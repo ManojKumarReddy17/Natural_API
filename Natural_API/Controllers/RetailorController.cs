@@ -6,6 +6,7 @@ using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 
+
 namespace Natural_API.Controllers
 {
     [Route("api/[controller]")]

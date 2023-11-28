@@ -12,5 +12,6 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<City>> GetCitiesAsync();
 
+        Task<IEnumerable<City>> GetCitywithStateId(string StateId);
     }
 }

@@ -29,6 +29,15 @@ namespace Natural_API.Controllers
             return Ok(CitiesList);
         }
 
+        [HttpGet("{StateId}")]
+
+        public async Task<ActionResult<IEnumerable<City>>> GetCitywithStateId(string StateId)
+        {
+            var city = await _cityService.GetCitywithStateId(StateId);
+            var CitiesList = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(city);
+            return Ok(CitiesList);
+        }
+
     }
 }
 

@@ -35,7 +35,7 @@ namespace Natural_Data.Repositories
                 Address = c.Address,
                 Area = c.AreaNavigation.AreaName,
                 Email = c.Email,
-                City = c.CityNavigation.CityName,
+                City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName
             }).ToList();
 

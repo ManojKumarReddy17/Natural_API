@@ -6,6 +6,7 @@ using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 
+
 namespace Natural_API.Controllers
 {
     [Route("api/[controller]")]
@@ -52,13 +53,12 @@ namespace Natural_API.Controllers
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
+
         [HttpDelete]
         public ActionResult Delete()
         {
             return Ok();
-        }
-
-        
+        }        
 
     }
 }

@@ -31,5 +31,15 @@ namespace Natural_API.Controllers
             return Ok(AreasList);
         }
 
+
+        [HttpGet("{CityId}")]
+
+        public async Task<ActionResult<IEnumerable<City>>> GetCitywithStateId(string CityId)
+        {
+            var areas = await _areaService.GetAreasWithCityID(CityId);
+            var AreaList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areas);
+            return Ok(AreaList);
+        }
+
     }
 }

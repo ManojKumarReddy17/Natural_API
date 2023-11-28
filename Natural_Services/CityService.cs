@@ -24,5 +24,10 @@ namespace Natural_Services
             return await _unitOfWork.CityRepo.GetAllAsync();
 
         }
+
+        public async Task<IEnumerable<City>> GetCitywithStateId(string StateId)
+        {
+            return await _unitOfWork.CityRepo.GetCitywithStateId(StateId);
+        }
     }
 }

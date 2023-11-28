@@ -3,6 +3,7 @@ using Natural_Core.IRepositories;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace Natural_Data.Repositories
         public async Task<IEnumerable<Area>> GetAllAreasAsync()
         {
             return await NaturalDbContext.Areas.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Area>> GetAreasWithCityID(string CityId)
+        {
+            return await NaturalDbContext.Areas.Where(m => m.CityId == CityId).ToListAsync();
         }
         private NaturalsContext NaturalDbContext
         {

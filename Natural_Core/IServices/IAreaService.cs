@@ -11,6 +11,8 @@ namespace Natural_Core.IServices
     public interface IAreaService
     {
         Task<IEnumerable<Area>> GetAreasAsync();
+
+        Task<IEnumerable<Area>> GetAreasWithCityID(string CityId);
     }
 }
 

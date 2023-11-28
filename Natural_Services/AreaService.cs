@@ -23,5 +23,16 @@ namespace Natural_Services
             return await _unitOfWork.AreaRepo.GetAllAsync();
 
         }
+
+        public async Task<IEnumerable<Area>> GetAreasWithCityID(string CityId)
+        {
+            return await _unitOfWork.AreaRepo.GetAreasWithCityID(CityId);
+        }
+
+
     }
+
+
+
+
 }

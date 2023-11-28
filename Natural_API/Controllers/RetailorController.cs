@@ -53,6 +53,8 @@ namespace Natural_API.Controllers
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
 
+        
+
     }
 }
 

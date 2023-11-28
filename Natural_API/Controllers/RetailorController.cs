@@ -52,12 +52,12 @@ namespace Natural_API.Controllers
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
+
+        [HttpDelete]
         public ActionResult Delete()
         {
             return Ok();
-        }
-
-        
+        }        
 
     }
 }

@@ -12,6 +12,6 @@ namespace Natural_Core.IRepositories
     {
         Task<IEnumerable<City>> GetAllCitiesAsync();
 
-
+        Task<IEnumerable<City>> GetCitywithStateId(string StateId);
     }
 }

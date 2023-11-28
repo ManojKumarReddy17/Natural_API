@@ -42,5 +42,20 @@ namespace Natural_API.Controllers
             return StatusCode(categoreis.StatusCode, categoreis);
 
         }
+        [HttpDelete("{Category_Name}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            if (id == 0)
+                return BadRequest();
+
+            var Category = await _categoryService.GetCategoryById(id);
+
+            if (Category == null)
+                return NotFound();
+
+            await _categoryService.DeleteCategory(Category);
+
+            return NoContent();
+        }
     }
 }

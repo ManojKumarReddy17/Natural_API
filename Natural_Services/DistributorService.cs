@@ -33,6 +33,13 @@ namespace Natural_Services
             return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
         }
 
+
+
+        public async Task<Distributor> GetDistributorByonlId(string Id)
+        {
+            return await _unitOfWork.DistributorRepo.GetByIdAsync(Id);
+        }
+
         //Create Distributor
         public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor, string areaId, string cityId, string stateId)
         {
@@ -69,5 +76,6 @@ namespace Natural_Services
             return response;
         }
 
-        }
+       
+    }
     }

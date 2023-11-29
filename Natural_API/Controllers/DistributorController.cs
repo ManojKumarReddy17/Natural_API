@@ -44,6 +44,16 @@ namespace Natural_API.Controllers
             return Ok(distributorResource);
         }
 
+
+        [HttpGet("{onlyid}")]
+
+        public async Task<ActionResult<DistributorResource>> GetDistributorByonlId(string id)
+        {
+            var distributor = await _DistributorService.GetDistributorById(id);
+            var distributorResource = _mapper.Map<Distributor, DistributorResource>(distributor);
+            return Ok(distributorResource);
+
+        }
         // Create Distributor
 
         [HttpPost]

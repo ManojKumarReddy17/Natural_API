@@ -25,6 +25,24 @@ namespace Natural_Data.Repositories
         {
             get { return Context as NaturalsContext; }
         }
+       
+        
+
+        public async ValueTask<Category> GetWithCategoryByIdAsync(string Categoryid)
+
+        {
+            return await NaturalDbContext.Categories.FindAsync(Categoryid);
+        }
+
+        //public async ValueTask<Category> UpdateCategoryById(string Id)
+        //{
+        //    return await NaturalDbContext.Categories.FindAsync(Id);
+        //}
+
+        ////public async Task<Category> DeleteCategoryById(string Id)
+        //{
+        //    return await NaturalDbContext.Categories.FirstAsync(Id);
+        //}
     }
 
 }

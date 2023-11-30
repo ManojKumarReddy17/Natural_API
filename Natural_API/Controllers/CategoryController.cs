@@ -33,14 +33,31 @@ namespace Natural_API.Controllers
             return Ok(mapped);
         }
 
-        [HttpPost]
+        [HttpGet("{Id}")]
 
-        public async Task<ActionResult<CategoryResponse>> InsertCategories([FromBody]CategoryResource category)
+        public async Task<ActionResult<CategoryResource>> GetCategoryById(string Id)
         {
-            var mapresult =  _mapper.Map<CategoryResource,Category>(category);
-            var categoreis = await _categoryService.CreateCategory(mapresult);
-            return StatusCode(categoreis.StatusCode, categoreis);
 
+            var categories = await _categoryService.GetCategoryById(Id);
+            var categoryResource = _mapper.Map<Category,CategoryResource>(categories);
+
+            return Ok(categoryResource);
         }
+
+        //[HttpPost("{id}")
+        //public async Task<ActionResult<IEnumerable<CategoryResponse>>> UpdateCategory(string Id)
+        //{
+        //    var mapresult = _mapper.Map<CategoryResource, Category>(category);
+        //    var response = await _categoryService.UpdateCategory(Id, mapresult);
+        //    return StatusCode(response.StatusCode, response);
+        //}
+
+        //[HttpPost("{id}")]
+        //public async Task<ActionResult<CategoryResponse>> DeleteCategory(string id)
+        //{
+        //    var response = await _categoryService.DeleteCategory(id);
+        //    return StatusCode(response.StatusCode, response);
+        //}
+
     }
 }

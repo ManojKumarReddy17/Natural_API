@@ -43,6 +43,7 @@ namespace Natural_API.Mapping
 
 
 
+
                 //// We can map like this also 
                 // CreateMap<CityResource, City>()
                 //.ForMember(source => source.Id, opt => opt.MapFrom(domain => domain.Id))

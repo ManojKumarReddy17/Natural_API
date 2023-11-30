@@ -5,6 +5,7 @@ using Natural_API.Resources;
 using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Services;
 
 
 namespace Natural_API.Controllers
@@ -53,6 +54,7 @@ namespace Natural_API.Controllers
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
+<<<<<<< HEAD
 
         [HttpDelete]
         public ActionResult Delete()
@@ -60,7 +62,10 @@ namespace Natural_API.Controllers
             return Ok();
         }        
 
+=======
+       
+        
+>>>>>>> 2163af9 (Intial commit)
     }
+    
 }
-
-

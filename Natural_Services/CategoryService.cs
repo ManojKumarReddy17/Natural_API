@@ -44,11 +44,80 @@ namespace Natural_Services
             return response;
         }
 
-   
+
         public async Task<IEnumerable<Category>> GetAllCategories()
         {
-            var result =  await _unitOfWork.CategoryRepo.GetAllAsync();
+            var result = await _unitOfWork.CategoryRepo.GetAllAsync();
             return result;
         }
+
+        public async Task<Category> GetCategoryById(string CategoryId)
+        {
+            return await _unitOfWork.CategoryRepo.GetByIdAsync(CategoryId);
+
+        }
+
+
     }
 }
+
+    //public async Task<CategoryResponse> DeleteCategory(string id)
+    //{
+    //    var response = new CategoryResponse();
+    //    try
+    //    {
+    //        var existingCategory = await _unitOfWork.CategoryRepo.GetCategoryById(id);
+    //        if (existingCategory == null)
+    //        {
+    //            response.Message = "Category not found";
+    //            response.StatusCode = 404;
+    //            return response;
+    //        }
+
+    //        _unitOfWork.CategoryRepo.Delete(existingCategory);
+    //        await _unitOfWork.CommitAsync();
+
+    //        response.Message = "Delete Successful";
+    //        response.StatusCode = 200;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        response.Message = "Delete Failed";
+    //        response.StatusCode = 500;
+    //    }
+
+    //    return response;
+    //}
+
+  
+//        public async Task <Category> UpdateCategory(string Id)
+//        {
+//            var response = new CategoryResponse();
+//            try
+//            {
+//                var existingCategory = await _unitOfWork.CategoryRepo.GetCategoryById(id);
+//                if (existingCategory == null)
+//                {
+//                    response.Message = "Category not found";
+//                    response.StatusCode = 404;
+//                    return response;
+//                }
+
+//                //existingCategory.CategoryName = category.CategoryName;
+
+//                _unitOfWork.CategoryRepo.Update(existingCategory);
+//                await _unitOfWork.CommitAsync();
+
+//                response.Message = "Update Successful";
+//                response.StatusCode = 200;
+//            }
+//            catch (Exception ex)
+//            {
+//                response.Message = "Update Failed";
+//                response.StatusCode = 500;
+//            }
+
+//            return response;
+//        }
+//    }
+//}

@@ -10,5 +10,12 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<Category>> GetAllCategories();
         Task<CategoryResponse> CreateCategory(Category category);
+        
+            Task<Category> GetCategoryById(string CategoryId);
+
+
+
+       // Task<IEnumerable<Category>> UpdateCategoryById(String Id);
+        //Task<IEnumerable<Category>> DeleteCategory(string Id);
     }
 }

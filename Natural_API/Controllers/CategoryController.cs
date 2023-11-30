@@ -33,29 +33,31 @@ namespace Natural_API.Controllers
             return Ok(mapped);
         }
 
-        [HttpPost]
+        [HttpGet("{Id}")]
 
-        public async Task<ActionResult<CategoryResponse>> InsertCategories([FromBody]CategoryResource category)
+        public async Task<ActionResult<CategoryResource>> GetCategoryById(string Id)
         {
-            var mapresult =  _mapper.Map<CategoryResource,Category>(category);
-            var categoreis = await _categoryService.CreateCategory(mapresult);
-            return StatusCode(categoreis.StatusCode, categoreis);
 
+            var categories = await _categoryService.GetCategoryById(Id);
+            var categoryResource = _mapper.Map<Category,CategoryResource>(categories);
+
+            return Ok(categoryResource);
         }
-        [HttpDelete("{Category_Name}")]
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            if (id == 0)
-                return BadRequest();
 
-            var Category = await _categoryService.GetCategoryById(id);
+        //[HttpPost("{id}")
+        //public async Task<ActionResult<IEnumerable<CategoryResponse>>> UpdateCategory(string Id)
+        //{
+        //    var mapresult = _mapper.Map<CategoryResource, Category>(category);
+        //    var response = await _categoryService.UpdateCategory(Id, mapresult);
+        //    return StatusCode(response.StatusCode, response);
+        //}
 
-            if (Category == null)
-                return NotFound();
+        //[HttpPost("{id}")]
+        //public async Task<ActionResult<CategoryResponse>> DeleteCategory(string id)
+        //{
+        //    var response = await _categoryService.DeleteCategory(id);
+        //    return StatusCode(response.StatusCode, response);
+        //}
 
-            await _categoryService.DeleteCategory(Category);
-
-            return NoContent();
-        }
     }
 }

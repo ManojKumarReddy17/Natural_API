@@ -2,6 +2,7 @@
 using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
+using Natural_Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,11 +83,15 @@ namespace Natural_Data.Repositories
             return null;
         }
 
+
+
+
+        
+
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
         }
-
-
+        
     }
 }

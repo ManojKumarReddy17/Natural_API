@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Natural_Core.IRepositories;
+using Natural_Data.Repositories;
 
 #nullable disable
 
@@ -13,6 +16,8 @@ namespace Natural_Services
     public class RetailorService : IRetailorService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRetailorRepository _repository;
+
 
         public RetailorService(IUnitOfWork unitOfWork)
         {
@@ -35,17 +40,14 @@ namespace Natural_Services
 
             try
             {
-                // setting associated models (or) entities 
 
                 retailor.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
                 retailor.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
                 retailor.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
 
-                // Adding distributor to the repository
 
                 await _unitOfWork.RetailorRepo.AddAsync(retailor);
 
-                // Commit changes
                 var created = await _unitOfWork.CommitAsync();
 
                 if (created != null)
@@ -54,7 +56,7 @@ namespace Natural_Services
                     response.StatusCode = 200;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 response.Message = "Insertion Failed";
@@ -64,5 +66,6 @@ namespace Natural_Services
             return response;
         }
 
+       
     }
 }

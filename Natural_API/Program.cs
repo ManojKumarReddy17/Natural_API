@@ -53,7 +53,6 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSwaggerGen(c =>

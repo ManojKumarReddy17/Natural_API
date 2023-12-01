@@ -10,6 +10,7 @@ namespace Natural_Core.Models
         public Area()
         {
             Distributors = new HashSet<Distributor>();
+            Executives = new HashSet<Executive>();
             Retailors = new HashSet<Retailor>();
         }
 
@@ -19,6 +20,7 @@ namespace Natural_Core.Models
 
         public virtual City City { get; set; }
         public virtual ICollection<Distributor> Distributors { get; set; }
+        public virtual ICollection<Executive> Executives { get; set; }
         public virtual ICollection<Retailor> Retailors { get; set; }
     }
 }

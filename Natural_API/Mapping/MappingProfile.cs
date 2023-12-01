@@ -21,6 +21,7 @@ namespace Natural_API.Mapping
                 CreateMap<City, CityResource>();
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
+            CreateMap <Executive,ExecutiveResource>();
 
 
                 //// We can map like this also
@@ -39,6 +40,7 @@ namespace Natural_API.Mapping
                 CreateMap<CityResource, City>();
                  CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
+            CreateMap<ExecutiveResource, Executive>();
 
 
 

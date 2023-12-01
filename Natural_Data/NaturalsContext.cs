@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Natural_Core;
 using Natural_Core.Models;
 
 #nullable disable
@@ -23,6 +22,7 @@ namespace Natural_Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
+        public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -57,7 +57,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName)
                     .HasMaxLength(20)
@@ -95,7 +95,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -152,11 +152,78 @@ namespace Natural_Data
                     .HasConstraintName("Distributor_ibfk_3");
             });
 
+            modelBuilder.Entity<Executive>(entity =>
+            {
+                entity.ToTable("Executive");
+
+                entity.HasIndex(e => e.Area, "Area");
+
+                entity.HasIndex(e => e.City, "City");
+
+                entity.HasIndex(e => e.State, "State");
+
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Area)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MobileNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasOne(d => d.AreaNavigation)
+                    .WithMany(p => p.Executives)
+                    .HasForeignKey(d => d.Area)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_ibfk_1");
+
+                entity.HasOne(d => d.CityNavigation)
+                    .WithMany(p => p.Executives)
+                    .HasForeignKey(d => d.City)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_ibfk_2");
+
+                entity.HasOne(d => d.StateNavigation)
+                    .WithMany(p => p.Executives)
+                    .HasForeignKey(d => d.State)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_ibfk_3");
+            });
+
             modelBuilder.Entity<Login>(entity =>
             {
                 entity.ToTable("Login");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -177,7 +244,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()

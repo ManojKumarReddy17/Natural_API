@@ -57,7 +57,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName)
                     .HasMaxLength(20)
@@ -95,7 +95,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -223,7 +223,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Login");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -244,7 +244,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()

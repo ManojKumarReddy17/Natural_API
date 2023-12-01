@@ -1,6 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+<<<<<<< HEAD
+=======
+using Natural_Core.Models;
+>>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 
 #nullable disable
 

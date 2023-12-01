@@ -21,7 +21,11 @@ namespace Natural_API.Mapping
                 CreateMap<City, CityResource>();
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
+<<<<<<< HEAD
             CreateMap <Executive,ExecutiveResource>();
+=======
+              CreateMap <Executive, ExecutiveResource>();
+>>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 
 
                 //// We can map like this also

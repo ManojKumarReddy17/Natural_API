@@ -43,17 +43,9 @@ namespace Natural_API.Controllers
             var distributorResource = _mapper.Map<Distributor,DistributorResource>(distributor);
             return Ok(distributorResource);
         }
+        
 
-
-        [HttpGet("{onlyid}")]
-
-        public async Task<ActionResult<DistributorResource>> GetDistributorByonlId(string id)
-        {
-            var distributor = await _DistributorService.GetDistributorById(id);
-            var distributorResource = _mapper.Map<Distributor, DistributorResource>(distributor);
-            return Ok(distributorResource);
-
-        }
+       
         // Create Distributor
 
         [HttpPost]
@@ -63,6 +55,31 @@ namespace Natural_API.Controllers
             var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor, distributorResource.Area, distributorResource.City, distributorResource.State);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DistributorResource>> UpdateDistributor(string id, [FromBody] DistributorResource distributorResource)
+        {
+            //var validator = new SaveInvoiceResourceValidator();
+            //var validationResult = await validator.ValidateAsync(saveInvoiceResource);
+
+            //var requestIsInvalid = id == 0 || !validationResult.IsValid;
+
+            //if (requestIsInvalid)
+            //    return BadRequest(validationResult.Errors); // this needs refining, but for demo it is ok
+
+            var DistributorToBeUpdate = await _DistributorService.GetDistributorById(id);
+
+            if (DistributorToBeUpdate == null)
+                return NotFound();
+
+            var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
+            var updated = await _DistributorService.GetDistributorById(id);
+
+
+            await _DistributorService.UpdateDistributor(DistributorToBeUpdate, distributor);
+            var updatedInvoiceResource = _mapper.Map<Distributor, DistributorResource>(updated);
+
+            return Ok(updatedInvoiceResource);
         }
 
     }

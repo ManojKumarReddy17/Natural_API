@@ -33,11 +33,11 @@ namespace Natural_Services
             return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
         }
 
-
-
-        public async Task<Distributor> GetDistributorByonlId(string Id)
+        public async Task UpdateDistributor(Distributor DistributorToBeUpdated, Distributor distributor)
         {
-            return await _unitOfWork.DistributorRepo.GetByIdAsync(Id);
+            //DistributorToBeUpdated.Name = Distributor.t;
+
+            await _unitOfWork.CommitAsync();
         }
 
         //Create Distributor
@@ -76,6 +76,9 @@ namespace Natural_Services
             return response;
         }
 
-       
+        //public Task UpdateDistributor(Distributor DistributorToBeUpdates, Distributor distributor)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
     }

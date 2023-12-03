@@ -13,6 +13,8 @@ namespace Natural_Core
     {
         ILoginRepository Login { get; }
         IDistributorRepository DistributorRepo { get; }
+
+        IUpdateDistributorRepository UpdateDistributorRepository { get; }
         ICityRepository CityRepo { get; }
         IStateRepository StateRepo { get; }
         IAreaRepository AreaRepo { get; }

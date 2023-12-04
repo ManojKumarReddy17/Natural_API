@@ -24,6 +24,11 @@ namespace Natural_Data.Repositories
             await Context.Set<TEntity>().AddAsync(entity);
         }
 
+        public void  Update(TEntity entity)
+        {
+             Context.Set<TEntity>().Update(entity);
+        }
+
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await Context.Set<TEntity>().AddRangeAsync(entities);

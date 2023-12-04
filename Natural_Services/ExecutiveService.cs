@@ -17,6 +17,13 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Executive> CreateExecutive(Executive newexecutive)
+        {
+            await _unitOfWork.ExecutiveRepo.AddAsync(newexecutive);
+            await _unitOfWork.CommitAsync();
+            return newexecutive;
+        }
+
         public  async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive, string areaId, string cityId, string stateId)
         {
             {
@@ -54,6 +61,12 @@ namespace Natural_Services
             }
         }
 
+        public async Task<IEnumerable<Executive>> GetAll()
+        {
+            var result = await _unitOfWork.ExecutiveRepo.GetAllAsync();
+            return result;
+        }
+
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
         {
             var result = await _unitOfWork.ExecutiveRepo.GetAllExectivesAsync();
@@ -63,6 +76,27 @@ namespace Natural_Services
         public  async Task<Executive> GetExecutiveById(string ExecutiveId)
         {
             return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(ExecutiveId);
+        }
+
+        public async Task<Executive> GetId(string ExecutiveId)
+        {
+            return await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+        }
+
+        public async Task UpadateExecutive(Executive existing,Executive executive)
+        {
+          
+            existing.FirstName= executive.FirstName;
+            existing.LastName= executive.LastName;
+            existing.MobileNumber = executive.MobileNumber;
+            existing.Address = executive.Address;
+            existing.Area = executive.Area;
+            existing.City = executive.City;
+            existing.State = executive.State;
+            existing.Email = executive.Email;
+            _unitOfWork.ExecutiveRepo.Update(existing);
+
+            await _unitOfWork.CommitAsync();
         }
     }
 }

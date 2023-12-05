@@ -17,55 +17,7 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Executive> CreateExecutive(Executive newexecutive)
-        {
-            await _unitOfWork.ExecutiveRepo.AddAsync(newexecutive);
-            await _unitOfWork.CommitAsync();
-            return newexecutive;
-        }
-
-        public  async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive, string areaId, string cityId, string stateId)
-        {
-            {
-                var response = new ExecutiveResponse();
-
-                try
-                {
-                    // setting associated models (or) entities 
-
-                    executive.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                    executive.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                    executive.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-                    // Adding distributor to the repository
-
-                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-                    // Commit changes
-                    var created = await _unitOfWork.CommitAsync();
-
-                    if (created != null)
-                    {
-                        response.Message = "Insertion Successful";
-                        response.StatusCode = 200;
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    response.Message = "Insertion Failed";
-                    response.StatusCode = 401;
-                }
-
-                return response;
-            }
-        }
-
-        public async Task<IEnumerable<Executive>> GetAll()
-        {
-            var result = await _unitOfWork.ExecutiveRepo.GetAllAsync();
-            return result;
-        }
+     
 
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
         {
@@ -73,30 +25,43 @@ namespace Natural_Services
             return result;
         }
 
-        public  async Task<Executive> GetExecutiveById(string ExecutiveId)
+        public  async Task<Executive> GetDetailsById(string ExecutiveId)
         {
             return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(ExecutiveId);
         }
 
-        public async Task<Executive> GetId(string ExecutiveId)
+        public async Task<Executive> GetExecutiveById(string ExecutiveId)
         {
             return await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
         }
 
-        public async Task UpadateExecutive(Executive existing,Executive executive)
+        public async Task<ExecutiveResponse> UpadateExecutive(Executive existing,Executive executive)
         {
-          
-            existing.FirstName= executive.FirstName;
-            existing.LastName= executive.LastName;
-            existing.MobileNumber = executive.MobileNumber;
-            existing.Address = executive.Address;
-            existing.Area = executive.Area;
-            existing.City = executive.City;
-            existing.State = executive.State;
-            existing.Email = executive.Email;
-            _unitOfWork.ExecutiveRepo.Update(existing);
+            var response = new ExecutiveResponse();
+            try
+            {
+                existing.FirstName = executive.FirstName;
+                existing.LastName = executive.LastName;
+                existing.MobileNumber = executive.MobileNumber;
+                existing.Address = executive.Address;
+                existing.Area = executive.Area;
+                existing.City = executive.City;
+                existing.State = executive.State;
+                existing.Email = executive.Email;
+                _unitOfWork.ExecutiveRepo.Update(existing);
 
-            await _unitOfWork.CommitAsync();
+
+                await _unitOfWork.CommitAsync();
+                response.Message = "updatesuceesfull";
+                response.StatusCode = 200;
+            }
+            catch  (Exception ex)
+            {
+                response.Message = "Failed";
+                response.StatusCode = 500;
+            }
+
+            return (response);
         }
     }
 }

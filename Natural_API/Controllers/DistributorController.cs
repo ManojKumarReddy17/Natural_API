@@ -35,7 +35,8 @@ namespace Natural_API.Controllers
 
         // Get Distributor by Id
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/details")]
+        
 
         public async Task<ActionResult<DistributorResource>> GetByIdDistributor(string id)
         {
@@ -43,9 +44,16 @@ namespace Natural_API.Controllers
             var distributorResource = _mapper.Map<Distributor,DistributorResource>(distributor);
             return Ok(distributorResource);
         }
-        
 
-       
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<DistributorResource>> GetById(string id)
+        {
+            var distributor = await _DistributorService.GetById(id);
+            var distributorResource = _mapper.Map<Distributor, DistributorResource>(distributor);
+            return Ok(distributorResource);
+        }
+
         // Create Distributor
 
         [HttpPost]
@@ -57,29 +65,24 @@ namespace Natural_API.Controllers
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<DistributorResource>> UpdateDistributor(string id, [FromBody] DistributorResource distributorResource)
+        public async Task<ActionResult<DistributorResource>> UpdateDistributor(string id, [FromBody] DistributorResource updatedistributor)
         {
-            //var validator = new SaveInvoiceResourceValidator();
-            //var validationResult = await validator.ValidateAsync(saveInvoiceResource);
+           
 
-            //var requestIsInvalid = id == 0 || !validationResult.IsValid;
+            var ExistingDistributor = await _DistributorService.GetById(id);
 
-            //if (requestIsInvalid)
-            //    return BadRequest(validationResult.Errors); // this needs refining, but for demo it is ok
+            //if (Distributor == null)
+            //    return NotFound();
 
-            var DistributorToBeUpdate = await _DistributorService.GetDistributorById(id);
-
-            if (DistributorToBeUpdate == null)
-                return NotFound();
-
-            var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
-            var updated = await _DistributorService.GetDistributorById(id);
+            var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
+            
 
 
-            await _DistributorService.UpdateDistributor(DistributorToBeUpdate, distributor);
-            var updatedInvoiceResource = _mapper.Map<Distributor, DistributorResource>(updated);
+            await _DistributorService.UpdateDistributor(distributorToUpdate);
+            var update = await _DistributorService.GetById(id);
+            var updatedDistributor = _mapper.Map<Distributor, DistributorResource>(update);
 
-            return Ok(updatedInvoiceResource);
+            return Ok(updatedDistributor);
         }
 
     }

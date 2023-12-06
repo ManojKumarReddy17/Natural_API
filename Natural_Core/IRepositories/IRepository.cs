@@ -16,6 +16,7 @@ namespace Natural_Core.IRepositories
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);
+        void Update(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
     }
 }

@@ -49,6 +49,11 @@ namespace Natural_Data.Repositories
             Context.Set<TEntity>().Remove(entity);
         }
 
+        public void Update(TEntity entity)
+        {
+            Context.Set<TEntity>().Update(entity);
+        }
+
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             Context.Set<TEntity>().RemoveRange(entities);

@@ -13,7 +13,9 @@ namespace Natural_Core.IServices
         Task<IEnumerable<Distributor>> GetAllDistributors();
         Task<Distributor> GetDistributorById(string distributorId);
 
-        Task UpdateDistributor(Distributor DistributorToBeUpdates, Distributor distributor);
+        Task<Distributor> GetById(string distributorId);
+
+        Task UpdateDistributor( Distributor distributor);
         Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor,
         string areaId, string cityId, string stateId);
 

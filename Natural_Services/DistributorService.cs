@@ -33,12 +33,11 @@ namespace Natural_Services
             return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
         }
 
-        public async Task UpdateDistributor(Distributor DistributorToBeUpdated, Distributor distributor)
+        public async Task<Distributor> GetById(string distributorId)
         {
-            //DistributorToBeUpdated.Name = Distributor.t;
-
-            await _unitOfWork.CommitAsync();
+            return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
         }
+       
 
         //Create Distributor
         public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor, string areaId, string cityId, string stateId)
@@ -74,6 +73,20 @@ namespace Natural_Services
             }
 
             return response;
+        }
+
+        //public async Task<Distributor> GetById(update)
+        //{
+        //  var distributer=  await _unitOfWork.DistributorRepo.update(distributorId);
+        //    return distributer;
+        //}
+
+       
+
+        public async Task UpdateDistributor(Distributor distributor)
+        {
+            _unitOfWork.DistributorRepo.Update(distributor);
+            await _unitOfWork.CommitAsync();
         }
 
         //public Task UpdateDistributor(Distributor DistributorToBeUpdates, Distributor distributor)

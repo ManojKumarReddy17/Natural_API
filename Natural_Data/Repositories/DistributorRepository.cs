@@ -62,7 +62,7 @@ namespace Natural_Data.Repositories
                     Address = distributors.Address,
                     Area = distributors.AreaNavigation.AreaName,
                     Email = distributors.Email,
-                    City = distributors.CityNavigation.CityName,
+                    City = distributors.AreaNavigation.City.CityName,
                     State = distributors.AreaNavigation.City.State.StateName
                 };
 

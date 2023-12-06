@@ -9,9 +9,11 @@ namespace Natural_Core.IServices
     public interface IExecutiveService
     {
         Task<IEnumerable<Executive>> GetAllExecutives();
-        Task<Executive> GetExecutiveById(string ExecutiveId);
-        Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive,
-        string areaId, string cityId, string stateId);
+ 
+        Task<Executive> GetDetailsById(string ExecutiveId);
 
+        Task<Executive> GetExecutiveById(string ExecutiveId);
+
+        Task<ExecutiveResponse> UpadateExecutive (Executive existing, Executive  executive);
     }
 }

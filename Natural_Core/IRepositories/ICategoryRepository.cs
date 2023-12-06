@@ -9,11 +9,9 @@ namespace Natural_Core.IRepositories
     public interface ICategoryRepository :IRepository<Category>
     {
         Task<IEnumerable<Category>> GetCatogeriesAsync();
-        ValueTask<Category> GetWithCategoryByIdAsync(string Categoryid);
-        //Task<IEnumerable<Category>> UpdateCategoryById(string Id);
-       // Task<Category> DeleteCategoryById(string Id);
-
-
+        ValueTask<Category> GetWithCategoryByIdAsync(string CategoryId);
+        Task<Category> GetCategoryById(string CategoryId);
+        void Update(Category category);
 
     }
 }

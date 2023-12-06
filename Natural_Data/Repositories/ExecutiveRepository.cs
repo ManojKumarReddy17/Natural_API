@@ -5,35 +5,36 @@ using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
 
+namespace Natural_Data.Repositories
 namespace Natural_Data.Repositories
 {
     public class ExecutiveRepository : Repository<Executive>, IExecutiveRepository
     {
         public ExecutiveRepository(NaturalsContext context) : base(context)
         {
+
         }
 
         public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
         {
-            var executive = await(from executives in NaturalDbContext.Executives
-                                  join area in NaturalDbContext.Areas on executives.Area equals area.Id
-                                  join city in NaturalDbContext.Cities on area.CityId equals city.Id
-                                  join state in NaturalDbContext.States on city.StateId equals state.Id
-                                  select new
-                                  {
-                                      executive = executives,
-                                      Area = area,
-                                      City = city,
-                                      State = state
-                                  }).ToListAsync();
+            var executive = await (from executives in NaturalDBContext.Executives
+                                   join area in NaturalDBContext.Areas on executives.Area equals area.Id
+                                   join city in NaturalDBContext.Cities on area.CityId equals city.Id
+                                   join state in NaturalDBContext.States on city.StateId equals state.Id
+                                   select new
+                                   {
+                                       executivee = executives,
+                                       Area = area,
+                                       City = city,
+                                       State = state
+                                   }).ToListAsync();
+
             var result = executive.Select(c => new Executive
             {
-            var exec = await NaturalDBContext.Executives
-                       .Include(c => c.AreaNavigation)
+
+                FirstName = c.executive.FirstName,
                         .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                         .FirstOrDefaultAsync(c => c.Id == execid);
@@ -44,13 +45,16 @@ namespace Natural_Data.Repositories
                 Address = c.executive.Address,
                 Area = c.Area.AreaName,
                 Email = c.executive.Email,
+                UserName= c.executivee.UserName,
+                Password= c.executivee.Password,
                 City = c.City.CityName,
                 State = c.State.StateName,
+           
             });
 
-            return result;
+        public async Task<List<Executive>> GetAllExectivesAsync()
 
-            }
+
             else
             {
                 return null;
@@ -65,6 +69,6 @@ namespace Natural_Data.Repositories
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
-        }
-    }
+   }    }
+
 }

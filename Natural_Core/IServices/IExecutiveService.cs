@@ -13,7 +13,7 @@ namespace Natural_Core.IServices
         Task<Executive> GetDetailsById(string ExecutiveId);
 
         Task<Executive> GetExecutiveById(string ExecutiveId);
-
+       
         Task<ExecutiveResponse> UpadateExecutive (Executive existing, Executive  executive);
     }
 }

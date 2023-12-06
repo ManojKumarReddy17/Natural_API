@@ -8,7 +8,7 @@ using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Core.Models
+namespace Natural_Data
 {
     public partial class NaturalsContext : DbContext
     {
@@ -157,7 +157,15 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(20);
 
@@ -224,7 +232,15 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(20);
 

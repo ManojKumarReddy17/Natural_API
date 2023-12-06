@@ -23,7 +23,7 @@ namespace Natural_Data.Repositories
              .ThenInclude(a => a.City)
             .ThenInclude(ct => ct.State)
              .ToListAsync();
-
+            
             var result = exec.Select(c => new Executive
             {
                 Id = c.Id,
@@ -71,6 +71,16 @@ namespace Natural_Data.Repositories
                 return null;
             }
         }
+
+        public Task<List<Executive>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+       //public  Task<Executive> IExecutiveRepository.GetByIdAsync(string id)
+       // {
+       //     throw new NotImplementedException();
+       // }
 
         private NaturalsContext NaturalDBContext
         {

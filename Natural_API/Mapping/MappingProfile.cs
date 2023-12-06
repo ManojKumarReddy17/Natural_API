@@ -41,6 +41,7 @@ namespace Natural_API.Mapping
                  CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
             CreateMap<ExecutiveResource, Executive>();
+            CreateMap<SaveExecutiveResource, Executive>();
 
 
 

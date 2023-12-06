@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
@@ -27,7 +30,32 @@ namespace Natural_Data
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetTimestamps<Distributor>();
+            SetTimestamps<Executive>();
+            SetTimestamps<Retailor>();
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetTimestamps<T>() where T : class
+        {
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is T && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
+                }
+
+                entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
+
+            }
+        }
+                protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_0900_ai_ci");

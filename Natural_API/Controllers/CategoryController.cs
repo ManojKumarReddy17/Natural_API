@@ -44,7 +44,6 @@ namespace Natural_API.Controllers
             return Ok(categoryResource);
         }
 
-      
 
     }
 }

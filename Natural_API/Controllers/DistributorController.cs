@@ -51,6 +51,7 @@ namespace Natural_API.Controllers
         {
 
             var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
+            
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor, distributorResource.Area, distributorResource.City, distributorResource.State);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }

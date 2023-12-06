@@ -44,7 +44,11 @@ namespace Natural_API.Controllers
             return Ok(categoryResource);
         }
 
+<<<<<<< HEAD
       
 
+=======
+        
+>>>>>>> f6e9558 (Intital commit)
     }
 }

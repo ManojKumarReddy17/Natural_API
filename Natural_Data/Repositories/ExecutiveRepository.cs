@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Natural_Data.Repositories
 {
@@ -16,54 +17,38 @@ namespace Natural_Data.Repositories
         {
         }
 
-        public async Task<List<Executive>> GetAllExectivesAsync()
+        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
         {
-            var exec = await NaturalDBContext.Executives
-            .Include(c => c.AreaNavigation)
-             .ThenInclude(a => a.City)
-            .ThenInclude(ct => ct.State)
-             .ToListAsync();
-            
-            var result = exec.Select(c => new Executive
+            var executive = await(from executives in NaturalDbContext.Executives
+                                  join area in NaturalDbContext.Areas on executives.Area equals area.Id
+                                  join city in NaturalDbContext.Cities on area.CityId equals city.Id
+                                  join state in NaturalDbContext.States on city.StateId equals state.Id
+                                  select new
+                                  {
+                                      executive = executives,
+                                      Area = area,
+                                      City = city,
+                                      State = state
+                                  }).ToListAsync();
+            var result = executive.Select(c => new Executive
             {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                MobileNumber = c.MobileNumber,
-                Address = c.Address,
-                Area = c.AreaNavigation.AreaName,
-                Email = c.Email,
-                City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
-            }).ToList();
-
-            return result;
-        }
-
-        public async Task<Executive> GetWithExectiveByIdAsync(string execid)
-        {
             var exec = await NaturalDBContext.Executives
                        .Include(c => c.AreaNavigation)
                         .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                         .FirstOrDefaultAsync(c => c.Id == execid);
 
-            if (exec != null)
-            {
-                var result = new Executive
-                {
-                    Id = exec.Id,
-                    FirstName = exec.FirstName,
-                    LastName = exec.LastName,
-                    MobileNumber = exec.MobileNumber,
-                    Address = exec.Address,
-                    Area = exec.AreaNavigation.AreaName,
-                    Email = exec.Email,
-                    City = exec.AreaNavigation.City.CityName,
-                    State = exec.AreaNavigation.City.State.StateName
-                };
+                FirstName = c.executive.FirstName,
+                LastName = c.executive.LastName,
+                MobileNumber = c.executive.MobileNumber,
+                Address = c.executive.Address,
+                Area = c.Area.AreaName,
+                Email = c.executive.Email,
+                City = c.City.CityName,
+                State = c.State.StateName,
+            });
 
-                return result;
+            return result;
 
             }
             else
@@ -77,13 +62,9 @@ namespace Natural_Data.Repositories
             throw new NotImplementedException();
         }
 
-       //public  Task<Executive> IExecutiveRepository.GetByIdAsync(string id)
-       // {
-       //     throw new NotImplementedException();
-       // }
-
-        private NaturalsContext NaturalDBContext
+        private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
-   }    }
+        }
+    }
 }

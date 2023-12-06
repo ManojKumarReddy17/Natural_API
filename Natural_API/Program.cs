@@ -37,6 +37,9 @@ builder.Services.AddTransient<IDistributorService, DistributorService>();
 builder.Services.AddTransient<IRetailorRepository, RetailorRepository>();
 builder.Services.AddTransient<IRetailorService, RetailorService>();
 
+builder.Services.AddTransient<IExecutiveRepository,ExecutiveRepository>();
+builder.Services.AddTransient<IExecutiveService,ExecutiveService>();
+
 builder.Services.AddTransient<ICityRepository, CityRepository>();
 builder.Services.AddTransient<ICityService, CityService>();
 

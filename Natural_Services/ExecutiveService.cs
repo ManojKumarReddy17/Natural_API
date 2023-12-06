@@ -26,7 +26,7 @@ namespace Natural_Services
         }
 
         public  async Task<Executive> GetDetailsById(string ExecutiveId)
-        {
+            {
             return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(ExecutiveId);
         }
 
@@ -50,18 +50,21 @@ namespace Natural_Services
                 existing.Email = executive.Email;
                 _unitOfWork.ExecutiveRepo.Update(existing);
 
+                // Commit changes
+                var created = await _unitOfWork.CommitAsync();
 
                 await _unitOfWork.CommitAsync();
                 response.Message = "updatesuceesfull";
-                response.StatusCode = 200;
-            }
+                    response.StatusCode = 200;
+                }
             catch  (Exception ex)
             {
                 response.Message = "Failed";
                 response.StatusCode = 500;
-            }
+        }
 
             return (response);
         }
+    
     }
 }

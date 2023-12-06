@@ -44,28 +44,30 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
-        // Create Distributor
+        // Create Retailor
 
         [HttpPost]
         public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorResource retailorResource)
+        
         {
 
             var retailor = _mapper.Map<RetailorResource, Retailor>(retailorResource);
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
-<<<<<<< HEAD
 
-        [HttpDelete]
-        public ActionResult Delete()
+        //Delete Retailor
+
+        [HttpDelete("{retailorId}")]
+        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string retailorId)
         {
-            return Ok();
-        }        
 
-=======
-       
-        
->>>>>>> 2163af9 (Intial commit)
+            var response = await _retailorservice.DeleteRetailor(retailorId);
+            return Ok(response);
+        }
     }
-    
 }
+        
+
+ 
+ 

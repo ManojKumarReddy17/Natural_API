@@ -13,6 +13,8 @@ namespace Natural_Core.IServices
         Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor distributor,
         string areaId, string cityId, string stateId);
 
+        Task<RetailorResponce> DeleteRetailor(string retailorId);
+
 
     }
 }

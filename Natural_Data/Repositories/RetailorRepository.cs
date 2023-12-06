@@ -34,6 +34,7 @@ namespace Natural_Data.Repositories
             var result = retailors.Select(c => new Retailor
             {
 
+                Id = c.retailor.Id,
                 FirstName = c.retailor.FirstName,
                 LastName = c.retailor.LastName,
                 MobileNumber = c.retailor.MobileNumber,
@@ -83,12 +84,12 @@ namespace Natural_Data.Repositories
             return null;
         }
 
+    
+    
 
 
 
-        
-
-        private NaturalsContext NaturalDbContext
+    private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
         }

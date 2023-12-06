@@ -23,7 +23,7 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-
+        
         public async Task<IEnumerable<Retailor>> GetAllRetailors()
         {
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
@@ -66,6 +66,36 @@ namespace Natural_Services
             return response;
         }
 
-       
+
+
+        public async Task<RetailorResponce> DeleteRetailor(string retailorId)
+        {
+            var response = new RetailorResponce();
+
+            try
+            {
+                var retailor = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+
+                if (retailor!= null)
+                {
+                    _unitOfWork.RetailorRepo.Remove(retailor);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                }
+                else
+                {
+                    response.Message = "RETAILER NOT FOUND";
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
+        }
+
+
     }
 }
+ 

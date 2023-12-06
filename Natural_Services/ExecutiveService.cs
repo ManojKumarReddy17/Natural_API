@@ -17,7 +17,43 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
+<<<<<<< HEAD
      
+=======
+        public  async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive, string areaId, string cityId, string stateId)
+        {
+            {
+                var response = new ExecutiveResponse();
+
+                try
+                {
+
+                    executive.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
+                    executive.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
+                    executive.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
+
+
+                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+                    var created = await _unitOfWork.CommitAsync();
+
+                    if (created != null)
+                    {
+                        response.Message = "Insertion Successful";
+                        response.StatusCode = 200;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+                }
+
+                return response;
+            }
+        }
+>>>>>>> 7e4e8b7 (Intial commit)
 
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
         {

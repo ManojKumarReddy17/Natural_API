@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Services;
+using System.Net.WebSockets;
 
 #nullable disable
 
@@ -27,6 +29,7 @@ namespace Natural_API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DistributorResource>>> GetDistributors()
+        
         {
             var distributors = await _DistributorService.GetAllDistributors();
             var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorResource>>(distributors);
@@ -40,7 +43,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<DistributorResource>> GetByIdDistributor(string id)
         {
             var distributor = await _DistributorService.GetDistributorById(id);
-            var distributorResource = _mapper.Map<Distributor,DistributorResource>(distributor);
+            var distributorResource = _mapper.Map<Distributor, DistributorResource>(distributor);
             return Ok(distributorResource);
         }
 
@@ -51,12 +54,26 @@ namespace Natural_API.Controllers
         {
 
             var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
-            
-            var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor, distributorResource.Area, distributorResource.City, distributorResource.State);
+
+            var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
 
+        // Delete Distributor
+
+
+        [HttpDelete("{distributorId}")]
+
+        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string distributorId)
+        {            
+            var response = await _DistributorService.DeleteDistributor(distributorId);           
+
+            return Ok(response);
+        }
     }
 }
+
+
+
 
 

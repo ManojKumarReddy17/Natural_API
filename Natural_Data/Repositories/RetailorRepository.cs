@@ -33,6 +33,7 @@ namespace Natural_Data.Repositories
             var result = retailors.Select(c => new Retailor
             {
 
+
                 FirstName = c.retailor.FirstName,
                 LastName = c.retailor.LastName,
                 MobileNumber = c.retailor.MobileNumber,

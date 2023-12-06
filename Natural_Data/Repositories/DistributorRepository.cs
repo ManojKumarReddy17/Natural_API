@@ -34,10 +34,13 @@ namespace Natural_Data.Repositories
                 LastName = c.LastName,
                 MobileNumber = c.MobileNumber,
                 Address = c.Address,
-                Area = c.AreaNavigation.AreaName,
                 Email = c.Email,
+                UserName = c.UserName,
+                Password = c.Password,
+                Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+              
             }).ToList();
 
             return result;
@@ -75,11 +78,11 @@ namespace Natural_Data.Repositories
             }
             
         }
-    
-
         private NaturalsContext NaturalDbContext
         {
-            get { return Context as NaturalsContext; }
+            get 
+            
+            { return Context as NaturalsContext; }
         }
 
 

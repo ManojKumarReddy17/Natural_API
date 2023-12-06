@@ -123,7 +123,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -156,6 +156,12 @@ namespace Natural_Data
                     .HasMaxLength(10);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UserName).IsRequired()
+                .HasMaxLength(20);
+                entity.Property(e => e.Password).IsRequired()
+               .HasMaxLength(20);
+
 
                 entity.Property(e => e.State)
                     .IsRequired()

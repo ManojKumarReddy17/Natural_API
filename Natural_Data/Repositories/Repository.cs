@@ -58,11 +58,7 @@ namespace Natural_Data.Repositories
         {
             Context.Set<TEntity>().RemoveRange(entities);
         }
-        //public void Update(TEntity entity)
-        //{
-        //    Context.Entry(entity) = EntityState.Modified;
-        //}
-
+     
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);

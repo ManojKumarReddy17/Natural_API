@@ -29,20 +29,13 @@ namespace Natural_Services
             return await _unitOfWork.RetailorRepo.GetWithRetailorsByIdAsync(distributorId);
         }
 
-        public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor, string areaId, string cityId, string stateId)
+        public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {
             var response = new RetailorResponce();
 
             try
             {
-                // setting associated models (or) entities 
-
-                retailor.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                retailor.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                retailor.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-                // Adding distributor to the repository
-
+              
                 await _unitOfWork.RetailorRepo.AddAsync(retailor);
 
                 // Commit changes

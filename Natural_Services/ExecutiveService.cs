@@ -17,9 +17,8 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-<<<<<<< HEAD
-     
-=======
+
+
         public  async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive, string areaId, string cityId, string stateId)
         {
             {
@@ -53,7 +52,6 @@ namespace Natural_Services
                 return response;
             }
         }
->>>>>>> 7e4e8b7 (Intial commit)
 
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
         {
@@ -91,7 +89,7 @@ namespace Natural_Services
                 response.Message = "updatesuceesfull";
                 response.StatusCode = 200;
             }
-            catch  (Exception ex)
+            catch  (Exception)
             {
                 response.Message = "Failed";
                 response.StatusCode = 500;

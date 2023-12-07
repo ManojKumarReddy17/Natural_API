@@ -30,11 +30,7 @@ namespace Natural_Data
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-<<<<<<< HEAD
-=======
-       
 
->>>>>>> 7e4e8b7 (Intial commit)
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();
@@ -57,19 +53,15 @@ namespace Natural_Data
                 }
 
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
-<<<<<<< HEAD
+
 
             }
         }
-                protected override void OnModelCreating(ModelBuilder modelBuilder)
-=======
-            }
-        }
+         
     
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
->>>>>>> 7e4e8b7 (Intial commit)
         {
             modelBuilder.HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_0900_ai_ci");

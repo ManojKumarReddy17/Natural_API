@@ -29,9 +29,13 @@ namespace Natural_Services
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
             return result;
         }
-        public async Task<Retailor> GetRetailorById(string distributorId)
+        public async Task<Retailor> GetRetailorById(string retailorId)
         {
-            return await _unitOfWork.RetailorRepo.GetWithRetailorsByIdAsync(distributorId);
+            return await _unitOfWork.RetailorRepo.GetWithRetailorsByIdAsync(retailorId);
+        }
+        public async Task<Retailor> GetRetailorsById(string retailorId)
+        {
+            return await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
         }
 
         public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor, string areaId, string cityId, string stateId)
@@ -95,7 +99,7 @@ namespace Natural_Services
             return response;
         }
 
-
+        
     }
 }
  

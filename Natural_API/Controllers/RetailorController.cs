@@ -35,13 +35,24 @@ namespace Natural_API.Controllers
 
         // Get Retailor by Id
 
-        [HttpGet("{id}")]
+        [HttpGet("details/{id}")]
 
         public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string id)
         {
             var retailor = await _retailorservice.GetRetailorById(id);
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(retailorResource);
+        }
+
+        //Get Retailors Details
+
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string id)
+        {
+            var retailor = await _retailorservice.GetRetailorsById(id);
+            var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
+            return Ok(ret);
         }
 
         // Create Retailor

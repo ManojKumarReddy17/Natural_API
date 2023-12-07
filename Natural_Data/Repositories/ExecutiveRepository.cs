@@ -77,10 +77,7 @@ namespace Natural_Data.Repositories
             throw new NotImplementedException();
         }
 
-       //public  Task<Executive> IExecutiveRepository.GetByIdAsync(string id)
-       // {
-       //     throw new NotImplementedException();
-       // }
+      
 
         private NaturalsContext NaturalDBContext
         {

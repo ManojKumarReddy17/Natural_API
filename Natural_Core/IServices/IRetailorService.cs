@@ -14,6 +14,8 @@ namespace Natural_Core.IServices
         string areaId, string cityId, string stateId);
 
         Task<RetailorResponce> DeleteRetailor(string retailorId);
+        Task<Retailor> GetRetailorsById(string retailorId);
+
 
 
     }

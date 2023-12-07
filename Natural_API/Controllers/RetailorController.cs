@@ -66,9 +66,11 @@ namespace Natural_API.Controllers
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
+<<<<<<< HEAD
 
         //Delete Retailor
 
+<<<<<<< HEAD
         [HttpDelete("{retailorId}")]
         public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string retailorId)
         {
@@ -82,3 +84,12 @@ namespace Natural_API.Controllers
 
  
  
+=======
+=======
+       
+        
+>>>>>>> 2163af9 (Intial commit)
+    }
+    
+}
+>>>>>>> 7677d32a2ec34e478c20486a57ff8f5d9b7d2917

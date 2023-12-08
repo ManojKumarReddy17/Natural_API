@@ -11,7 +11,7 @@ namespace Natural_API.Mapping
       
             public MappingProfile()
             {
-                // DOMAIN TO RESOURCE
+                // DOMAIN TO RESOURCE 
 
 
                 CreateMap<Login, LoginResource>();

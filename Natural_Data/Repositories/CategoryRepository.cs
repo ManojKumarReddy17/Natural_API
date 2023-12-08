@@ -35,11 +35,7 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Categories.FindAsync(CategoryId);
         }
 
-      
-        public Task<Category> GetCategoryById(string CategoryId)
-        {
-            throw new NotImplementedException();
-        }
+     
 
 
          public void Update(Category category)

@@ -10,7 +10,6 @@ namespace Natural_Core.IRepositories
     {
         Task<IEnumerable<Category>> GetCatogeriesAsync();
         ValueTask<Category> GetWithCategoryByIdAsync(string CategoryId);
-        Task<Category> GetCategoryById(string CategoryId);
         void Update(Category category);
 
     }

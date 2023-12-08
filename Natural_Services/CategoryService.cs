@@ -60,34 +60,7 @@ namespace Natural_Services
 
         public async Task UpdateCategory(Category updatecategory)
         {
-            //var response = new CategoryResponse();
-
-            //try
-            //{
-            //    var existingCategory = await _unitOfWork.CategoryRepo.GetCategoryById(categoryId);
-
-            //    if (existingCategory == null)
-            //    {
-            //        response.Message = "Category not found";
-            //        response.StatusCode = 404;
-            //    }
-            //    else
-            //    {
-            //        existingCategory.CategoryName = category.CategoryName;
-            //        // Update other properties as needed
-
-            //        _unitOfWork.CategoryRepo.Update(categorytoUpdate);
-            //        await _unitOfWork.CommitAsync();
-
-            //        response.Message = "Update Successful";
-            //        response.StatusCode = 200;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    response.Message = "Update Failed";
-            //    response.StatusCode = 500;
-            //}
+            
             _unitOfWork.CategoryRepo.Update(updatecategory);
             await _unitOfWork.CommitAsync();
         }

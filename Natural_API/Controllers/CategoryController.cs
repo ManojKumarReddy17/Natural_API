@@ -60,17 +60,6 @@ namespace Natural_API.Controllers
             var update = await _categoryService.GetCategoryById(Id);
             var up = _mapper.Map<Category,CategoryResource>(update);
             return Ok(up);
-
-            //if (response.StatusCode == 200)
-            //{
-            //    var updatedCategory = await _categoryService.GetCategoryById(Id);
-            //    var updatedCategoryResource = _mapper.Map<Category, CategoryResource>(updatedCategory);
-            //    return Ok(updatedCategoryResource);
-            //}
-            //else
-            //{
-            //    return BadRequest(response);
-            //}
         }
 
         [HttpDelete("{Id}")]

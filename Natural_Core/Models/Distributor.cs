@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public partial class Distributor
+    public partial class Distributor 
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -20,9 +20,13 @@ namespace Natural_Core.Models
         public DateTime ModifiedDate { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
+
+
+        
+
+       
     }
 }

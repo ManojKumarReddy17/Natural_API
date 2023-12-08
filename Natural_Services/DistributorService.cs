@@ -20,39 +20,34 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
+        
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
             return result;
         }
-    
+
 
         // Get Distributor by Id
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
-            return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
-        }
-
-        public async Task<Distributor> GetById(string distributorId)
-        {
             return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
         }
-       
+
+        // Get Distributor Details by Id
+
+        public async Task<Distributor> GetDistributorDetailsById(string distributorId)
+        {
+            return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
+        }
 
         //Create Distributor
-        public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor, string areaId, string cityId, string stateId)
+        public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
         {
             var response = new DistributorResponse();
 
             try
             {
-                // setting associated models (or) entities 
-
-                distributor.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                distributor.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                distributor.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-                // Adding distributor to the repository
 
                 await _unitOfWork.DistributorRepo.AddAsync(distributor);
 
@@ -75,23 +70,54 @@ namespace Natural_Services
             return response;
         }
 
-        //public async Task<Distributor> GetById(update)
-        //{
-        //  var distributer=  await _unitOfWork.DistributorRepo.update(distributorId);
-        //    return distributer;
-        //}
+        public async Task<DistributorResponse> UpdateDistributor(Distributor distributor)
 
-       
-
-        public async Task UpdateDistributor(Distributor distributor)
         {
-            _unitOfWork.DistributorRepo.Update(distributor);
-            await _unitOfWork.CommitAsync();
-        }
+            var response = new DistributorResponse();
+            try
+            {
+                _unitOfWork.DistributorRepo.Update(distributor);
+                var created=      await _unitOfWork.CommitAsync();
+                if (created != null)
+                {
+                    response.Message = "update Successful";
+                    response.StatusCode = 200;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //public Task UpdateDistributor(Distributor DistributorToBeUpdates, Distributor distributor)
-        //{
-        //    throw new NotImplementedException();
-        //}
+                response.Message = "update Failed";
+                response.StatusCode = 401;
+            }
+
+            return response;
+        }
+        public async Task<DistributorResponse> DeleteDistributor(string distributorId)
+        {
+            var response = new DistributorResponse();
+
+            try
+            {
+                var distributor = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+
+                if (distributor != null)
+                {
+                    _unitOfWork.DistributorRepo.Remove(distributor);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                }
+                else
+                {
+                    response.Message = "DISTRIBUTOR NOT FOUND";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
+        }
     }
-    }
+}

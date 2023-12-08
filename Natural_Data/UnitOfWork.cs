@@ -1,5 +1,6 @@
 ﻿using Natural_Core;
 using Natural_Core.IRepositories;
+using Natural_Core.Models;
 using Natural_Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Natural_Data
         private IStateRepository _stateRepository;
         private ICategoryRepository _categoryRepository;
         private IRetailorRepository _retailorRepository;
-       // private IUpdateDistributorRepository _updateRepository;
+        private IExecutiveRepository _executiveRepository;
 
 
         public UnitOfWork(NaturalsContext context)
@@ -32,7 +33,7 @@ namespace Natural_Data
 
         public ILoginRepository Login => _loginRepository = _loginRepository ?? new LoginRepository(_context);
         public IDistributorRepository DistributorRepo => _distributorRepository = _distributorRepository ?? new DistributorRepository(_context);
-    
+        public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context);
         public ICityRepository CityRepo => _cityRepository = _cityRepository ?? new CityRepository(_context);
         public IStateRepository StateRepo => _stateRepository = _stateRepository ?? new StateRepository(_context);
 
@@ -41,9 +42,7 @@ namespace Natural_Data
         public ICategoryRepository CategoryRepo => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
-
-        public IUpdateDistributorRepository UpdateDistributorRepository => throw new NotImplementedException();
-
+        
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

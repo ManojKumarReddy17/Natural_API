@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
@@ -27,16 +30,38 @@ namespace Natural_Data
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseMySql("server=naturals-mysql.c23wiuavicdg.ap-south-1.rds.amazonaws.com;database=Naturals;username=admin;password=Admin123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.33-mysql"));
-//            }
-//        }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetTimestamps<Distributor>();
+            SetTimestamps<Executive>();
+            SetTimestamps<Retailor>();
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetTimestamps<T>() where T : class
+        {
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is T && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
+                }
+
+                entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
+
+
+            }
+        }
+         
+    
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_0900_ai_ci");
@@ -138,7 +163,11 @@ namespace Natural_Data
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.UserName).IsRequired()
+                .HasMaxLength(20);
+                entity.Property(e => e.Password).IsRequired()
+               .HasMaxLength(20);
+
 
                 entity.Property(e => e.State)
                     .IsRequired()
@@ -175,7 +204,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -209,15 +238,7 @@ namespace Natural_Data
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
                 entity.Property(e => e.State)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(20);
 
@@ -265,7 +286,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd(); ;
 
                 entity.Property(e => e.Address)
                     .IsRequired()

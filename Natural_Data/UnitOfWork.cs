@@ -33,10 +33,7 @@ namespace Natural_Data
 
         public ILoginRepository Login => _loginRepository = _loginRepository ?? new LoginRepository(_context);
         public IDistributorRepository DistributorRepo => _distributorRepository = _distributorRepository ?? new DistributorRepository(_context);
-<<<<<<< HEAD
-=======
         public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context);
->>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
         public ICityRepository CityRepo => _cityRepository = _cityRepository ?? new CityRepository(_context);
         public IStateRepository StateRepo => _stateRepository = _stateRepository ?? new StateRepository(_context);
 
@@ -45,9 +42,6 @@ namespace Natural_Data
         public ICategoryRepository CategoryRepo => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
-
-        public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context);
-
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

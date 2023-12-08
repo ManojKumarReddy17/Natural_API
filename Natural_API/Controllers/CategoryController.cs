@@ -75,11 +75,6 @@ namespace Natural_API.Controllers
             {
                 return BadRequest(response);
             }
-
-
-        
-        
-        
         }
     }
 }

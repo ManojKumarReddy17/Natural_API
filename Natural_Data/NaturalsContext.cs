@@ -4,10 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-<<<<<<< HEAD
-=======
 using Natural_Core.Models;
->>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 
 #nullable disable
 
@@ -52,7 +49,7 @@ namespace Natural_Core.Models
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Property("CreateDate").CurrentValue = DateTime.UtcNow;
+                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
                 }
 
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
@@ -132,7 +129,7 @@ namespace Natural_Core.Models
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()

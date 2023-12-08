@@ -54,9 +54,6 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
-
-
-
 builder.Services.AddEndpointsApiExplorer();
 
 

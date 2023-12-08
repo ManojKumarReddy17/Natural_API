@@ -8,6 +8,11 @@ namespace Natural_Core.IServices
 {
     public interface IExecutiveService
     {
+<<<<<<< HEAD
+        Task<IEnumerable<Executive>> GetAllExecutive();
+        Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive exec,
+       string areaId, string cityId, string stateId);
+=======
         Task<IEnumerable<Executive>> GetAllExecutives();
  
         Task<Executive> GetExecutiveDetailsById(string DetailsId);

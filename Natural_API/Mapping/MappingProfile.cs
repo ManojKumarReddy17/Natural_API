@@ -25,6 +25,7 @@ namespace Natural_API.Mapping
                 CreateMap <Executive, ExecutiveResource>();
               CreateMap <Executive, ExecutiveGetResource>();
             CreateMap<Executive, ExecutiveInsertUpdateResource>();
+              CreateMap <Executive, ExecutiveResource>();
 
 
             

@@ -23,6 +23,19 @@ namespace Natural_API.Controllers
 
 
         [HttpGet]
+        public async Task<IEnumerable<ExecutiveResource>> GetExecutives()
+        {
+            var exec = await _executiveService.GetAllExecutive();
+            var execget=_mapper.Map<IEnumerable<Executive>,IEnumerable<ExecutiveResource>>(exec);
+            return execget;
+        }
+        [HttpPost]
+        public async Task<ActionResult<ExecutiveResponse>> InsertRetailorWithAssociations([FromBody] ExecutiveResource executiveResource)
+        {
+            var insertexec = _mapper.Map<ExecutiveResource, Executive>(executiveResource);
+            var crtexec = await _executiveService.CreateExecutiveWithAssociationsAsync(insertexec, executiveResource.Area, executiveResource.City, executiveResource.State);
+            return StatusCode(crtexec.StatusCode, crtexec);
+        public async Task<ActionResult<IEnumerable<ExecutiveResource>>> GetExecutive()
         public async Task<ActionResult<IEnumerable<ExecutiveGetResource>>> GetExecutive()
         {
             var execu = await _executiveService.GetAllExecutives();

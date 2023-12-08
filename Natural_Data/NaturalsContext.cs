@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+<<<<<<< HEAD
+=======
 using Natural_Core.Models;
+>>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Core.Models
 {
     public partial class NaturalsContext : DbContext
     {

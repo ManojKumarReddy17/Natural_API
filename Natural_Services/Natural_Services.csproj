@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Natural_Core\Natural_Core.csproj" />
+    <ProjectReference Include="..\Natural_Data\Natural_Data.csproj" />
   </ItemGroup>
 
 </Project>

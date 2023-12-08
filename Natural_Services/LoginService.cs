@@ -56,9 +56,8 @@ namespace Natural_Services
               
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
-                //can we have line no 62 and  63 in exception //
                 response.Message = "INTERNAL SERVER ERROR";
                 response.StatusCode = 500;
                 return response;

@@ -71,6 +71,14 @@ namespace Natural_Data.Repositories
                 return null;
             }
         }
+
+        public Task<List<Executive>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+      
+
         private NaturalsContext NaturalDBContext
         {
             get { return Context as NaturalsContext; }

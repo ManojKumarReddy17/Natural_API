@@ -30,6 +30,7 @@ namespace Natural_Data
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();
@@ -53,9 +54,14 @@ namespace Natural_Data
 
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
 
+
             }
         }
-                protected override void OnModelCreating(ModelBuilder modelBuilder)
+         
+    
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_0900_ai_ci");
@@ -257,7 +263,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Login");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -278,7 +284,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd(); ;
 
                 entity.Property(e => e.Address)
                     .IsRequired()

@@ -5,6 +5,7 @@ using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Data.Repositories;
+using Natural_Services;
 
 namespace Natural_API.Controllers
 {
@@ -22,10 +23,10 @@ namespace Natural_API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExecutiveResource>>> GetExecutive()
+        public async Task<ActionResult<IEnumerable<ExecutiveGetResource>>> GetExecutive()
         {
             var execu = await _executiveService.GetAllExecutives();
-            var executiveresource = _mapper.Map<IEnumerable<Executive>, IEnumerable<ExecutiveResource>>(execu);
+            var executiveresource = _mapper.Map<IEnumerable<Executive>, IEnumerable<ExecutiveGetResource>>(execu);
             return Ok(executiveresource);
         }
       
@@ -34,32 +35,48 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string id)
         {
             var executive = await _executiveService.GetExecutiveById(id);
-            var exec = _mapper.Map<Executive, ExecutiveResource>(executive);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
             return Ok(exec);
         }
 
 
-        [HttpGet("{id}/details")]
-        public async Task<ActionResult<ExecutiveResponse>> GetDetailsById(string id)
+        [HttpGet("details/{id}")]
+  
+        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveDetailsById(string id)
         {
-            var executive = await _executiveService.GetDetailsById(id);
-            var exec = _mapper.Map<Executive, ExecutiveResource>(executive);
+            var executive = await _executiveService.GetExecutiveDetailsById(id);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
             return Ok(exec);
         }
 
     
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ExecutiveResource>> UpdateExecutive(string id , [FromBody]ExecutiveResource saveExecutiveResource)
+        public async Task<ActionResult<ExecutiveResponse>> UpdateExecutive(string id , [FromBody] ExecutiveInsertUpdateResource saveExecutiveResource)
         {
             var exectutivetobrupade = await _executiveService.GetExecutiveById(id);
             
-            var executive = _mapper.Map<ExecutiveResource, Executive>(saveExecutiveResource);
+            var executive = _mapper.Map<ExecutiveInsertUpdateResource, Executive>(saveExecutiveResource);
           var Updateresponse =  await _executiveService.UpadateExecutive(exectutivetobrupade, executive);
            
             return StatusCode(Updateresponse.StatusCode,Updateresponse);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] ExecutiveInsertUpdateResource executiveResource)
+        {
+            var createexecu = _mapper.Map<ExecutiveInsertUpdateResource, Executive>(executiveResource);
+            var exe = await _executiveService.CreateExecutiveWithAssociationsAsync(createexecu);
+
+            return StatusCode(exe.StatusCode, exe);
+        }
+        [HttpDelete("{execId}")]
+        public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string execId)
+        {
+
+            var response = await _executiveService.DeleteExecutive(execId);
+            return Ok(response);
+        }
 
     }
 }

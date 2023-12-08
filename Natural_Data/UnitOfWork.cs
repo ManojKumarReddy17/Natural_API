@@ -43,7 +43,6 @@ namespace Natural_Data
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
 
-        public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context);
 
         public async Task<int> CommitAsync()
         {

@@ -5,10 +5,10 @@ using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Natural_Data.Repositories
-namespace Natural_Data.Repositories
+
 {
     public class ExecutiveRepository : Repository<Executive>, IExecutiveRepository
     {
@@ -17,58 +17,78 @@ namespace Natural_Data.Repositories
 
         }
 
-        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
+        public async  Task<IEnumerable<Executive>> GetAllExecutiveAsync()
         {
-            var executive = await (from executives in NaturalDBContext.Executives
-                                   join area in NaturalDBContext.Areas on executives.Area equals area.Id
-                                   join city in NaturalDBContext.Cities on area.CityId equals city.Id
-                                   join state in NaturalDBContext.States on city.StateId equals state.Id
-                                   select new
-                                   {
-                                       executivee = executives,
-                                       Area = area,
-                                       City = city,
-                                       State = state
-                                   }).ToListAsync();
-
-            var result = executive.Select(c => new Executive
             {
+                var exec = await NaturalDbContext.Executives
+                .Include(c => c.AreaNavigation)
+                 .ThenInclude(a => a.City)
+                .ThenInclude(ct => ct.State)
+                 .ToListAsync();
 
-                FirstName = c.executive.FirstName,
-                        .ThenInclude(a => a.City)
-                       .ThenInclude(ct => ct.State)
-                        .FirstOrDefaultAsync(c => c.Id == execid);
+                var result = exec.Select(c => new Executive
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    MobileNumber = c.MobileNumber,
+                    Address = c.Address,
+                    Area = c.AreaNavigation.AreaName,
+                    Email = c.Email,
+                    UserName= c.UserName,
+                    Password= c.Password,
+                    City = c.AreaNavigation.City.CityName,
+                    State = c.AreaNavigation.City.State.StateName
+                }).ToList();
 
-                FirstName = c.executive.FirstName,
-                LastName = c.executive.LastName,
-                MobileNumber = c.executive.MobileNumber,
-                Address = c.executive.Address,
-                Area = c.Area.AreaName,
-                Email = c.executive.Email,
-                UserName= c.executivee.UserName,
-                Password= c.executivee.Password,
-                City = c.City.CityName,
-                State = c.State.StateName,
-           
-            });
-
-        public async Task<List<Executive>> GetAllExectivesAsync()
-
-
-            else
-            {
-                return null;
+                return result;
             }
         }
 
-        public Task<List<Executive>> GetAll()
+        //public Task<List<Executive>> GetAll()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+       public async Task<Executive> GetWithExectiveByIdAsync(string execid)
         {
-            throw new NotImplementedException();
+            {
+                var exec = await NaturalDbContext.Executives
+                           .Include(c => c.AreaNavigation)
+                            .ThenInclude(a => a.City)
+                           .ThenInclude(ct => ct.State)
+                            .FirstOrDefaultAsync(c => c.Id == execid);
+
+                if (exec != null)
+                {
+                    var result = new Executive
+                    {
+                        Id = exec.Id,
+                        FirstName = exec.FirstName,
+                        LastName = exec.LastName,
+                        MobileNumber = exec.MobileNumber,
+                        Address = exec.Address,
+                        Area = exec.AreaNavigation.AreaName,
+                        Email = exec.Email,
+                        UserName= exec.UserName,
+                        Password= exec.Password,
+                        City = exec.AreaNavigation.City.CityName,
+                        State = exec.AreaNavigation.City.State.StateName
+                    };
+
+                    return result;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
-   }    }
-
+        }
+    }
 }

@@ -48,7 +48,7 @@ namespace Natural_Data
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
+                    entry.Property("CreateDate").CurrentValue = DateTime.UtcNow;
                 }
 
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;

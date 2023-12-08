@@ -10,10 +10,13 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<Executive>> GetAllExecutives();
  
-        Task<Executive> GetDetailsById(string ExecutiveId);
+        Task<Executive> GetExecutiveDetailsById(string DetailsId);
 
         Task<Executive> GetExecutiveById(string ExecutiveId);
-       
+
+        Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
+        Task<ExecutiveResponse> DeleteExecutive(string executiveId);
+
         Task<ExecutiveResponse> UpadateExecutive (Executive existing, Executive  executive);
     }
 }

@@ -21,13 +21,13 @@ namespace Natural_Services
 
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
         {
-            var result = await _unitOfWork.ExecutiveRepo.GetAllExectivesAsync();
+            var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
             return result;
         }
 
-        public  async Task<Executive> GetDetailsById(string ExecutiveId)
+        public  async Task<Executive> GetExecutiveDetailsById(string DetailsId)
             {
-            return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(ExecutiveId);
+            return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
         }
 
         public async Task<Executive> GetExecutiveById(string ExecutiveId)
@@ -48,10 +48,11 @@ namespace Natural_Services
                 existing.City = executive.City;
                 existing.State = executive.State;
                 existing.Email = executive.Email;
+                existing.UserName= executive.UserName;
+                existing.Password= executive.Password;
                 _unitOfWork.ExecutiveRepo.Update(existing);
 
                 // Commit changes
-                var created = await _unitOfWork.CommitAsync();
 
                 await _unitOfWork.CommitAsync();
                 response.Message = "updatesuceesfull";
@@ -65,7 +66,63 @@ namespace Natural_Services
 
             return (response);
         }
-    
+
+        public async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+        {
+            {
+                var response = new ExecutiveResponse();
+
+                try
+                {
+                    
+                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+               
+                    var created = await _unitOfWork.CommitAsync();
+
+                    if (created != null)
+                    {
+                        response.Message = "Insertion Successful";
+                        response.StatusCode = 200;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+                }
+
+                return response;
+            }
+        }
+
+        public async Task<ExecutiveResponse> DeleteExecutive(string executiveId)
+        {
+            var response = new ExecutiveResponse();
+
+            try
+            {
+                var exec = await _unitOfWork.ExecutiveRepo.GetByIdAsync(executiveId);
+
+                if (exec != null)
+                {
+                    _unitOfWork.ExecutiveRepo.Remove(exec);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                }
+                else
+                {
+                    response.Message = "RETAILER NOT FOUND";
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
+        } 
     }
 }
 

@@ -21,27 +21,32 @@ namespace Natural_API.Mapping
                 CreateMap<City, CityResource>();
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
-              CreateMap <Executive, ExecutiveResource>();
-
-
-                //// We can map like this also
-                //CreateMap<City, CityResource>()
-                //.ForMember(domain => domain.Id, opt => opt.MapFrom(source => source.Id))
-                //.ForMember(domain => domain.CityName, opt => opt.MapFrom(source => source.CityName));
+              CreateMap <Executive, ExecutiveGetResource>();
+            CreateMap<Executive, ExecutiveInsertUpdateResource>();
 
 
 
-                //// RESOURCE TO DOMAIN
+            //// We can map like this also
+            //CreateMap<City, CityResource>()
+            //.ForMember(domain => domain.Id, opt => opt.MapFrom(source => source.Id))
+            //.ForMember(domain => domain.CityName, opt => opt.MapFrom(source => source.CityName));
 
-                CreateMap<LoginResource, Login>();
+
+
+            //// RESOURCE TO DOMAIN
+
+            CreateMap<LoginResource, Login>();
                 CreateMap<DistributorResource, Distributor>();
                 CreateMap<StateResource, State>();
                 CreateMap<AreaResource, Area>();
                 CreateMap<CityResource, City>();
                  CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
-            CreateMap<ExecutiveResource, Executive>();
-            CreateMap<SaveExecutiveResource, Executive>();
+            CreateMap<ExecutiveGetResource, Executive>();
+
+            CreateMap<ExecutiveInsertUpdateResource, Executive>();
+
+           
 
 
 

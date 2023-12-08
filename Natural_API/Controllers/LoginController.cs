@@ -16,7 +16,7 @@ namespace Natural_API.Controllers
     {
         private readonly ILoginService _loginService;
         private readonly IMapper _mapper;
-
+         
 
         public LoginController(ILoginService loginService, IMapper mapper)
         {

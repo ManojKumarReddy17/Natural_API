@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Natural_Core
+namespace Natural_Core.Models
 {
     public partial class Category
     {

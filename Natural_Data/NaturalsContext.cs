@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Natural_Core;
 using Natural_Core.Models;
 
 #nullable disable
@@ -23,9 +22,19 @@ namespace Natural_Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
+        public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
+
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                optionsBuilder.UseMySql("server=naturals-mysql.c23wiuavicdg.ap-south-1.rds.amazonaws.com;database=Naturals;username=admin;password=Admin123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.33-mysql"));
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,7 +66,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName)
                     .HasMaxLength(20)
@@ -95,7 +104,78 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Area)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MobileNumber)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Password).HasMaxLength(50);
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.UserName).HasMaxLength(50);
+
+                entity.HasOne(d => d.AreaNavigation)
+                    .WithMany(p => p.Distributors)
+                    .HasForeignKey(d => d.Area)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Distributor_ibfk_1");
+
+                entity.HasOne(d => d.CityNavigation)
+                    .WithMany(p => p.Distributors)
+                    .HasForeignKey(d => d.City)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Distributor_ibfk_2");
+
+                entity.HasOne(d => d.StateNavigation)
+                    .WithMany(p => p.Distributors)
+                    .HasForeignKey(d => d.State)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Distributor_ibfk_3");
+            });
+
+            modelBuilder.Entity<Executive>(entity =>
+            {
+                entity.ToTable("Executive");
+
+                entity.HasIndex(e => e.Area, "Area");
+
+                entity.HasIndex(e => e.City, "City");
+
+                entity.HasIndex(e => e.State, "State");
+
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -125,38 +205,46 @@ namespace Natural_Data
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.State)
                     .IsRequired()
                     .HasMaxLength(20);
 
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.HasOne(d => d.AreaNavigation)
-                    .WithMany(p => p.Distributors)
+                    .WithMany(p => p.Executives)
                     .HasForeignKey(d => d.Area)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Distributor_ibfk_1");
+                    .HasConstraintName("Executive_ibfk_1");
 
                 entity.HasOne(d => d.CityNavigation)
-                    .WithMany(p => p.Distributors)
+                    .WithMany(p => p.Executives)
                     .HasForeignKey(d => d.City)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Distributor_ibfk_2");
+                    .HasConstraintName("Executive_ibfk_2");
 
                 entity.HasOne(d => d.StateNavigation)
-                    .WithMany(p => p.Distributors)
+                    .WithMany(p => p.Executives)
                     .HasForeignKey(d => d.State)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Distributor_ibfk_3");
+                    .HasConstraintName("Executive_ibfk_3");
             });
 
             modelBuilder.Entity<Login>(entity =>
             {
                 entity.ToTable("Login");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
@@ -177,7 +265,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()

@@ -62,7 +62,7 @@ namespace Natural_API.Controllers
         {
 
             var retailor = _mapper.Map<RetailorResource, Retailor>(retailorResource);
-            var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
+            var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
 

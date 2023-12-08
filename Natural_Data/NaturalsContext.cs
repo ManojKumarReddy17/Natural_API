@@ -143,7 +143,7 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -162,6 +162,12 @@ namespace Natural_Data
                     .HasMaxLength(10);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UserName).IsRequired()
+                .HasMaxLength(20);
+                entity.Property(e => e.Password).IsRequired()
+               .HasMaxLength(20);
+
 
                 entity.Property(e => e.State)
                     .IsRequired()

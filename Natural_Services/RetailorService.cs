@@ -38,7 +38,7 @@ namespace Natural_Services
             return await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
         }
 
-        public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor, string areaId, string cityId, string stateId)
+        public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {
             var response = new RetailorResponce();
 

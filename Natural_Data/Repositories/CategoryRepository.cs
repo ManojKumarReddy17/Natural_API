@@ -34,15 +34,10 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Categories.FindAsync(Categoryid);
         }
 
-        //public async ValueTask<Category> UpdateCategoryById(string Id)
-        //{
-        //    return await NaturalDbContext.Categories.FindAsync(Id);
-        //}
-
-        ////public async Task<Category> DeleteCategoryById(string Id)
-        //{
-        //    return await NaturalDbContext.Categories.FirstAsync(Id);
-        //}
+        public Task<IEnumerable<Category>> UpdateCategoryById(string Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

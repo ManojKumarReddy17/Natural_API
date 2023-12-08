@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public partial class Executive
+    public  class Executive
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

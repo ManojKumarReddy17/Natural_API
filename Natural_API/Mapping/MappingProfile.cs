@@ -23,6 +23,9 @@ namespace Natural_API.Mapping
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
                 CreateMap <Executive, ExecutiveResource>();
+              CreateMap <Executive, ExecutiveGetResource>();
+            CreateMap<Executive, ExecutiveInsertUpdateResource>();
+              CreateMap <Executive, ExecutiveResource>();
 
 
             
@@ -33,8 +36,10 @@ namespace Natural_API.Mapping
 
 
 
-                //// RESOURCE TO DOMAIN
+            //// RESOURCE TO DOMAIN
 
+            CreateMap<LoginResource, Login>();
+                CreateMap<DistributorResource, Distributor>();
                 CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
                 CreateMap<DistributorInsertUpdateResource, Distributor>();
@@ -43,6 +48,13 @@ namespace Natural_API.Mapping
                 CreateMap<CityResource, City>();
                 CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
+            CreateMap<ExecutiveGetResource, Executive>();
+
+            CreateMap<ExecutiveInsertUpdateResource, Executive>();
+
+           
+
+
                 CreateMap<ExecutiveResource, Executive>();
                 CreateMap<SaveExecutiveResource, Executive>();
                 CreateMap<ExecutiveResource, Executive>();

@@ -13,12 +13,12 @@ namespace Natural_Core
     {
         ILoginRepository Login { get; }
         IDistributorRepository DistributorRepo { get; }
-        IExecutiveRepository ExecutiveRepo { get; }
         ICityRepository CityRepo { get; }
         IStateRepository StateRepo { get; }
         IAreaRepository AreaRepo { get; }
         ICategoryRepository CategoryRepo { get; }
         IRetailorRepository  RetailorRepo { get; }
+        IExecutiveRepository ExecutiveRepo { get; }
         Task<int> CommitAsync();
 
 

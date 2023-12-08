@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IRepositories
 {
+<<<<<<< HEAD
+    public  interface IExecutiveRepository :IRepository<Executive>
+    {
+        Task<IEnumerable<Executive>> GetAllExecutiveAsync();
+=======
     public interface IExecutiveRepository:IRepository<Executive>
     {
         Task<List<Executive>> GetAllExectivesAsync();

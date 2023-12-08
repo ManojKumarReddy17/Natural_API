@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+<<<<<<< HEAD
+=======
 using Natural_Core.Models;
+>>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Core.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -49,7 +52,7 @@ namespace Natural_Data
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
+                    entry.Property("CreateDate").CurrentValue = DateTime.UtcNow;
                 }
 
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
@@ -163,17 +166,17 @@ namespace Natural_Data
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UserName).IsRequired()
-                .HasMaxLength(20);
-                entity.Property(e => e.Password).IsRequired()
-               .HasMaxLength(20);
-
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.State)
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.UserName).HasMaxLength(50);
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.HasOne(d => d.AreaNavigation)
                     .WithMany(p => p.Distributors)
@@ -238,7 +241,15 @@ namespace Natural_Data
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(20);
 

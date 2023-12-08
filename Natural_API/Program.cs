@@ -25,6 +25,7 @@ builder.Services.AddDbContext<NaturalsContext>(options =>
 });
 
 
+builder.Services.AddControllers();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ILoginRepository, LoginRepository>();
@@ -36,6 +37,9 @@ builder.Services.AddTransient<IDistributorService, DistributorService>();
 
 builder.Services.AddTransient<IRetailorRepository, RetailorRepository>();
 builder.Services.AddTransient<IRetailorService, RetailorService>();
+
+builder.Services.AddTransient<IExecutiveRepository,ExecutiveRepository>();
+builder.Services.AddTransient<IExecutiveService,ExecutiveService>();
 
 builder.Services.AddTransient<ICityRepository, CityRepository>();
 builder.Services.AddTransient<ICityService, CityService>();
@@ -49,10 +53,6 @@ builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
-builder.Services.AddTransient<IExecutiveRepository, ExecutiveRepository>();
-builder.Services.AddTransient<IExecutiveService, ExecutiveService>();
-
-builder.Services.AddControllers();
 
 
 

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Core.Models
+namespace Natural_API.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -30,38 +27,7 @@ namespace Natural_Core.Models
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            SetTimestamps<Distributor>();
-            SetTimestamps<Executive>();
-            SetTimestamps<Retailor>();
-
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        private void SetTimestamps<T>() where T : class
-        {
-            var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is T && (e.State == EntityState.Added || e.State == EntityState.Modified));
-
-            foreach (var entry in entries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
-                }
-
-                entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
-
-
-            }
-        }
-         
-    
-
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
                 .UseCollation("utf8mb4_0900_ai_ci");
@@ -163,17 +129,13 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.Password).HasMaxLength(50);
 
                 entity.Property(e => e.State)
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.UserName).HasMaxLength(50);
 
                 entity.HasOne(d => d.AreaNavigation)
                     .WithMany(p => p.Distributors)
@@ -218,7 +180,7 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -294,7 +256,7 @@ namespace Natural_Core.Models
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd(); ;
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()

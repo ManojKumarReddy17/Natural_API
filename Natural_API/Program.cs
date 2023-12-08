@@ -8,6 +8,7 @@ using Natural_Services;
 using Natural_API;
 using Microsoft.OpenApi.Models;
 using Natural_Core.Models;
+using Natural_API.Models;
 #nullable disable
 
 

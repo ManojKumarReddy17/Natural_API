@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Natural_Core;
+using Natural_API.Models;
 
 #nullable disable
 

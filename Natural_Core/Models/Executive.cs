@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public  class Executive
+    public partial class Executive
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -16,7 +16,7 @@ namespace Natural_Core.Models
         public string Area { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }

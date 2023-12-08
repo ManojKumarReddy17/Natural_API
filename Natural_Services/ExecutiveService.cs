@@ -1,8 +1,5 @@
 ﻿using Natural_Core;
-<<<<<<< HEAD
-=======
 using Natural_Core.IRepositories;
->>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
@@ -12,52 +9,12 @@ using System.Threading.Tasks;
 
 namespace Natural_Services
 {
-<<<<<<< HEAD
     public class ExecutiveService :IExecutiveService
-=======
-    public class ExecutiveService : IExecutiveService
->>>>>>> c58358f3903f29e537fa003d6294fb2aae3176fa
     {
         private readonly IUnitOfWork _unitOfWork;
         public ExecutiveService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
-
-
-
-        public  async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive, string areaId, string cityId, string stateId)
-        {
-            {
-                var response = new ExecutiveResponse();
-
-                try
-                {
-
-                    executive.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                    executive.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                    executive.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-
-                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-                    var created = await _unitOfWork.CommitAsync();
-
-                    if (created != null)
-                    {
-                        response.Message = "Insertion Successful";
-                        response.StatusCode = 200;
-                    }
-                }
-                catch (Exception)
-                {
-
-                    response.Message = "Insertion Failed";
-                    response.StatusCode = 401;
-                }
-
-                return response;
-            }
         }
 
         public  async Task<IEnumerable<Executive>> GetAllExecutives()
@@ -163,7 +120,12 @@ namespace Natural_Services
             }
 
             return response;
-        } 
+        }
+
+        public Task<IEnumerable<Executive>> GetAllExecutive()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

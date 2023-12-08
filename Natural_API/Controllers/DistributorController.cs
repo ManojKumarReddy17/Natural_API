@@ -65,31 +65,23 @@ namespace Natural_API.Controllers
         // Create Distributor
 
         [HttpPost]
-        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] DistributorInsertUpdateResource distributorResource)
+        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
         {
 
-            var distributor = _mapper.Map<DistributorInsertUpdateResource, Distributor>(distributorResource);
+            var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
 
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<DistributorResource>> UpdateDistributor(string id, [FromBody] DistributorResource updatedistributor)
+        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string id, [FromBody] InsertUpdateResource updatedistributor)
         {
 
-
             var ExistingDistributor = await _DistributorService.GetDistributorById(id);
-
-            //if (Distributor == null)
-            //    return NotFound();
-
             var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
-
-
-
             var update=  await _DistributorService.UpdateDistributor(distributorToUpdate);
             return StatusCode(update.StatusCode, update);
-
             
         }
 

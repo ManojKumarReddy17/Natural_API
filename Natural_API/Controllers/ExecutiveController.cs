@@ -23,26 +23,12 @@ namespace Natural_API.Controllers
 
 
         [HttpGet]
-        public async Task<IEnumerable<ExecutiveResource>> GetExecutives()
+        public async Task<IEnumerable<ExecutiveGetResource>> GetExecutives()
         {
-            var exec = await _executiveService.GetAllExecutive();
-            var execget=_mapper.Map<IEnumerable<Executive>,IEnumerable<ExecutiveResource>>(exec);
+            var exec = await _executiveService.GetAllExecutives();
+            var execget=_mapper.Map<IEnumerable<Executive>,IEnumerable<ExecutiveGetResource>>(exec);
             return execget;
         }
-        [HttpPost]
-        public async Task<ActionResult<ExecutiveResponse>> InsertRetailorWithAssociations([FromBody] ExecutiveResource executiveResource)
-        {
-            var insertexec = _mapper.Map<ExecutiveResource, Executive>(executiveResource);
-            var crtexec = await _executiveService.CreateExecutiveWithAssociationsAsync(insertexec, executiveResource.Area, executiveResource.City, executiveResource.State);
-            return StatusCode(crtexec.StatusCode, crtexec);
-        public async Task<ActionResult<IEnumerable<ExecutiveResource>>> GetExecutive()
-        public async Task<ActionResult<IEnumerable<ExecutiveGetResource>>> GetExecutive()
-        {
-            var execu = await _executiveService.GetAllExecutives();
-            var executiveresource = _mapper.Map<IEnumerable<Executive>, IEnumerable<ExecutiveGetResource>>(execu);
-            return Ok(executiveresource);
-        }
-      
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string id)
@@ -65,20 +51,20 @@ namespace Natural_API.Controllers
     
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ExecutiveResponse>> UpdateExecutive(string id , [FromBody] ExecutiveInsertUpdateResource saveExecutiveResource)
+        public async Task<ActionResult<ExecutiveResponse>> UpdateExecutive(string id , [FromBody] InsertUpdateResource saveExecutiveResource)
         {
             var exectutivetobrupade = await _executiveService.GetExecutiveById(id);
             
-            var executive = _mapper.Map<ExecutiveInsertUpdateResource, Executive>(saveExecutiveResource);
+            var executive = _mapper.Map<InsertUpdateResource, Executive>(saveExecutiveResource);
           var Updateresponse =  await _executiveService.UpadateExecutive(exectutivetobrupade, executive);
            
             return StatusCode(Updateresponse.StatusCode,Updateresponse);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] ExecutiveInsertUpdateResource executiveResource)
+        public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
         {
-            var createexecu = _mapper.Map<ExecutiveInsertUpdateResource, Executive>(executiveResource);
+            var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
             var exe = await _executiveService.CreateExecutiveWithAssociationsAsync(createexecu);
 
             return StatusCode(exe.StatusCode, exe);

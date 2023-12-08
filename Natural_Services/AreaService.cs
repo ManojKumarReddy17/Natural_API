@@ -29,10 +29,5 @@ namespace Natural_Services
             return await _unitOfWork.AreaRepo.GetAreasWithCityID(CityId);
         }
 
-
     }
-
-
-
-
 }

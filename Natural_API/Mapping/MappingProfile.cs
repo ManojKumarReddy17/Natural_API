@@ -16,50 +16,28 @@ namespace Natural_API.Mapping
 
                 CreateMap<Login, LoginResource>();
                 CreateMap<Distributor, DistributorGetResource>();
-                CreateMap<Distributor, DistributorInsertUpdateResource>();
+                CreateMap<Distributor, InsertUpdateResource>();
                 CreateMap<State, StateResource>();
                 CreateMap<Area, AreaResource>();
                 CreateMap<City, CityResource>();
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
-                CreateMap <Executive, ExecutiveResource>();
-              CreateMap <Executive, ExecutiveGetResource>();
-            CreateMap<Executive, ExecutiveInsertUpdateResource>();
-              CreateMap <Executive, ExecutiveResource>();
-
-
-            
-                //We can map like this also
-                //CreateMap<City, CityResource>()
-                //.ForMember(domain => domain.Id, opt => opt.MapFrom(source => source.Id))
-                //.ForMember(domain => domain.CityName, opt => opt.MapFrom(source => source.CityName));
-
-
+                CreateMap <Executive, ExecutiveGetResource>();
+                CreateMap<Executive, InsertUpdateResource>();
 
             //// RESOURCE TO DOMAIN
 
-            CreateMap<LoginResource, Login>();
-                CreateMap<DistributorResource, Distributor>();
                 CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
-                CreateMap<DistributorInsertUpdateResource, Distributor>();
+                CreateMap<InsertUpdateResource, Distributor>();
                 CreateMap<StateResource, State>();
                 CreateMap<AreaResource, Area>();
                 CreateMap<CityResource, City>();
                 CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
-            CreateMap<ExecutiveGetResource, Executive>();
-
-            CreateMap<ExecutiveInsertUpdateResource, Executive>();
-
-           
-
-
-                CreateMap<ExecutiveResource, Executive>();
-                CreateMap<SaveExecutiveResource, Executive>();
-                CreateMap<ExecutiveResource, Executive>();
-
-
+                CreateMap<ExecutiveGetResource, Executive>();   
+                CreateMap<InsertUpdateResource, Executive>();
+                CreateMap<ExecutiveGetResource, Executive>();
 
                 //// We can map like this also 
                 // CreateMap<CityResource, City>()

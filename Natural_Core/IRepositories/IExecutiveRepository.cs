@@ -10,10 +10,8 @@ namespace Natural_Core.IRepositories
     {
         Task<List<Executive>> GetAllExectivesAsync();
 
-        Task<List<Executive>> GetAll();
         Task<Executive> GetWithExectiveByIdAsync(string id);
 
-        //Task<Executive> GetByIdAsync(string id);
 
     }
 }

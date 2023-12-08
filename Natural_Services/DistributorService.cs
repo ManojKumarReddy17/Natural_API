@@ -20,6 +20,7 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
+        
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
@@ -30,7 +31,14 @@ namespace Natural_Services
         // Get Distributor by Id
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
-            return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
+            return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+        }
+
+        // Get Distributor Details by Id
+
+        public async Task<Distributor> GetDistributorDetailsById(string distributorId)
+        {
+            return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
         }
 
         //Create Distributor

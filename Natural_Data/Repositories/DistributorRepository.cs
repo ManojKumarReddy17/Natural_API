@@ -46,7 +46,7 @@ namespace Natural_Data.Repositories
             return result;
         }
 
-        public async ValueTask<Distributor> GetWithDistributorsByIdAsync(string distributorid)
+        public async Task<Distributor> GetDistributorDetailsByIdAsync(string distributorid)
         {
             var distributors = await NaturalDbContext.Distributors
                        .Include(c => c.AreaNavigation)
@@ -66,7 +66,9 @@ namespace Natural_Data.Repositories
                     Area = distributors.AreaNavigation.AreaName,
                     Email = distributors.Email,
                     City = distributors.AreaNavigation.City.CityName,
-                    State = distributors.AreaNavigation.City.State.StateName
+                    State = distributors.AreaNavigation.City.State.StateName,
+                    UserName = distributors.UserName,
+                    Password = distributors.Password
                 };
 
                 return result;

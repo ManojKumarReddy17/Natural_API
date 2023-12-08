@@ -13,8 +13,8 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<Distributor>> GetAllDistributors();
         Task<Distributor> GetDistributorById(string distributorId);
+        Task<Distributor> GetDistributorDetailsById(string distributorId);
         Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor);
-        //Task DeleteDistributor(string distributorId);
 
         Task<DistributorResponse> DeleteDistributor(string distributorId);
     }

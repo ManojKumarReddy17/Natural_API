@@ -137,7 +137,7 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .IsRequired()

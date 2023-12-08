@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable disable
 
-#nullable disable
 
-namespace Natural_Core.Models
+namespace Natural_API.Resources
 {
-    public partial class Distributor
+    public class DistributorInsertUpdateResource
     {
-        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -16,12 +13,8 @@ namespace Natural_Core.Models
         public string Area { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public virtual Area AreaNavigation { get; set; }
-        public virtual City CityNavigation { get; set; }
-        public virtual State StateNavigation { get; set; }
+
     }
 }

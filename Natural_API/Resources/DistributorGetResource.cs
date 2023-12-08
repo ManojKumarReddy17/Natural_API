@@ -2,7 +2,7 @@
 
 namespace Natural_API.Resources
 {
-    public class DistributorResource
+    public class DistributorGetResource
     {
 
             public string Id { get; set; }

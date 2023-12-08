@@ -11,6 +11,7 @@ namespace Natural_Core.IRepositories
     public interface IDistributorRepository : IRepository<Distributor>
     {
         Task<List<Distributor>> GetAllDistributorstAsync();
-        ValueTask<Distributor> GetWithDistributorsByIdAsync(string id);
+        Task<Distributor> GetDistributorDetailsByIdAsync(string id);
+
     }
 }

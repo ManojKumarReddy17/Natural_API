@@ -28,11 +28,11 @@ namespace Natural_API.Controllers
         // Get All Distributors
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DistributorResource>>> GetDistributors()
+        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails()
         
         {
             var distributors = await _DistributorService.GetAllDistributors();
-            var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorResource>>(distributors);
+            var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);
             return Ok(distributorResources);
         }
 
@@ -40,20 +40,32 @@ namespace Natural_API.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<DistributorResource>> GetByIdDistributor(string id)
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string id)
         {
             var distributor = await _DistributorService.GetDistributorById(id);
-            var distributorResource = _mapper.Map<Distributor, DistributorResource>(distributor);
+            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
+            return Ok(distributorResource);
+        }
+
+
+        // Get Distributor Details by Id
+
+        [HttpGet("{id}/Details")]
+
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string id)
+        {
+            var distributor = await _DistributorService.GetDistributorDetailsById(id);
+            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
             return Ok(distributorResource);
         }
 
         // Create Distributor
 
         [HttpPost]
-        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] DistributorResource distributorResource)
+        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] DistributorInsertUpdateResource distributorResource)
         {
 
-            var distributor = _mapper.Map<DistributorResource, Distributor>(distributorResource);
+            var distributor = _mapper.Map<DistributorInsertUpdateResource, Distributor>(distributorResource);
 
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);

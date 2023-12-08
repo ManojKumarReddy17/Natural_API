@@ -25,6 +25,11 @@ namespace Natural_Data.Repositories
             await Context.Set<TEntity>().AddAsync(entity);
         }
 
+        public void  Update(TEntity entity)
+        {
+             Context.Set<TEntity>().Update(entity);
+        }
+
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await Context.Set<TEntity>().AddRangeAsync(entities);
@@ -55,7 +60,7 @@ namespace Natural_Data.Repositories
             Context.Set<TEntity>().RemoveRange(entities);
 
         }
-
+     
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);

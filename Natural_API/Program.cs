@@ -24,7 +24,6 @@ builder.Services.AddDbContext<NaturalsContext>(options =>
     options.UseMySql(databaseConfiguration.ConnectionString, new MySqlServerVersion(new Version()));
 });
 
-builder.Services.AddControllers();
 
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -33,6 +32,7 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IDistributorRepository, DistributorRepository>();
 builder.Services.AddTransient<IDistributorService, DistributorService>();
+
 
 builder.Services.AddTransient<IRetailorRepository, RetailorRepository>();
 builder.Services.AddTransient<IRetailorService, RetailorService>();
@@ -49,11 +49,15 @@ builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
+builder.Services.AddTransient<IExecutiveRepository, ExecutiveRepository>();
+builder.Services.AddTransient<IExecutiveService, ExecutiveService>();
+
+builder.Services.AddControllers();
+
 
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSwaggerGen(c =>

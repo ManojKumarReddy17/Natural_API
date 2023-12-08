@@ -5,6 +5,7 @@ using Natural_API.Resources;
 using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Services;
 
 
 namespace Natural_API.Controllers
@@ -32,9 +33,9 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
-        // Get Retailor by Id
+        //Get Retailors Details
 
-        [HttpGet("{id}")]
+        [HttpGet("details/{id}")]
 
         public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string id)
         {
@@ -42,25 +43,39 @@ namespace Natural_API.Controllers
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(retailorResource);
         }
+        // Get Retailor by Id
 
-        // Create Distributor
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string id)
+        {
+            var retailor = await _retailorservice.GetRetailorsById(id);
+            var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
+            return Ok(ret);
+        }
+
+        // Create Retailor
 
         [HttpPost]
         public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorResource retailorResource)
+        
         {
 
             var retailor = _mapper.Map<RetailorResource, Retailor>(retailorResource);
-            var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
+            var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
 
-        [HttpDelete]
-        public ActionResult Delete()
+        [HttpDelete("{retailorId}")]
+        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string retailorId)
         {
-            return Ok();
-        }        
 
+            var response = await _retailorservice.DeleteRetailor(retailorId);
+            return Ok(response);
+        }
     }
 }
+        
 
-
+ 
+ 

@@ -20,33 +20,34 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
+        
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
             return result;
         }
-    
+
 
         // Get Distributor by Id
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
-            return await _unitOfWork.DistributorRepo.GetWithDistributorsByIdAsync(distributorId);
+            return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+        }
+
+        // Get Distributor Details by Id
+
+        public async Task<Distributor> GetDistributorDetailsById(string distributorId)
+        {
+            return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
         }
 
         //Create Distributor
-        public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor, string areaId, string cityId, string stateId)
+        public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
         {
             var response = new DistributorResponse();
 
             try
             {
-                // setting associated models (or) entities 
-
-                distributor.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                distributor.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                distributor.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-                // Adding distributor to the repository
 
                 await _unitOfWork.DistributorRepo.AddAsync(distributor);
 
@@ -68,6 +69,31 @@ namespace Natural_Services
 
             return response;
         }
+        public async Task<DistributorResponse> DeleteDistributor(string distributorId)
+        {
+            var response = new DistributorResponse();
 
+            try
+            {
+                var distributor = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+
+                if (distributor != null)
+                {
+                    _unitOfWork.DistributorRepo.Remove(distributor);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                }
+                else
+                {
+                    response.Message = "DISTRIBUTOR NOT FOUND";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
         }
     }
+}

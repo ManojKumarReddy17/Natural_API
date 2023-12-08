@@ -34,7 +34,7 @@ namespace Natural_Services
                     response.StatusCode = 200;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 response.Message = "Insertion Failed";

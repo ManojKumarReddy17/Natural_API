@@ -5,6 +5,7 @@ namespace Natural_API.Resources
 {
     public class RetailorResource
     {
+        public string Id { get;set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -13,5 +14,8 @@ namespace Natural_API.Resources
         public string Area { get; set; }
         public string City { get; set; }
         public string State { get; set; }
+       
+
+
     }
 }

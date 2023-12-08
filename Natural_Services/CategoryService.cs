@@ -34,7 +34,7 @@ namespace Natural_Services
                     response.StatusCode = 200;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 response.Message = "Insertion Failed";
@@ -43,6 +43,7 @@ namespace Natural_Services
 
             return response;
         }
+
 
 
         public async Task<IEnumerable<Category>> GetAllCategories()
@@ -57,67 +58,49 @@ namespace Natural_Services
 
         }
 
+        public async Task UpdateCategory(Category updatecategory)
+        {
+            
+            _unitOfWork.CategoryRepo.Update(updatecategory);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<CategoryResponse> DeleteCategory(string categoryId)
+        {
+            var response = new CategoryResponse();
+
+            try
+            {
+                var existingCategory = await _unitOfWork.CategoryRepo.GetByIdAsync(categoryId);
+
+                _unitOfWork.CategoryRepo.Remove(existingCategory);
+                await _unitOfWork.CommitAsync();
+
+
+                if (existingCategory == null)
+                {
+                    response.Message = "Category not found";
+                    response.StatusCode = 404;
+                }
+                else
+                {
+                    response.Message = "Delete Successful";
+                    response.StatusCode = 200;
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Delete Failed";
+                response.StatusCode = 500;
+            }
+
+            return response;
+        }
+
+
 
     }
+
 }
 
-    //public async Task<CategoryResponse> DeleteCategory(string id)
-    //{
-    //    var response = new CategoryResponse();
-    //    try
-    //    {
-    //        var existingCategory = await _unitOfWork.CategoryRepo.GetCategoryById(id);
-    //        if (existingCategory == null)
-    //        {
-    //            response.Message = "Category not found";
-    //            response.StatusCode = 404;
-    //            return response;
-    //        }
 
-    //        _unitOfWork.CategoryRepo.Delete(existingCategory);
-    //        await _unitOfWork.CommitAsync();
-
-    //        response.Message = "Delete Successful";
-    //        response.StatusCode = 200;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        response.Message = "Delete Failed";
-    //        response.StatusCode = 500;
-    //    }
-
-    //    return response;
-    //}
-
-  
-//        public async Task <Category> UpdateCategory(string Id)
-//        {
-//            var response = new CategoryResponse();
-//            try
-//            {
-//                var existingCategory = await _unitOfWork.CategoryRepo.GetCategoryById(id);
-//                if (existingCategory == null)
-//                {
-//                    response.Message = "Category not found";
-//                    response.StatusCode = 404;
-//                    return response;
-//                }
-
-//                //existingCategory.CategoryName = category.CategoryName;
-
-//                _unitOfWork.CategoryRepo.Update(existingCategory);
-//                await _unitOfWork.CommitAsync();
-
-//                response.Message = "Update Successful";
-//                response.StatusCode = 200;
-//            }
-//            catch (Exception ex)
-//            {
-//                response.Message = "Update Failed";
-//                response.StatusCode = 500;
-//            }
-
-//            return response;
-//        }
-//    }
-//}

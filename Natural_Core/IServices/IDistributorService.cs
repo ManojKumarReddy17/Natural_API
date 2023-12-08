@@ -1,4 +1,5 @@
-﻿using Natural_Core.Models;
+﻿using AutoMapper.Mappers;
+using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,11 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<Distributor>> GetAllDistributors();
         Task<Distributor> GetDistributorById(string distributorId);
-        Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor,
-        string areaId, string cityId, string stateId);
+        Task<Distributor> GetDistributorDetailsById(string distributorId);
+        Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor);
+
+        Task<DistributorResponse> DeleteDistributor(string distributorId);
+        Task<DistributorResponse> UpdateDistributor(Distributor distributor);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Natural_Core;
 using Natural_Core.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -54,15 +55,20 @@ namespace Natural_Data.Repositories
             Context.Set<TEntity>().Remove(entity);
         }
 
+      
+
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             Context.Set<TEntity>().RemoveRange(entities);
-        }
 
+        }
+     
         public Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
         }
+       
 
+      
     }
 }

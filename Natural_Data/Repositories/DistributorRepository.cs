@@ -34,16 +34,19 @@ namespace Natural_Data.Repositories
                 LastName = c.LastName,
                 MobileNumber = c.MobileNumber,
                 Address = c.Address,
-                Area = c.AreaNavigation.AreaName,
                 Email = c.Email,
+                UserName = c.UserName,
+                Password = c.Password,
+                Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+              
             }).ToList();
 
             return result;
         }
 
-        public async ValueTask<Distributor> GetWithDistributorsByIdAsync(string distributorid)
+        public async Task<Distributor> GetDistributorDetailsByIdAsync(string distributorid)
         {
             var distributors = await NaturalDbContext.Distributors
                        .Include(c => c.AreaNavigation)
@@ -60,10 +63,13 @@ namespace Natural_Data.Repositories
                     LastName = distributors.LastName,
                     MobileNumber = distributors.MobileNumber,
                     Address = distributors.Address,
-                    Area = distributors.AreaNavigation.AreaName,
                     Email = distributors.Email,
+                    Area = distributors.AreaNavigation.AreaName,
+                   
                     City = distributors.AreaNavigation.City.CityName,
-                    State = distributors.AreaNavigation.City.State.StateName
+                    State = distributors.AreaNavigation.City.State.StateName,
+                    UserName = distributors.UserName,
+                    Password = distributors.Password
                 };
 
                 return result;
@@ -75,11 +81,11 @@ namespace Natural_Data.Repositories
             }
             
         }
-    
-
         private NaturalsContext NaturalDbContext
         {
-            get { return Context as NaturalsContext; }
+            get 
+            
+            { return Context as NaturalsContext; }
         }
 
 

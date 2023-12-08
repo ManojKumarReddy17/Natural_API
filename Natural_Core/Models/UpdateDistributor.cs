@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public partial class Retailor
+    public partial class UpdateDistributor
     {
-
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -17,7 +16,7 @@ namespace Natural_Core.Models
         public string Area { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual Area AreaNavigation { get; set; }

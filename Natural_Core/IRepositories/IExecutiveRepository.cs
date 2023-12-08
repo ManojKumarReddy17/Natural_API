@@ -8,12 +8,10 @@ namespace Natural_Core.IRepositories
 {
     public interface IExecutiveRepository:IRepository<Executive>
     {
-        
-        Task<IEnumerable<Executive>> GetAllExecutiveAsync();
-        //Task<List<Executive>> GetAll();
+        Task<List<Executive>> GetAllExectivesAsync();
+
         Task<Executive> GetWithExectiveByIdAsync(string id);
 
-        //Task<Executive> GetByIdAsync(string id);
 
     }
 }

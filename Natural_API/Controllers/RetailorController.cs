@@ -33,7 +33,7 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
-        // Get Retailor by Id
+        //Get Retailors Details
 
         [HttpGet("details/{id}")]
 
@@ -43,8 +43,7 @@ namespace Natural_API.Controllers
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(retailorResource);
         }
-
-        //Get Retailors Details
+        // Get Retailor by Id
 
         [HttpGet("{id}")]
 
@@ -66,11 +65,7 @@ namespace Natural_API.Controllers
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor, retailorResource.Area, retailorResource.City, retailorResource.State);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
-<<<<<<< HEAD
 
-        //Delete Retailor
-
-<<<<<<< HEAD
         [HttpDelete("{retailorId}")]
         public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string retailorId)
         {
@@ -84,12 +79,3 @@ namespace Natural_API.Controllers
 
  
  
-=======
-=======
-       
-        
->>>>>>> 2163af9 (Intial commit)
-    }
-    
-}
->>>>>>> 7677d32a2ec34e478c20486a57ff8f5d9b7d2917

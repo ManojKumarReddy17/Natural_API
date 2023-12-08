@@ -84,21 +84,13 @@ namespace Natural_Data.Repositories
             return null;
         }
 
-<<<<<<< HEAD
-    
-    
 
-
-
-    private NaturalsContext NaturalDbContext
-=======
 
 
 
         
 
         private NaturalsContext NaturalDbContext
->>>>>>> 7677d32a2ec34e478c20486a57ff8f5d9b7d2917
         {
             get { return Context as NaturalsContext; }
         }

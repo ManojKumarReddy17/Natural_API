@@ -70,7 +70,6 @@ namespace Natural_Services
             return response;
         }
 
-<<<<<<< HEAD
 
 
         public async Task<RetailorResponce> DeleteRetailor(string retailorId)
@@ -104,8 +103,4 @@ namespace Natural_Services
     }
 }
  
-=======
        
-    }
-}
->>>>>>> 7677d32a2ec34e478c20486a57ff8f5d9b7d2917

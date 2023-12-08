@@ -45,11 +45,7 @@ namespace Natural_Services
             try
             {
 
-                retailor.AreaNavigation = await _unitOfWork.AreaRepo.GetByIdAsync(areaId);
-                retailor.CityNavigation = await _unitOfWork.CityRepo.GetByIdAsync(cityId);
-                retailor.StateNavigation = await _unitOfWork.StateRepo.GetByIdAsync(stateId);
-
-
+              
                 await _unitOfWork.RetailorRepo.AddAsync(retailor);
 
                 var created = await _unitOfWork.CommitAsync();

@@ -55,6 +55,8 @@ namespace Natural_Data.Repositories
             Context.Set<TEntity>().Remove(entity);
         }
 
+      
+
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             Context.Set<TEntity>().RemoveRange(entities);
@@ -65,10 +67,7 @@ namespace Natural_Data.Repositories
         {
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
         }
-        public void Update(TEntity entity)
-        {
-            Context.Set<TEntity>().Update(entity);
-        }
+       
 
       
     }

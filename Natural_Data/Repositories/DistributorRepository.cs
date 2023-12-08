@@ -63,8 +63,9 @@ namespace Natural_Data.Repositories
                     LastName = distributors.LastName,
                     MobileNumber = distributors.MobileNumber,
                     Address = distributors.Address,
-                    Area = distributors.AreaNavigation.AreaName,
                     Email = distributors.Email,
+                    Area = distributors.AreaNavigation.AreaName,
+                   
                     City = distributors.AreaNavigation.City.CityName,
                     State = distributors.AreaNavigation.City.State.StateName,
                     UserName = distributors.UserName,

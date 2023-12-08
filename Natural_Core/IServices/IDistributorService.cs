@@ -17,5 +17,7 @@ namespace Natural_Core.IServices
         Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor);
 
         Task<DistributorResponse> DeleteDistributor(string distributorId);
+        Task<DistributorResponse> UpdateDistributor(Distributor distributor);
+
     }
 }

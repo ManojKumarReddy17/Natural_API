@@ -38,7 +38,8 @@ namespace Natural_API.Controllers
 
         // Get Distributor by Id
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/details")]
+        
 
         public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string id)
         {
@@ -59,6 +60,8 @@ namespace Natural_API.Controllers
             return Ok(distributorResource);
         }
 
+      
+
         // Create Distributor
 
         [HttpPost]
@@ -69,6 +72,25 @@ namespace Natural_API.Controllers
 
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DistributorResource>> UpdateDistributor(string id, [FromBody] DistributorResource updatedistributor)
+        {
+
+
+            var ExistingDistributor = await _DistributorService.GetDistributorById(id);
+
+            //if (Distributor == null)
+            //    return NotFound();
+
+            var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
+
+
+
+            var update=  await _DistributorService.UpdateDistributor(distributorToUpdate);
+            return StatusCode(update.StatusCode, update);
+
+            
         }
 
         // Delete Distributor

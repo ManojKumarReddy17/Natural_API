@@ -69,6 +69,30 @@ namespace Natural_Services
 
             return response;
         }
+
+        public async Task<DistributorResponse> UpdateDistributor(Distributor distributor)
+
+        {
+            var response = new DistributorResponse();
+            try
+            {
+                _unitOfWork.DistributorRepo.Update(distributor);
+                var created=      await _unitOfWork.CommitAsync();
+                if (created != null)
+                {
+                    response.Message = "update Successful";
+                    response.StatusCode = 200;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                response.Message = "update Failed";
+                response.StatusCode = 401;
+            }
+
+            return response;
+        }
         public async Task<DistributorResponse> DeleteDistributor(string distributorId)
         {
             var response = new DistributorResponse();

@@ -5,7 +5,7 @@ using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_API.Models
+namespace Natural_Data
 {
     public partial class NaturalsContext : DbContext
     {

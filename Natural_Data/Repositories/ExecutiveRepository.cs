@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using Natural_API.Models;
 
 namespace Natural_Data.Repositories
 

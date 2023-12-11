@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Natural_API.Models;
 using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;

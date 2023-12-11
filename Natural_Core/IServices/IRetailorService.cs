@@ -9,8 +9,9 @@ namespace Natural_Core.IServices
     public interface IRetailorService
     {
         Task<IEnumerable<Retailor>> GetAllRetailors();
-        Task<Retailor> GetRetailorById(string distributorId);
+        Task<Retailor> GetRetailorDetailsById(string distributorId);
         Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor distributor);
+        Task<RetailorResponce> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
 
         Task<RetailorResponce> DeleteRetailor(string retailorId);
         Task<Retailor> GetRetailorsById(string retailorId);

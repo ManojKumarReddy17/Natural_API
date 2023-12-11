@@ -1,4 +1,5 @@
-﻿namespace Natural_API.Resources
+﻿#nullable disable
+namespace Natural_API.Resources
 {
     public class InsertUpdateResource
     {

@@ -22,6 +22,7 @@ namespace Natural_API.Mapping
                 CreateMap<City, CityResource>();
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
+            CreateMap<Retailor, InsertUpdateResource>();
                 CreateMap <Executive, ExecutiveGetResource>();
                 CreateMap<Executive, InsertUpdateResource>();
 
@@ -35,6 +36,7 @@ namespace Natural_API.Mapping
                 CreateMap<CityResource, City>();
                 CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorResource, Retailor>();
+            CreateMap<InsertUpdateResource, Retailor>();
                 CreateMap<ExecutiveGetResource, Executive>();   
                 CreateMap<InsertUpdateResource, Executive>();
                 CreateMap<ExecutiveGetResource, Executive>();

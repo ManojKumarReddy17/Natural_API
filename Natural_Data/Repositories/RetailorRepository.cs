@@ -47,7 +47,6 @@ namespace Natural_Data.Repositories
 
             return result;
         }
-
         public async Task<Retailor> GetWithRetailorsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
@@ -84,12 +83,28 @@ namespace Natural_Data.Repositories
             return null;
         }
 
+        public async Task UpdateRetailorAsync(Retailor existingRetailor, Retailor retailor)
+        {
+            if (existingRetailor != null)
+            {
+
+                existingRetailor.FirstName = retailor.FirstName;
+                existingRetailor.LastName = retailor.LastName;
+                existingRetailor.Email = retailor.Email;
+                existingRetailor.MobileNumber = retailor.MobileNumber;
+                existingRetailor.Address = retailor.Address;
+                existingRetailor.City = retailor.City;
+                existingRetailor.State = retailor.State;
+                existingRetailor.Area = retailor.Area;
 
 
+                await NaturalDbContext.SaveChangesAsync();
 
 
-        
+            }
+        }
 
+   
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }

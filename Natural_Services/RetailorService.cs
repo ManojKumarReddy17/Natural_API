@@ -29,7 +29,7 @@ namespace Natural_Services
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
             return result;
         }
-        public async Task<Retailor> GetRetailorById(string retailorId)
+        public async Task<Retailor> GetRetailorDetailsById(string retailorId)
         {
             return await _unitOfWork.RetailorRepo.GetWithRetailorsByIdAsync(retailorId);
         }
@@ -43,8 +43,7 @@ namespace Natural_Services
             var response = new RetailorResponce();
 
             try
-            {
-
+            { 
               
                 await _unitOfWork.RetailorRepo.AddAsync(retailor);
 
@@ -65,7 +64,32 @@ namespace Natural_Services
 
             return response;
         }
+        public async Task<RetailorResponce> UpdateRetailors(Retailor existingRetailor, Retailor retailor)
+        {
 
+            var response = new RetailorResponce();
+
+            try
+            {
+                await _unitOfWork.RetailorRepo.UpdateRetailorAsync(existingRetailor, retailor);
+
+                await _unitOfWork.CommitAsync();
+
+
+                response.Message = "Update Successfull";
+                response.StatusCode = 200;
+            }
+
+            catch (Exception ex)
+            {
+
+                response.Message = "Update Failed";
+                response.StatusCode = 400;
+
+            }
+            return response;
+
+        }
 
 
         public async Task<RetailorResponce> DeleteRetailor(string retailorId)

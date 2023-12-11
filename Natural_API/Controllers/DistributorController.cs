@@ -38,7 +38,7 @@ namespace Natural_API.Controllers
 
         // Get Distributor by Id
 
-        [HttpGet("{id}/details")]
+        [HttpGet("{id}")]
         
 
         public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string id)

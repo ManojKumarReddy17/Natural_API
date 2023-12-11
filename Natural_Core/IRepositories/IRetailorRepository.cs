@@ -10,7 +10,7 @@ namespace Natural_Core.IRepositories
     {
 
         Task<IEnumerable<Retailor>> GetAllRetailorsAsync();
-        /*Task GetRetailorsById(string id)*/
+       
         Task<Retailor> GetWithRetailorsByIdAsync(string id);
         Task UpdateRetailorAsync(Retailor retailor, Retailor existingRetailor);
 

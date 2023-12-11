@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Natural_Core;
 
+
 #nullable disable
 
 namespace Natural_Data.Repositories

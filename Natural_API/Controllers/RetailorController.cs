@@ -62,23 +62,23 @@ namespace Natural_API.Controllers
         // Create Retailor
 
         [HttpPost]
-        public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorResource retailorResource)
+        public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorPostResource retailorResource)
         
         {
 
-            var retailor = _mapper.Map<RetailorResource, Retailor>(retailorResource);
+            var retailor = _mapper.Map<RetailorPostResource, Retailor>(retailorResource);
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
 
     
         [HttpPut("{id}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateRetailor(string id, [FromBody] InsertUpdateResource updatedRetailorResource)
+        public async Task<ActionResult<RetailorPostResource>> UpdateRetailor(string id, [FromBody] RetailorPostResource updatedRetailorResource)
         {
 
 
             var existingRetailor = await _retailorservice.GetRetailorsById(id);
-            var retailor = _mapper.Map<InsertUpdateResource, Retailor>(updatedRetailorResource);
+            var retailor = _mapper.Map<RetailorPostResource, Retailor>(updatedRetailorResource);
             var result = await _retailorservice.UpdateRetailors(existingRetailor, retailor);
             return StatusCode(result.StatusCode, result);
 

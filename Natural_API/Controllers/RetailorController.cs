@@ -40,8 +40,7 @@ namespace Natural_API.Controllers
 
         //Get Retailors Details
 
-        [HttpGet("details/{id}")]
-
+        [HttpGet("{id}")]
         public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string id)
         {
             var retailor = await _retailorservice.GetRetailorsById(id);
@@ -50,8 +49,9 @@ namespace Natural_API.Controllers
         }
         // Get Retailor by Id
 
-        [HttpGet("{id}")]
+   
 
+        [HttpGet("details/{id}")]
         public async Task<ActionResult<RetailorResponce>> GetDetailsById(string id)
         {
             var retailor = await _retailorservice.GetRetailorDetailsById(id);

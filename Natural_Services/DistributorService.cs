@@ -49,9 +49,10 @@ namespace Natural_Services
             try
             {
 
+                distributor.Id = "NDIS" + new Random().Next(10000, 99999).ToString();
+
                 await _unitOfWork.DistributorRepo.AddAsync(distributor);
 
-                // Commit changes
                 var created = await _unitOfWork.CommitAsync();
 
                 if (created != null)
@@ -62,7 +63,6 @@ namespace Natural_Services
             }
             catch (Exception ex)
             {
-
                 response.Message = "Insertion Failed";
                 response.StatusCode = 401;
             }

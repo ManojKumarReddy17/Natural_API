@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Natural_Services
 {
@@ -72,7 +73,10 @@ namespace Natural_Services
 
                 try
                 {
-                    
+
+                    executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
+
+
                     await _unitOfWork.ExecutiveRepo.AddAsync(executive);
 
                

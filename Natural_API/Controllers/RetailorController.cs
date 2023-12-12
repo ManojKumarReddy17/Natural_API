@@ -54,7 +54,7 @@ namespace Natural_API.Controllers
 
         public async Task<ActionResult<RetailorResponce>> GetDetailsById(string id)
         {
-            var retailor = await _retailorservice.GetRetailorsById(id);
+            var retailor = await _retailorservice.GetRetailorDetailsById(id);
             var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(ret);
         }

@@ -43,8 +43,9 @@ namespace Natural_Services
             var response = new RetailorResponce();
 
             try
-            { 
-              
+            {
+                retailor.Id = "NRET" + new Random().Next(10000, 99999).ToString();
+
                 await _unitOfWork.RetailorRepo.AddAsync(retailor);
 
                 var created = await _unitOfWork.CommitAsync();

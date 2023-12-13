@@ -112,10 +112,12 @@ namespace Natural_Services
                     _unitOfWork.ExecutiveRepo.Remove(exec);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
                 }
                 else
                 {
                     response.Message = "RETAILER NOT FOUND";
+                    response.StatusCode = 404;
                 }
             }
             catch (Exception)

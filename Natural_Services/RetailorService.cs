@@ -106,10 +106,12 @@ namespace Natural_Services
                     _unitOfWork.RetailorRepo.Remove(retailor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
                 }
                 else
                 {
                     response.Message = "RETAILER NOT FOUND";
+                    response.StatusCode = 404;
                 }
             }
             catch (Exception)

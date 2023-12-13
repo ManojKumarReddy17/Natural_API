@@ -24,8 +24,12 @@ namespace Natural_API.Controllers
             _loginService = loginService;
         }
 
+        /// <summary>
+        /// ADMIN LOGIN 
+        /// </summary>
+        
         [HttpPost]
-        public async Task<ActionResult<LoginResponse>> ValidUser([FromBody] LoginResource loginModel)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginResource loginModel)
         {
             var credentials = _mapper.Map<LoginResource, Login>(loginModel);
             var user = await _loginService.LoginAsync(credentials);

@@ -28,7 +28,9 @@ namespace Natural_API.Controllers
             _areaservice = areaservice;
         }
 
-        // Get All Retailors
+        /// <summary>
+        /// GETTING LIST OF RETAILORS
+        /// </summary>
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RetailorResource>>> GetRetailors()
@@ -38,29 +40,35 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
-        //Get Retailors Details
-
-        [HttpGet("details/{id}")]
-
-        public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string id)
+        /// <summary>
+        /// GETTING RETAILOR BY ID
+        /// </summary>
+        /// 
+        [HttpGet("{RetId}")]
+        public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string RetId)
         {
-            var retailor = await _retailorservice.GetRetailorsById(id);
+            var retailor = await _retailorservice.GetRetailorsById(RetId);
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(retailorResource);
         }
-        // Get Retailor by Id
 
-        [HttpGet("{id}")]
+        /// <summary>
+        /// GETTING RETAILOR DETAILS BY ID
+        /// </summary>
+        /// 
+        [HttpGet("details/{RetId}")]
 
-        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string id)
+        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string RetId)
         {
-            var retailor = await _retailorservice.GetRetailorDetailsById(id);
+            var retailor = await _retailorservice.GetRetailorDetailsById(RetId);
             var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(ret);
         }
 
-        // Create Retailor
-
+        /// <summary>
+        /// CREATING NEW RETAILOR
+        /// </summary>
+        
         [HttpPost]
         public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorPostResource retailorResource)
         
@@ -71,24 +79,31 @@ namespace Natural_API.Controllers
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
 
-    
-        [HttpPut("{id}")]
-        public async Task<ActionResult<RetailorPostResource>> UpdateRetailor(string id, [FromBody] RetailorPostResource updatedRetailorResource)
+        /// <summary>
+        /// UPDATING RETAILOR BY ID
+        /// </summary>
+        
+        [HttpPut("{RetId}")]
+        public async Task<ActionResult<RetailorPostResource>> UpdateRetailor(string RetId, [FromBody] RetailorPostResource updatedRetailorResource)
         {
 
 
-            var existingRetailor = await _retailorservice.GetRetailorsById(id);
+            var existingRetailor = await _retailorservice.GetRetailorsById(RetId);
             var retailor = _mapper.Map<RetailorPostResource, Retailor>(updatedRetailorResource);
             var result = await _retailorservice.UpdateRetailors(existingRetailor, retailor);
             return StatusCode(result.StatusCode, result);
 
 
         }
-        [HttpDelete("{retailorId}")]
-        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string retailorId)
+        /// <summary>
+        /// DELETING RETAILOR BY ID
+        /// </summary>
+        
+        [HttpDelete("{RetId}")]
+        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string RetId)
         {
 
-            var response = await _retailorservice.DeleteRetailor(retailorId);
+            var response = await _retailorservice.DeleteRetailor(RetId);
             return Ok(response);
         }
     }

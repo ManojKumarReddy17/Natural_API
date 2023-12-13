@@ -24,14 +24,20 @@ namespace Natural_API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        /// <summary>
+        /// GETTING LIST OF CATEGORIES
+        /// </summary>
 
-        public async Task<ActionResult<IEnumerable<CategoryResource>>> GetCategories()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CategoryResource>>> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategories();
             var mapped = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResource>>(categories);
             return Ok(mapped);
         }
+        /// <summary>
+        /// CREATING NEW CATEGORY
+        /// </summary>
 
         [HttpPost]
         public async Task<ActionResult<CategoryResponse>> InsertCategories([FromBody] CategoryResource category)
@@ -41,31 +47,44 @@ namespace Natural_API.Controllers
             return StatusCode(categoreis.StatusCode, categoreis);
         }
 
-        [HttpGet("{Id}")]
+        /// <summary>
+        /// GETTING CATEGORY BY ID
+        /// </summary>
+       
+        [HttpGet("{catId}")]
 
-        public async Task<ActionResult<CategoryResource>> GetCategoryById(string Id)
+        public async Task<ActionResult<CategoryResource>> GetCategoryById(string catId)
         {
 
-            var categories = await _categoryService.GetCategoryById(Id);
+            var categories = await _categoryService.GetCategoryById(catId);
             var categoryResource = _mapper.Map<Category, CategoryResource>(categories);
 
             return Ok(categoryResource);
         }
-        [HttpPut("{Id}")]
-        public async Task<ActionResult<CategoryResource>> UpdateCategory(string Id, [FromBody] CategoryResource categorytoUpdate)
-        { 
-            var existcategory = await _categoryService.GetCategoryById(Id);
-            var updatedCategory = _mapper.Map(categorytoUpdate, existcategory);
-             await _categoryService.UpdateCategory(updatedCategory);
-            var update = await _categoryService.GetCategoryById(Id);
-            var up = _mapper.Map<Category,CategoryResource>(update);
-            return Ok(up);
+
+        /// <summary>
+        /// UPDATING CATEGORY BY ID
+        /// </summary>
+       
+        [HttpPut("{catId}")]
+        public async Task<ActionResult<CategoryInsertResource>> UpdateCategory(string catId, [FromBody] CategoryInsertResource categorytoUpdate)
+        {
+            var existcategory = await _categoryService.GetCategoryById(catId);
+            var category = _mapper.Map(categorytoUpdate,existcategory);
+            var result = await _categoryService.UpdateCategory(category);
+
+            return StatusCode(result.StatusCode, result);
+
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteCategory(string Id)
+        /// <summary>
+        /// DELETING CATEGORY BY ID
+        /// </summary>
+       
+        [HttpDelete("{catId}")]
+        public async Task<ActionResult> DeleteCategory(string catId)
         {
-            var response = await _categoryService.DeleteCategory(Id);
+            var response = await _categoryService.DeleteCategory(catId);
 
             if (response.StatusCode == 200)
             {

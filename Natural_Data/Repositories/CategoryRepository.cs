@@ -36,9 +36,7 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Categories.FindAsync(CategoryId);
         }
 
-     
-
-
+    
          public void Update(Category category)
          {
              NaturalDbContext.Categories.Update(category);

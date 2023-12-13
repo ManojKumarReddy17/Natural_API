@@ -52,13 +52,13 @@ namespace Natural_Services
 
                 var created = await _unitOfWork.CommitAsync();
 
-                if (created != null)
+                if (created != 0)
                 {
                     response.Message = "Insertion Successful";
                     response.StatusCode = 200;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Message = "Insertion Failed";
                 response.StatusCode = 401;
@@ -74,14 +74,14 @@ namespace Natural_Services
             try
             {
                 _unitOfWork.DistributorRepo.Update(distributor);
-                var created=      await _unitOfWork.CommitAsync();
-                if (created != null)
+                var created=  await _unitOfWork.CommitAsync();
+                if (created != 0)
                 {
                     response.Message = "update Successful";
                     response.StatusCode = 200;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 response.Message = "update Failed";
@@ -111,7 +111,7 @@ namespace Natural_Services
                     response.StatusCode = 404;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Message = "Internal Server Error";
             }

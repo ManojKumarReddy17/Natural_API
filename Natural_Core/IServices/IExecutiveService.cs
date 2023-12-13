@@ -17,6 +17,6 @@ namespace Natural_Core.IServices
         Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
         Task<ExecutiveResponse> DeleteExecutive(string executiveId);
 
-        Task<ExecutiveResponse> UpadateExecutive (Executive existing, Executive  executive);
+        Task<ExecutiveResponse> UpadateExecutive(Executive executive);
     }
 }

@@ -34,28 +34,19 @@ namespace Natural_Services
             return await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
         }
 
-        public async Task<ExecutiveResponse> UpadateExecutive(Executive existing,Executive executive)
+        public async Task<ExecutiveResponse> UpadateExecutive(Executive executive)
         {
             var response = new ExecutiveResponse();
             try
             {
-                existing.FirstName = executive.FirstName;
-                existing.LastName = executive.LastName;
-                existing.MobileNumber = executive.MobileNumber;
-                existing.Address = executive.Address;
-                existing.Area = executive.Area;
-                existing.City = executive.City;
-                existing.State = executive.State;
-                existing.Email = executive.Email;
-                existing.UserName= executive.UserName;
-                existing.Password= executive.Password;
-                _unitOfWork.ExecutiveRepo.Update(existing);
+                _unitOfWork.ExecutiveRepo.Update(executive);                             
+               var updated = await _unitOfWork.CommitAsync();
+                if (updated != 0)
+                {
 
-                // Commit changes
-
-                await _unitOfWork.CommitAsync();
-                response.Message = "updatesuceesfull";
-                response.StatusCode = 200;
+                    response.Message = "updatesuceesfull";
+                    response.StatusCode = 200;
+                }
             }
             catch  (Exception)
             {
@@ -82,7 +73,7 @@ namespace Natural_Services
                
                     var created = await _unitOfWork.CommitAsync();
 
-                    if (created != null)
+                    if (created != 0)
                     {
                         response.Message = "Insertion Successful";
                         response.StatusCode = 200;
@@ -111,12 +102,12 @@ namespace Natural_Services
                 {
                     _unitOfWork.ExecutiveRepo.Remove(exec);
                     await _unitOfWork.CommitAsync();
-                    response.Message = "SUCCESSFULLY DELETED";
+                    response.Message = "Successfully Deleted";
                     response.StatusCode = 200;
                 }
                 else
                 {
-                    response.Message = "RETAILER NOT FOUND";
+                    response.Message = "Executive Not Found";
                     response.StatusCode = 404;
                 }
             }
@@ -128,10 +119,7 @@ namespace Natural_Services
             return response;
         }
 
-        public Task<IEnumerable<Executive>> GetAllExecutive()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
 

@@ -29,7 +29,7 @@ namespace Natural_Services
                 await _unitOfWork.CategoryRepo.AddAsync(category);
                 var created = await _unitOfWork.CommitAsync();
 
-                if (created != null)
+                if (created != 0)
                 {
                     response.Message = "Insertion Successful";
                     response.StatusCode = 200;
@@ -67,7 +67,7 @@ namespace Natural_Services
                 _unitOfWork.CategoryRepo.Update(updatecategory);
                 var updated = await _unitOfWork.CommitAsync();
 
-                if (updated != null)
+                if (updated != 0)
                 {
                     response.Message = "Update Successful";
                     response.StatusCode = 200;

@@ -44,10 +44,10 @@ namespace Natural_API.Controllers
         /// GETTING RETAILOR BY ID
         /// </summary>
         /// 
-        [HttpGet("{RetId}")]
-        public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string RetId)
+        [HttpGet("{RetailorId}")]
+        public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string RetailorId)
         {
-            var retailor = await _retailorservice.GetRetailorsById(RetId);
+            var retailor = await _retailorservice.GetRetailorsById(RetailorId);
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(retailorResource);
         }
@@ -56,11 +56,11 @@ namespace Natural_API.Controllers
         /// GETTING RETAILOR DETAILS BY ID
         /// </summary>
         /// 
-        [HttpGet("details/{RetId}")]
+        [HttpGet("details/{RetailorId}")]
 
-        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string RetId)
+        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string RetailorId)
         {
-            var retailor = await _retailorservice.GetRetailorDetailsById(RetId);
+            var retailor = await _retailorservice.GetRetailorDetailsById(RetailorId);
             var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
             return Ok(ret);
         }
@@ -83,12 +83,12 @@ namespace Natural_API.Controllers
         /// UPDATING RETAILOR BY ID
         /// </summary>
         
-        [HttpPut("{RetId}")]
-        public async Task<ActionResult<RetailorPostResource>> UpdateRetailor(string RetId, [FromBody] RetailorPostResource updatedRetailorResource)
+        [HttpPut("{RetailorId}")]
+        public async Task<ActionResult<RetailorPostResource>> UpdateRetailor(string RetailorId, [FromBody] RetailorPostResource updatedRetailorResource)
         {
 
 
-            var existingRetailor = await _retailorservice.GetRetailorsById(RetId);
+            var existingRetailor = await _retailorservice.GetRetailorsById(RetailorId);
             var retailor = _mapper.Map<RetailorPostResource, Retailor>(updatedRetailorResource);
             var result = await _retailorservice.UpdateRetailors(existingRetailor, retailor);
             return StatusCode(result.StatusCode, result);
@@ -99,11 +99,11 @@ namespace Natural_API.Controllers
         /// DELETING RETAILOR BY ID
         /// </summary>
         
-        [HttpDelete("{RetId}")]
-        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string RetId)
+        [HttpDelete("{RetailorId}")]
+        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string RetailorId)
         {
 
-            var response = await _retailorservice.DeleteRetailor(RetId);
+            var response = await _retailorservice.DeleteRetailor(RetailorId);
             return Ok(response);
         }
     }

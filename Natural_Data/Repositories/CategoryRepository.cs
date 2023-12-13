@@ -22,7 +22,13 @@ namespace Natural_Data.Repositories
         {
             return await NaturalDbContext.Categories.ToListAsync();
         }
+        public async ValueTask<Category> GetWithCategoryByIdAsync(string CategoryId)
 
+        {
+            return await NaturalDbContext.Categories.FindAsync(CategoryId);
+        }
+
+   
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
@@ -30,19 +36,6 @@ namespace Natural_Data.Repositories
 
 
 
-        public async ValueTask<Category> GetWithCategoryByIdAsync(string CategoryId)
-
-        {
-            return await NaturalDbContext.Categories.FindAsync(CategoryId);
-        }
-
-    
-         public void Update(Category category)
-         {
-             NaturalDbContext.Categories.Update(category);
-         }
-
-      
     }
 }
 

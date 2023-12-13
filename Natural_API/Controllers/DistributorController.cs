@@ -43,12 +43,12 @@ namespace Natural_API.Controllers
         /// </summary>
       
 
-        [HttpGet("{DisId}")]
+        [HttpGet("{DistributorId}")]
         
 
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DisId)
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DistributorId)
         {
-            var distributor = await _DistributorService.GetDistributorById(DisId);
+            var distributor = await _DistributorService.GetDistributorById(DistributorId);
             var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
             return Ok(distributorResource);
         }
@@ -57,11 +57,11 @@ namespace Natural_API.Controllers
         ///GETTING DISTRIBUTOR DETAILS BY ID
         /// </summary>
       
-        [HttpGet("Details/{DisId}")]
+        [HttpGet("Details/{DistributorId}")]
 
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string DisId)
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string DistributorId)
         {
-            var distributor = await _DistributorService.GetDistributorDetailsById(DisId);
+            var distributor = await _DistributorService.GetDistributorDetailsById(DistributorId);
             var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
             return Ok(distributorResource);
         }   
@@ -85,11 +85,11 @@ namespace Natural_API.Controllers
         /// UPDATING DISTRIBUTOR BY ID
         /// </summary>
       
-        [HttpPut("{DisId}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DisId, [FromBody] InsertUpdateResource updatedistributor)
+        [HttpPut("{DistributorId}")]
+        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DistributorId, [FromBody] InsertUpdateResource updatedistributor)
         {
 
-            var ExistingDistributor = await _DistributorService.GetDistributorById(DisId);
+            var ExistingDistributor = await _DistributorService.GetDistributorById(DistributorId);
             var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
             var update=  await _DistributorService.UpdateDistributor(distributorToUpdate);
             return StatusCode(update.StatusCode, update);
@@ -101,11 +101,11 @@ namespace Natural_API.Controllers
       /// </summary>
 
 
-        [HttpDelete("{DisId}")]
+        [HttpDelete("{DistributorId}")]
 
-        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string DisId)
+        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string DistributorId)
         {            
-            var response = await _DistributorService.DeleteDistributor(DisId);           
+            var response = await _DistributorService.DeleteDistributor(DistributorId);           
 
             return Ok(response);
         }

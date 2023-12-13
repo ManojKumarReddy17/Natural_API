@@ -16,7 +16,6 @@ namespace Natural_Services
     public class RetailorService : IRetailorService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRetailorRepository _repository;
 
 
         public RetailorService(IUnitOfWork unitOfWork)
@@ -50,7 +49,7 @@ namespace Natural_Services
 
                 var created = await _unitOfWork.CommitAsync();
 
-                if (created != null)
+                if (created != 0)
                 {
                     response.Message = "Insertion Successful";
                     response.StatusCode = 200;
@@ -81,7 +80,7 @@ namespace Natural_Services
                 response.StatusCode = 200;
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 response.Message = "Update Failed";

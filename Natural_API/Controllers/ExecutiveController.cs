@@ -21,45 +21,46 @@ namespace Natural_API.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// GETTING LIST OF EXECUTIVE DETAILS
+        /// </summary>
         [HttpGet]
-        public async Task<IEnumerable<ExecutiveGetResource>> GetExecutives()
+        public async Task<IEnumerable<ExecutiveGetResource>> GetAllExecutives()
         {
             var exec = await _executiveService.GetAllExecutives();
             var execget=_mapper.Map<IEnumerable<Executive>,IEnumerable<ExecutiveGetResource>>(exec);
             return execget;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string id)
-        {
-            var executive = await _executiveService.GetExecutiveById(id);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
-            return Ok(exec);
-        }
-
-
-        [HttpGet("details/{id}")]
-  
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveDetailsById(string id)
-        {
-            var executive = await _executiveService.GetExecutiveDetailsById(id);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
-            return Ok(exec);
-        }
-
+        /// <summary>
+        /// GETTING EXECUTIVE BY ID
+        /// </summary>
     
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ExecutiveResponse>> UpdateExecutive(string id , [FromBody] InsertUpdateResource saveExecutiveResource)
+        [HttpGet("{ExeId}")]
+        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string ExeId)
         {
-            var exectutivetobrupade = await _executiveService.GetExecutiveById(id);
-            
-            var executive = _mapper.Map<InsertUpdateResource, Executive>(saveExecutiveResource);
-          var Updateresponse =  await _executiveService.UpadateExecutive(exectutivetobrupade, executive);
-           
-            return StatusCode(Updateresponse.StatusCode,Updateresponse);
+            var executive = await _executiveService.GetExecutiveById(ExeId);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
+            return Ok(exec);
         }
+
+        /// <summary>
+        /// GETTING EXECUTIVE DETAILS BY ID
+        /// </summary>
+       
+        [HttpGet("details/{ExeId}")]
+  
+        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveDetailsById(string ExeId)
+        {
+            var executive = await _executiveService.GetExecutiveDetailsById(ExeId);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
+            return Ok(exec);
+        }
+
+        /// <summary>
+        /// CREATING NEW EXECUTIVE
+        /// </summary>
+
 
         [HttpPost]
         public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
@@ -69,11 +70,31 @@ namespace Natural_API.Controllers
 
             return StatusCode(exe.StatusCode, exe);
         }
-        [HttpDelete("{execId}")]
-        public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string execId)
+
+        /// <summary>
+        /// UPDATING EXECUTIVE BY ID
+        /// </summary>
+
+        [HttpPut("{ExeId}")]
+        public async Task<ActionResult<ExecutiveResponse>> UpdateExecutive(string ExeId, [FromBody] InsertUpdateResource saveExecutiveResource)
+        {
+            var exectutivetobrupade = await _executiveService.GetExecutiveById(ExeId);
+
+            var executive = _mapper.Map<InsertUpdateResource, Executive>(saveExecutiveResource);
+            var Updateresponse = await _executiveService.UpadateExecutive(exectutivetobrupade, executive);
+
+            return StatusCode(Updateresponse.StatusCode, Updateresponse);
+        }
+
+        /// <summary>
+        /// DELETING EXECUTIVE BY ID
+        /// </summary>
+
+        [HttpDelete("{ExeId}")]
+        public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string ExeId)
         {
 
-            var response = await _executiveService.DeleteExecutive(execId);
+            var response = await _executiveService.DeleteExecutive(ExeId);
             return Ok(response);
         }
 

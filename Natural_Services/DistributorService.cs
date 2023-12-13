@@ -28,20 +28,17 @@ namespace Natural_Services
         }
 
 
-        // Get Distributor by Id
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
             return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
         }
 
-        // Get Distributor Details by Id
 
         public async Task<Distributor> GetDistributorDetailsById(string distributorId)
         {
             return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
         }
 
-        //Create Distributor
         public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
         {
             var response = new DistributorResponse();
@@ -106,10 +103,12 @@ namespace Natural_Services
                     _unitOfWork.DistributorRepo.Remove(distributor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode=200;
                 }
                 else
                 {
                     response.Message = "DISTRIBUTOR NOT FOUND";
+                    response.StatusCode = 404;
                 }
             }
             catch (Exception ex)

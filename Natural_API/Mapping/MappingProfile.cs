@@ -25,8 +25,9 @@ namespace Natural_API.Mapping
                 CreateMap<Retailor, RetailorPostResource>();
                 CreateMap <Executive, ExecutiveGetResource>();
                 CreateMap<Executive, InsertUpdateResource>();
+                CreateMap<Category , CategoryInsertResource>();
 
-            //// RESOURCE TO DOMAIN
+              //// RESOURCE TO DOMAIN
 
                 CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
@@ -36,17 +37,14 @@ namespace Natural_API.Mapping
                 CreateMap<CityResource, City>();
                 CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorPostResource, Retailor>();
-            CreateMap<InsertUpdateResource, Retailor>();
                 CreateMap<ExecutiveGetResource, Executive>();   
                 CreateMap<InsertUpdateResource, Executive>();
                 CreateMap<ExecutiveGetResource, Executive>();
-
-                //// We can map like this also 
-                // CreateMap<CityResource, City>()
-                //.ForMember(source => source.Id, opt => opt.MapFrom(domain => domain.Id))
-                //.ForMember(source => source.CityName, opt => opt.MapFrom(domain => domain.CityName));
+                CreateMap<CategoryInsertResource,Category>();
 
 
-            }
+          
+
         }
+    }
 }

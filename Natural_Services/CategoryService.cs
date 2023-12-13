@@ -24,6 +24,7 @@ namespace Natural_Services
             var response = new CategoryResponse();
             try
             {
+                category.Id = "NCAT" +new Random().Next(10000,99999).ToString();
 
                 await _unitOfWork.CategoryRepo.AddAsync(category);
                 var created = await _unitOfWork.CommitAsync();
@@ -58,11 +59,29 @@ namespace Natural_Services
 
         }
 
-        public async Task UpdateCategory(Category updatecategory)
+        public async Task<CategoryResponse> UpdateCategory(Category updatecategory)
         {
-            
-            _unitOfWork.CategoryRepo.Update(updatecategory);
-            await _unitOfWork.CommitAsync();
+            var response = new CategoryResponse();
+            try
+            {
+                _unitOfWork.CategoryRepo.Update(updatecategory);
+                var updated = await _unitOfWork.CommitAsync();
+
+                if (updated != null)
+                {
+                    response.Message = "Update Successful";
+                    response.StatusCode = 200;
+
+                }
+            }
+            catch (Exception)
+            {
+
+                response.Message = "Update Failed";
+                response.StatusCode = 401;
+            }
+
+            return response;
         }
 
         public async Task<CategoryResponse> DeleteCategory(string categoryId)
@@ -75,7 +94,6 @@ namespace Natural_Services
 
                 _unitOfWork.CategoryRepo.Remove(existingCategory);
                 await _unitOfWork.CommitAsync();
-
 
                 if (existingCategory == null)
                 {

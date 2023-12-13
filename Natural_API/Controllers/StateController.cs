@@ -23,6 +23,11 @@ namespace Natural_API.Controllers
             _mapper = mapper;
         }
 
+
+        /// <summary>
+        /// GETTING LIST OF STATES
+        /// </summary>
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<State>>> GetStatesList()
         {

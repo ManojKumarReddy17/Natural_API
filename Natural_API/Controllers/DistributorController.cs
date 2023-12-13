@@ -25,7 +25,9 @@ namespace Natural_API.Controllers
 
         }
 
-        // Get All Distributors
+        /// <summary>
+        ///GETTING LIST OF DISTRIBUTOR DETAILS
+        /// </summary>
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails()
@@ -36,33 +38,38 @@ namespace Natural_API.Controllers
             return Ok(distributorResources);
         }
 
-        // Get Distributor by Id
-
-        [HttpGet("{id}")]
-        
-
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string id)
-        {
-            var distributor = await _DistributorService.GetDistributorById(id);
-            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
-            return Ok(distributorResource);
-        }
-
-
-        // Get Distributor Details by Id
-
-        [HttpGet("Details/{id}")]
-
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string id)
-        {
-            var distributor = await _DistributorService.GetDistributorDetailsById(id);
-            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
-            return Ok(distributorResource);
-        }
-
+        /// <summary>
+        /// GETTING DISTRIBUTOR BY ID
+        /// </summary>
       
 
-        // Create Distributor
+        [HttpGet("{DisId}")]
+        
+
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DisId)
+        {
+            var distributor = await _DistributorService.GetDistributorById(DisId);
+            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
+            return Ok(distributorResource);
+        }
+
+        /// <summary>
+        ///GETTING DISTRIBUTOR DETAILS BY ID
+        /// </summary>
+      
+        [HttpGet("Details/{DisId}")]
+
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string DisId)
+        {
+            var distributor = await _DistributorService.GetDistributorDetailsById(DisId);
+            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
+            return Ok(distributorResource);
+        }   
+
+        /// <summary>
+        /// CREATING NEW DISTRIBUTOR
+        /// </summary>
+       
 
         [HttpPost]
         public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
@@ -74,25 +81,31 @@ namespace Natural_API.Controllers
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string id, [FromBody] InsertUpdateResource updatedistributor)
+        /// <summary>
+        /// UPDATING DISTRIBUTOR BY ID
+        /// </summary>
+      
+        [HttpPut("{DisId}")]
+        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DisId, [FromBody] InsertUpdateResource updatedistributor)
         {
 
-            var ExistingDistributor = await _DistributorService.GetDistributorById(id);
+            var ExistingDistributor = await _DistributorService.GetDistributorById(DisId);
             var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
             var update=  await _DistributorService.UpdateDistributor(distributorToUpdate);
             return StatusCode(update.StatusCode, update);
             
         }
 
-        // Delete Distributor
+      /// <summary>
+      /// DELETING DISTRIBUTOR BY ID
+      /// </summary>
 
 
-        [HttpDelete("{distributorId}")]
+        [HttpDelete("{DisId}")]
 
-        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string distributorId)
+        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string DisId)
         {            
-            var response = await _DistributorService.DeleteDistributor(distributorId);           
+            var response = await _DistributorService.DeleteDistributor(DisId);           
 
             return Ok(response);
         }

@@ -1,4 +1,5 @@
-﻿using Natural_Core.Models;
+﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,10 @@ namespace Natural_Core.IRepositories
     {
         Task<List<Distributor>> GetAllDistributorstAsync();
         Task<Distributor> GetDistributorDetailsByIdAsync(string id);
+        Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search);
+
+
+
 
     }
 }

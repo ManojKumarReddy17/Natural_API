@@ -18,6 +18,8 @@ namespace Natural_Core.IServices
 
         Task<DistributorResponse> DeleteDistributor(string distributorId);
         Task<DistributorResponse> UpdateDistributor(Distributor distributor);
+        Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search);
+
 
     }
 }

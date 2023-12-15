@@ -93,10 +93,24 @@ namespace Natural_API.Controllers
         [HttpDelete("{ExecutiveId}")]
         public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string ExecutiveId)
         {
-
             var response = await _executiveService.DeleteExecutive(ExecutiveId);
             return Ok(response);
         }
+
+
+        /// <summary>
+        /// SEARCH EXECUTIVE 
+        /// </summary>
+        /// 
+        [HttpPost("Search")]
+        public async Task<IEnumerable<ExecutiveGetResource>> SearchExecutive([FromBody] SearchModel search)
+        {
+           var exe = await _executiveService.SearchExecutives(search);
+            var execget = _mapper.Map<IEnumerable<Executive>, IEnumerable<ExecutiveGetResource>>(exe);
+            return execget;
+        }
+
+
 
     }
 }

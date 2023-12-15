@@ -8,9 +8,9 @@ namespace Natural_Core.IRepositories
 {
     public interface IExecutiveRepository:IRepository<Executive>
     {
-        Task<List<Executive>> GetAllExectivesAsync();
         Task<IEnumerable<Executive>> GetAllExecutiveAsync();
         Task<Executive> GetWithExectiveByIdAsync(string id);
+       Task<IEnumerable<Executive>> SearchExecutiveAsync(SearchModel search);
 
 
     }

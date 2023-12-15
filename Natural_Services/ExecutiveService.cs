@@ -10,7 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Natural_Services
 {
-    public class ExecutiveService :IExecutiveService
+    public class ExecutiveService : IExecutiveService
     {
         private readonly IUnitOfWork _unitOfWork;
         public ExecutiveService(IUnitOfWork unitOfWork)
@@ -119,7 +119,11 @@ namespace Natural_Services
             return response;
         }
 
-      
+        public async Task<IEnumerable<Executive>> SearchExecutives(SearchModel search)
+        {
+            var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
+            return exec;
+        }
     }
 }
 

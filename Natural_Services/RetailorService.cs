@@ -121,7 +121,11 @@ namespace Natural_Services
             return response;
         }
 
-        
+        public async Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search)
+        {
+            var exec = await _unitOfWork.RetailorRepo.SearchRetailorAsync(search);
+            return exec;
+        }
     }
 }
  

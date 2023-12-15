@@ -20,7 +20,7 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-        
+
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
@@ -74,7 +74,7 @@ namespace Natural_Services
             try
             {
                 _unitOfWork.DistributorRepo.Update(distributor);
-                var created=  await _unitOfWork.CommitAsync();
+                var created = await _unitOfWork.CommitAsync();
                 if (created != 0)
                 {
                     response.Message = "update Successful";
@@ -103,7 +103,7 @@ namespace Natural_Services
                     _unitOfWork.DistributorRepo.Remove(distributor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
-                    response.StatusCode=200;
+                    response.StatusCode = 200;
                 }
                 else
                 {
@@ -118,5 +118,12 @@ namespace Natural_Services
 
             return response;
         }
+
+        public async Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search)
+        {
+            var exec = await _unitOfWork.DistributorRepo.SearchDistributorAsync(search);
+            return exec;
+        }
+
     }
 }

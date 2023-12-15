@@ -18,5 +18,13 @@ namespace Natural_Core.IServices
         Task<ExecutiveResponse> DeleteExecutive(string executiveId);
 
         Task<ExecutiveResponse> UpadateExecutive(Executive executive);
+
+        Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
+
+
+
+
+
+
     }
 }

@@ -106,8 +106,23 @@ namespace Natural_API.Controllers
             var response = await _retailorservice.DeleteRetailor(RetailorId);
             return Ok(response);
         }
+
+        /// <summary>
+        /// SEARCH RETAILOR 
+        /// </summary>
+
+        [HttpPost("Search")]
+        public async Task<IEnumerable<RetailorResource>> SearchRetailor([FromBody] SearchModel search)
+        {
+            var exe = await _retailorservice.SearcRetailors(search);
+            var execget = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(exe);
+            return execget;
+        }
+
+
     }
 }
+
         
 
  

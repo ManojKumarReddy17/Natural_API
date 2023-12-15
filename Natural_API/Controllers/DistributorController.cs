@@ -109,6 +109,22 @@ namespace Natural_API.Controllers
 
             return Ok(response);
         }
+
+
+
+        /// <summary>
+        /// SEARCH DISTRIBUTOR 
+        /// </summary>
+        
+        [HttpPost("Search")]
+        public async Task<IEnumerable<DistributorGetResource>> SearchDistributor([FromBody] SearchModel search)
+        {
+            var exe = await _DistributorService.SearcDistributors(search);
+            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
+            return execget;
+        }
+
+
     }
 }
 

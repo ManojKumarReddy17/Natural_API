@@ -15,6 +15,7 @@ namespace Natural_Core.IServices
 
         Task<RetailorResponce> DeleteRetailor(string retailorId);
         Task<Retailor> GetRetailorsById(string retailorId);
+        Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 
 
 

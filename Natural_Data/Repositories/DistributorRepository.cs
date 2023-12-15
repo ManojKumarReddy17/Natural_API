@@ -82,6 +82,39 @@ namespace Natural_Data.Repositories
             }
             
         }
+
+        public async Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search)
+        {
+            
+                var exec = await NaturalDbContext.Distributors
+                       .Include(c => c.AreaNavigation)
+                        .ThenInclude(a => a.City)
+                       .ThenInclude(ct => ct.State)
+                       .Where(c =>
+        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+        (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
+        (string.IsNullOrEmpty(search.FirstName) || c.FirstName.StartsWith(search.FirstName)) &&
+        (string.IsNullOrEmpty(search.LastName) || c.LastName.StartsWith(search.LastName)))
+       .ToListAsync();
+            var result = exec.Select(c => new Distributor
+            {
+                Id = c.Id,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                MobileNumber = c.MobileNumber,
+                Address = c.Address,
+                Area = c.AreaNavigation.AreaName,
+                Email = c.Email,
+                UserName = c.UserName,
+                Password = c.Password,
+                City = c.AreaNavigation.City.CityName,
+                State = c.AreaNavigation.City.State.StateName
+            }).ToList();
+                return result;
+            }
+        
+
         private NaturalsContext NaturalDbContext
         {
             get 

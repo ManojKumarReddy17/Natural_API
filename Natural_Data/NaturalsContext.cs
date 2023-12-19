@@ -30,7 +30,6 @@ namespace Natural_Data
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -40,6 +39,7 @@ namespace Natural_Data
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
             SetTimestamps<Dsr>();
+
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -59,6 +59,9 @@ namespace Natural_Data
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
             }
         }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
@@ -89,7 +92,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
             });
@@ -109,7 +112,7 @@ namespace Natural_Data
                     .HasMaxLength(20)
                     .HasColumnName("State_Id");
 
-                entity.HasOne(d => d.State)
+                entity.HasOne(d => d.State) 
                     .WithMany(p => p.Cities)
                     .HasForeignKey(d => d.StateId)
                     .HasConstraintName("Cities_ibfk_1");
@@ -125,7 +128,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -325,7 +328,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Address)
                     .IsRequired()

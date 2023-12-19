@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IRepositories
 {
-    public interface IDSRRepository: IRepository<Dsr>
+    public interface IDSRRepository :IRepository<Dsr>
     {
-        Task<IEnumerable<Dsr>> GetAllDsrAsync();
-
+        Task<Dsr> GetDsrDetailsByIdAsync(string DsrId);
+        
     }
 }

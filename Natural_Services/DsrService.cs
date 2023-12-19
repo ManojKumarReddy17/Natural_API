@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Natural_Services
 {
-    public class DsrService:IDsrService
+
+    public class DSRService:IDSRService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public DsrService(IUnitOfWork unitOfWork)
+        public DSRService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -46,10 +47,28 @@ namespace Natural_Services
 
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
-            var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
+            var result = await _unitOfWork.dSRRepo.GetAllAsync();
             return result;
         }
 
         
+    
+
+        public async Task<Dsr> GetDsrDetailsById(string DsrId)
+        {
+            return await _unitOfWork.dSRRepo.GetDsrDetailsByIdAsync(DsrId);
+        }
+
+        public async Task<Dsr> GetDsrById(string dsrId)
+        {
+            return await _unitOfWork.dSRRepo.GetByIdAsync(dsrId);
+        }
+
+        //public async Task<dsrre> DeleteDsr(string dsrId)
+        //{
+
+        //}
+
+
     }
 }

@@ -24,6 +24,8 @@ namespace Natural_Data
         private ICategoryRepository _categoryRepository;
         private IRetailorRepository _retailorRepository;
         private IExecutiveRepository _executiveRepository;
+        private IDSRRepository _dsrRepository;
+        private IdsrDetailsRepository _IdsrDetailsRepository;
 
 
         public UnitOfWork(NaturalsContext context)
@@ -42,6 +44,11 @@ namespace Natural_Data
         public ICategoryRepository CategoryRepo => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
+
+        public IDSRRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
+        public IdsrDetailsRepository DSRDetailsRepo => _IdsrDetailsRepository = _IdsrDetailsRepository ?? new DSRDetailRepository(_context);
+
+
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

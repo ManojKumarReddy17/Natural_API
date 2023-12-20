@@ -26,10 +26,14 @@ namespace Natural_API.Mapping
                 CreateMap <Executive, ExecutiveGetResource>();
                 CreateMap<Executive, InsertUpdateResource>();
                 CreateMap<Category , CategoryInsertResource>();
+                CreateMap<Dsr,DsrResource>();
+                CreateMap<Dsr, DsrPostResource>();
+            CreateMap<Dsrdetail, DsrDetailResource>();
+            CreateMap<Dsrdetail,DsrDetailPostResource>();
 
-              //// RESOURCE TO DOMAIN
+            //// RESOURCE TO DOMAIN
 
-                CreateMap<LoginResource, Login>();
+            CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
                 CreateMap<InsertUpdateResource, Distributor>();
                 CreateMap<StateResource, State>();
@@ -40,10 +44,14 @@ namespace Natural_API.Mapping
                 CreateMap<ExecutiveGetResource, Executive>();   
                 CreateMap<InsertUpdateResource, Executive>();
                 CreateMap<ExecutiveGetResource, Executive>();
-                CreateMap<CategoryInsertResource,Category>();
+                CreateMap<CategoryInsertResource, Category>();
+                CreateMap<DsrResource, Dsr>();
+                CreateMap<DsrPostResource, Dsr>();
+            CreateMap<DsrDetailResource,Dsrdetail>();
+            CreateMap<DsrDetailPostResource, Dsrdetail>();
+            
 
 
-          
 
         }
     }

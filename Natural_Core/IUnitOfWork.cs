@@ -18,6 +18,8 @@ namespace Natural_Core
         IAreaRepository AreaRepo { get; }
         ICategoryRepository CategoryRepo { get; }
         IRetailorRepository  RetailorRepo { get; }
+        IDSRRepository dSRRepo { get; }
+        IdsrDetailsRepository DSRDetailsRepo { get; }
         IExecutiveRepository ExecutiveRepo { get; }
         Task<int> CommitAsync();
 

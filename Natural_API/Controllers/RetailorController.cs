@@ -10,8 +10,7 @@ using Natural_Services;
 
 namespace Natural_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+   
     public class RetailorController : ControllerBase
     {
         private readonly IRetailorService _retailorservice;

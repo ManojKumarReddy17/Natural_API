@@ -7,6 +7,11 @@ namespace Natural_Core.Models
 {
     public partial class Retailor
     {
+        public Retailor()
+        {
+            Dsrs = new HashSet<Dsr>();
+            RetailorToDistributors = new HashSet<RetailorToDistributor>();
+        }
 
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -23,5 +28,7 @@ namespace Natural_Core.Models
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
+        public virtual ICollection<Dsr> Dsrs { get; set; }
+        public virtual ICollection<RetailorToDistributor> RetailorToDistributors { get; set; }
     }
 }

@@ -53,6 +53,11 @@ builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
+builder.Services.AddTransient<IDSRRepository,DsrRepository>(); 
+builder.Services.AddTransient<IDsrService, DsrService>();
+
+builder.Services.AddTransient<IdsrDetailsRepository,DSRDetailRepository>();
+builder.Services.AddTransient<IDSRdetailsService,DsrDetailService>();
 
 builder.Services.AddEndpointsApiExplorer();
 

@@ -5,8 +5,14 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public  class Executive
+    public partial class Executive
     {
+        public Executive()
+        {
+            DistributorToExecutives = new HashSet<DistributorToExecutive>();
+            Dsrs = new HashSet<Dsr>();
+        }
+
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,5 +30,7 @@ namespace Natural_Core.Models
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
+        public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
+        public virtual ICollection<Dsr> Dsrs { get; set; }
     }
 }

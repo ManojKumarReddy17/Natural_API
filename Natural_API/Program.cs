@@ -64,6 +64,11 @@ builder.Services.AddTransient<IAssignDistributorToExecutiveRepository, AssignDis
 builder.Services.AddTransient<IAssignDistributorToExecutiveService, AssignDistributorToExecutiveService>();
 
 
+builder.Services.AddTransient<IRetailor_To_Distributor_Service, Retailor_To_Distributor_Service>();
+builder.Services.AddTransient<IRetailor_To_Distributor_Repository,Retailor_To_Distributor_Repository>();
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 

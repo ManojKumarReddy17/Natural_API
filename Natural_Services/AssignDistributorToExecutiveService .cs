@@ -28,17 +28,18 @@ namespace Natural_Services
         }
 
 
-        public async Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive resources)
+        public async Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive model)
         {
             var Response = new ResultResponse();
 
             try
             {
+
                 var distributorToExecutive = new DistributorToExecutive
                 {
                     Id = "ADTE" + new Random().Next(1000, 9999).ToString(),
-                    ExecutiveId = resources.ExecutiveId,
-                    DistributorId = resources.DistributorId
+                    ExecutiveId = model.ExecutiveId,
+                    DistributorId = model.DistributorId
                 };
 
                 await _unitOfWork.distributorToExecutiveRepo.AddAsync(distributorToExecutive);

@@ -13,7 +13,7 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<DistributorToExecutive>> AssignedDistributorsByExecutiveId(string ExecutiveId);
 
-        Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive distributorsToExecutiveList);
+        Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive model);
 
 
     }

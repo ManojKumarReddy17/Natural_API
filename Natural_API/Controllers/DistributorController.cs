@@ -72,10 +72,10 @@ namespace Natural_API.Controllers
        
 
         [HttpPost]
-        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
+        public async Task<ActionResult<ResultRepsonse>> InsertDistributorWithAssociations([FromBody] DEInsertUpdateResource distributorResource)
         {
 
-            var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
+            var distributor = _mapper.Map<DEInsertUpdateResource, Distributor>(distributorResource);
 
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
@@ -86,7 +86,7 @@ namespace Natural_API.Controllers
         /// </summary>
       
         [HttpPut("{DistributorId}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DistributorId, [FromBody] InsertUpdateResource updatedistributor)
+        public async Task<ActionResult<DEInsertUpdateResource>> UpdateDistributor(string DistributorId, [FromBody] DEInsertUpdateResource updatedistributor)
         {
 
             var ExistingDistributor = await _DistributorService.GetDistributorById(DistributorId);
@@ -103,7 +103,7 @@ namespace Natural_API.Controllers
 
         [HttpDelete("{DistributorId}")]
 
-        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string DistributorId)
+        public async Task<ActionResult<ResultRepsonse>> DeleteDistributor(string DistributorId)
         {            
             var response = await _DistributorService.DeleteDistributor(DistributorId);           
 

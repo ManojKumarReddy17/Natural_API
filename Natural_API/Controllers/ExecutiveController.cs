@@ -37,7 +37,7 @@ namespace Natural_API.Controllers
         /// </summary>
     
         [HttpGet("{ExecutiveId}")]
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string ExecutiveId)
+        public async Task<ActionResult<ResultRepsonse>> GetExecutiveById(string ExecutiveId)
         {
             var executive = await _executiveService.GetExecutiveById(ExecutiveId);
             var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
@@ -50,7 +50,7 @@ namespace Natural_API.Controllers
        
         [HttpGet("details/{ExecutiveId}")]
   
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveDetailsById(string ExecutiveId)
+        public async Task<ActionResult<ResultRepsonse>> GetExecutiveDetailsById(string ExecutiveId)
         {
             var executive = await _executiveService.GetExecutiveDetailsById(ExecutiveId);
             var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
@@ -63,9 +63,9 @@ namespace Natural_API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
+        public async Task<ActionResult<ResultRepsonse>> InsertExecutiveWithAssociations([FromBody] DEInsertUpdateResource executiveResource)
         {
-            var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+            var createexecu = _mapper.Map<DEInsertUpdateResource, Executive>(executiveResource);
             var exe = await _executiveService.CreateExecutiveWithAssociationsAsync(createexecu);
 
             return StatusCode(exe.StatusCode, exe);
@@ -76,7 +76,7 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpPut("{ExecutiveId}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateExecutive(string ExecutiveId, [FromBody] InsertUpdateResource updatedexecutive)
+        public async Task<ActionResult<DEInsertUpdateResource>> UpdateExecutive(string ExecutiveId, [FromBody] DEInsertUpdateResource updatedexecutive)
         {
             var existingexectutive= await _executiveService.GetExecutiveById(ExecutiveId);
 
@@ -91,7 +91,7 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpDelete("{ExecutiveId}")]
-        public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string ExecutiveId)
+        public async Task<ActionResult<ResultRepsonse>> DeleteExecutive(string ExecutiveId)
         {
             var response = await _executiveService.DeleteExecutive(ExecutiveId);
             return Ok(response);

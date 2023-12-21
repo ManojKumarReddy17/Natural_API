@@ -65,8 +65,7 @@ namespace Natural_Data.Repositories
                     MobileNumber = distributors.MobileNumber,
                     Address = distributors.Address,
                     Email = distributors.Email,
-                    Area = distributors.AreaNavigation.AreaName,
-                   
+                    Area = distributors.AreaNavigation.AreaName,       
                     City = distributors.AreaNavigation.City.CityName,
                     State = distributors.AreaNavigation.City.State.StateName,
                     UserName = distributors.UserName,
@@ -82,7 +81,6 @@ namespace Natural_Data.Repositories
             }
             
         }
-
         public async Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search)
         {
             
@@ -113,13 +111,11 @@ namespace Natural_Data.Repositories
             }).ToList();
                 return result;
             }
-        
+
 
         private NaturalsContext NaturalDbContext
         {
-            get 
-            
-            { return Context as NaturalsContext; }
+            get { return Context as NaturalsContext; }
         }
 
 

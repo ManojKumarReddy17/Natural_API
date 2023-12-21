@@ -14,10 +14,10 @@ namespace Natural_Core.IServices
         Task<IEnumerable<Distributor>> GetAllDistributors();
         Task<Distributor> GetDistributorById(string distributorId);
         Task<Distributor> GetDistributorDetailsById(string distributorId);
-        Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor);
+        Task<ResultRepsonse> CreateDistributorWithAssociationsAsync(Distributor distributor);
 
-        Task<DistributorResponse> DeleteDistributor(string distributorId);
-        Task<DistributorResponse> UpdateDistributor(Distributor distributor);
+        Task<ResultRepsonse> DeleteDistributor(string distributorId);
+        Task<ResultRepsonse> UpdateDistributor(Distributor distributor);
         Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search);
 
 

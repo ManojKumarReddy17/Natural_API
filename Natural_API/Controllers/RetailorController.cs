@@ -45,7 +45,7 @@ namespace Natural_API.Controllers
         /// </summary>
         /// 
         [HttpGet("{RetailorId}")]
-        public async Task<ActionResult<RetailorResponce>> GetByIdRetailor(string RetailorId)
+        public async Task<ActionResult<ResultRepsonse>> GetByIdRetailor(string RetailorId)
         {
             var retailor = await _retailorservice.GetRetailorsById(RetailorId);
             var retailorResource = _mapper.Map<Retailor, RetailorResource>(retailor);
@@ -58,7 +58,7 @@ namespace Natural_API.Controllers
         /// 
         [HttpGet("details/{RetailorId}")]
 
-        public async Task<ActionResult<RetailorResponce>> GetDetailsById(string RetailorId)
+        public async Task<ActionResult<ResultRepsonse>> GetDetailsById(string RetailorId)
         {
             var retailor = await _retailorservice.GetRetailorDetailsById(RetailorId);
             var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
@@ -70,7 +70,7 @@ namespace Natural_API.Controllers
         /// </summary>
         
         [HttpPost]
-        public async Task<ActionResult<RetailorResponce>> InsertRetailorWithAssociations([FromBody] RetailorPostResource retailorResource)
+        public async Task<ActionResult<ResultRepsonse>> InsertRetailorWithAssociations([FromBody] RetailorPostResource retailorResource)
         
         {
 
@@ -100,7 +100,7 @@ namespace Natural_API.Controllers
         /// </summary>
         
         [HttpDelete("{RetailorId}")]
-        public async Task<ActionResult<RetailorResponce>> DeleteRetailor(string RetailorId)
+        public async Task<ActionResult<ResultRepsonse>> DeleteRetailor(string RetailorId)
         {
 
             var response = await _retailorservice.DeleteRetailor(RetailorId);

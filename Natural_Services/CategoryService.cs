@@ -19,9 +19,9 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<CategoryResponse> CreateCategory(Category category)
+        public async Task<ResultRepsonse> CreateCategory(Category category)
         {
-            var response = new CategoryResponse();
+            var response = new ResultRepsonse();
             try
             {
                 category.Id = "NCAT" +new Random().Next(10000,99999).ToString();
@@ -59,9 +59,9 @@ namespace Natural_Services
 
         }
 
-        public async Task<CategoryResponse> UpdateCategory(Category updatecategory)
+        public async Task<ResultRepsonse> UpdateCategory(Category updatecategory)
         {
-            var response = new CategoryResponse();
+            var response = new ResultRepsonse();
             try
             {
                 _unitOfWork.CategoryRepo.Update(updatecategory);
@@ -84,9 +84,9 @@ namespace Natural_Services
             return response;
         }
 
-        public async Task<CategoryResponse> DeleteCategory(string categoryId)
+        public async Task<ResultRepsonse> DeleteCategory(string categoryId)
         {
-            var response = new CategoryResponse();
+            var response = new ResultRepsonse();
 
             try
             {

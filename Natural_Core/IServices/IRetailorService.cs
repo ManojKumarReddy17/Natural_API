@@ -10,10 +10,10 @@ namespace Natural_Core.IServices
     {
         Task<IEnumerable<Retailor>> GetAllRetailors();
         Task<Retailor> GetRetailorDetailsById(string distributorId);
-        Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor distributor);
-        Task<RetailorResponce> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
+        Task<ResultRepsonse> CreateRetailorWithAssociationsAsync(Retailor distributor);
+        Task<ResultRepsonse> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
 
-        Task<RetailorResponce> DeleteRetailor(string retailorId);
+        Task<ResultRepsonse> DeleteRetailor(string retailorId);
         Task<Retailor> GetRetailorsById(string retailorId);
         Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 

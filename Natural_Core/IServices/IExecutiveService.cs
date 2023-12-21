@@ -14,10 +14,10 @@ namespace Natural_Core.IServices
 
         Task<Executive> GetExecutiveById(string ExecutiveId);
 
-        Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
-        Task<ExecutiveResponse> DeleteExecutive(string executiveId);
+        Task<ResultRepsonse> CreateExecutiveWithAssociationsAsync(Executive executive);
+        Task<ResultRepsonse> DeleteExecutive(string executiveId);
 
-        Task<ExecutiveResponse> UpadateExecutive(Executive executive);
+        Task<ResultRepsonse> UpadateExecutive(Executive executive);
 
         Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
 

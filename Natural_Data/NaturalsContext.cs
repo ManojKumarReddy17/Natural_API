@@ -15,7 +15,6 @@ namespace Natural_Data
         public NaturalsContext()
         {
         }
-
         public NaturalsContext(DbContextOptions<NaturalsContext> options)
             : base(options)
         {
@@ -25,13 +24,14 @@ namespace Natural_Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
+        public virtual DbSet<DistributorToExecutive> DistributorToExecutives { get; set; }
+        public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
+        public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
-
-
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();
@@ -185,6 +185,67 @@ namespace Natural_Data
                     .HasConstraintName("Distributor_ibfk_3");
             });
 
+            modelBuilder.Entity<DistributorToExecutive>(entity =>
+            {
+                entity.ToTable("DistributorToExecutive");
+
+                entity.HasIndex(e => e.DistributorId, "DistributorId");
+
+                entity.HasIndex(e => e.ExecutiveId, "ExecutiveId");
+
+                entity.Property(e => e.Id).HasMaxLength(10);
+
+                entity.Property(e => e.DistributorId).HasMaxLength(10);
+
+                entity.Property(e => e.ExecutiveId).HasMaxLength(10);
+
+                entity.HasOne(d => d.Distributor)
+                    .WithMany(p => p.DistributorToExecutives)
+                    .HasForeignKey(d => d.DistributorId)
+                    .HasConstraintName("DistributorToExecutive_ibfk_2");
+
+                entity.HasOne(d => d.Executive)
+                    .WithMany(p => p.DistributorToExecutives)
+                    .HasForeignKey(d => d.ExecutiveId)
+                    .HasConstraintName("DistributorToExecutive_ibfk_1");
+            });
+
+            modelBuilder.Entity<Dsr>(entity =>
+            {
+                entity.ToTable("DSR");
+
+                entity.HasIndex(e => e.Distributor, "Distributor");
+
+                entity.HasIndex(e => e.Executive, "Executive");
+
+                entity.HasIndex(e => e.Retailor, "Retailor");
+
+                entity.Property(e => e.Id).HasMaxLength(10);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Distributor).HasMaxLength(10);
+
+                entity.Property(e => e.Executive).HasMaxLength(10);
+
+                entity.Property(e => e.Retailor).HasMaxLength(10);
+
+                entity.HasOne(d => d.DistributorNavigation)
+                    .WithMany(p => p.Dsrs)
+                    .HasForeignKey(d => d.Distributor)
+                    .HasConstraintName("DSR_ibfk_2");
+
+                entity.HasOne(d => d.ExecutiveNavigation)
+                    .WithMany(p => p.Dsrs)
+                    .HasForeignKey(d => d.Executive)
+                    .HasConstraintName("DSR_ibfk_1");
+
+                entity.HasOne(d => d.RetailorNavigation)
+                    .WithMany(p => p.Dsrs)
+                    .HasForeignKey(d => d.Retailor)
+                    .HasConstraintName("DSR_ibfk_3");
+            });
+
             modelBuilder.Entity<Executive>(entity =>
             {
                 entity.ToTable("Executive");
@@ -275,6 +336,23 @@ namespace Natural_Data
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(e => e.Id).HasMaxLength(10);
+
+                entity.Property(e => e.Amount).HasMaxLength(30);
+
+                entity.Property(e => e.Category).HasMaxLength(30);
+
+                entity.Property(e => e.Grams).HasMaxLength(30);
+
+                entity.Property(e => e.Price).HasMaxLength(30);
+
+                entity.Property(e => e.ProductName).HasMaxLength(30);
+
+                entity.Property(e => e.Quantity).HasMaxLength(30);
+            });
+
             modelBuilder.Entity<Retailor>(entity =>
             {
                 entity.ToTable("Retailor");
@@ -285,7 +363,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).HasMaxLength(50).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -340,6 +418,31 @@ namespace Natural_Data
                     .HasForeignKey(d => d.State)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Retailor_ibfk_3");
+            });
+
+            modelBuilder.Entity<RetailorToDistributor>(entity =>
+            {
+                entity.ToTable("RetailorToDistributor");
+
+                entity.HasIndex(e => e.DistributorId, "FK_Distributor");
+
+                entity.HasIndex(e => e.RetailorId, "FK_Retailor");
+
+                entity.Property(e => e.Id).HasMaxLength(10);
+
+                entity.Property(e => e.DistributorId).HasMaxLength(10);
+
+                entity.Property(e => e.RetailorId).HasMaxLength(10);
+
+                entity.HasOne(d => d.Distributor)
+                    .WithMany(p => p.RetailorToDistributors)
+                    .HasForeignKey(d => d.DistributorId)
+                    .HasConstraintName("FK_Distributor");
+
+                entity.HasOne(d => d.Retailor)
+                    .WithMany(p => p.RetailorToDistributors)
+                    .HasForeignKey(d => d.RetailorId)
+                    .HasConstraintName("FK_Retailor");
             });
 
             modelBuilder.Entity<State>(entity =>

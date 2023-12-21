@@ -19,6 +19,7 @@ namespace Natural_Core
         ICategoryRepository CategoryRepo { get; }
         IRetailorRepository  RetailorRepo { get; }
         IExecutiveRepository ExecutiveRepo { get; }
+        IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
         Task<int> CommitAsync();
 
 

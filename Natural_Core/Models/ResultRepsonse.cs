@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Natural_Core.Models
 {
-    public class RetailorResponce
+    public class ResultRepsonse
     {
         public string Message { get; set; }
         public int StatusCode { get; set; }

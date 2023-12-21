@@ -24,6 +24,7 @@ namespace Natural_Data
         private ICategoryRepository _categoryRepository;
         private IRetailorRepository _retailorRepository;
         private IExecutiveRepository _executiveRepository;
+        private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
 
 
         public UnitOfWork(NaturalsContext context)
@@ -42,6 +43,7 @@ namespace Natural_Data
         public ICategoryRepository CategoryRepo => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
+        public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo=> _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

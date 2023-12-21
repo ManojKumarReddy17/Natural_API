@@ -53,6 +53,9 @@ builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
+builder.Services.AddTransient<IAssignDistributorToExecutiveRepository,AssignDistributorToExecutiveRepository>();    
+builder.Services.AddTransient<IAssignDistributorToExecutiveService, AssignDistributorToExecutiveService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 

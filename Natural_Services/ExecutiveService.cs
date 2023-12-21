@@ -34,9 +34,9 @@ namespace Natural_Services
             return await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
         }
 
-        public async Task<ExecutiveResponse> UpadateExecutive(Executive executive)
+        public async Task<ResultRepsonse> UpadateExecutive(Executive executive)
         {
-            var response = new ExecutiveResponse();
+            var response = new ResultRepsonse();
             try
             {
                 _unitOfWork.ExecutiveRepo.Update(executive);                             
@@ -57,10 +57,10 @@ namespace Natural_Services
             return (response);
         }
 
-        public async Task<ExecutiveResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+        public async Task<ResultRepsonse> CreateExecutiveWithAssociationsAsync(Executive executive)
         {
             {
-                var response = new ExecutiveResponse();
+                var response = new ResultRepsonse();
 
                 try
                 {
@@ -90,9 +90,9 @@ namespace Natural_Services
             }
         }
 
-        public async Task<ExecutiveResponse> DeleteExecutive(string executiveId)
+        public async Task<ResultRepsonse> DeleteExecutive(string executiveId)
         {
-            var response = new ExecutiveResponse();
+            var response = new ResultRepsonse();
 
             try
             {

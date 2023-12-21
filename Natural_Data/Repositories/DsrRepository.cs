@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable disable
 namespace Natural_Data.Repositories
 {
     public class DsrRepository: Repository<Dsr>,IDSRRepository

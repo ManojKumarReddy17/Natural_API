@@ -10,7 +10,7 @@ namespace Natural_Core.IServices
     public interface IDSRdetailsService 
     {
         Task<IEnumerable<Dsrdetail>> GetAllDsrdetail();
-        Task<RetailorResponce> CreateDsrDetailsWithAssociationsAsync(Dsrdetail dsr);
+        Task<ResultResponse> CreateDsrDetailsWithAssociationsAsync(Dsrdetail dsr);
 
     }
 }

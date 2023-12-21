@@ -21,6 +21,8 @@ namespace Natural_Core
         IDSRRepository dSRRepo { get; }
         IdsrDetailsRepository DSRDetailsRepo { get; }
         IExecutiveRepository ExecutiveRepo { get; }
+        IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
+
         Task<int> CommitAsync();
 
 

@@ -9,10 +9,10 @@ namespace Natural_Core.IServices
     public interface ICategoryService
     {
         Task<IEnumerable<Category>> GetAllCategories();
-        Task<CategoryResponse> CreateCategory(Category category);
+        Task<ResultResponse> CreateCategory(Category category);
         Task<Category> GetCategoryById(string CategoryId);
-        Task<CategoryResponse> UpdateCategory(Category updatecategory);
-        Task<CategoryResponse> DeleteCategory(string categoryId);
+        Task<ResultResponse> UpdateCategory(Category updatecategory);
+        Task<ResultResponse> DeleteCategory(string categoryId);
 
 
     }

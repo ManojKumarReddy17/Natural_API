@@ -9,7 +9,7 @@ namespace Natural_Core.IServices
     public interface IDsrService
     {
         Task<IEnumerable<Dsr>> GetAllDsr();
-        Task<RetailorResponce> CreateDsrWithAssociationsAsync(Dsr dsr);
+        Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr);
         
     }
 }

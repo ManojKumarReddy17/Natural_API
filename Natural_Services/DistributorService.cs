@@ -39,9 +39,9 @@ namespace Natural_Services
             return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
         }
 
-        public async Task<DistributorResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
+        public async Task<ResultResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
         {
-            var response = new DistributorResponse();
+            var response = new ResultResponse();
 
             try
             {
@@ -67,10 +67,10 @@ namespace Natural_Services
             return response;
         }
 
-        public async Task<DistributorResponse> UpdateDistributor(Distributor distributor)
+        public async Task<ResultResponse> UpdateDistributor(Distributor distributor)
 
         {
-            var response = new DistributorResponse();
+            var response = new ResultResponse();
             try
             {
                 _unitOfWork.DistributorRepo.Update(distributor);
@@ -90,9 +90,9 @@ namespace Natural_Services
 
             return response;
         }
-        public async Task<DistributorResponse> DeleteDistributor(string distributorId)
+        public async Task<ResultResponse> DeleteDistributor(string distributorId)
         {
-            var response = new DistributorResponse();
+            var response = new ResultResponse();
 
             try
             {

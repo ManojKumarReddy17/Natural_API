@@ -26,6 +26,7 @@ namespace Natural_Data
         private IExecutiveRepository _executiveRepository;
         private IDSRRepository _dsrRepository;
         private IdsrDetailsRepository _IdsrDetailsRepository;
+        private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
 
 
         public UnitOfWork(NaturalsContext context)
@@ -48,6 +49,7 @@ namespace Natural_Data
         public IDSRRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
         public IdsrDetailsRepository DSRDetailsRepo => _IdsrDetailsRepository = _IdsrDetailsRepository ?? new DSRDetailRepository(_context);
 
+        public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
 
         public async Task<int> CommitAsync()
         {

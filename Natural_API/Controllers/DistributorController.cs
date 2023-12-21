@@ -72,7 +72,7 @@ namespace Natural_API.Controllers
        
 
         [HttpPost]
-        public async Task<ActionResult<DistributorResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
+        public async Task<ActionResult<ResultResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
         {
 
             var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
@@ -103,7 +103,7 @@ namespace Natural_API.Controllers
 
         [HttpDelete("{DistributorId}")]
 
-        public async Task<ActionResult<DistributorResponse>> DeleteDistributor(string DistributorId)
+        public async Task<ActionResult<ResultResponse>> DeleteDistributor(string DistributorId)
         {            
             var response = await _DistributorService.DeleteDistributor(DistributorId);           
 

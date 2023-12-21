@@ -28,35 +28,48 @@ namespace Natural_Services
         }
 
 
-        public async Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive resources)
+        public async Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive model)
         {
             var Response = new ResultResponse();
 
             try
             {
-                var distributorToExecutive = new DistributorToExecutive
+                var IsAssignedDistributor = await _unitOfWork.distributorToExecutiveRepo.
+                  IsExecutiveAssignedToDistributor(new List<string> { model.DistributorId });
+
+                if (!IsAssignedDistributor)
                 {
-                    Id = "ADTE" + new Random().Next(1000, 9999).ToString(),
-                    ExecutiveId = resources.ExecutiveId,
-                    DistributorId = resources.DistributorId
-                };
 
-                await _unitOfWork.distributorToExecutiveRepo.AddAsync(distributorToExecutive);
+                    var distributorToExecutive = new DistributorToExecutive
+                    {
+                        Id = "ADTE" + new Random().Next(1000, 9999).ToString(),
+                        ExecutiveId = model.ExecutiveId,
+                        DistributorId = model.DistributorId
+                    };
+
+                    await _unitOfWork.distributorToExecutiveRepo.AddAsync(distributorToExecutive);
 
 
-                var assigned = await _unitOfWork.CommitAsync();
+                    var assigned = await _unitOfWork.CommitAsync();
 
-                if (assigned != 0)
-                {
-                    Response.Message = "Successfully Assigned Distributors to Executive";
-                    Response.StatusCode = 200;
+                    if (assigned != 0)
+                    {
+                        Response.Message = "Successfully Assigned Distributors to Executive";
+                        Response.StatusCode = 200;
+                    }
+                    else
+                    {
+                        Response.Message = "Failed Assigning Distributors to Executive";
+                        Response.StatusCode = 404;
+                    }
                 }
                 else
                 {
-                    Response.Message = "Failed Assigning Distributors to Executive";
-                    Response.StatusCode = 404;
+                    Response.Message = "Executive is already assigned to the distributor";
+                    Response.StatusCode = 400;
                 }
             }
+
             catch (Exception)
             {
                 Response.Message = "Failed Assigning Distributors to Executive";

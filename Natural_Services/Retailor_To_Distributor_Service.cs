@@ -28,38 +28,52 @@ namespace Natural_Services
             return await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
         }
 
+       
         public async Task<ResultResponse> AssignRetailorsToDistributor(RetailorToDistributor retailorToDistributorlist)
         {
             var Response = new ResultResponse();
 
             try
             {
-                var retailorTodistributor = new RetailorToDistributor()
+                var AssignedRetailor = await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.
+                  DistributorAssignedToRetailor(new List<string> { retailorToDistributorlist.RetailorId });
+
+                if (!AssignedRetailor)
                 {
-                    Id = "ARTD" + new Random().Next(1000, 9999).ToString(),
-                    DistributorId = retailorToDistributorlist.DistributorId,
-                    RetailorId = retailorToDistributorlist.RetailorId
-                };
 
-                await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.AddAsync(retailorTodistributor);
+                    var retailorToDistributor = new RetailorToDistributor
+                    {
+                        Id = "ARTD" + new Random().Next(1000, 9999).ToString(),
+                        DistributorId = retailorToDistributorlist.DistributorId,
+                        RetailorId = retailorToDistributorlist.RetailorId
+                    };
+
+                    await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.AddAsync(retailorToDistributor);
 
 
-                var assigned = await _unitOfWork.CommitAsync();
+                    var assigned = await _unitOfWork.CommitAsync();
 
-                if (assigned != 0)
-                {
-                    Response.Message = "Successfully Assigned Distributors to Executive";
-                    Response.StatusCode = 200;
+                    if (assigned != 0)
+                    {
+                        Response.Message = "Successfully Assigned Retailor To Distributor";
+                        Response.StatusCode = 200;
+                    }
+                    else
+                    {
+                        Response.Message = "Failed Assigning Retailor To Distributor";
+                        Response.StatusCode = 404;
+                    }
                 }
                 else
                 {
-                    Response.Message = "Failed Assigning Distributors to Executive";
-                    Response.StatusCode = 404;
+                    Response.Message = "Retailor is already assigned to the distributor";
+                    Response.StatusCode = 400;
                 }
             }
+
             catch (Exception)
             {
-                Response.Message = "Failed Assigning Distributors to Executive";
+                Response.Message = "Failed Assigning Retailor To Distributor";
                 Response.StatusCode = 404;
             }
 

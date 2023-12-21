@@ -15,9 +15,9 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-       public async Task<RetailorResponce> CreateDsrDetailsWithAssociationsAsync(Dsrdetail dsr)
+       public async Task<ResultResponse> CreateDsrDetailsWithAssociationsAsync(Dsrdetail dsr)
         {
-            var response = new RetailorResponce();
+            var response = new ResultResponse();
             try
             {
 

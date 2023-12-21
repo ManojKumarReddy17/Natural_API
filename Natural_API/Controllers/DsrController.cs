@@ -26,7 +26,7 @@ namespace Natural_API.Controllers
             return Ok(DsrList);
         }
         [HttpPost]
-        public async Task<ActionResult<RetailorResponce>> InsertdsrWithAssociations([FromBody] DsrPostResource dsrResource)
+        public async Task<ActionResult<ResultResponse>> InsertdsrWithAssociations([FromBody] DsrPostResource dsrResource)
         {
             var response = _mapper.Map<DsrPostResource, Dsr>(dsrResource);
             var creadted = await _repository.CreateDsrWithAssociationsAsync(response);

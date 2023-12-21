@@ -30,6 +30,8 @@ namespace Natural_API.Mapping
                 CreateMap<Dsr, DsrPostResource>();
             CreateMap<Dsrdetail, DsrDetailResource>();
             CreateMap<Dsrdetail,DsrDetailPostResource>();
+            CreateMap<InsertDEmapper, DistributorToExecutive>();
+
 
             //// RESOURCE TO DOMAIN
 
@@ -49,7 +51,8 @@ namespace Natural_API.Mapping
                 CreateMap<DsrPostResource, Dsr>();
             CreateMap<DsrDetailResource,Dsrdetail>();
             CreateMap<DsrDetailPostResource, Dsrdetail>();
-            
+            CreateMap<DistributorToExecutive, InsertDEmapper>();
+
 
 
 

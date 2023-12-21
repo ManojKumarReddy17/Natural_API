@@ -37,9 +37,9 @@ namespace Natural_Services
             return await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
         }
 
-        public async Task<RetailorResponce> CreateRetailorWithAssociationsAsync(Retailor retailor)
+        public async Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {
-            var response = new RetailorResponce();
+            var response = new ResultResponse();
 
             try
             {
@@ -64,10 +64,10 @@ namespace Natural_Services
 
             return response;
         }
-        public async Task<RetailorResponce> UpdateRetailors(Retailor existingRetailor, Retailor retailor)
+        public async Task<ResultResponse> UpdateRetailors(Retailor existingRetailor, Retailor retailor)
         {
 
-            var response = new RetailorResponce();
+            var response = new ResultResponse();
 
             try
             {
@@ -92,9 +92,9 @@ namespace Natural_Services
         }
 
 
-        public async Task<RetailorResponce> DeleteRetailor(string retailorId)
+        public async Task<ResultResponse> DeleteRetailor(string retailorId)
         {
-            var response = new RetailorResponce();
+            var response = new ResultResponse();
 
             try
             {

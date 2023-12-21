@@ -16,9 +16,9 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<RetailorResponce> CreateDsrWithAssociationsAsync(Dsr dsr)
+        public async Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr)
         {
-            var response = new RetailorResponce();
+            var response = new ResultResponse();
             try
             {
                 dsr.Id = "DSR" + new Random().Next(10000, 99999).ToString();

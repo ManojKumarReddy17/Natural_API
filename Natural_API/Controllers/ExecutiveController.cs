@@ -37,7 +37,7 @@ namespace Natural_API.Controllers
         /// </summary>
     
         [HttpGet("{ExecutiveId}")]
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveById(string ExecutiveId)
+        public async Task<ActionResult<ResultResponse>> GetExecutiveById(string ExecutiveId)
         {
             var executive = await _executiveService.GetExecutiveById(ExecutiveId);
             var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
@@ -50,7 +50,7 @@ namespace Natural_API.Controllers
        
         [HttpGet("details/{ExecutiveId}")]
   
-        public async Task<ActionResult<ExecutiveResponse>> GetExecutiveDetailsById(string ExecutiveId)
+        public async Task<ActionResult<ResultResponse>> GetExecutiveDetailsById(string ExecutiveId)
         {
             var executive = await _executiveService.GetExecutiveDetailsById(ExecutiveId);
             var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
@@ -63,7 +63,7 @@ namespace Natural_API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ExecutiveResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
+        public async Task<ActionResult<ResultResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
         {
             var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
             var exe = await _executiveService.CreateExecutiveWithAssociationsAsync(createexecu);
@@ -91,7 +91,7 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpDelete("{ExecutiveId}")]
-        public async Task<ActionResult<ExecutiveResponse>> DeleteExecutive(string ExecutiveId)
+        public async Task<ActionResult<ResultResponse>> DeleteExecutive(string ExecutiveId)
         {
             var response = await _executiveService.DeleteExecutive(ExecutiveId);
             return Ok(response);

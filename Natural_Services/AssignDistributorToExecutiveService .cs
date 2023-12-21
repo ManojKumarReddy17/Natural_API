@@ -1,0 +1,69 @@
+﻿using Natural_Core;
+using Natural_Core.IServices;
+using Natural_Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Natural_Services
+{
+    public class AssignDistributorToExecutiveService : IAssignDistributorToExecutiveService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AssignDistributorToExecutiveService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        public async Task<IEnumerable<DistributorToExecutive>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+        {
+            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorDetailsByExecutiveId(ExecutiveId);
+        }
+
+        public async Task<IEnumerable<DistributorToExecutive>> AssignedDistributorsByExecutiveId(string ExecutiveId)
+        {
+            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorByExecutiveId(ExecutiveId);
+        }
+
+
+        public async Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive resources)
+        {
+            var Response = new ResultResponse();
+
+            try
+            {
+                var distributorToExecutive = new DistributorToExecutive
+                {
+                    Id = "ADTE" + new Random().Next(1000, 9999).ToString(),
+                    ExecutiveId = resources.ExecutiveId,
+                    DistributorId = resources.DistributorId
+                };
+
+                await _unitOfWork.distributorToExecutiveRepo.AddAsync(distributorToExecutive);
+
+
+                var assigned = await _unitOfWork.CommitAsync();
+
+                if (assigned != 0)
+                {
+                    Response.Message = "Successfully Assigned Distributors to Executive";
+                    Response.StatusCode = 200;
+                }
+                else
+                {
+                    Response.Message = "Failed Assigning Distributors to Executive";
+                    Response.StatusCode = 404;
+                }
+            }
+            catch (Exception)
+            {
+                Response.Message = "Failed Assigning Distributors to Executive";
+                Response.StatusCode = 404;
+            }
+
+            return Response;
+        }
+    }
+}

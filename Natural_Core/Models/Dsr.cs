@@ -18,11 +18,12 @@ namespace Natural_Core.Models
         public string Retailor { get; set; }
         public string OrderBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public double TotalAmount { get; set; }
 
         public virtual Distributor DistributorNavigation { get; set; }
         public virtual Executive ExecutiveNavigation { get; set; }
+        public virtual Login OrderByNavigation { get; set; }
         public virtual Retailor RetailorNavigation { get; set; }
         public virtual ICollection<Dsrdetail> Dsrdetails { get; set; }
     }

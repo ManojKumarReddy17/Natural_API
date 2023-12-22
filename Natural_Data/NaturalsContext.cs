@@ -39,6 +39,7 @@ namespace Natural_Data
             SetTimestamps<Distributor>();
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
+            SetTimestamps<Dsr>();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -224,6 +225,8 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.Executive, "Executive");
 
+                entity.HasIndex(e => e.OrderBy, "OrderBy");
+
                 entity.HasIndex(e => e.Retailor, "Retailor");
 
                 entity.Property(e => e.Id).HasMaxLength(10);
@@ -238,15 +241,15 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(10);
 
+                entity.Property(e => e.ModifiedDate).HasColumnType("date");
+
                 entity.Property(e => e.OrderBy)
                     .IsRequired()
-                    .HasMaxLength(30);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Retailor)
                     .IsRequired()
                     .HasMaxLength(10);
-
-                entity.Property(e => e.UpdatedDate).HasColumnType("date");
 
                 entity.HasOne(d => d.DistributorNavigation)
                     .WithMany(p => p.Dsrs)
@@ -259,6 +262,12 @@ namespace Natural_Data
                     .HasForeignKey(d => d.Executive)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DSR_ibfk_1");
+
+                entity.HasOne(d => d.OrderByNavigation)
+                    .WithMany(p => p.Dsrs)
+                    .HasForeignKey(d => d.OrderBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("DSR_ibfk_4");
 
                 entity.HasOne(d => d.RetailorNavigation)
                     .WithMany(p => p.Dsrs)

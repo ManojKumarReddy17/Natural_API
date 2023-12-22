@@ -23,7 +23,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<DsrDetailResource>>> GetDsrDetail()
         {
             var dsrdetail = await _dsrdetails.GetAllDsrdetail();
-            var dsrdetaillist= _mapper.Map<IEnumerable<Dsrdetail> ,IEnumerable<DsrDetailResource>>(dsrdetail);
+            var dsrdetaillist = _mapper.Map<IEnumerable<Dsrdetail>, IEnumerable<DsrDetailResource>>(dsrdetail);
             return Ok(dsrdetaillist);
         }
         [HttpPost]

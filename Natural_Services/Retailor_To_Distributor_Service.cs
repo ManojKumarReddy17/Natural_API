@@ -1,12 +1,8 @@
 ﻿using Natural_Core;
-using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using Natural_Core.Models;
-using Natural_Data.Repositories;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Natural_Services

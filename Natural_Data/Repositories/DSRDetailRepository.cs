@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
+using Natural_Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Data.Models
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -24,10 +24,14 @@ namespace Natural_Data
         private ICategoryRepository _categoryRepository;
         private IRetailorRepository _retailorRepository;
         private IExecutiveRepository _executiveRepository;
+
         private IDSRRepository _dsrRepository;
         private IdsrDetailsRepository _IdsrDetailsRepository;
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
         private IRetailor_To_Distributor_Repository _retailor_To_Distributor_Repository;
+
+      
+
 
 
         public UnitOfWork(NaturalsContext context)
@@ -41,17 +45,20 @@ namespace Natural_Data
         public ICityRepository CityRepo => _cityRepository = _cityRepository ?? new CityRepository(_context);
         public IStateRepository StateRepo => _stateRepository = _stateRepository ?? new StateRepository(_context);
 
-        public IAreaRepository AreaRepo => _areaRepository = _areaRepository ?? new AreaRepository(_context);
+        public IAreaRepository AreaRepo => _areaRepository= _areaRepository ?? new AreaRepository(_context);
 
         public ICategoryRepository CategoryRepo => _categoryRepository = _categoryRepository ?? new CategoryRepository(_context);
 
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
 
-        public IDSRRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
+
+        public IDSRRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DSRRepository(_context);
         public IdsrDetailsRepository DSRDetailsRepo => _IdsrDetailsRepository = _IdsrDetailsRepository ?? new DSRDetailRepository(_context);
 
         public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
         public IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo => _retailor_To_Distributor_Repository ?? new Retailor_To_Distributor_Repository(_context);
+
+
 
         public async Task<int> CommitAsync()
         {

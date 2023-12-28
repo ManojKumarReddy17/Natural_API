@@ -26,24 +26,26 @@ namespace Natural_API.Mapping
                 CreateMap <Executive, ExecutiveGetResource>();
                 CreateMap<Executive, InsertUpdateResource>();
                 CreateMap<Category , CategoryInsertResource>();
-                CreateMap<Dsr,DsrResource>();
+
+                CreateMap<Dsr,DSRResource>();
                 CreateMap<Dsr, DsrPostResource>();
             CreateMap<Dsrdetail, DsrDetailResource>();
-            CreateMap<Dsrdetail,DsrDetailPostResource>();
             CreateMap<InsertDEmapper, DistributorToExecutive>();
             CreateMap<DistributorToExecutive , DistributorToExecutiveResource>();
-                CreateMap<Dsrdetail, DsrDetailResource>();
                 CreateMap<Dsrdetail,DsrDetailPostResource>();
-                CreateMap<InsertDEmapper, DistributorToExecutive>();
                 CreateMap<RetailorToDistributor, GetRTDResource>();
                 CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
             CreateMap<RetailorToDistributor,InsertRTDResource>();
+            CreateMap<Product,DsrProductResource>();
+            CreateMap<Dsr,DsrDetailsByIdResource>();
+
+
 
 
 
             //// RESOURCE TO DOMAIN
 
-                CreateMap<LoginResource, Login>();
+            CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
                 CreateMap<InsertUpdateResource, Distributor>();
                 CreateMap<StateResource, State>();
@@ -54,19 +56,21 @@ namespace Natural_API.Mapping
                 CreateMap<ExecutiveGetResource, Executive>();   
                 CreateMap<InsertUpdateResource, Executive>();
                 CreateMap<ExecutiveGetResource, Executive>();
+
                 CreateMap<CategoryInsertResource, Category>();
-                CreateMap<DsrResource, Dsr>();
+                CreateMap<DSRResource, Dsr>();
                 CreateMap<DsrPostResource, Dsr>();
             CreateMap<DsrDetailResource,Dsrdetail>();
             CreateMap<DsrDetailPostResource, Dsrdetail>();
             CreateMap<DistributorToExecutive, InsertDEmapper>();
             CreateMap<DistributorToExecutiveResource, DistributorToExecutive>();
-                CreateMap<DsrDetailResource,Dsrdetail>();
-                CreateMap<DsrDetailPostResource, Dsrdetail>();
                 CreateMap<DistributorToExecutive, InsertDEmapper>();
                 CreateMap<GetRTDResource, RetailorToDistributor>();
                 CreateMap<AssignRetailorToDistributorResource, RetailorToDistributor>();
             CreateMap<InsertRTDResource, RetailorToDistributor>();
+            CreateMap<DsrProductResource,Product>();
+            CreateMap<DsrDetailsByIdResource, Dsr>();
+
 
 
 

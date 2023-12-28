@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Data.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -30,7 +30,6 @@ namespace Natural_Data
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -40,6 +39,7 @@ namespace Natural_Data
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
             SetTimestamps<Dsr>();
+
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -59,6 +59,9 @@ namespace Natural_Data
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
             }
         }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
@@ -411,23 +414,18 @@ namespace Natural_Data
 
                 entity.Property(e => e.Id).HasMaxLength(10);
 
-                entity.Property(e => e.Amount)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
+               
                 entity.Property(e => e.Category)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.Grams)
-                    .IsRequired()
-                    .HasMaxLength(30);
+               
 
                 entity.Property(e => e.Price)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.ProductName)
+                entity.Property(e => e.product)
                     .IsRequired()
                     .HasMaxLength(30);
 

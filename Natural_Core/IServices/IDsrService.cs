@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IServices
 {
-    public interface IDsrService
+    public interface IDSRService 
     {
-        Task<IEnumerable<Dsr>> GetAllDsr();
+        Task<Dsr> GetDsrDetailsById(string DsrId);
+        Task<DsrResponse> DeleteDsr(string dsrId);
         Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr);
-        
+        Task<IEnumerable<Dsr>> GetAllDsr();
     }
 }

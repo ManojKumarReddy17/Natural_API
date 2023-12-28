@@ -46,66 +46,27 @@ namespace Natural_Services
             return response;
         }
     
-
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
             var result = await _unitOfWork.dSRRepo.GetAllAsync();
             return result;
         }
 
-        
-    
-
+       
         public async Task<Dsr> GetDsrDetailsById(string DsrId)
         {
-            return await _unitOfWork.DsrRepo.GetByIdAsync(DsrId);
+            return await _unitOfWork.dSRRepo.GetDetails(DsrId);
         }
-
-        public async Task<IEnumerable<Product>> GetProductsByDsrIdAsync(string dsrId)
-        {
-            return await _unitOfWork.DsrRepo.GetProductDetailsByDsrIdAsync(dsrId);
-        }
-
-        public async Task<Dsr> GetAllDetails(string id)
-        {
-            return await _unitOfWork.DsrRepo.GetDetails(id);
-        }
-
-
-
-        public async Task<Dsr> GetDsrById(string dsrId)
-        {
-            return await _unitOfWork.dSRRepo.GetByIdAsync(dsrId);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task<DsrResponse> DeleteDsr(string dsrId)
         {
             var response= new DsrResponse();
 
             try
             {
-                var dsr = await _unitOfWork.DsrRepo.GetByIdAsync(dsrId);
+                var dsr = await _unitOfWork.dSRRepo.GetByIdAsync(dsrId);
                 if (dsr != null)
                 {
-                    _unitOfWork.DsrRepo.Remove(dsr);
+                    _unitOfWork.dSRRepo.Remove(dsr);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

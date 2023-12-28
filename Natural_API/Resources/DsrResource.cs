@@ -5,6 +5,7 @@ namespace Natural_API.Resources
 {
     public class DSRResource
     {
+        public string Id { get; set; }
         public string Executive { get; set; }
         public string Distributor { get; set; }
         public string Retailor { get; set; }
@@ -12,7 +13,6 @@ namespace Natural_API.Resources
 
         public DateTime CreatedDate { get; set; }
         public double TotalAmount { get; set; }
-        public IEnumerable<DsrProductResource> ProductDetails { get; set; }
 
 
 

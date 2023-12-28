@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
@@ -411,23 +414,18 @@ namespace Natural_Data.Models
 
                 entity.Property(e => e.Id).HasMaxLength(10);
 
-                entity.Property(e => e.Amount)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
+               
                 entity.Property(e => e.Category)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.Grams)
-                    .IsRequired()
-                    .HasMaxLength(30);
+               
 
                 entity.Property(e => e.Price)
                     .IsRequired()
                     .HasMaxLength(30);
 
-                entity.Property(e => e.ProductName)
+                entity.Property(e => e.product)
                     .IsRequired()
                     .HasMaxLength(30);
 

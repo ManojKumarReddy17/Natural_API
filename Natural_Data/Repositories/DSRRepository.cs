@@ -46,10 +46,6 @@ namespace Natural_Data.Repositories
         }
 
 
-
-
-
-
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)
         {
             var productDetails = await NaturalDbContext.Dsrdetails
@@ -86,39 +82,17 @@ namespace Natural_Data.Repositories
 
             var dsrDetails = await dsrQuery.ToListAsync();
             var result = dsrDetails.Select(c => new Dsr
-            var dsrlist= await NaturalDbContext.Dsrs.Include(D=> D.DistributorNavigation).
-                                               Include(D=> D.RetailorNavigation).
-                                               Include(D=> D.ExecutiveNavigation).
-                FirstOrDefaultAsync(c=> c.Id== DsrId);
-                                               
-            if(dsrlist != null)
-            {
-                var result = new Dsr
-                {
-                    Id = dsrlist.Id,
-                    Executive = string.Concat(dsrlist.ExecutiveNavigation.FirstName, " ", dsrlist.ExecutiveNavigation.LastName),
-                    Distributor = string.Concat(dsrlist.DistributorNavigation.FirstName, " ", dsrlist.DistributorNavigation.LastName),
-                    Retailor = string.Concat(dsrlist.RetailorNavigation.FirstName, " ", dsrlist.RetailorNavigation.LastName),
-                    CreatedDate = dsrlist.CreatedDate
-
-                };
-                return result;
-    
-            }
-            else
             {
                 Id = c.dsrs.Id,
                 Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
                 Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
-                Retailor=string.Concat(c.Retailor.FirstName,c.Retailor.LastName),
-                OrderBy=string.Concat(c.OrderByNavigation.FirstName,c.OrderByNavigation.LastName),
-                CreatedDate= DateTime.Now,
-                TotalAmount=c.dsrs.TotalAmount
-               
-             
+                Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
+                OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+                CreatedDate = DateTime.Now,
+                TotalAmount = c.dsrs.TotalAmount
+
+
             }).ToList();
-
-
 
             var productDetails = await GetProductDetailsByDsrIdAsync(dsrid);
             var details = result.Where(c => c.Id == dsrid).First();

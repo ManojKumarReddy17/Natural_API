@@ -30,16 +30,15 @@ namespace Natural_API.Mapping
                 CreateMap<Dsr,DSRResource>();
                 CreateMap<Dsr, DsrPostResource>();
             CreateMap<Dsrdetail, DsrDetailResource>();
-            CreateMap<Dsrdetail,DsrDetailPostResource>();
             CreateMap<InsertDEmapper, DistributorToExecutive>();
             CreateMap<DistributorToExecutive , DistributorToExecutiveResource>();
-                CreateMap<Dsrdetail, DsrDetailResource>();
                 CreateMap<Dsrdetail,DsrDetailPostResource>();
-                CreateMap<InsertDEmapper, DistributorToExecutive>();
                 CreateMap<RetailorToDistributor, GetRTDResource>();
                 CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
             CreateMap<RetailorToDistributor,InsertRTDResource>();
-            CreateMap<Dsr,DSRResource>();
+            CreateMap<Product,DsrProductResource>();
+            CreateMap<Dsr,DsrDetailsByIdResource>();
+
 
 
 
@@ -65,17 +64,12 @@ namespace Natural_API.Mapping
             CreateMap<DsrDetailPostResource, Dsrdetail>();
             CreateMap<DistributorToExecutive, InsertDEmapper>();
             CreateMap<DistributorToExecutiveResource, DistributorToExecutive>();
-                CreateMap<DsrDetailResource,Dsrdetail>();
-                CreateMap<DsrDetailPostResource, Dsrdetail>();
                 CreateMap<DistributorToExecutive, InsertDEmapper>();
                 CreateMap<GetRTDResource, RetailorToDistributor>();
                 CreateMap<AssignRetailorToDistributorResource, RetailorToDistributor>();
             CreateMap<InsertRTDResource, RetailorToDistributor>();
-
-
-                CreateMap<CategoryInsertResource,Category>();
-            CreateMap<DSRResource,Dsr>();
             CreateMap<DsrProductResource,Product>();
+            CreateMap<DsrDetailsByIdResource, Dsr>();
 
 
 

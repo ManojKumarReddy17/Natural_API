@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Data.Models
 {
     public class UnitOfWork : IUnitOfWork
     {

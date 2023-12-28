@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Data
+namespace Natural_Data.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -92,7 +89,7 @@ namespace Natural_Data
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
             });
@@ -112,7 +109,7 @@ namespace Natural_Data
                     .HasMaxLength(20)
                     .HasColumnName("State_Id");
 
-                entity.HasOne(d => d.State) 
+                entity.HasOne(d => d.State)
                     .WithMany(p => p.Cities)
                     .HasForeignKey(d => d.StateId)
                     .HasConstraintName("Cities_ibfk_1");
@@ -128,7 +125,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -328,7 +325,7 @@ namespace Natural_Data
 
                 entity.HasIndex(e => e.State, "State");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.Address)
                     .IsRequired()

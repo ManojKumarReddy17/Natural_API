@@ -3,6 +3,8 @@ using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,19 +58,72 @@ namespace Natural_Services
 
         public async Task<Dsr> GetDsrDetailsById(string DsrId)
         {
-            return await _unitOfWork.dSRRepo.GetDsrDetailsByIdAsync(DsrId);
+            return await _unitOfWork.DsrRepo.GetByIdAsync(DsrId);
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByDsrIdAsync(string dsrId)
+        {
+            return await _unitOfWork.DsrRepo.GetProductDetailsByDsrIdAsync(dsrId);
+        }
+
+        public async Task<Dsr> GetAllDetails(string id)
+        {
+            return await _unitOfWork.DsrRepo.GetDetails(id);
+        }
+
+
 
         public async Task<Dsr> GetDsrById(string dsrId)
         {
             return await _unitOfWork.dSRRepo.GetByIdAsync(dsrId);
         }
 
-        //public async Task<dsrre> DeleteDsr(string dsrId)
-        //{
 
-        //}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public async Task<DsrResponse> DeleteDsr(string dsrId)
+        {
+            var response= new DsrResponse();
+
+            try
+            {
+                var dsr = await _unitOfWork.DsrRepo.GetByIdAsync(dsrId);
+                if (dsr != null)
+                {
+                    _unitOfWork.DsrRepo.Remove(dsr);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
+                }
+                else
+                {
+                    response.Message = "FAILED";
+                    response.StatusCode = 400;
+                }
+            }
+            catch(Exception ) 
+            {
+                response.Message = "NOT FOUND";
+            }
+
+            return response;
+             
+        }
 
     }
 }

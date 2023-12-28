@@ -46,7 +46,7 @@ namespace Natural_API.Mapping
 
             //// RESOURCE TO DOMAIN
 
-                CreateMap<LoginResource, Login>();
+            CreateMap<LoginResource, Login>();
                 CreateMap<DistributorGetResource, Distributor>();
                 CreateMap<InsertUpdateResource, Distributor>();
                 CreateMap<StateResource, State>();
@@ -75,6 +75,8 @@ namespace Natural_API.Mapping
 
                 CreateMap<CategoryInsertResource,Category>();
             CreateMap<DSRResource,Dsr>();
+            CreateMap<DsrProductResource,Product>();
+
 
 
 

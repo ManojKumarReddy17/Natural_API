@@ -8,7 +8,9 @@ namespace Natural_Core.IRepositories
 {
     public interface IDSRRepository :IRepository<Dsr>
     {
-        Task<Dsr> GetDsrDetailsByIdAsync(string DsrId);
-        
+
+        Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId);
+        Task<IEnumerable<Dsr>> GetAllAsync(string dsrid);
+        Task<Dsr> GetDetails(string dsrid);
     }
 }

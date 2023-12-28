@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Natural_Data.Models;
 
 #nullable disable
 namespace Natural_Data.Repositories

@@ -95,8 +95,9 @@ namespace Natural_Data.Repositories
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-        (string.IsNullOrEmpty(search.FirstName) || c.FirstName.StartsWith(search.FirstName)) &&
-        (string.IsNullOrEmpty(search.LastName) || c.LastName.StartsWith(search.LastName)))
+        (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+        c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
        .ToListAsync();
             var result = exec.Select(c => new Distributor
             {

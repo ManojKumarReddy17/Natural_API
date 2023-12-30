@@ -61,7 +61,6 @@ namespace Natural_API.Controllers
         /// CREATING NEW EXECUTIVE
         /// </summary>
 
-
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
         {

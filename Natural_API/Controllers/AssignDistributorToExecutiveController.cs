@@ -8,6 +8,7 @@ using Natural_Services;
 
 namespace Natural_API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class AssignDistributorToExecutiveController : ControllerBase
@@ -53,8 +54,9 @@ namespace Natural_API.Controllers
         /// </summary>
 
 
+
         [HttpPost]
-        public async Task<ActionResult<ResultResponse>> AssignDistributortoExecutive([FromBody] AssignDistributorToExecutiveResource distributorToExecutiveResources)
+        public async Task<ActionResult<ResultResponse>> CreateAssignDistributortoExecutive([FromBody] AssignDistributorToExecutiveResource distributorToExecutiveResources)
         {
             var AssignedResult = new ResultResponse();
 

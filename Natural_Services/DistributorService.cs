@@ -45,7 +45,6 @@ namespace Natural_Services
 
             try
             {
-
                 distributor.Id = "NDIS" + new Random().Next(10000, 99999).ToString();
 
                 await _unitOfWork.DistributorRepo.AddAsync(distributor);

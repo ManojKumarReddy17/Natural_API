@@ -14,6 +14,7 @@ namespace Natural_Core.Models
 
         public string Id { get; set; }
         public string Category { get; set; }
+<<<<<<< Updated upstream
         public string product { get; set; }
         public decimal Price { get; set; }
         public string Quantity { get; set; }
@@ -21,6 +22,16 @@ namespace Natural_Core.Models
         public string Image { get; set; }
         public DateTime ModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+=======
+        public string Product1 { get; set; }
+        public decimal? Price { get; set; }
+        public string Quantity { get; set; }
+        public int? Weight { get; set; }
+        public string Image { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+
+>>>>>>> Stashed changes
         public virtual Category CategoryNavigation { get; set; }
         public virtual ICollection<Dsrdetail> Dsrdetails { get; set; }
     }

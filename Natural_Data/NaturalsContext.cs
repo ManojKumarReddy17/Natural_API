@@ -1,14 +1,20 @@
 ﻿using System;
+<<<<<<< Updated upstream
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+=======
+>>>>>>> Stashed changes
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Natural_Core.Models;
 
 #nullable disable
 
+<<<<<<< Updated upstream
 namespace Natural_Data.Models
+=======
+namespace Natural_Core.Models
+>>>>>>> Stashed changes
 {
     public partial class NaturalsContext : DbContext
     {
@@ -33,13 +39,8 @@ namespace Natural_Data.Models
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            SetTimestamps<Distributor>();
-            SetTimestamps<Executive>();
-            SetTimestamps<Retailor>();
-            SetTimestamps<Dsr>();
 
+<<<<<<< Updated upstream
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -62,6 +63,8 @@ namespace Natural_Data.Models
 
 
 
+=======
+>>>>>>> Stashed changes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasCharSet("utf8mb4")
@@ -410,34 +413,47 @@ namespace Natural_Data.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.ToTable("Product");
+
                 entity.HasIndex(e => e.Category, "Category");
 
-                entity.Property(e => e.Id).HasMaxLength(10);
+                entity.Property(e => e.Id).HasMaxLength(50);
 
+<<<<<<< Updated upstream
                
                 entity.Property(e => e.Category)
                     .IsRequired()
                     .HasMaxLength(30);
 
                
+=======
+                entity.Property(e => e.Category).HasMaxLength(50);
 
-                entity.Property(e => e.Price)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Image).HasMaxLength(50);
+>>>>>>> Stashed changes
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+<<<<<<< Updated upstream
                 entity.Property(e => e.product)
                     .IsRequired()
                     .HasMaxLength(30);
+=======
+                entity.Property(e => e.Price).HasPrecision(20, 3);
+>>>>>>> Stashed changes
 
-                entity.Property(e => e.Quantity)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Product1)
+                    .HasMaxLength(50)
+                    .HasColumnName("Product");
+
+                entity.Property(e => e.Quantity).HasMaxLength(20);
 
                 entity.HasOne(d => d.CategoryNavigation)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.Category)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Products_ibfk_1");
+                    .HasConstraintName("Product_ibfk_1");
             });
 
             modelBuilder.Entity<Retailor>(entity =>

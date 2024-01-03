@@ -21,7 +21,11 @@ namespace Natural_Data.Repositories
         {
             
         }
+<<<<<<< Updated upstream
         public async Task<IEnumerable<Dsr>> GetAllAsync(string dsrId)
+=======
+        public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
+>>>>>>> Stashed changes
         {
             var dsr = await NaturalDbContext.Dsrs
                 .Where(d => d.Id == dsrId)

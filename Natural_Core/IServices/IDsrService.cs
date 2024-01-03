@@ -11,11 +11,6 @@ namespace Natural_Core.IServices
         Task<Dsr> GetDsrDetailsById(string DsrId);
         Task<DsrResponse> DeleteDsr(string dsrId);
         Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr);
-<<<<<<< Updated upstream
         Task<IEnumerable<Dsr>> GetAllDsr();
-=======
-
-
->>>>>>> Stashed changes
     }
 }

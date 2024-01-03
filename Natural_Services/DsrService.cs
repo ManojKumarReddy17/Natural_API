@@ -4,12 +4,9 @@ using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
-<<<<<<< Updated upstream
 using System.Globalization;
 using System.Linq.Expressions;
-=======
 using System.Linq;
->>>>>>> Stashed changes
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,12 +16,8 @@ namespace Natural_Services
     public class DSRService:IDSRService
     {
         private readonly IUnitOfWork _unitOfWork;
-<<<<<<< Updated upstream
-        public DSRService(IUnitOfWork unitOfWork)
-=======
         private readonly IDSRdetailsService _detailsService;
-        public DsrService(IUnitOfWork unitOfWork)
->>>>>>> Stashed changes
+        public DSRService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -55,13 +48,7 @@ namespace Natural_Services
 
             return response;
         }
-<<<<<<< Updated upstream
-    
-=======
-     
 
-
->>>>>>> Stashed changes
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
             var result = await _unitOfWork.dSRRepo.GetAllAsync();

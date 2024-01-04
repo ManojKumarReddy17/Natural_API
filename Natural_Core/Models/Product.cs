@@ -14,6 +14,7 @@ namespace Natural_Core.Models
 
         public string Id { get; set; }
         public string Category { get; set; }
+
         public string product { get; set; }
         public decimal Price { get; set; }
         public string Quantity { get; set; }

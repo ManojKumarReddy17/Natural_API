@@ -22,7 +22,7 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Dsrdetails.ToListAsync();
         }
         private NaturalsContext NaturalDbContext
-        {
+        {   
             get { return Context as NaturalsContext; }
         }
     }

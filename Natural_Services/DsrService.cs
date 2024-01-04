@@ -1,10 +1,12 @@
-﻿using Natural_Core;
+﻿using Microsoft.EntityFrameworkCore;
+using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +16,7 @@ namespace Natural_Services
     public class DSRService:IDSRService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDSRdetailsService _detailsService;
         public DSRService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -45,10 +48,10 @@ namespace Natural_Services
 
             return response;
         }
-    
+
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
-            var result = await _unitOfWork.dSRRepo.GetAllAsync();
+            var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
             return result;
         }
 

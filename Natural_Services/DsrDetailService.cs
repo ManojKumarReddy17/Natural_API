@@ -1,4 +1,5 @@
-﻿using Natural_Core;
+﻿using Microsoft.EntityFrameworkCore;
+using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
@@ -15,31 +16,7 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-       public async Task<ResultResponse> CreateDsrDetailsWithAssociationsAsync(Dsrdetail dsr)
-        {
-            var response = new ResultResponse();
-            try
-            {
-
-                dsr.Id = "DSRD" + new Random().Next(10000, 99999).ToString();
-
-
-                await _unitOfWork.DSRDetailsRepo.AddAsync(dsr);
-                var created = await _unitOfWork.CommitAsync();
-                if(created !=0)
-                {
-                    response.Message = "Insertion Successful";
-                    response.StatusCode = 200;
-                }
-            }
-            catch (Exception)
-            {
-                response.Message = "Insertion Failed";
-                      response.StatusCode = 401;
-            }
-            return response;
-         
-        }
+            
 
         public async Task<IEnumerable<Dsrdetail>> GetAllDsrdetail()
         {
@@ -47,5 +24,33 @@ namespace Natural_Services
             return result;
             
         }
+       public async Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsrdetail dsrDetail)
+        {
+          
+                var response = new ResultResponse();
+                try
+                {
+                dsrDetail.Id = "DSRD" + new Random().Next(10000, 99999).ToString();
+
+                await _unitOfWork.DSRDetailsRepo.AddAsync(dsrDetail);
+                    var created = await _unitOfWork.CommitAsync();
+
+                    if (created != 0)
+                    {
+                        response.Message = "Insertion Successful";
+                        response.StatusCode = 200;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+                }
+
+            return response;
+            }
+        
+
     }
 }

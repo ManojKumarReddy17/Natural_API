@@ -51,7 +51,7 @@ namespace Natural_Services
 
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
-            var result = await _unitOfWork.dSRRepo.GetAllAsync();
+            var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
             return result;
         }
 

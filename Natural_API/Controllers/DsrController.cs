@@ -22,6 +22,7 @@ namespace Natural_API.Controllers
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DSRResource>>> GetDsrList()
+        
         {
             var dsrs = await _dsrservice.GetAllDsr();
             var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRResource>>(dsrs);

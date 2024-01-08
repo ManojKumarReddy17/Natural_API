@@ -13,11 +13,10 @@ using System.Threading.Tasks;
 namespace Natural_Services
 {
 
-    public class DSRService:IDSRService
+    public class DsrService:IDsrService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDSRdetailsService _detailsService;
-        public DSRService(IUnitOfWork unitOfWork)
+        public DsrService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IServices
 {
-    public interface IDSRService 
+    public interface IDsrService 
     {
         Task<Dsr> GetDsrDetailsById(string DsrId);
         Task<DsrResponse> DeleteDsr(string dsrId);

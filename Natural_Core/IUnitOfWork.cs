@@ -19,8 +19,7 @@ namespace Natural_Core
         IAreaRepository AreaRepo { get; }
         ICategoryRepository CategoryRepo { get; }
         IRetailorRepository  RetailorRepo { get; }
-        IDSRRepository dSRRepo { get; }
-        IdsrDetailsRepository DSRDetailsRepo { get; }
+        IDsrRepository dSRRepo { get; }
         IExecutiveRepository ExecutiveRepo { get; }
         IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
         IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo { get; }

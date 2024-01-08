@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Natural_Core.Models;
@@ -30,9 +30,12 @@ namespace Natural_Data
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
+
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -60,8 +63,6 @@ namespace Natural_Data
                 entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
             }
         }
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -411,34 +412,32 @@ namespace Natural_Data
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.ToTable("Product");
+
                 entity.HasIndex(e => e.Category, "Category");
 
-                entity.Property(e => e.Id).HasMaxLength(10);
+                entity.Property(e => e.Id).HasMaxLength(50);
 
+                entity.Property(e => e.Category).HasMaxLength(50);
 
-                entity.Property(e => e.Category)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Image).HasMaxLength(50);
 
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Price)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Price).HasPrecision(20, 3);
 
-                entity.Property(e => e.product)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.ProductName)
+                    .HasMaxLength(50)
+                    .HasColumnName("Product_Name");
 
-                entity.Property(e => e.Quantity)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Quantity).HasMaxLength(20);
 
                 entity.HasOne(d => d.CategoryNavigation)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.Category)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Products_ibfk_1");
+                    .HasConstraintName("Product_ibfk_1");
             });
 
             modelBuilder.Entity<Retailor>(entity =>

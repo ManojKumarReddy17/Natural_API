@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace Natural_Data.Repositories
 {
-    public class DSRRepository : Repository<Dsr>, IDSRRepository
+    public class DsrRepository : Repository<Dsr>, IDsrRepository
     {
         private readonly IMapper _mapper;
-        public DSRRepository(NaturalsContext context) : base(context)
+        public DsrRepository(NaturalsContext context) : base(context)
         {
 
         }
@@ -46,7 +46,6 @@ namespace Natural_Data.Repositories
                 Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
                 OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
                 CreatedDate = DateTime.Now,
-                TotalAmount = c.dsrs.TotalAmount
 
 
             }).ToList();
@@ -66,7 +65,7 @@ namespace Natural_Data.Repositories
                 .Select(d => new Product
                 {
                     Id = d.ProductNavigation.Id,                
-                    product = d.ProductNavigation.product,      
+                    ProductName = d.ProductNavigation.ProductName,      
                     Price = d.ProductNavigation.Price,
                     Quantity = d.Quantity,
                     Weight = d.ProductNavigation.Weight

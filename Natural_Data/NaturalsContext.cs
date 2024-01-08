@@ -8,7 +8,7 @@ using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Data.Models
+namespace Natural_Data
 {
     public partial class NaturalsContext : DbContext
     {
@@ -33,6 +33,7 @@ namespace Natural_Data.Models
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();
@@ -414,12 +415,12 @@ namespace Natural_Data.Models
 
                 entity.Property(e => e.Id).HasMaxLength(10);
 
-               
+
                 entity.Property(e => e.Category)
                     .IsRequired()
                     .HasMaxLength(30);
 
-               
+
 
                 entity.Property(e => e.Price)
                     .IsRequired()

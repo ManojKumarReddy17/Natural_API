@@ -22,6 +22,7 @@ namespace Natural_API.Controllers
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DSRResource>>> GetDsrList()
+        
         {
             var dsrs = await _dsrservice.GetAllDsr();
             var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRResource>>(dsrs);
@@ -43,7 +44,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// To get products and dsrdetails
         /// </summary>
-              
+
 
         [HttpGet("Details/{dsrId}")]
         public async Task<ActionResult<DsrDetailsByIdResource>> GetDsrAndProductDetailsById(string dsrId)
@@ -61,47 +62,3 @@ namespace Natural_API.Controllers
         }
     }
 }
-
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       

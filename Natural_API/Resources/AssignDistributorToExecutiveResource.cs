@@ -7,7 +7,6 @@ namespace Natural_API.Resources
     {
         public string ExecutiveId { get; set; }
         public List<string> DistributorIds { get; set; }
-
-
+     
     }
 }

@@ -19,31 +19,44 @@ namespace Natural_Data.Repositories
         private readonly IMapper _mapper;
         public DSRRepository(NaturalsContext context) : base(context)
         {
-            
+
         }
-        public async Task<IEnumerable<Dsr>> GetAllAsync(string dsrId)
+        public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
         {
-            var dsr = await NaturalDbContext.Dsrs
-                .Where(d => d.Id == dsrId)
-                .Include(d => d.DistributorNavigation)
-                .Include(d => d.ExecutiveNavigation)
-                .Include(d => d.OrderByNavigation)
-                .Include(d => d.RetailorNavigation)
-                .Include(d => d.Dsrdetails)
-                .ThenInclude(d => d.ProductNavigation)
-                .ToListAsync();
+            var dsr = from Dsr in NaturalDbContext.Dsrs
+                      join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
+                      join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
+                      join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id
+                      join ordby in NaturalDbContext.Logins on Dsr.OrderByNavigation.UserName equals ordby.UserName
+                      select new
+                      {
+                          dsrs = Dsr,
+                          Executive = executive,
+                          Distributor = distributor,
+                          Retailor = retailer,
+                          OrderByNavigation = ordby,
+                      };
+
+            var dsrs = await dsr.ToListAsync();
             var result = dsr.Select(c => new Dsr
             {
-                Id = c.Id,
-                Executive = c.Executive,
-                Distributor = c.Distributor,
-                Retailor = c.Retailor,
-                OrderBy = c.OrderBy,
-                CreatedDate = c.CreatedDate,
-                TotalAmount = c.TotalAmount,
+                Id = c.dsrs.Id,
+                Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
+                Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
+                Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
+                OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+                CreatedDate = DateTime.Now,
+                TotalAmount = c.dsrs.TotalAmount
+
+
             }).ToList();
-            return dsr;
+
+            return result;
+
+
         }
+
+
 
 
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)

@@ -10,7 +10,7 @@ namespace Natural_Core.IRepositories
     {
 
         Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId);
-        Task<IEnumerable<Dsr>> GetAllAsync(string dsrid);
+       Task<IEnumerable<Dsr>> GetAllDsrAsync();
         Task<Dsr> GetDetails(string dsrid);
     }
 }

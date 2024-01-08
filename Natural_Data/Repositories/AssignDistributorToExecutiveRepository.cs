@@ -39,6 +39,7 @@ namespace Natural_Data.Repositories
         }
 
         public async Task<bool> IsExecutiveAssignedToDistributor(List<string> distributorIds)
+
         {
             var existingAssignment = await NaturalDbContext.DistributorToExecutives
                 .AnyAsync(d => distributorIds.Contains(d.DistributorId));

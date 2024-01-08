@@ -10,7 +10,8 @@ using Natural_Services;
 
 namespace Natural_API.Controllers
 {
-   
+    [Route("api/[controller]")]
+    [ApiController]
     public class RetailorController : ControllerBase
     {
         private readonly IRetailorService _retailorservice;
@@ -67,7 +68,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// CREATING NEW RETAILOR
         /// </summary>
-        
+
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> InsertRetailorWithAssociations([FromBody] RetailorPostResource retailorResource)
         

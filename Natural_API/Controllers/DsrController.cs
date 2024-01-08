@@ -13,19 +13,19 @@ namespace Natural_API.Controllers
     public class DsrController : ControllerBase
     {
 
-        private readonly IDSRService _dsrservice;
+        private readonly IDsrService _dsrservice;
         private readonly IMapper _mapper;
-        public DsrController(IDSRService dsrservice, IMapper mapper)
+        public DsrController(IDsrService dsrservice, IMapper mapper)
         {
             _dsrservice = dsrservice;
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DSRResource>>> GetDsrList()
+        public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList()
         
         {
             var dsrs = await _dsrservice.GetAllDsr();
-            var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRResource>>(dsrs);
+            var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(dsrs);
             return Ok(DsrList);
         }
 

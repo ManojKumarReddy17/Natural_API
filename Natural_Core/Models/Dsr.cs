@@ -26,7 +26,6 @@ namespace Natural_Core.Models
         public virtual Login OrderByNavigation { get; set; }
         public virtual Retailor RetailorNavigation { get; set; }
         public virtual ICollection<Dsrdetail> Dsrdetails { get; set; }
-        public IEnumerable<Product> ProductDetails { get; set; } // Assuming ProductDetails is a property in your Dsr class
-
+        public IEnumerable<Product> ProductDetails { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace Natural_API.Resources
+﻿#nullable disable
+namespace Natural_API.Resources
 {
     public class DsrDetailsByIdResource
     {
@@ -8,7 +9,6 @@
         public string OrderBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
-        public double TotalAmount { get; set; }
         public IEnumerable<DsrProductResource> ProductDetails { get; set; }
 
 

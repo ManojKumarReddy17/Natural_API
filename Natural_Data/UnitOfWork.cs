@@ -25,8 +25,7 @@ namespace Natural_Data.Models
         private IRetailorRepository _retailorRepository;
         private IExecutiveRepository _executiveRepository;
 
-        private IDSRRepository _dsrRepository;
-        private IdsrDetailsRepository _IdsrDetailsRepository;
+        private IDsrRepository _dsrRepository;
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
         private IRetailor_To_Distributor_Repository _retailor_To_Distributor_Repository;
 
@@ -52,8 +51,7 @@ namespace Natural_Data.Models
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
 
 
-        public IDSRRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DSRRepository(_context);
-        public IdsrDetailsRepository DSRDetailsRepo => _IdsrDetailsRepository = _IdsrDetailsRepository ?? new DSRDetailRepository(_context);
+        public IDsrRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
 
         public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
         public IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo => _retailor_To_Distributor_Repository ?? new Retailor_To_Distributor_Repository(_context);

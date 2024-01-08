@@ -54,11 +54,9 @@ builder.Services.AddTransient<IAreaService, AreaService>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
-builder.Services.AddTransient<IDSRRepository,DSRRepository>(); 
-builder.Services.AddTransient<IDSRService, DSRService>();
+builder.Services.AddTransient<IDsrRepository,DsrRepository>(); 
+builder.Services.AddTransient<IDsrService, DsrService>();
 
-builder.Services.AddTransient<IdsrDetailsRepository,DSRDetailRepository>();
-builder.Services.AddTransient<IDSRdetailsService,DsrDetailService>();
 
 
 builder.Services.AddTransient<IAssignDistributorToExecutiveRepository, AssignDistributorToExecutiveRepository>();
@@ -69,8 +67,8 @@ builder.Services.AddTransient<IRetailor_To_Distributor_Service, Retailor_To_Dist
 builder.Services.AddTransient<IRetailor_To_Distributor_Repository,Retailor_To_Distributor_Repository>();
 
 
-builder.Services.AddTransient<IDSRRepository, DSRRepository>();
-builder.Services.AddTransient<IDSRService,DSRService>();
+builder.Services.AddTransient<IDsrRepository, DsrRepository>();
+builder.Services.AddTransient<IDsrService,DsrService>();
 
 builder.Services.AddEndpointsApiExplorer();
 

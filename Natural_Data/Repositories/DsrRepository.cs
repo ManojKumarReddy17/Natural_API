@@ -16,7 +16,6 @@ namespace Natural_Data.Repositories
 {
     public class DsrRepository : Repository<Dsr>, IDsrRepository
     {
-        private readonly IMapper _mapper;
         public DsrRepository(NaturalsContext context) : base(context)
         {
 
@@ -101,7 +100,6 @@ namespace Natural_Data.Repositories
                 Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
                 OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
                 CreatedDate = DateTime.Now,
-                TotalAmount = c.dsrs.TotalAmount
 
 
             }).ToList();

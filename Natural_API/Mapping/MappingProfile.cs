@@ -27,7 +27,7 @@ namespace Natural_API.Mapping
                 CreateMap<Executive, InsertUpdateResource>();
                 CreateMap<Category , CategoryInsertResource>();
 
-                CreateMap<Dsr,DsrResource>();
+                CreateMap<Dsr,DSRResource>();
                 CreateMap<Dsr, DsrPostResource>();
             CreateMap<Dsrdetail, DsrDetailResource>();
             CreateMap<InsertDEmapper, DistributorToExecutive>();
@@ -58,7 +58,7 @@ namespace Natural_API.Mapping
                 CreateMap<ExecutiveGetResource, Executive>();
 
                 CreateMap<CategoryInsertResource, Category>();
-                CreateMap<DsrResource, Dsr>();
+                CreateMap<DSRResource, Dsr>();
                 CreateMap<DsrPostResource, Dsr>();
             CreateMap<DsrDetailResource,Dsrdetail>();
             CreateMap<DsrDetailPostResource, Dsrdetail>();

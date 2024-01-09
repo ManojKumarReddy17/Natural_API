@@ -3,7 +3,7 @@ using Natural_Core.Models;
 
 namespace Natural_API.Resources
 {
-    public class DsrResource
+    public class DSRResource
     {
         public string Id { get; set; }
         public string Executive { get; set; }
@@ -12,6 +12,7 @@ namespace Natural_API.Resources
         public string OrderBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
+        public double TotalAmount { get; set; }
 
 
 

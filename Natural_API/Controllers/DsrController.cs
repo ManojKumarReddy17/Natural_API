@@ -21,11 +21,11 @@ namespace Natural_API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList()
+        public async Task<ActionResult<IEnumerable<DSRResource>>> GetDsrList()
         
         {
             var dsrs = await _dsrservice.GetAllDsr();
-            var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(dsrs);
+            var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRResource>>(dsrs);
             return Ok(DsrList);
         }
 

@@ -14,7 +14,6 @@ namespace Natural_API
         {
             _next = next;
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             if (!context.Request.Headers.TryGetValue(APIKEY, out var extractedApiKey))

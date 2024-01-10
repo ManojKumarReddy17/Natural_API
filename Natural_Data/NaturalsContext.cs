@@ -36,8 +36,6 @@ namespace Natural_Data
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();

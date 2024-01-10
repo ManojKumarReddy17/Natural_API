@@ -22,6 +22,7 @@ namespace Natural_Services
         public LoginService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            
         }
       
         public async Task<LoginResponse> LoginAsync(Login credentials)

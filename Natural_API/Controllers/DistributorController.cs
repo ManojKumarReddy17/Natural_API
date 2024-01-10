@@ -31,7 +31,7 @@ namespace Natural_API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails()
-        
+   
         {
             var distributors = await _DistributorService.GetAllDistributors();
             var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);

@@ -13,6 +13,8 @@ namespace Natural_Core
     public interface IUnitOfWork : IDisposable
     {
         ILoginRepository Login { get; }
+
+
         IDistributorRepository DistributorRepo { get; }
         ICityRepository CityRepo { get; }
         IStateRepository StateRepo { get; }

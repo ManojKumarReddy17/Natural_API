@@ -25,4 +25,10 @@
     <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="S3 Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="S3 Models\" />
+  </ItemGroup>
 </Project>

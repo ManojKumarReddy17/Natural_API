@@ -41,6 +41,7 @@ namespace Natural_Data
             SetTimestamps<Distributor>();
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
+            SetTimestamps<Product>();
             SetTimestamps<Dsr>();
 
 

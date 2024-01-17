@@ -88,5 +88,24 @@ namespace Natural_Services
              
         }
 
+        public async Task<ResultResponse> UpdateDsrAsync(Dsr dsr)
+        {
+            var response = new ResultResponse();
+            try
+            {
+                _unitOfWork.dSRRepo.Update(dsr);
+                await _unitOfWork.CommitAsync();
+                response.Message = "Successfully updated DSR";
+                response.StatusCode = 200;
+            }
+            catch (Exception ex)
+            {
+                response.Message = $"Failed to updated DSR: {ex.Message}";
+                response.StatusCode = 500;
+            }
+
+            return response;
+        }
+
     }
 }

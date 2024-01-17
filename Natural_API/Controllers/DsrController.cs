@@ -5,6 +5,7 @@ using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Natural_API.Controllers
 {
@@ -22,7 +23,7 @@ namespace Natural_API.Controllers
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList()
-        
+
         {
             var dsrs = await _dsrservice.GetAllDsr();
             var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(dsrs);
@@ -60,5 +61,21 @@ namespace Natural_API.Controllers
             var response = await _dsrservice.DeleteDsr(dsrId);
             return Ok(response);
         }
+
+        [HttpPut("{dsrId}")]
+        public async Task<ActionResult<ResultResponse>> UpdateDsr(string dsrId, [FromBody] DsrPostResource updatedDsrResource)
+        {
+            Dsr existingDsr = await _dsrservice.GetDsrDetailsById(dsrId);
+            if (existingDsr == null)
+            {
+                return StatusCode(404, "DSR is not exists");
+            }
+            Dsr dsr = _mapper.Map(updatedDsrResource, existingDsr);
+            dsr.Id = dsrId;
+            var dsrResultResponse = await _dsrservice.UpdateDsrAsync(dsr);
+            return StatusCode(dsrResultResponse.StatusCode, dsrResultResponse);
+        }
     }
+
+
 }

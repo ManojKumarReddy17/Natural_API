@@ -77,7 +77,7 @@ namespace Natural_Data.Repositories
 
         public async Task<Dsr> GetDetails(string dsrid)
         {
-            var dsrQuery = from Dsr in NaturalDbContext.Dsrs
+            var dsrQuery = from Dsr in NaturalDbContext.Dsrs.AsNoTracking()
                            join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
                            join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
                            join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id

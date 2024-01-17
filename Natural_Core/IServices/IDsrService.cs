@@ -12,5 +12,6 @@ namespace Natural_Core.IServices
         Task<DsrResponse> DeleteDsr(string dsrId);
         Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr);
         Task<IEnumerable<Dsr>> GetAllDsr();
+        Task<ResultResponse> UpdateDsrAsync(Dsr dsr);
     }
 }

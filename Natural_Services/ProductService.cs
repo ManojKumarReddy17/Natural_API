@@ -96,8 +96,7 @@ namespace Natural_Services
         {
             var productresoursze = await GetAllProduct();
 
-            //string bucketName = "lokesh-s3-demo";
-            //string bucketName = "naturalsbucket";
+            
             string bucketName = _s3Config.BucketName;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
@@ -124,8 +123,6 @@ namespace Natural_Services
         {
             var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
 
-            //string bucketName = "lokesh-s3-demo";
-            //string bucketName = "naturalsbucket";
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
@@ -139,15 +136,14 @@ namespace Natural_Services
         //get product by id as in tabel and asign presigned url
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
-            //return  await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+           
 
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-            //string bucketName = "lokesh-s3-demo";
-            //string bucketName = "naturalsbucket";
+          
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            //var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+            
             var isd = PresignedUrl.FirstOrDefault();
             var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
             productresoursze1.PresignedUrl = isd.PresignedUrl;
@@ -192,8 +188,7 @@ namespace Natural_Services
         //upload images to s3 bucket
         public async Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix)
         {
-            //var bucketName = "lokesh-s3-demo";
-            //string bucketName = "naturalsbucket";
+           
             string bucketName = _s3Config.BucketName;
             var metadata = await _unitOfWork.ProductRepository.UploadFileAsync(file, bucketName, prefix);
             return metadata;
@@ -210,14 +205,11 @@ namespace Natural_Services
                 response.Message = "product does not exit";
             }
             string key = product1.Image;
-            //string bucketName = "lokesh-s3-demo";
-            //string bucketName = "naturalsbucket";
+           
             string bucketName = _s3Config.BucketName;
             await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
             response.Message = "Image deleted";
-            //var bucketExists = await _s3Client.DoesS3BucketExistAsync(bucketName);
-            //if (!bucketExists) return NotFound($"Bucket {bucketName} does not exist");
-            //await _s3Client.DeleteObjectAsync(bucketName, key);
+          
             return response;
         }
 
@@ -231,27 +223,19 @@ namespace Natural_Services
 
                 if (product1 != null)
                 {
-                    //string bucketName = "lokesh-s3-demo";
-                    //string bucketName = "naturalsbucket";
+                   
                     string bucketName = _s3Config.BucketName;
                     string key = product1.Image;
                     bool imageDeletionResult = await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
-                    //if (imageDeletionResult)
-                    //{
+                    
                     _unitOfWork.ProductRepository.Remove(product1);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;
                 }
-                //else
-                //    {
-                //        // If image deletion fails, set appropriate response properties
-                //        response.Message = "Error deleting image from S3 bucket";
-                //        response.StatusCode = 500; // Internal Server Error
-                //    }
+               
 
-
-                //}
+                
                 else
                 {
                     response.Message = "Product NOT FOUND";

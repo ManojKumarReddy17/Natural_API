@@ -22,24 +22,13 @@ namespace Natural_Data.Repositories
             _S3Client = S3Client;
         }
 
-
-
-
-        //public Task<IEnumerable<Product>> GetAllProductAsync()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         //get products with category name 
         public async Task<List<Product>> GetProducttAsync()
         {
 
             var Products = await NaturalDbContext.Products
            .Include(p => p.CategoryNavigation).ToListAsync();
-            // .ThenInclude(a => a.City)
-            //.ThenInclude(ct => ct.State)
-            // .ToListAsync();
-
+         
             var result = Products.Select(p => new Product
             {
                 Id = p.Id,
@@ -65,19 +54,11 @@ namespace Natural_Data.Repositories
             return buckets;
         }
 
+
         //all images with presignedurl
-        
          public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
         {
-            //var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);
-            //if (!bucketExists)
-            //{
-            //    return new S3Object
-            //    {
-            //        Message =
-            //    $"Bucket {bucketName} does not exist."
-            //    }; 
-            //}
+          
             var request = new ListObjectsV2Request()
             {
                 BucketName = bucketName,
@@ -120,12 +101,11 @@ namespace Natural_Data.Repositories
             try
             {
                 await _S3Client.PutObjectAsync(request);
-                return new UploadResult { Success = true, Message = /*$"File {prefix}/{*/file.FileName/*} uploaded to S3 successfully!"*/ };
+                return new UploadResult { Success = true, Message = file.FileName };
             }
 
             catch (Exception ex)
             { return new UploadResult { Success = false, Message = $"Error uploading file to S3:{ex.Message}" }; }
-
 
         }
 
@@ -163,19 +143,14 @@ namespace Natural_Data.Repositories
             }
         }
 
+
         //if while updating i want to delete image
         public async Task<bool> DeleteImageAsync(string bucketName, string key)
         {
-            //var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);
-            //if (!bucketExists) return NotFound($"Bucket {bucketName} does not exist");
-            //await _S3Client.DeleteObjectAsync(bucketName, key);
-
+          
             try
             {
-                // Add any additional checks, such as checking if the bucket or key exists
-                // var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);
-                // if (!bucketExists) return false;
-
+            
                 // Attempt to delete the object
                 await _S3Client.DeleteObjectAsync(bucketName, key);
 
@@ -188,8 +163,6 @@ namespace Natural_Data.Repositories
                 return false;
             }
         }
-
-        
 
         private NaturalsContext NaturalDbContext
         {

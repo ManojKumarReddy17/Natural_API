@@ -106,7 +106,7 @@ namespace Natural_Data.Repositories
 
             var productDetails = await GetProductDetailsByDsrIdAsync(dsrid);
             var details = result.Where(c => c.Id == dsrid).First();
-            details.ProductDetails = (IEnumerable<Product>)productDetails;
+            //details.ProductDetails = (IEnumerable<Product>)productDetails;
 
             return details;
         }

@@ -1,4 +1,5 @@
-﻿using Natural_Core;
+﻿using Amazon.S3;
+using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
 using Natural_Data.Repositories;
@@ -14,6 +15,7 @@ namespace Natural_Data.Models
     public class UnitOfWork : IUnitOfWork
     {
         private readonly NaturalsContext _context;
+        private readonly IAmazonS3 _S3Client;
 
         private ILoginRepository _loginRepository;
 
@@ -24,18 +26,19 @@ namespace Natural_Data.Models
         private ICategoryRepository _categoryRepository;
         private IRetailorRepository _retailorRepository;
         private IExecutiveRepository _executiveRepository;
-
+        private IProductRepository _ProductRepository;
         private IDsrRepository _dsrRepository;
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
         private IRetailor_To_Distributor_Repository _retailor_To_Distributor_Repository;
 
-      
 
 
 
-        public UnitOfWork(NaturalsContext context)
+
+        public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
         {
             _context = context;
+            _S3Client = S3Client;
         }
 
         public ILoginRepository Login => _loginRepository = _loginRepository ?? new LoginRepository(_context);
@@ -53,6 +56,7 @@ namespace Natural_Data.Models
 
         public IDsrRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
 
+        public IProductRepository ProductRepository => _ProductRepository = _ProductRepository ?? new ProductRepository(_context, _S3Client);
         public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
         public IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo => _retailor_To_Distributor_Repository ?? new Retailor_To_Distributor_Repository(_context);
 

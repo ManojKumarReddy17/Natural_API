@@ -67,18 +67,12 @@ namespace Natural_API.Controllers
 
         [HttpGet("{ProductId}")] //get product by id as in tabel and presigned url
         public async Task<ActionResult<GetProduct>> GetProductById(string ProductId)
-
         {
-            var productresult = await _ProductService.GetProductpresignedurlByIdAsync(ProductId);
-           
+            var productresult = await _ProductService.GetProductpresignedurlByIdAsync(ProductId);         
 
             return Ok(productresult);
-
             
         }
-
-
-
 
         // POST: ProductController/Create
         [HttpPost]
@@ -97,8 +91,7 @@ namespace Natural_API.Controllers
 
        
         [HttpPut]
-        
-
+       
         public async Task<ActionResult<ProductResource>> UpdateProduct([FromForm] ProductResource productResource, string? prefix)
         {
             var id = productResource.Id;

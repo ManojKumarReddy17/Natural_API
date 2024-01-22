@@ -12,9 +12,11 @@ namespace Natural_Core.IRepositories
     public interface IDistributorRepository : IRepository<Distributor>
     {
         Task<List<Distributor>> GetAllDistributorstAsync();
-
         Task<Distributor> GetDistributorDetailsByIdAsync(string id);
         Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search);
+
+        Task<IEnumerable<Distributor>> GetNonAssignedDistributorsAsync();
+
 
 
 

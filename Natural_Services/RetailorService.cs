@@ -28,9 +28,16 @@ namespace Natural_Services
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
             return result;
         }
+
+
+        public async Task<IEnumerable<Retailor>> GetNonAssignedRetailors()
+        {
+            var result = await _unitOfWork.RetailorRepo.GetNonAssignedRetailorsAsync();
+            return result;
+        }
         public async Task<Retailor> GetRetailorDetailsById(string retailorId)
         {
-            return await _unitOfWork.RetailorRepo.GetWithRetailorsByIdAsync(retailorId);
+            return await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
         }
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {

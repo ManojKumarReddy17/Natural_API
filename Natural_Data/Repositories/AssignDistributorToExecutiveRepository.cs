@@ -16,6 +16,7 @@ namespace Natural_Data.Repositories
     {
         public AssignDistributorToExecutiveRepository(NaturalsContext context) : base(context)
         {
+
         }
         public async Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {

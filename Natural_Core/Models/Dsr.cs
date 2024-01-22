@@ -20,12 +20,12 @@ namespace Natural_Core.Models
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public double TotalAmount { get; set; }
-
         public virtual Distributor DistributorNavigation { get; set; }
         public virtual Executive ExecutiveNavigation { get; set; }
         public virtual Login OrderByNavigation { get; set; }
         public virtual Retailor RetailorNavigation { get; set; }
         public virtual ICollection<Dsrdetail> Dsrdetails { get; set; }
-        //public IEnumerable<Product> ProductDetails { get; set; }
+        public virtual IEnumerable<Product> ProductDetails { get; set; }
+
     }
 }

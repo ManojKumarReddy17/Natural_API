@@ -57,11 +57,6 @@ namespace Natural_Services
                         Response.Message = "Successfully Assigned Distributors to Executive";
                         Response.StatusCode = 200;
                     }
-                    else
-                    {
-                        Response.Message = "Failed Assigning Distributors to Executive";
-                        Response.StatusCode = 404;
-                    }
                 }
                 else
                 {

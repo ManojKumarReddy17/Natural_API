@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Natural_Data.Repositories
 {
-    public class Retailor_To_Distributor_Repository : Repository<RetailorToDistributor>, IRetailor_To_Distributor_Repository
+    public class AssignRetailorToDistributorRepository : Repository<RetailorToDistributor>, IAssignRetailorToDistributorRepository
     {
-        public Retailor_To_Distributor_Repository(NaturalsContext context) : base(context)
+        public AssignRetailorToDistributorRepository(NaturalsContext context) : base(context)
         {
 
         }

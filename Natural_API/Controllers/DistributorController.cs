@@ -15,7 +15,6 @@ namespace Natural_API.Controllers
     [ApiController]
     public class DistributorController : ControllerBase
     {
-
         private readonly IDistributorService _DistributorService;
         private readonly IMapper _mapper;
         public DistributorController(IDistributorService DistributorService, IMapper mapper)
@@ -30,10 +29,21 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails()
-   
+        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails() 
         {
             var distributors = await _DistributorService.GetAllDistributors();
+            var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);
+            return Ok(distributorResources);
+        }
+      
+        /// <summary>
+        ///GETTING LIST OF NON-ASSIGNED DISTRIBUTORS DETAILS
+        /// </summary>
+
+        [HttpGet("Assign")]
+        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetNonAssignedDistributorDetails()
+        {
+            var distributors = await _DistributorService.GetNonAssignedDistributors();
             var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);
             return Ok(distributorResources);
         }
@@ -41,14 +51,12 @@ namespace Natural_API.Controllers
         /// <summary>
         /// GETTING DISTRIBUTOR BY ID
         /// </summary>
-      
 
-        [HttpGet("{DistributorId}")]
-        
 
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DistributorId)
+        [HttpGet("{DisId}")]
+        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DisId)
         {
-            var distributor = await _DistributorService.GetDistributorById(DistributorId);
+            var distributor = await _DistributorService.GetDistributorById(DisId);
             var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
             return Ok(distributorResource);
         }

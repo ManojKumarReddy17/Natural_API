@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace Natural_Services
 {
-    public class Retailor_To_Distributor_Service : IRetailor_To_Distributor_Service
+    public class AssignRetailorToDistributorService : IAssignRetailorToDistributorService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public Retailor_To_Distributor_Service(IUnitOfWork unitOfWork)
+        public AssignRetailorToDistributorService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorId(string distributorId)
         {
-            return await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.GetRetailorsIdByDistributorIdAsync(distributorId);
+            return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetRetailorsIdByDistributorIdAsync(distributorId);
         }
         public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
-            return await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
+            return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
         }
 
        
@@ -35,7 +35,7 @@ namespace Natural_Services
 
             try
             {
-                var AssignedRetailor = await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.
+                var AssignedRetailor = await _unitOfWork.RetailorToDistributorRepositoryRepo.
                   DistributorAssignedToRetailor(new List<string> { retailorToDistributorlist.RetailorId });
 
                 if (!AssignedRetailor)
@@ -48,7 +48,7 @@ namespace Natural_Services
                         RetailorId = retailorToDistributorlist.RetailorId
                     };
 
-                    await _unitOfWork.Retailor_To_Distributor_RepositoryRepo.AddAsync(retailorToDistributor);
+                    await _unitOfWork.RetailorToDistributorRepositoryRepo.AddAsync(retailorToDistributor);
 
 
                     var assigned = await _unitOfWork.CommitAsync();

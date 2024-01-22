@@ -20,6 +20,8 @@ namespace Natural_Core.IServices
         Task<ResultResponse> UpdateDistributor(Distributor distributor);
         Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search);
 
+        Task<IEnumerable<Distributor>> GetNonAssignedDistributors();
+
 
     }
 }

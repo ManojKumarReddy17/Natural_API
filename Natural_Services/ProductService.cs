@@ -15,6 +15,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable disable
 
 namespace Natural_Services
 {

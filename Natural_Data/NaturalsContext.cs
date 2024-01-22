@@ -8,8 +8,8 @@ using Natural_Core.Models;
 
 #nullable disable
 
-
 namespace Natural_Data
+
 {
     public partial class NaturalsContext : DbContext
     {
@@ -35,6 +35,8 @@ namespace Natural_Data
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
+
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -195,31 +197,25 @@ namespace Natural_Data
             {
                 entity.ToTable("DistributorToExecutive");
 
-                entity.HasIndex(e => e.ExecutiveId, "DistributortoExecutive_ibfk_1");
+                entity.HasIndex(e => e.DistributorId, "FK_Distributor");
 
-                entity.HasIndex(e => e.DistributorId, "DistributortoExecutive_ibfk_2");
+                entity.HasIndex(e => e.ExecutiveId, "FK_Executive");
 
                 entity.Property(e => e.Id).HasMaxLength(10);
 
-                entity.Property(e => e.DistributorId)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.DistributorId).HasMaxLength(10);
 
-                entity.Property(e => e.ExecutiveId)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.ExecutiveId).HasMaxLength(10);
 
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.DistributorToExecutives)
                     .HasForeignKey(d => d.DistributorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DistributortoExecutive_ibfk_2");
+                    .HasConstraintName("DistributorToExecutive_ibfk_2");
 
                 entity.HasOne(d => d.Executive)
                     .WithMany(p => p.DistributorToExecutives)
                     .HasForeignKey(d => d.ExecutiveId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DistributortoExecutive_ibfk_1");
+                    .HasConstraintName("DistributorToExecutive_ibfk_1");
             });
 
             modelBuilder.Entity<Dsr>(entity =>

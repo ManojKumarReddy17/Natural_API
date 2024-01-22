@@ -48,7 +48,7 @@ namespace Natural_Data.Repositories
 
             return result;
         }
-        public async Task<Retailor> GetWithRetailorsByIdAsync(string id)
+        public async Task<Retailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
                                          join area in NaturalDbContext.Areas on retailor.Area equals area.Id
@@ -117,9 +117,9 @@ namespace Natural_Data.Repositories
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-            (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-    c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-    (c.FirstName + " " + c.LastName).StartsWith(search.FullName))).ToListAsync();
+        (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+        c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName))).ToListAsync();
                 var result = exec.Select(c => new Retailor
                 {
                     Id = c.Id,
@@ -136,6 +136,40 @@ namespace Natural_Data.Repositories
             }
 
         }
+
+        public async Task<IEnumerable<Retailor>> GetNonAssignedRetailorsAsync()
+        {         
+
+                var retailors = await NaturalDbContext.Retailors
+                    .Include(c => c.AreaNavigation)
+                    .ThenInclude(a => a.City)
+                    .ThenInclude(ct => ct.State)
+                    .ToListAsync();
+
+                var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
+                    .Select(de => de.RetailorId)
+                    .ToListAsync();
+
+                   var nonAssignedRetailors = retailors
+                    .Where(c => !assignedRetailorIds.Contains(c.Id))
+                    .Select(c => new Retailor
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        MobileNumber = c.MobileNumber,
+                        Address = c.Address,
+                        Email = c.Email,
+                        Area = c.AreaNavigation.AreaName,
+                        City = c.AreaNavigation.City.CityName,
+                        State = c.AreaNavigation.City.State.StateName,
+                    })
+                    .ToList();
+
+                return nonAssignedRetailors;
+        }
+
+
 
         private NaturalsContext NaturalDbContext
         {

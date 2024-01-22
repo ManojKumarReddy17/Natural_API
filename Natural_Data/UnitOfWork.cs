@@ -1,6 +1,7 @@
 ﻿using Amazon.S3;
 using Natural_Core;
 using Natural_Core.IRepositories;
+using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Data.Repositories;
 using System;
@@ -29,9 +30,8 @@ namespace Natural_Data.Models
         private IProductRepository _ProductRepository;
         private IDsrRepository _dsrRepository;
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
-        private IRetailor_To_Distributor_Repository _retailor_To_Distributor_Repository;
 
-
+        private IAssignRetailorToDistributorRepository _retailorToDistributorRepository;
 
 
 
@@ -58,9 +58,7 @@ namespace Natural_Data.Models
 
         public IProductRepository ProductRepository => _ProductRepository = _ProductRepository ?? new ProductRepository(_context, _S3Client);
         public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
-        public IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo => _retailor_To_Distributor_Repository ?? new Retailor_To_Distributor_Repository(_context);
-
-
+        public IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo => _retailorToDistributorRepository = _retailorToDistributorRepository ?? new AssignRetailorToDistributorRepository(_context);
 
         public async Task<int> CommitAsync()
         {

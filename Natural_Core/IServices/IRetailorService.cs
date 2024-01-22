@@ -17,6 +17,8 @@ namespace Natural_Core.IServices
         Task<Retailor> GetRetailorsById(string retailorId);
         Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 
+        Task<IEnumerable<Retailor>> GetNonAssignedRetailors();
+
 
 
 

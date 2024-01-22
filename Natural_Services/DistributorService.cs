@@ -19,11 +19,15 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-
-
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
+            return result;
+        }
+
+        public async Task<IEnumerable<Distributor>> GetNonAssignedDistributors()
+        {
+            var result = await _unitOfWork.DistributorRepo.GetNonAssignedDistributorsAsync();
             return result;
         }
 

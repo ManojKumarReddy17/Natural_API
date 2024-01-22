@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IRepositories
 {
-    public interface IRetailor_To_Distributor_Repository : IRepository<RetailorToDistributor>
+    public interface IAssignRetailorToDistributorRepository : IRepository<RetailorToDistributor>
     {
         Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorIdAsync(string distributorId);
         Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId);

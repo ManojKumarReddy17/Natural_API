@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IServices
 {
-    public interface IRetailor_To_Distributor_Service
+    public interface IAssignRetailorToDistributorService
     {
         Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorId(string distributorId);
         Task<IEnumerable<RetailorToDistributor>> GetRetailorsDetailsByDistributorId(string distributorId);

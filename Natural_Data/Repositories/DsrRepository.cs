@@ -33,7 +33,8 @@ namespace Natural_Data.Repositories
                           Executive = executive,
                           Distributor = distributor,
                           Retailor = retailer,
-                          OrderByNavigation = ordby,
+                          OrderByNavigation = ordby
+                         
                       };
 
             var dsrs = await dsr.ToListAsync();
@@ -44,6 +45,7 @@ namespace Natural_Data.Repositories
                 Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
                 Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
                 OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+                TotalAmount=c.dsrs.TotalAmount,
                 CreatedDate = DateTime.Now,
 
 

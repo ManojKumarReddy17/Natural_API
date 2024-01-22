@@ -115,9 +115,43 @@ namespace Natural_Data.Repositories
             }).ToList();
                 return result;
             }
-        
 
-        private NaturalsContext NaturalDbContext
+        public async Task<IEnumerable<Distributor>> GetNonAssignedDistributorsAsync()
+        {
+           
+                var distributors = await NaturalDbContext.Distributors
+                    .Include(c => c.AreaNavigation)
+                    .ThenInclude(a => a.City)
+                    .ThenInclude(ct => ct.State)
+                    .ToListAsync();
+
+                var assignedDistributorIds = await NaturalDbContext.DistributorToExecutives
+                    .Select(de => de.DistributorId)
+                    .ToListAsync();
+
+                var nonAssignedDistributors = distributors
+                    .Where(c => !assignedDistributorIds.Contains(c.Id))
+                    .Select(c => new Distributor
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        MobileNumber = c.MobileNumber,
+                        Address = c.Address,
+                        Email = c.Email,
+                        UserName = c.UserName,
+                        Password = c.Password,
+                        Area = c.AreaNavigation.AreaName,
+                        City = c.AreaNavigation.City.CityName,
+                        State = c.AreaNavigation.City.State.StateName,
+                    })
+                    .ToList();
+
+                return nonAssignedDistributors;
+            }
+
+
+    private NaturalsContext NaturalDbContext
         {
             get 
             

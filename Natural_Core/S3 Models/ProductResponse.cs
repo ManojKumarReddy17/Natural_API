@@ -1,4 +1,6 @@
 ﻿using System;
+
+#nullable disable
 namespace Natural_Core.S3Models
 {
 	public class ProductResponse

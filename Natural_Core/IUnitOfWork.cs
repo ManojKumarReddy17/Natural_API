@@ -1,4 +1,5 @@
 ﻿using Natural_Core.IRepositories;
+using Natural_Core.IServices;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,8 +26,7 @@ namespace Natural_Core
         IExecutiveRepository ExecutiveRepo { get; }
         IProductRepository ProductRepository { get; }
         IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
-        IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo { get; }
-        
+        IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo { get; }
 
         Task<int> CommitAsync();
 

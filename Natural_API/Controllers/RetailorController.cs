@@ -40,6 +40,20 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
+
+        /// <summary>
+        /// GETTING LIST OF NON-ASSIGNED RETAILORS
+        /// </summary>
+        
+        [HttpGet("Assign")]
+        public async Task<ActionResult<IEnumerable<RetailorResource>>> GetNonAssignedRetailors()
+        {
+            var retailor = await _retailorservice.GetNonAssignedRetailors();
+            var retailorResource = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(retailor);
+            return Ok(retailorResource);
+        }
+
+
         /// <summary>
         /// GETTING RETAILOR BY ID
         /// </summary>

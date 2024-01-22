@@ -11,9 +11,9 @@ namespace Natural_API.Controllers
     [ApiController]
     public class AssignRetailorToDistributorController : ControllerBase
     {
-        private readonly IRetailor_To_Distributor_Service _retailortodistributorservice;
+        private readonly IAssignRetailorToDistributorService _retailortodistributorservice;
         private readonly IMapper _mapper;
-        public AssignRetailorToDistributorController(IRetailor_To_Distributor_Service service, IMapper mapper)
+        public AssignRetailorToDistributorController(IAssignRetailorToDistributorService service, IMapper mapper)
         {
             _retailortodistributorservice = service;
             _mapper = mapper;

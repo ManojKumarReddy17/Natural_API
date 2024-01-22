@@ -30,7 +30,6 @@ builder.Services.AddDbContext<NaturalsContext>(options =>
     options.UseMySql(databaseConfiguration.ConnectionString, new MySqlServerVersion(new Version()));
 });
 
-
 builder.Services.AddControllers();
 
 //configure AWS s3 client
@@ -83,8 +82,8 @@ builder.Services.AddTransient<IAssignDistributorToExecutiveRepository, AssignDis
 builder.Services.AddTransient<IAssignDistributorToExecutiveService, AssignDistributorToExecutiveService>();
 
 
-builder.Services.AddTransient<IRetailor_To_Distributor_Service, Retailor_To_Distributor_Service>();
-builder.Services.AddTransient<IRetailor_To_Distributor_Repository,Retailor_To_Distributor_Repository>();
+builder.Services.AddTransient<IAssignRetailorToDistributorService, AssignRetailorToDistributorService>();
+builder.Services.AddTransient<IAssignRetailorToDistributorRepository, AssignRetailorToDistributorRepository>();
 
 
 builder.Services.AddTransient<IDsrRepository, DsrRepository>();

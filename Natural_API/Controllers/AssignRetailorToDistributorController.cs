@@ -26,19 +26,19 @@ namespace Natural_API.Controllers
             var rtdresources = _mapper.Map<IEnumerable<RetailorToDistributor>, IEnumerable<GetRTDResource>>(retailers);
             return Ok(rtdresources);
         }
-        [HttpGet("details/{distributorId}")]
 
+        [HttpGet("details/{distributorId}")]
         public async Task<ActionResult<IEnumerable<GetRTDResource>>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             var retailers = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
             var rtdresources = _mapper.Map<IEnumerable<RetailorToDistributor>, IEnumerable<GetRTDResource>>(retailers);
             return Ok(rtdresources);
         }
+
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> AssignRetailorToDistributor([FromBody] AssignRetailorToDistributorResource retailortodistributorResources)
         {
             var AssignedResult = new ResultResponse();
-
             foreach (var retailor in retailortodistributorResources.RetailorId)
             {
                 var DistributorId = retailortodistributorResources.DistributorId;
@@ -50,7 +50,5 @@ namespace Natural_API.Controllers
             }
             return StatusCode(AssignedResult.StatusCode, AssignedResult);
         }
-
-
     }
 }

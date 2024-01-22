@@ -9,6 +9,11 @@ using Natural_API;
 using Microsoft.OpenApi.Models;
 using Natural_Core.Models;
 using Natural_Data.Models;
+using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.Util;
+using Amazon;
+using Natural_Core.S3Models;
 #nullable disable
 
 
@@ -27,6 +32,20 @@ builder.Services.AddDbContext<NaturalsContext>(options =>
 
 
 builder.Services.AddControllers();
+
+//configure AWS s3 client
+var awssettings = configuration.GetSection(key: "AWS");
+var cradentials = new BasicAWSCredentials(awssettings[key: "AccessKey"], awssettings[key: "SecretKey"]);
+
+//configure AWS Options
+var awsoptions = configuration.GetAWSOptions();
+awsoptions.Credentials = cradentials;
+awsoptions.Region = RegionEndpoint.APSouth1;
+
+builder.Services.AddDefaultAWSOptions(awsoptions);
+builder.Services.AddAWSService<IAmazonS3>();
+
+builder.Services.Configure<S3Config>(builder.Configuration.GetSection("S3Config"));
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ILoginRepository, LoginRepository>();
@@ -57,7 +76,8 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IDsrRepository,DsrRepository>(); 
 builder.Services.AddTransient<IDsrService, DsrService>();
 
-
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddTransient<IAssignDistributorToExecutiveRepository, AssignDistributorToExecutiveRepository>();
 builder.Services.AddTransient<IAssignDistributorToExecutiveService, AssignDistributorToExecutiveService>();

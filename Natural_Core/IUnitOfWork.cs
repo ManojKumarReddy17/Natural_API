@@ -23,8 +23,10 @@ namespace Natural_Core
         IRetailorRepository  RetailorRepo { get; }
         IDsrRepository dSRRepo { get; }
         IExecutiveRepository ExecutiveRepo { get; }
+        IProductRepository ProductRepository { get; }
         IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
         IRetailor_To_Distributor_Repository Retailor_To_Distributor_RepositoryRepo { get; }
+        
 
         Task<int> CommitAsync();
 

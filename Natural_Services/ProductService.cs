@@ -144,13 +144,28 @@ namespace Natural_Services
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            
+
             var isd = PresignedUrl.FirstOrDefault();
             var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
             productresoursze1.PresignedUrl = isd.PresignedUrl;
 
 
             return productresoursze1;
+            //// Check if PresignedUrl is not null and has at least one item
+            //if (PresignedUrl != null && PresignedUrl.Any())
+            //{
+            //    var isd = PresignedUrl.FirstOrDefault();
+            //    productresoursze1.PresignedUrl = isd.PresignedUrl;
+            //    return productresoursze1;
+            //}
+            //else
+            //{
+            //    // If PresignedUrl is null or empty, you can choose to set it to null or any default value
+            //    // For example, setting it to null:
+            //    //productresoursze1.PresignedUrl = null;
+            //}
+
+            //return productresoursze1;
         }
 
         //get product by id as in tabel 

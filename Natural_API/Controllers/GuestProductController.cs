@@ -32,13 +32,13 @@ namespace Natural_API.Controllers
             return View();
         }
 
-        [HttpPost("Search")]
-        public async Task<IEnumerable<GetProduct>> SearchDistributor([FromBody] SearchProductResource search)
-        {
-            var exe = await _DistributorService.SearcDistributors(search);
-            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
-            return execget;
-        }
+        //[HttpPost("Search")]
+        //public async Task<IEnumerable<GetProduct>> SearchDistributor([FromBody] SearchProductResource search)
+        //{
+        //    var exe = await _DistributorService.SearcDistributors(search);
+        //    var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
+        //    return execget;
+        //}
     }
 }
 

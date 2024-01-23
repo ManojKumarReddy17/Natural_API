@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 namespace Natural_Core.S3Models
 {
 	public class SearchProduct

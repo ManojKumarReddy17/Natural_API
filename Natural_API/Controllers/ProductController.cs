@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
 using Natural_Services;
 using System.Reflection.Metadata.Ecma335;
 using static NuGet.Packaging.PackagingConstants;
@@ -24,26 +25,18 @@ namespace Natural_API.Controllers
     {
         private readonly IProductService _ProductService;
         private readonly IMapper _mapper;
-        private readonly IAmazonS3 _s3Client;
+        private readonly ICategoryService _categoryService;
 
 
-        public ProductController(IProductService ProductService, IMapper mapper, IAmazonS3 s3Client)
+        public ProductController(IProductService ProductService, IMapper mapper, ICategoryService categoryService)
         {
 
             _ProductService = ProductService;
             _mapper = mapper;
-            _s3Client = s3Client;
+            _categoryService = categoryService;
         }
 
-        //// to test bucket connection
-        //[HttpGet("get-all")]
-        //public async Task<IActionResult> GetAllBucketAsync()
-        //{
-        //    var buckets = await _ProductService.GetAllBucketAsync();
-        //    return Ok(buckets);
-        //}
-
-
+     
         [HttpGet]  //get products with category name and presignred url//
 
         public async Task<ActionResult<IEnumerable<GetProduct>>> GetAllPrtoductDetails(string? prefix)
@@ -130,6 +123,28 @@ namespace Natural_API.Controllers
             return Ok(produ);
         }
 
+        [HttpPost("Search")]
+        //search based on category or product or both
+        public async Task<IEnumerable<GetProduct>> search([FromBody] SearchProduct search)
+        {
+           
+            if (string.IsNullOrEmpty(search.Category))
+            {
+                var result = await _ProductService.SearchProduct(search);
+                return result;
+            }
+            else
+            {
+                SearchProduct vae = new SearchProduct();
+                vae.ProductName = search.ProductName;
+                var Category = await _categoryService.GetCategoryById(search.Category);
+                vae.Category = Category.CategoryName;
+                var result = await _ProductService.SearchProduct(vae);
+                return result;
+            }
+
+
+        }
 
     }
 }

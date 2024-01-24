@@ -130,11 +130,23 @@ namespace Natural_Services
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            var isd = PresignedUrl.FirstOrDefault();
-            var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-            productresoursze1.PresignedUrl = isd.PresignedUrl;
+            if (PresignedUrl.Any())
+            {
+                var isd = PresignedUrl.FirstOrDefault();
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
-            return productresoursze1;
+                return productresoursze1;
+            }
+            else
+            {
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                //productresoursze1.PresignedUrl = isd.PresignedUrl;
+
+                return productresoursze1;
+
+            }
+
         }
 
         //get product by id as in tabel and asign presigned url
@@ -148,12 +160,30 @@ namespace Natural_Services
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-            var isd = PresignedUrl.FirstOrDefault();
-            var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-            productresoursze1.PresignedUrl = isd.PresignedUrl;
+            //var isd = PresignedUrl.FirstOrDefault();
+            //var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+            //productresoursze1.PresignedUrl = isd.PresignedUrl;
+            //return productresoursze1;
+
+            if (PresignedUrl.Any())
+            {
+                var isd = PresignedUrl.FirstOrDefault();
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                productresoursze1.PresignedUrl = isd.PresignedUrl;
+
+                return productresoursze1;
+            }
+            else
+            {
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                //productresoursze1.PresignedUrl = isd.PresignedUrl;
+
+                return productresoursze1;
+
+            }
 
 
-            return productresoursze1;
+
             //// Check if PresignedUrl is not null and has at least one item
             //if (PresignedUrl != null && PresignedUrl.Any())
             //{
@@ -317,8 +347,8 @@ namespace Natural_Services
             List<GetProduct> exec = new List<GetProduct>();
             exec = getProduct
              .Where(c =>
-                    (string.IsNullOrEmpty(search.Category) || c.Category == search.Category) &&
-                    (string.IsNullOrEmpty(search.ProductName) || c.ProductName == search.ProductName)
+                    (string.IsNullOrEmpty(search.Category) || c.Category.StartsWith(search.Category)) &&
+                    (string.IsNullOrEmpty(search.ProductName) || c.ProductName.StartsWith(search.ProductName, StringComparison.OrdinalIgnoreCase))
 //                    (c.Category == search.Category || c.ProductName == search.ProductName) &&
 //(!string.IsNullOrEmpty(search.Category) || !string.IsNullOrEmpty(search.ProductName))
 

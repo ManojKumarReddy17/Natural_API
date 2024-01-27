@@ -10,7 +10,6 @@ namespace Natural_Core.Models
         public string Id { get; set; }
         public string ExecutiveId { get; set; }
         public string DistributorId { get; set; }
-
         public virtual Distributor Distributor { get; set; }
         public virtual Executive Executive { get; set; }
     }

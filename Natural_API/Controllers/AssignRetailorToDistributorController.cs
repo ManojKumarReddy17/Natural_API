@@ -31,7 +31,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<GetRTDResource>>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             var retailers = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
-            var rtdresources = _mapper.Map<IEnumerable<RetailorToDistributor>, IEnumerable<GetRTDResource>>(retailers);
+            var rtdresources = _mapper.Map<IEnumerable<AssignRetailorToDistributorModel>, IEnumerable<GetRTDResource>>(retailers);
             return Ok(rtdresources);
         }
 
@@ -39,7 +39,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> AssignRetailorToDistributor([FromBody] AssignRetailorToDistributorResource retailortodistributorResources)
         {
             var AssignedResult = new ResultResponse();
-            foreach (var retailor in retailortodistributorResources.RetailorId)
+            foreach (var retailor in retailortodistributorResources.RetailorIds)
             {
                 var DistributorId = retailortodistributorResources.DistributorId;
                 var lst = new InsertRTDResource();

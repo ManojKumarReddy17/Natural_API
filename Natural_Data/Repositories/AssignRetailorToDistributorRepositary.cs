@@ -24,20 +24,27 @@ namespace Natural_Data.Repositories
                 .Where(rt => rt.DistributorId == distributorId)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId)
+        public async Task<IEnumerable<AssignRetailorToDistributorModel>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId)
         {
-            var AssignedList = await NaturalDbContext.RetailorToDistributors.
-                Include(D => D.Retailor).
-                Include(D => D.Distributor).Where(rt=> rt.DistributorId == distributorId).ToListAsync();
+            var AssignedList = await NaturalDbContext.RetailorToDistributors
+                .Include(D => D.Retailor)
+                .Include(D => D.Distributor)
+                .Where(rt => rt.DistributorId == distributorId)
+                .ToListAsync();
 
-            var result = AssignedList.Select(rt => new RetailorToDistributor
+            var result = AssignedList.Select(rt => new AssignRetailorToDistributorModel
             {
-                Id = rt.Id,
-                DistributorId = string.Concat(rt.Distributor.FirstName, "", rt.Distributor.LastName),
-                RetailorId = string.Concat(rt.Retailor.FirstName, "", rt.Retailor.LastName)
+                FirstName = rt.Retailor.FirstName,
+                LastName = rt.Retailor.LastName,
+                Email = rt.Retailor.Email,
+                MobileNumber = rt.Retailor.MobileNumber ,        
+                Address = rt.Retailor.Address,
+                
             }).ToList();
+
             return result;
         }
+
 
         public async Task<bool> DistributorAssignedToRetailor(List<string> retailorid)
         {

@@ -89,7 +89,7 @@ namespace Natural_Data.Repositories
             
                 var exec = await NaturalDbContext.Distributors
                        .Include(c => c.AreaNavigation)
-                        .ThenInclude(a => a.City)
+                       .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                        .Where(c =>
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&

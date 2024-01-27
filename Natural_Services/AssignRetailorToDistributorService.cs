@@ -1,12 +1,8 @@
 ﻿using Natural_Core;
-using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using Natural_Core.Models;
-using Natural_Data.Repositories;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Natural_Services
@@ -23,7 +19,7 @@ namespace Natural_Services
         {
             return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetRetailorsIdByDistributorIdAsync(distributorId);
         }
-        public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsDetailsByDistributorId(string distributorId)
+        public async Task<IEnumerable<AssignRetailorToDistributorModel>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
         }

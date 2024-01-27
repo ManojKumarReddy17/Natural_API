@@ -19,7 +19,7 @@ namespace Natural_Services
         {
             return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetRetailorsIdByDistributorIdAsync(distributorId);
         }
-        public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsDetailsByDistributorId(string distributorId)
+        public async Task<IEnumerable<AssignRetailorToDistributorModel>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
         }

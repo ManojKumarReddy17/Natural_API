@@ -16,6 +16,7 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search);
 
         Task<IEnumerable<Distributor>> GetNonAssignedDistributorsAsync();
+        Task<IEnumerable<Distributor>> SearchNonAssignedDistributorsAsync(SearchModel search);
 
 
 

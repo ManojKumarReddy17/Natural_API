@@ -17,7 +17,7 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<IEnumerable<DistributorToExecutive>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+        public async Task<IEnumerable<Distributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {
             return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorDetailsByExecutiveId(ExecutiveId);
         }
@@ -73,5 +73,34 @@ namespace Natural_Services
 
             return Response;
         }
+
+        public async Task<ResultResponse> DeleteAssignedDistributorByid(string distributorId,string ExecutiveId)
+        {
+            var response = new ResultResponse();
+            try
+            {
+                var distributor = await _unitOfWork.distributorToExecutiveRepo.DeleteDistributor(distributorId,ExecutiveId);
+
+                if (distributor != null)
+                {
+                    _unitOfWork.distributorToExecutiveRepo.Remove(distributor);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
+                }
+                else
+                {
+                    response.Message = "DISTRIBUTOR NOT FOUND";
+                    response.StatusCode = 404;
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
+        }
+
     }
 }

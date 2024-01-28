@@ -39,7 +39,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> AssignRetailorToDistributor([FromBody] AssignRetailorToDistributorResource retailortodistributorResources)
         {
             var AssignedResult = new ResultResponse();
-            foreach (var retailor in retailortodistributorResources.RetailorId)
+            foreach (var retailor in retailortodistributorResources.RetailorIds)
             {
                 var DistributorId = retailortodistributorResources.DistributorId;
                 var lst = new InsertRTDResource();

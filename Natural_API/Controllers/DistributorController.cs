@@ -127,7 +127,7 @@ namespace Natural_API.Controllers
         [HttpPost("Search")]
         public async Task<IEnumerable<DistributorGetResource>> SearchDistributor([FromBody] SearchModel search)
         {
-            var exe = await _DistributorService.SearcDistributors(search);
+            var exe = await _DistributorService.SearchNonAssignedDistributors(search);
             var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
             return execget;
         }

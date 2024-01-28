@@ -18,18 +18,29 @@ namespace Natural_Data.Repositories
         {
 
         }
-        public async Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+        public async Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {
-            var AssignedList = await NaturalDbContext.DistributorToExecutives.
-                Include(D => D.Distributor).
-                Include(D => D.Executive).Where(c => c.ExecutiveId == ExecutiveId).ToListAsync();
-            var result = AssignedList.Select(c => new DistributorToExecutive
-            {
-                Id = c.Id,
-                ExecutiveId = string.Concat(c.Executive.FirstName, "", c.Executive.LastName),
-                DistributorId = string.Concat(c.Distributor.FirstName, "", c.Distributor.LastName)
-            }).ToList();
+            var AssignedList = await NaturalDbContext.DistributorToExecutives
+                .Include(D => D.Distributor)
+                .ThenInclude(d => d.AreaNavigation)  
+                .ThenInclude(a => a.City)    
+                .ThenInclude(c => c.State)           
+                .Include(D => D.Executive)
+                .Include(D => D.Executive)
+                .Where(c => c.ExecutiveId == ExecutiveId)
+                .ToListAsync();
 
+            var result = AssignedList.Select(c => new Distributor
+            {
+                Id = c.Distributor.Id,
+                FirstName = c.Distributor.FirstName,
+                LastName = c.Distributor.LastName,
+                MobileNumber = c.Distributor.MobileNumber,
+                Email = c.Distributor.Email,
+                Area = c.Distributor.AreaNavigation.AreaName,
+                City = c.Distributor.AreaNavigation.City.CityName,
+                State = c.Distributor.AreaNavigation.City.State?.StateName
+            }).ToList();
             return result;
         }
 
@@ -46,6 +57,15 @@ namespace Natural_Data.Repositories
                 .AnyAsync(d => distributorIds.Contains(d.DistributorId));
 
             return existingAssignment;
+        }
+
+        public async Task<DistributorToExecutive> DeleteDistributor(string distributorId, string ExecutiveId)
+        {
+            var result = await NaturalDbContext.DistributorToExecutives
+                .Where(d => d.DistributorId == distributorId && d.ExecutiveId == ExecutiveId)
+                .FirstOrDefaultAsync();
+
+            return result;
         }
 
         private NaturalsContext NaturalDbContext

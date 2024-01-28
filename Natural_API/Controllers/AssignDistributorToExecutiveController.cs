@@ -45,7 +45,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<DistributorToExecutiveResource>>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {
             var result = await _distributorToExecutiveService.AssignedDistributorDetailsByExecutiveId(ExecutiveId);
-            var mapped = _mapper.Map<IEnumerable<DistributorToExecutive>, IEnumerable<DistributorToExecutiveResource>>(result);
+            var mapped = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorToExecutiveResource>>(result);
             return Ok(mapped);
         }
 
@@ -59,7 +59,6 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> CreateAssignDistributortoExecutive([FromBody] AssignDistributorToExecutiveResource distributorToExecutiveResources)
         {
             var AssignedResult = new ResultResponse();
-
             foreach (var distributor in distributorToExecutiveResources.DistributorIds)
             {
                 var ExecutiveId = distributorToExecutiveResources.ExecutiveId;
@@ -72,5 +71,15 @@ namespace Natural_API.Controllers
             return StatusCode(AssignedResult.StatusCode, AssignedResult);
         }
 
+
+        [HttpDelete("{DistributorId}/{ExecutiveId}")]
+
+        public async Task<ActionResult<ResultResponse>> DeleteAssignedDistributor(string DistributorId,string ExecutiveId)
+        {
+
+            var response = await _distributorToExecutiveService.DeleteAssignedDistributorByid(DistributorId, ExecutiveId);
+
+            return response;
+        }
     }
 }

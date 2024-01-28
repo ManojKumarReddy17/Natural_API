@@ -18,9 +18,11 @@ namespace Natural_Core.IServices
 
         Task<ResultResponse> DeleteDistributor(string distributorId);
         Task<ResultResponse> UpdateDistributor(Distributor distributor);
-        Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search);
+        Task<IEnumerable<Distributor>> SearchDistributors(SearchModel search);
 
         Task<IEnumerable<Distributor>> GetNonAssignedDistributors();
+        Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
+
 
 
     }

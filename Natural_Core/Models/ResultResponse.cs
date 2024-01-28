@@ -10,6 +10,7 @@ namespace Natural_Core.Models
     {
         public string Message { get; set; }
         public int StatusCode { get; set; }
+
     }
 }
  

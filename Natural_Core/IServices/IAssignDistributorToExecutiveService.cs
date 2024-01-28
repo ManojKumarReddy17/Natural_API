@@ -9,11 +9,15 @@ namespace Natural_Core.IServices
 {
     public interface IAssignDistributorToExecutiveService
     {
-        Task<IEnumerable<DistributorToExecutive>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
+        Task<IEnumerable<Distributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
 
         Task<IEnumerable<DistributorToExecutive>> AssignedDistributorsByExecutiveId(string ExecutiveId);
 
         Task<ResultResponse> AssignDistributorsToExecutive(DistributorToExecutive model);
+
+        Task<ResultResponse> DeleteAssignedDistributorByid(string distributorId,string ExecutiveId);
+
+        
 
 
     }

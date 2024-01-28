@@ -122,11 +122,16 @@ namespace Natural_Services
             return response;
         }
 
-        public async Task<IEnumerable<Distributor>> SearcDistributors(SearchModel search)
+        public async Task<IEnumerable<Distributor>> SearchDistributors(SearchModel search)
         {
-            var exec = await _unitOfWork.DistributorRepo.SearchDistributorAsync(search);
-            return exec;
+            var distributors = await _unitOfWork.DistributorRepo.SearchDistributorAsync(search);
+            return distributors;
         }
 
+        public async Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search)
+        {
+            var searchdistributors = await _unitOfWork.DistributorRepo.SearchNonAssignedDistributorsAsync(search);
+            return searchdistributors;
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> CreateAssignDistributortoExecutive([FromBody] AssignDistributorToExecutiveResource distributorToExecutiveResources)
         {
             var AssignedResult = new ResultResponse();
-
+            //Remove the foreach use linq
             foreach (var distributor in distributorToExecutiveResources.DistributorIds)
             {
                 var ExecutiveId = distributorToExecutiveResources.ExecutiveId;

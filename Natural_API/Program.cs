@@ -76,7 +76,7 @@ builder.Services.AddTransient<IDsrRepository,DsrRepository>();
 builder.Services.AddTransient<IDsrService, DsrService>();
 
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
-builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddTransient<IAssignDistributorToExecutiveRepository, AssignDistributorToExecutiveRepository>();
 builder.Services.AddTransient<IAssignDistributorToExecutiveService, AssignDistributorToExecutiveService>();

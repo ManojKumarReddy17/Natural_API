@@ -1,19 +1,18 @@
 ﻿using Amazon.S3;
-using Amazon.S3.Model;
+
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 using Microsoft.Extensions.Options;
 using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Core.S3Models;
-using Natural_Data;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
+
 using System.Threading.Tasks;
 
 #nullable disable
@@ -24,14 +23,13 @@ namespace Natural_Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _Mapper;
-        //private readonly IAmazonS3 _s3Client;
+       
         private readonly S3Config _s3Config;
         private readonly ICategoryService _categoryService;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IAmazonS3 s3Client, IOptions<S3Config> s3Config, ICategoryService categoryService)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper,  IOptions<S3Config> s3Config, ICategoryService categoryService)
         {
             _unitOfWork = unitOfWork;
-            //_s3Client = s3Client;
             _Mapper = mapper;
             _s3Config = s3Config.Value;
             _categoryService = categoryService;
@@ -141,7 +139,7 @@ namespace Natural_Services
             else
             {
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                //productresoursze1.PresignedUrl = isd.PresignedUrl;
+                
 
                 return productresoursze1;
 
@@ -160,10 +158,7 @@ namespace Natural_Services
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-            //var isd = PresignedUrl.FirstOrDefault();
-            //var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-            //productresoursze1.PresignedUrl = isd.PresignedUrl;
-            //return productresoursze1;
+           
 
             if (PresignedUrl.Any())
             {
@@ -176,7 +171,7 @@ namespace Natural_Services
             else
             {
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                //productresoursze1.PresignedUrl = isd.PresignedUrl;
+                
 
                 return productresoursze1;
 
@@ -184,21 +179,7 @@ namespace Natural_Services
 
 
 
-            //// Check if PresignedUrl is not null and has at least one item
-            //if (PresignedUrl != null && PresignedUrl.Any())
-            //{
-            //    var isd = PresignedUrl.FirstOrDefault();
-            //    productresoursze1.PresignedUrl = isd.PresignedUrl;
-            //    return productresoursze1;
-            //}
-            //else
-            //{
-            //    // If PresignedUrl is null or empty, you can choose to set it to null or any default value
-            //    // For example, setting it to null:
-            //    //productresoursze1.PresignedUrl = null;
-            //}
-
-            //return productresoursze1;
+          
         }
 
         //get product by id as in tabel 
@@ -299,48 +280,9 @@ namespace Natural_Services
             return response;
         }
 
-        //  public async Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search)
-        //   {
-        //       string prefix = "";
-        //       var getProduct = await GetAllPrtoductDetails(prefix);
-        //       List<GetProduct> exec = new List<GetProduct>();
-        //       exec = await getProduct
-        //               .Where(c =>
-        //(string.IsNullOrEmpty(search.Category) || c.Category == search.Category) ||
-        //(string.IsNullOrEmpty(search.ProductName) || c.ProductName == search.ProductName))
-        //               .Select(c => new GetProduct
-        //               {
-        //                   Id = c.Id,
-        //                   Category = c.Category,
-        //                   ProductName = c.ProductName,
-        //                   Price = c.Price,
-        //                   Quantity = c.Quantity,
-        //                   Weight = c.Weight,
-        //                   PresignedUrl = c.PresignedUrl
-        //               });
-
-
-        //       //var result = exec.Select(c => new Distributor
-        //       //{
-        //       //    Id = c.Id,
-        //       //    FirstName = c.FirstName,
-        //       //    LastName = c.LastName,
-        //       //    MobileNumber = c.MobileNumber,
-        //       //    Address = c.Address,
-        //       //    Area = c.AreaNavigation.AreaName,
-        //       //    Email = c.Email,
-        //       //    UserName = c.UserName,
-        //       //    Password = c.Password,
-        //       //    City = c.AreaNavigation.City.CityName,
-        //       //    State = c.AreaNavigation.City.State.StateName
-        //       //}).ToList();
-        //       //return result;
-
-        //   }
         public async Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search)
         {
             string prefix = "";
-            //var getProduct = await GetAllPrtoductDetails(prefix);
             var getProduct = await  GetAllPrtoductDetails(prefix);
 
 
@@ -349,9 +291,6 @@ namespace Natural_Services
              .Where(c =>
                     (string.IsNullOrEmpty(search.Category) || c.Category.StartsWith(search.Category)) &&
                     (string.IsNullOrEmpty(search.ProductName) || c.ProductName.StartsWith(search.ProductName, StringComparison.OrdinalIgnoreCase))
-//                    (c.Category == search.Category || c.ProductName == search.ProductName) &&
-//(!string.IsNullOrEmpty(search.Category) || !string.IsNullOrEmpty(search.ProductName))
-
                 )
                 .Select(c => new GetProduct
                 {
@@ -367,33 +306,6 @@ namespace Natural_Services
 
             return exec;
         }
-
-        //public async Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search)
-        //{
-        //    string prefix = "";
-        //    var getProduct = await Task.Run(() => GetAllPrtoductDetails(prefix));
-
-        //    List<GetProduct> exec = getProduct
-        //        .Where(c =>
-        //            (string.IsNullOrEmpty(search.Category) || c.Category == search.Category) ||
-        //            (string.IsNullOrEmpty(search.ProductName) || c.ProductName == search.ProductName)
-        //        )
-        //        .Select(c => new GetProduct
-        //        {
-        //            Id = c.Id,
-        //            Category = c.Category,
-        //            ProductName = c.ProductName,
-        //            Price = c.Price,
-        //            Quantity = c.Quantity,
-        //            Weight = c.Weight,
-        //            PresignedUrl = c.PresignedUrl
-        //        })
-        //        .ToList();
-
-        //    return exec;
-        //}
-
-
 
     }
 }

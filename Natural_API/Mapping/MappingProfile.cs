@@ -77,9 +77,6 @@ namespace Natural_API.Mapping
             CreateMap<ProductResource, Product>();
             CreateMap<Product, GetProduct>();
 
-
-
-
         }
     }
 }

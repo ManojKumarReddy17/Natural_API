@@ -1,8 +1,5 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Natural_Core;
 using Natural_Core.IServices;
@@ -11,8 +8,6 @@ using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading.Tasks;
 
 #nullable disable
@@ -23,15 +18,15 @@ namespace Natural_Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _Mapper;
-        private readonly IAmazonS3 _s3Client;
         private readonly S3Config _s3Config;
+        private readonly ICategoryService _categoryService;
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IAmazonS3 s3Client, IOptions<S3Config> s3Config)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<S3Config> s3Config, ICategoryService categoryService)
         {
             _unitOfWork = unitOfWork;
-            _s3Client = s3Client;
             _Mapper = mapper;
             _s3Config = s3Config.Value;
+            _categoryService = categoryService;
         }
 
         // insert product data to database//
@@ -45,10 +40,7 @@ namespace Natural_Services
 
                     product.Id = "PROD" + new Random().Next(10000, 99999).ToString();
 
-
-
                     await _unitOfWork.ProductRepository.AddAsync(product);
-
 
                     var created = await _unitOfWork.CommitAsync();
 
@@ -71,12 +63,14 @@ namespace Natural_Services
             }
         }
 
+
         //get bucket names//
         public async Task<IEnumerable<string>> GetAllBucketAsync()
         {
             var bucketlist = await _unitOfWork.ProductRepository.GetAllBucketAsync();
             return bucketlist;
         }
+
 
         //get all files //all images with presignedurl
         public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
@@ -85,12 +79,14 @@ namespace Natural_Services
             return Allfilename;
         }
 
+
         //get products with category name
         public async Task<IEnumerable<Product>> GetAllProduct()
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
             return result;
         }
+
 
         //get products with category name and presignred url//
         public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix)
@@ -119,6 +115,7 @@ namespace Natural_Services
             return leftJoinQuery;
         }
 
+
         //get product by id -category name -presigned url
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
         {
@@ -127,31 +124,51 @@ namespace Natural_Services
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            var isd = PresignedUrl.FirstOrDefault();
-            var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-            productresoursze1.PresignedUrl = isd.PresignedUrl;
+            if (PresignedUrl.Any())
+            {
+                var isd = PresignedUrl.FirstOrDefault();
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
-            return productresoursze1;
+                return productresoursze1;
+            }
+            else
+            {
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                return productresoursze1;
+
+            }
         }
+
 
         //get product by id as in tabel and asign presigned url
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
            
-
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
           
             string bucketName = _s3Config.BucketName;
             string prefix = productResult.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            
-            var isd = PresignedUrl.FirstOrDefault();
-            var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-            productresoursze1.PresignedUrl = isd.PresignedUrl;
 
+            if (PresignedUrl.Any())
+            {
+                var isd = PresignedUrl.FirstOrDefault();
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
-            return productresoursze1;
+                return productresoursze1;
+            }
+            else
+            {
+                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                return productresoursze1;
+
+            }
         }
+
 
         //get product by id as in tabel 
         public async Task<Product> GetProductByIdAsync(string ProductId)
@@ -161,6 +178,7 @@ namespace Natural_Services
             return productResult;
 
         }
+
 
         //updating product data to db
         public async Task<ProductResponse> UpadateProduct(Product product)
@@ -186,6 +204,7 @@ namespace Natural_Services
             return (response);
         }
 
+
         //upload images to s3 bucket
         public async Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix)
         {
@@ -195,6 +214,7 @@ namespace Natural_Services
             return metadata;
 
         }
+
 
         //if while updating i want to delete image
         public async Task<ProductResponse> DeleteImage(string Id)
@@ -214,6 +234,8 @@ namespace Natural_Services
             return response;
         }
 
+
+        //if you want to delete Product complete from db including image
         public async Task<ProductResponse> DeleteProduct(string ProductId)
         {
 
@@ -234,8 +256,6 @@ namespace Natural_Services
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;
                 }
-               
-
                 
                 else
                 {
@@ -250,6 +270,36 @@ namespace Natural_Services
 
             return response;
         }
+
+
+        //search product based on category and product
+        public async Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search)
+        {
+            string prefix = "";
+            var getProduct = await GetAllPrtoductDetails(prefix);
+
+
+            List<GetProduct> exec = new List<GetProduct>();
+            exec = getProduct
+             .Where(c =>
+                    (string.IsNullOrEmpty(search.Category) || c.Category.StartsWith(search.Category)) &&
+                    (string.IsNullOrEmpty(search.ProductName) || c.ProductName.StartsWith(search.ProductName, StringComparison.OrdinalIgnoreCase))
+                )
+                .Select(c => new GetProduct
+                {
+                    Id = c.Id,
+                    Category = c.Category,
+                    ProductName = c.ProductName,
+                    Price = c.Price,
+                    Quantity = c.Quantity,
+                    Weight = c.Weight,
+                    PresignedUrl = c.PresignedUrl
+                })
+                .ToList();
+
+            return exec;
+        }
+
     }
 }
 

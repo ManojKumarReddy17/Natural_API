@@ -8,9 +8,9 @@ namespace Natural_Core.IRepositories
 {
     public interface IAssignRetailorToDistributorRepository : IRepository<RetailorToDistributor>
     {
-        Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorIdAsync(string distributorId);
-        Task<IEnumerable<AssignRetailorToDistributorModel>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId);
-        Task<bool> DistributorAssignedToRetailor(List<string> retailorid);
-
+        Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorsIdByDistributorIdAsync(string distributorId);
+        Task<IEnumerable<Retailor>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId);
+        Task<bool> IsRetailorAssignedToDistirbutor(List<string> retailorid);
+        Task<RetailorToDistributor> DeleteRetailorAsync(string RetailorID, string DistributorId);
     }
 }

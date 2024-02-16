@@ -18,14 +18,20 @@ namespace Natural_Data.Repositories
         {
 
         }
-        public async Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+
+        public async Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorByExecutiveIdAsync(string ExecutiveId)
+        {
+            return await NaturalDbContext.DistributorToExecutives.
+             Where(c => c.ExecutiveId == ExecutiveId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveIdAsync(string ExecutiveId)
         {
             var AssignedList = await NaturalDbContext.DistributorToExecutives
                 .Include(D => D.Distributor)
                 .ThenInclude(d => d.AreaNavigation)  
                 .ThenInclude(a => a.City)    
                 .ThenInclude(c => c.State)           
-                .Include(D => D.Executive)
                 .Include(D => D.Executive)
                 .Where(c => c.ExecutiveId == ExecutiveId)
                 .ToListAsync();
@@ -43,14 +49,7 @@ namespace Natural_Data.Repositories
             }).ToList();
             return result;
         }
-
-        public async Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorByExecutiveId(string ExecutiveId)
-        {
-            return await NaturalDbContext.DistributorToExecutives.
-             Where(c => c.ExecutiveId == ExecutiveId).ToListAsync();
-        }
-
-        public async Task<bool> IsExecutiveAssignedToDistributor(List<string> distributorIds)
+        public async Task<bool> IsDistirbutorAssignedToExecutiveAsync(List<string> distributorIds)
 
         {
             var existingAssignment = await NaturalDbContext.DistributorToExecutives
@@ -59,7 +58,7 @@ namespace Natural_Data.Repositories
             return existingAssignment;
         }
 
-        public async Task<DistributorToExecutive> DeleteDistributor(string distributorId, string ExecutiveId)
+        public async Task<DistributorToExecutive> DeleteDistributorAsync(string distributorId, string ExecutiveId)
         {
             var result = await NaturalDbContext.DistributorToExecutives
                 .Where(d => d.DistributorId == distributorId && d.ExecutiveId == ExecutiveId)

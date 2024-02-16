@@ -133,6 +133,13 @@ namespace Natural_Services
             var exec = await _unitOfWork.RetailorRepo.SearchRetailorAsync(search);
             return exec;
         }
+
+
+        public async Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search)
+        {
+            var searchdistributors = await _unitOfWork.DistributorRepo.SearchNonAssignedDistributorsAsync(search);
+            return searchdistributors;
+        }
     }
 }
  

@@ -133,6 +133,14 @@ namespace Natural_API.Controllers
             return execget;
         }
 
+        [HttpPost("SearchNonAssign")]
+        public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
+        {
+            var exe = await _retailorservice.SearchNonAssignedDistributors(SearchNonAssign);
+            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
+            return execget;
+        }
+
 
     }
 }

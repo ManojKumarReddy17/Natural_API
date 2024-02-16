@@ -17,9 +17,9 @@ namespace Natural_Services
         }
         public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorId(string distributorId)
         {
-            return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetRetailorsIdByDistributorIdAsync(distributorId);
+            return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetAssignedRetailorsIdByDistributorIdAsync(distributorId);
         }
-        public async Task<IEnumerable<AssignRetailorToDistributorModel>> GetRetailorsDetailsByDistributorId(string distributorId)
+        public async Task<IEnumerable<Retailor>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             return await _unitOfWork.RetailorToDistributorRepositoryRepo.GetAssignedRetailorDetailsByDistributorIdAsync(distributorId);
         }
@@ -32,7 +32,7 @@ namespace Natural_Services
             try
             {
                 var AssignedRetailor = await _unitOfWork.RetailorToDistributorRepositoryRepo.
-                  DistributorAssignedToRetailor(new List<string> { retailorToDistributorlist.RetailorId });
+                  IsRetailorAssignedToDistirbutor(new List<string> { retailorToDistributorlist.RetailorId });
 
                 if (!AssignedRetailor)
                 {
@@ -45,7 +45,6 @@ namespace Natural_Services
                     };
 
                     await _unitOfWork.RetailorToDistributorRepositoryRepo.AddAsync(retailorToDistributor);
-
 
                     var assigned = await _unitOfWork.CommitAsync();
 
@@ -75,9 +74,38 @@ namespace Natural_Services
 
             return Response;
         }
+
+        public async Task<ResultResponse> DeleteAssignedRetailotorByid(string retailorId, string distributorId)
+        {
+            var response = new ResultResponse();
+            try
+            {
+                var retailor = await _unitOfWork.RetailorToDistributorRepositoryRepo.DeleteRetailorAsync(retailorId, distributorId);
+
+                if (retailor != null)
+                {
+                    _unitOfWork.RetailorToDistributorRepositoryRepo.Remove(retailor);
+                    await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
+                }
+                else
+                {
+                    response.Message = "DISTRIBUTOR NOT FOUND";
+                    response.StatusCode = 404;
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
+        }
+
     }
- }
+}
 
-
+ 
 
 

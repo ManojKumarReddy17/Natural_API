@@ -18,7 +18,6 @@ namespace Natural_Data.Repositories
     {
         public DistributorRepository(NaturalsContext context) : base(context)
         {
-
         }
         public async Task<List<Distributor>> GetAllDistributorstAsync()
         {

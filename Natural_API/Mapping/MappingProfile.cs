@@ -13,7 +13,6 @@ namespace Natural_API.Mapping
             {
                 // DOMAIN TO RESOURCE 
 
-
                 CreateMap<Login, LoginResource>();
                 CreateMap<Distributor, DistributorGetResource>();
                 CreateMap<Distributor, InsertUpdateResource>();
@@ -29,11 +28,11 @@ namespace Natural_API.Mapping
 
                 CreateMap<Dsr,DsrResource>();
                 CreateMap<Dsr, DsrPostResource>();
-            CreateMap<Dsrdetail, DsrDetailResource>();
-            CreateMap<InsertDEmapper, DistributorToExecutive>();
-            CreateMap<Distributor , DistributorToExecutiveResource>();
+                CreateMap<Dsrdetail, DsrDetailResource>();
+                CreateMap<InsertDEmapper, DistributorToExecutive>();
+                CreateMap<Distributor , DistributorToExecutiveResource>();
                 CreateMap<Dsrdetail,DsrDetailPostResource>();
-                CreateMap<AssignRetailorToDistributorModel, GetRTDResource>();
+                CreateMap<Retailor, RetailorToDistributorResource>();
                 CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
             CreateMap<RetailorToDistributor,InsertRTDResource>();
             CreateMap<Product,DsrProductResource>();
@@ -69,7 +68,7 @@ namespace Natural_API.Mapping
             CreateMap<DistributorToExecutive, InsertDEmapper>();
             CreateMap<DistributorToExecutiveResource, Distributor>();
                 CreateMap<DistributorToExecutive, InsertDEmapper>();
-                CreateMap<GetRTDResource, AssignRetailorToDistributorModel>();
+                CreateMap<RetailorToDistributorResource, Retailor>();
                 CreateMap<AssignRetailorToDistributorResource, RetailorToDistributor>();
             CreateMap<InsertRTDResource, RetailorToDistributor>();
             CreateMap<DsrProductResource,Product>();

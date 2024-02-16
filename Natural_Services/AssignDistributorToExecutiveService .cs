@@ -20,12 +20,12 @@ namespace Natural_Services
         }
         public async Task<IEnumerable<Distributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {
-            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorDetailsByExecutiveId(ExecutiveId);
+            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorDetailsByExecutiveIdAsync(ExecutiveId);
         }
 
         public async Task<IEnumerable<DistributorToExecutive>> AssignedDistributorsByExecutiveId(string ExecutiveId)
         {
-            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorByExecutiveId(ExecutiveId);
+            return await _unitOfWork.distributorToExecutiveRepo.GetAssignedDistributorByExecutiveIdAsync(ExecutiveId);
         }
 
 
@@ -36,7 +36,7 @@ namespace Natural_Services
             try
             {
                 var IsAssignedDistributor = await _unitOfWork.distributorToExecutiveRepo.
-                  IsExecutiveAssignedToDistributor(new List<string> { model.DistributorId });
+                  IsDistirbutorAssignedToExecutiveAsync(new List<string> { model.DistributorId });
 
                 if (!IsAssignedDistributor)
                 {
@@ -80,7 +80,7 @@ namespace Natural_Services
             var response = new ResultResponse();
             try
             {
-                var distributor = await _unitOfWork.distributorToExecutiveRepo.DeleteDistributor(distributorId,ExecutiveId);
+                var distributor = await _unitOfWork.distributorToExecutiveRepo.DeleteDistributorAsync(distributorId,ExecutiveId);
 
                 if (distributor != null)
                 {

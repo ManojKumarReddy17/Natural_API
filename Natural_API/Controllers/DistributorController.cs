@@ -118,8 +118,6 @@ namespace Natural_API.Controllers
             return Ok(response);
         }
 
-
-
         /// <summary>
         /// SEARCH DISTRIBUTOR 
         /// </summary>
@@ -127,11 +125,18 @@ namespace Natural_API.Controllers
         [HttpPost("Search")]
         public async Task<IEnumerable<DistributorGetResource>> SearchDistributor([FromBody] SearchModel search)
         {
-            var exe = await _DistributorService.SearchNonAssignedDistributors(search);
+            var exe = await _DistributorService.SearchDistributors(search);
             var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
             return execget;
         }
 
+        [HttpPost("SearchNonAssign")]
+        public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
+        {
+            var exe = await _DistributorService.SearchNonAssignedDistributors(SearchNonAssign);
+            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
+            return execget;
+        }
 
     }
 }

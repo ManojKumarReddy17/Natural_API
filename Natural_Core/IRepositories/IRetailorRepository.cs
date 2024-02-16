@@ -16,6 +16,7 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<Retailor>> SearchRetailorAsync(SearchModel search);
         Task<IEnumerable<Retailor>> GetNonAssignedRetailorsAsync();
+        Task<IEnumerable<Retailor>> SearchNonAssignedRetailorsAsync(SearchModel search);
 
 
 

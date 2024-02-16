@@ -10,8 +10,9 @@ namespace Natural_Core.IServices
     public interface IAssignRetailorToDistributorService
     {
         Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorId(string distributorId);
-        Task<IEnumerable<AssignRetailorToDistributorModel>> GetRetailorsDetailsByDistributorId(string distributorId);
+        Task<IEnumerable<Retailor>> GetRetailorsDetailsByDistributorId(string distributorId);
         Task<ResultResponse> AssignRetailorsToDistributor(RetailorToDistributor retailorToDistributorlist);
+        Task<ResultResponse> DeleteAssignedRetailotorByid(string retailorId, string distributorId);
 
 
     }

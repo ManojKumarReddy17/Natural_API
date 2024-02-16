@@ -11,10 +11,10 @@ namespace Natural_Core.IRepositories
     public interface IAssignDistributorToExecutiveRepository : IRepository<DistributorToExecutive>
     {
 
-        Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorByExecutiveId(string ExecutiveId);
-        Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId);
-        Task<bool> IsExecutiveAssignedToDistributor(List<string> distributorIds);
-        Task<DistributorToExecutive>DeleteDistributor(string distributorId, string ExecutiveId);
+        Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorByExecutiveIdAsync(string ExecutiveId);
+        Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveIdAsync(string ExecutiveId);
+        Task<bool> IsDistirbutorAssignedToExecutiveAsync(List<string> distributorIds);
+        Task<DistributorToExecutive>DeleteDistributorAsync(string distributorId, string ExecutiveId);
 
 
 

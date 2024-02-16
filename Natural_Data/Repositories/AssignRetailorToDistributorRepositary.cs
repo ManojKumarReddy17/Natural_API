@@ -17,36 +17,41 @@ namespace Natural_Data.Repositories
         {
 
         }
-
-        public async Task<IEnumerable<RetailorToDistributor>> GetRetailorsIdByDistributorIdAsync(string distributorId)
+        public async Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorsIdByDistributorIdAsync(string distributorId)
         {
             return await Context.Set<RetailorToDistributor>()
                 .Where(rt => rt.DistributorId == distributorId)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<AssignRetailorToDistributorModel>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId)
+        public async Task<IEnumerable<Retailor>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId)
         {
             var AssignedList = await NaturalDbContext.RetailorToDistributors
                 .Include(D => D.Retailor)
+                .ThenInclude(d => d.AreaNavigation)
+                .ThenInclude(a => a.City)
+                .ThenInclude(c => c.State)
                 .Include(D => D.Distributor)
                 .Where(rt => rt.DistributorId == distributorId)
                 .ToListAsync();
 
-            var result = AssignedList.Select(rt => new AssignRetailorToDistributorModel
+            var result = AssignedList.Select(c => new Retailor
             {
-                FirstName = rt.Retailor.FirstName,
-                LastName = rt.Retailor.LastName,
-                Email = rt.Retailor.Email,
-                MobileNumber = rt.Retailor.MobileNumber ,        
-                Address = rt.Retailor.Address,
-                
+                Id = c.Retailor.Id,
+                FirstName = c.Retailor.FirstName,
+                LastName = c.Retailor.LastName,
+                MobileNumber = c.Retailor.MobileNumber,
+                Email = c.Retailor.Email,
+                Area = c.Retailor.AreaNavigation.AreaName,
+                City = c.Retailor.AreaNavigation.City.CityName,
+                State = c.Retailor.AreaNavigation.City.State.StateName
+
             }).ToList();
 
             return result;
         }
 
 
-        public async Task<bool> DistributorAssignedToRetailor(List<string> retailorid)
+        public async Task<bool> IsRetailorAssignedToDistirbutor(List<string> retailorid)
         {
             var existingAssignment = await NaturalDbContext.RetailorToDistributors
                            .AnyAsync(d => retailorid.Contains(d.RetailorId));
@@ -54,6 +59,15 @@ namespace Natural_Data.Repositories
             return existingAssignment;
         }
 
+
+        public async Task<RetailorToDistributor> DeleteRetailorAsync(string RetailorID, string DistributorId)
+        {
+            var result = await NaturalDbContext.RetailorToDistributors
+                .Where(d => d.DistributorId == RetailorID && d.DistributorId == DistributorId)
+                .FirstOrDefaultAsync();
+
+            return result;
+        }
         private NaturalsContext  NaturalDbContext
         {
             get { return Context as NaturalsContext; }

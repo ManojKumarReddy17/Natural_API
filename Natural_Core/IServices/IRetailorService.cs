@@ -18,6 +18,7 @@ namespace Natural_Core.IServices
         Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 
         Task<IEnumerable<Retailor>> GetNonAssignedRetailors();
+        Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
 
 
 

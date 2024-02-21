@@ -9,7 +9,7 @@ namespace Natural_API.Resources
         public string OrderBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
-        //public IEnumerable<DsrProductResource> ProductDetails { get; set; }
+       
 
 
     }

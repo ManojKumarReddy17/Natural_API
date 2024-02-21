@@ -222,35 +222,35 @@ namespace Natural_Data
             {
                 entity.ToTable("DSR");
 
-                entity.HasIndex(e => e.Distributor, "Distributor");
+                entity.HasIndex(e => e.Executive, "DSR_ibfk_1");
 
-                entity.HasIndex(e => e.Executive, "Executive");
+                entity.HasIndex(e => e.Distributor, "DSR_ibfk_2");
 
-                entity.HasIndex(e => e.OrderBy, "OrderBy");
+                entity.HasIndex(e => e.Retailor, "DSR_ibfk_3");
 
-                entity.HasIndex(e => e.Retailor, "Retailor");
+                entity.HasIndex(e => e.OrderBy, "DSR_ibfk_4");
 
-                entity.Property(e => e.Id).HasMaxLength(10);
+                entity.Property(e => e.Id).HasMaxLength(50);
 
-                entity.Property(e => e.CreatedDate).HasColumnType("date");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Distributor)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Executive)
                     .IsRequired()
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("date");
-
-                entity.Property(e => e.OrderBy)
-                    .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.OrderBy).HasMaxLength(50);
 
                 entity.Property(e => e.Retailor)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.TotalAmount).HasPrecision(20, 3);
 
                 entity.HasOne(d => d.DistributorNavigation)
                     .WithMany(p => p.Dsrs)
@@ -267,7 +267,6 @@ namespace Natural_Data
                 entity.HasOne(d => d.OrderByNavigation)
                     .WithMany(p => p.Dsrs)
                     .HasForeignKey(d => d.OrderBy)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DSR_ibfk_4");
 
                 entity.HasOne(d => d.RetailorNavigation)
@@ -277,31 +276,56 @@ namespace Natural_Data
                     .HasConstraintName("DSR_ibfk_3");
             });
 
+            //modelBuilder.Entity<Dsrdetail>(entity =>
+            //{
+            //    entity.HasNoKey();
+
+            //    entity.ToTable("DSRDetails");
+
+            //    entity.HasIndex(e => e.Dsr, "DSRDetails_ibfk_2");
+
+            //    entity.HasIndex(e => e.Product, "Product");
+
+            //    entity.Property(e => e.Dsr)
+            //        .IsRequired()
+            //        .HasMaxLength(50);
+
+            //    entity.Property(e => e.Price).HasPrecision(20, 3);
+
+            //    entity.Property(e => e.Product)
+            //        .IsRequired()
+            //        .HasMaxLength(50);
+
+            //    entity.HasOne(d => d.DsrNavigation)
+            //        .WithMany()
+            //        .HasForeignKey(d => d.Dsr)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("DSRDetails_ibfk_2");
+
+            //    entity.HasOne(d => d.ProductNavigation)
+            //        .WithMany()
+            //        .HasForeignKey(d => d.Product)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("DSRDetails_ibfk_1");
+            //});
+
             modelBuilder.Entity<Dsrdetail>(entity =>
             {
                 entity.ToTable("DSRDetails");
 
-                entity.HasIndex(e => e.Dsr, "Dsr");
+                entity.HasIndex(e => e.Dsr, "DSRDetails_ibfk_2");
 
                 entity.HasIndex(e => e.Product, "Product");
 
-                entity.Property(e => e.Id).HasMaxLength(10);
-
                 entity.Property(e => e.Dsr)
                     .IsRequired()
-                    .HasMaxLength(10);
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.Price)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Price).HasPrecision(20, 3);
 
                 entity.Property(e => e.Product)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.Quantity)
-                    .IsRequired()
-                    .HasMaxLength(30);
 
                 entity.HasOne(d => d.DsrNavigation)
                     .WithMany(p => p.Dsrdetails)
@@ -428,7 +452,7 @@ namespace Natural_Data
                     .HasMaxLength(50)
                     .HasColumnName("Product_Name");
 
-                entity.Property(e => e.Quantity).HasMaxLength(20);
+                entity.Property(e => e.Weight).HasPrecision(20, 3);
 
                 entity.HasOne(d => d.CategoryNavigation)
                     .WithMany(p => p.Products)

@@ -32,7 +32,7 @@ namespace Natural_Data.Models
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
 
         private IAssignRetailorToDistributorRepository _retailorToDistributorRepository;
-
+        private IDsrdetailRepository _dsrdetailRepository;
 
 
         public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
@@ -54,13 +54,15 @@ namespace Natural_Data.Models
         public IRetailorRepository RetailorRepo  => _retailorRepository = _retailorRepository ?? new RetailorRepository(_context);
 
 
-        public IDsrRepository dSRRepo => _dsrRepository = _dsrRepository = _dsrRepository ?? new DsrRepository(_context);
+        public IDsrRepository dSRRepo => _dsrRepository  = _dsrRepository ?? new DsrRepository(_context);
 
         public IProductRepository ProductRepository => _ProductRepository = _ProductRepository ?? new ProductRepository(_context, _S3Client);
 
         public IAssignDistributorToExecutiveRepository distributorToExecutiveRepo => _dstributorToExecutiveRepository = _dstributorToExecutiveRepository ?? new AssignDistributorToExecutiveRepository(_context);
 
         public IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo => _retailorToDistributorRepository = _retailorToDistributorRepository ?? new AssignRetailorToDistributorRepository(_context);
+        public IDsrdetailRepository DsrdetailRepository => _dsrdetailRepository = _dsrdetailRepository ?? new DsrdetailRepository(_context);
+
 
         public async Task<int> CommitAsync()
         {

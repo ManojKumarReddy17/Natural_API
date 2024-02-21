@@ -10,7 +10,11 @@ namespace Natural_Core.IServices
     {
         Task<Dsr> GetDsrDetailsById(string DsrId);
         Task<DsrResponse> DeleteDsr(string dsrId);
-        Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr);
+        Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
         Task<IEnumerable<Dsr>> GetAllDsr();
+        Task<IEnumerable<DsrDistributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
+        Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
+        Task<IEnumerable<Product>> GetProductAsync();
+        Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
     }
 }

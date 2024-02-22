@@ -39,7 +39,8 @@ namespace Natural_API.Mapping
             CreateMap<Dsr,DsrDetailsByIdResource>();
             CreateMap<Product, ProductResource>();
             CreateMap<GetProduct, ProductResource>();
-
+            CreateMap<DsrDistributor, DsrDistributorResource>();
+            CreateMap<DsrRetailor, DsrRetailorResource>();
 
 
 
@@ -75,6 +76,11 @@ namespace Natural_API.Mapping
             CreateMap<DsrDetailsByIdResource, Dsr>();
             CreateMap<ProductResource, Product>();
             CreateMap<Product, GetProduct>();
+            CreateMap<DsrdetailProduct, Dsrdetail>();
+            CreateMap<DsrInsertResource, Dsr>();
+            CreateMap<DsrDetailsByIdResource, Dsr>();
+            
+
 
         }
     }

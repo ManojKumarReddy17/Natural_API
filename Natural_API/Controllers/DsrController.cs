@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
-using System.Globalization;
+
 
 namespace Natural_API.Controllers
 {
@@ -20,9 +19,11 @@ namespace Natural_API.Controllers
             _dsrservice = dsrservice;
             _mapper = mapper;
         }
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList()
-        
+
         {
             var dsrs = await _dsrservice.GetAllDsr();
             var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(dsrs);
@@ -30,29 +31,62 @@ namespace Natural_API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<ResultResponse>> InsertdsrWithAssociations([FromBody] DsrPostResource dsrResource)
+        [HttpGet("Product")]
+        public async Task<ActionResult<DsrProductResource>> GetProductAsync()
         {
-            var response = _mapper.Map<DsrPostResource, Dsr>(dsrResource);
-            var creadted = await _dsrservice.CreateDsrWithAssociationsAsync(response);
+            var product = await _dsrservice.GetProductAsync();
+            var mapped = _mapper.Map<IEnumerable<Product>, IEnumerable<DsrProductResource>>(product);
+
+            return Ok(mapped);
+        }
+
+
+        [HttpGet("Details/{ExecutiveId}")]
+        public async Task<ActionResult<IEnumerable<DsrDistributorResource>>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+        {
+
+            var result = await _dsrservice.AssignedDistributorDetailsByExecutiveId(ExecutiveId);
+            var mapped = _mapper.Map<IEnumerable<DsrDistributor>, IEnumerable<DsrDistributorResource>>(result);
+
+            return Ok(mapped);
+        }
+
+        [HttpGet("{DistributorId}")]
+        public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        {
+
+            var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
+            var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
+
+            return Ok(mapped);
+        }
+
+
+        [HttpPost("Search")]
+        public async Task<ActionResult<IEnumerable<Dsr>>> SearchDsr([FromForm] DsrDetailsByIdResource search)
+
+        {
+           var mapped=  _mapper.Map<DsrDetailsByIdResource, Dsr>(search);
+
+            var selut =  await _dsrservice.SearchDsr(mapped);
+            return Ok(selut);
+        }
+    
+
+        [HttpPost]
+        public async Task<ActionResult<ResultResponse>> Insertdsr([FromBody] DsrInsertResource dsrResource)
+        {
+            var dsrdata = _mapper.Map<DsrInsertResource, Dsr>(dsrResource);
+           var productlist=                dsrResource.product;
+           var drsdetaildata = _mapper.Map<List<DsrdetailProduct>, List<Dsrdetail>>(productlist);
+          
+            var creadted = await _dsrservice.CreateDsrWithAssociationsAsync(dsrdata, drsdetaildata);
 
             return StatusCode(creadted.StatusCode, creadted);
 
         }
 
-
-        /// <summary>
-        /// To get products and dsrdetails
-        /// </summary>
-
-
-        [HttpGet("Details/{dsrId}")]
-        public async Task<ActionResult<DsrDetailsByIdResource>> GetDsrAndProductDetailsById(string dsrId)
-        {
-            var dsr = await _dsrservice.GetDsrDetailsById(dsrId);
-            var dsrresource = _mapper.Map<Dsr, DsrDetailsByIdResource>(dsr);
-            return dsrresource;
-        }
+       
 
         [HttpDelete("{dsrId}")]
         public async Task<ActionResult<DsrResponse>> DeleteDsr(String dsrId)

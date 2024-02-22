@@ -89,6 +89,9 @@ builder.Services.AddTransient<IAssignRetailorToDistributorRepository, AssignReta
 builder.Services.AddTransient<IDsrRepository, DsrRepository>();
 builder.Services.AddTransient<IDsrService,DsrService>();
 
+builder.Services.AddTransient<IDsrdetailRepository, DsrdetailRepository>();
+builder.Services.AddTransient<IDsrdetailService, DsrdetailService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 

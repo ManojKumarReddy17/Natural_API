@@ -57,7 +57,36 @@ namespace Natural_Data.Repositories
         }
 
 
+        public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
+        {
+            var dsr = NaturalDbContext.Dsrs
+                 .Include(c => c.ExecutiveNavigation)
+                 .Include(c => c.DistributorNavigation)
+                 .Include(c => c.RetailorNavigation)
+                  .Include(c => c.OrderByNavigation)
+                      .Where(c =>
+                    (string.IsNullOrEmpty(search.Executive) || c.Executive ==search.Executive) &&
+                    (string.IsNullOrEmpty(search.Distributor) || c.Distributor ==search.Distributor) &&
+                    (string.IsNullOrEmpty(search.Retailor) || c.Retailor ==search.Retailor) &&
+                    (string.IsNullOrEmpty(search.OrderBy) || c.Retailor == search.OrderBy)
+                    &&
+                    (search.CreatedDate == null || c.CreatedDate.Date == search.CreatedDate.Date))
+       
+                .Select(c => new Dsr
+                {
+                    Id =  c.Id,
+                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, c.ExecutiveNavigation.LastName),
+                    Distributor = string.Concat(c.DistributorNavigation.FirstName, c.DistributorNavigation.LastName),
+                    Retailor = string.Concat(c.RetailorNavigation.FirstName, c.RetailorNavigation.LastName),
+                    TotalAmount = c.TotalAmount,
+                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+                    CreatedDate = c.CreatedDate
+                   
+                })
+                .ToList();
+            return dsr;
 
+        }
 
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)
         {
@@ -108,12 +137,44 @@ namespace Natural_Data.Repositories
 
             var productDetails = await GetProductDetailsByDsrIdAsync(dsrid);
             var details = result.Where(c => c.Id == dsrid).First();
-            //details.ProductDetails = (IEnumerable<Product>)productDetails;
+           
 
             return details;
         }
 
+        public async Task<IEnumerable<DsrDistributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
+        {
 
+            var AssignedList = await NaturalDbContext.DistributorToExecutives.
+                Include(D => D.Distributor).
+                Include(D => D.Executive).Where(c => c.ExecutiveId == ExecutiveId).ToListAsync();
+            var result = AssignedList.Select(c => new DsrDistributor
+            {
+                Id = c.Distributor.Id,
+
+                DistributorName = string.Concat(c.Distributor.FirstName, "", c.Distributor.LastName)
+            }).ToList();
+
+            return result;
+
+        }
+
+        public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        {
+
+            var AssignedList = await NaturalDbContext.RetailorToDistributors.
+                Include(D => D.Retailor).
+                Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId).ToListAsync();
+            var result = AssignedList.Select(c => new DsrRetailor
+            {
+                Id = c.Retailor.Id,
+
+                Retailor = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName)
+            }).ToList();
+
+            return result;
+
+        }
 
 
 

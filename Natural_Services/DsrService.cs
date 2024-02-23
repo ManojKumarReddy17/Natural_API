@@ -1,6 +1,7 @@
 ﻿using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Natural_Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAssignDistributorToExecutiveService _distributorToExecutiveService;
         private readonly IDsrdetailService _DsrdetailService;
+
         public DsrService(IUnitOfWork unitOfWork, IAssignDistributorToExecutiveService distributorToExecutiveService, IDsrdetailService DsrdetailService)
         {
             _unitOfWork = unitOfWork;
@@ -20,9 +22,59 @@ namespace Natural_Services
             _DsrdetailService = DsrdetailService;
         }
 
-        public async Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails)
+        //public async Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails)
+        //{
+        //    var response = new ResultResponse();
+        //    try
+        //    {
+        //        dsr.Id = "DSR" + new Random().Next(10000, 99999).ToString();
+
+
+        //        await _unitOfWork.dSRRepo.AddAsync(dsr);
+
+
+
+        //        var created = await _unitOfWork.CommitAsync();
+
+        //        if (created != 0)
+        //        {
+        //            var dsrdetailinertion = await _DsrdetailService.CreateDsrdetail(dsrdetails, dsr.Id);
+
+        //            if (dsrdetailinertion.StatusCode == 200)
+        //            {
+
+        //                response.Message = " Dsr and DsrdetailInsertion Successful";
+        //                response.StatusCode = 200;
+        //            }
+        //            else
+        //            {
+        //                response.Message = "DsrdetailInsertion Failed";
+        //                response.StatusCode = 401;
+
+        //            }
+
+        //        }
+        //        else
+        //        {
+
+        //            response.Message = " Dsr Insertion Successful";
+        //            response.StatusCode = 200;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        response.Message = "Insertion Failed";
+        //        response.StatusCode = 401;
+        //    }
+
+        //    return response;
+        //}
+
+
+        public async Task<ProductResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails)
         {
-            var response = new ResultResponse();
+            var response = new ProductResponse();
             try
             {
                 dsr.Id = "DSR" + new Random().Next(10000, 99999).ToString();
@@ -43,6 +95,7 @@ namespace Natural_Services
 
                         response.Message = " Dsr and DsrdetailInsertion Successful";
                         response.StatusCode = 200;
+                        response.Id = dsr.Id;
                     }
                     else
                     {
@@ -69,6 +122,8 @@ namespace Natural_Services
             return response;
         }
 
+
+
         public async Task<IEnumerable<Dsr>> GetAllDsr()
         {
             var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
@@ -77,9 +132,9 @@ namespace Natural_Services
 
 
        
-        public async Task<Dsr> GetDsrDetailsById(string DsrId)
+        public async Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId)
         {
-            return await _unitOfWork.dSRRepo.GetDetails(DsrId);
+            return await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
         }
 
         public async Task<DsrResponse> DeleteDsr(string dsrId)
@@ -146,6 +201,11 @@ namespace Natural_Services
             return searchedDsr;
         }
 
+        public async Task<Dsr> GetDsrbyId(string dsrid)
+        {
+           var dsr = await _unitOfWork.dSRRepo.GetDsrbyId(dsrid);
+            return dsr;
+        }
 
 
     }

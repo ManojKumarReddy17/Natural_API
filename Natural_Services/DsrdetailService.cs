@@ -58,6 +58,51 @@ namespace Natural_Services
 
             return response;
         }
+
+
+      public async  Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId)
+
+        {  
+            
+       var dsrdetails =  await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
+
+            return dsrdetails;
+
+        }
+
+
+        public async Task<ResultResponse> UpadateDsrdetail(List<Dsrdetail> updatingRecord)
+        {
+            var response = new ResultResponse();
+            try
+            {
+                
+                _unitOfWork.DsrdetailRepository.UpdateRange(updatingRecord);
+                var updated = await _unitOfWork.CommitAsync();
+                if (updated != 0)
+                {
+
+                    response.Message = "updatesuceesfull";
+                    response.StatusCode = 200;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Failed";
+                response.StatusCode = 500;
+            }
+
+            return (response);
+
+
+
+
+
+        }
+
+
+
+
     }
 }
 

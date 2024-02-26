@@ -20,42 +20,68 @@ namespace Natural_Data.Repositories
         {
 
         }
+
+
+        //public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
+        //{
+        //    var dsr = from Dsr in NaturalDbContext.Dsrs
+        //              join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
+        //              join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
+        //              join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id
+        //              join ordby in NaturalDbContext.Logins on Dsr.OrderByNavigation.UserName equals ordby.UserName
+        //              select new
+        //              {
+        //                  dsrs = Dsr,
+        //                  Executive = executive,
+        //                  Distributor = distributor,
+        //                  Retailor = retailer,
+        //                  OrderByNavigation = ordby
+
+        //              };
+
+        //    var dsrs = await dsr.ToListAsync();
+        //    var result = dsr.Select(c => new Dsr
+        //    {
+        //        Id = c.dsrs.Id,
+        //        Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
+        //        Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
+        //        Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
+        //        OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+        //        TotalAmount = c.dsrs.TotalAmount,
+        //        CreatedDate = DateTime.Now,
+
+
+        //    }).ToList();
+
+        //    return result;
+
+
+
+
+        //}
+
         public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
         {
-            var dsr = from Dsr in NaturalDbContext.Dsrs
-                      join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
-                      join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
-                      join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id
-                      join ordby in NaturalDbContext.Logins on Dsr.OrderByNavigation.UserName equals ordby.UserName
-                      select new
-                      {
-                          dsrs = Dsr,
-                          Executive = executive,
-                          Distributor = distributor,
-                          Retailor = retailer,
-                          OrderByNavigation = ordby
-                         
-                      };
+            var dsr = await NaturalDbContext.Dsrs
+                   .Include(c => c.ExecutiveNavigation)
+                   .Include(c => c.DistributorNavigation)
+                   .Include(c => c.RetailorNavigation)
+                   .Include(c => c.OrderByNavigation)
+                   .Select(c => new Dsr
+                   {
+                       Id = c.Id,
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                       OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                       CreatedDate = c.CreatedDate,
+                       ModifiedDate = c.ModifiedDate,
+                       TotalAmount = c.TotalAmount
 
-            var dsrs = await dsr.ToListAsync();
-            var result = dsr.Select(c => new Dsr
-            {
-                Id = c.dsrs.Id,
-                Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
-                Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
-                Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
-                OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
-                TotalAmount=c.dsrs.TotalAmount,
-                CreatedDate = DateTime.Now,
-
-
-            }).ToList();
-
-            return result;
-
+                   }).ToListAsync();
+            return dsr;
 
         }
-
 
         public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
         {
@@ -68,10 +94,11 @@ namespace Natural_Data.Repositories
                     (string.IsNullOrEmpty(search.Executive) || c.Executive ==search.Executive) &&
                     (string.IsNullOrEmpty(search.Distributor) || c.Distributor ==search.Distributor) &&
                     (string.IsNullOrEmpty(search.Retailor) || c.Retailor ==search.Retailor) &&
-                    (string.IsNullOrEmpty(search.OrderBy) || c.Retailor == search.OrderBy)
+                    (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
                     &&
-                    (search.CreatedDate == null || c.CreatedDate.Date == search.CreatedDate.Date))
-       
+                    //(search.CreatedDate == null || c.CreatedDate.Date >=startdate && c.CreatedDate.Date <=enddate))
+                      (search.CreatedDate == null || c.CreatedDate.Date >= search.CreatedDate.Date && c.CreatedDate.Date <= search.ModifiedDate.Date))
+                      //values in search.create date is start date and search.modified date is end date
                 .Select(c => new Dsr
                 {
                     Id =  c.Id,
@@ -88,6 +115,7 @@ namespace Natural_Data.Repositories
 
         }
 
+
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)
         {
             var productDetails = await NaturalDbContext.Dsrdetails
@@ -95,8 +123,9 @@ namespace Natural_Data.Repositories
                 .Select(d => new Product
                 {
                     Id = d.ProductNavigation.Id,                
-                    ProductName = d.ProductNavigation.ProductName,      
+                    ProductName = d.ProductNavigation.ProductName,
                     Price = d.ProductNavigation.Price,
+                   
                     Quantity = d.Quantity,
                     Weight = d.ProductNavigation.Weight
                 })
@@ -106,41 +135,42 @@ namespace Natural_Data.Repositories
         }
 
 
-        public async Task<Dsr> GetDetails(string dsrid)
-        {
-            var dsrQuery = from Dsr in NaturalDbContext.Dsrs
-                           join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
-                           join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
-                           join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id
-                           join ordby in NaturalDbContext.Logins on Dsr.OrderByNavigation.UserName equals ordby.UserName
-                           select new
-                           {
-                               dsrs = Dsr,
-                               Executive = executive,
-                               Distributor = distributor,
-                               Retailor = retailer,
-                               OrderByNavigation = ordby,
-                           };
+        //public async Task<Dsr> GetDetails(string dsrid)
+        //{
+        //    var dsrQuery = from Dsr in NaturalDbContext.Dsrs
+        //                   join executive in NaturalDbContext.Executives on Dsr.Executive equals executive.Id
+        //                   join distributor in NaturalDbContext.Distributors on Dsr.Distributor equals distributor.Id
+        //                   join retailer in NaturalDbContext.Retailors on Dsr.Retailor equals retailer.Id
+        //                   join ordby in NaturalDbContext.Logins on Dsr.OrderByNavigation.UserName equals ordby.UserName
+        //                   select new
+        //                   {
+        //                       dsrs = Dsr,
+        //                       Executive = executive,
+        //                       Distributor = distributor,
+        //                       Retailor = retailer,
+        //                       OrderByNavigation = ordby,
+        //                   };
 
-            var dsrDetails = await dsrQuery.ToListAsync();
-            var result = dsrDetails.Select(c => new Dsr
-            {
-                Id = c.dsrs.Id,
-                Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
-                Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
-                Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
-                OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
-                CreatedDate = DateTime.Now,
+        //    var dsrDetails = await dsrQuery.ToListAsync();
+        //    var result = dsrDetails.Select(c => new Dsr
+        //    {
+        //        Id = c.dsrs.Id,
+        //        Executive = string.Concat(c.Executive.FirstName, c.Executive.LastName),
+        //        Distributor = string.Concat(c.Distributor.FirstName, c.Distributor.LastName),
+        //        Retailor = string.Concat(c.Retailor.FirstName, c.Retailor.LastName),
+        //        OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+        //        CreatedDate = DateTime.Now,
 
 
-            }).ToList();
+        //    }).ToList();
 
-            var productDetails = await GetProductDetailsByDsrIdAsync(dsrid);
-            var details = result.Where(c => c.Id == dsrid).First();
+        //    var productDetails = await GetProductDetailsByDsrIdAsync(dsrid);
+        //    var details = result.Where(c => c.Id == dsrid).First();
            
 
-            return details;
-        }
+        //    return details;
+        //}
+
 
         public async Task<IEnumerable<DsrDistributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId)
         {
@@ -176,7 +206,29 @@ namespace Natural_Data.Repositories
 
         }
 
+        public async Task<Dsr> GetDsrbyId(string dsrid)
+        {
+            var dsr =await NaturalDbContext.Dsrs
+                     .Include(c => c.ExecutiveNavigation)
+                     .Include(c => c.DistributorNavigation)
+                     .Include(c => c.RetailorNavigation)
+                     .Include(c => c.OrderByNavigation)
+                     .Where(c => c.Id == dsrid)
+                     .Select(c => new Dsr
+                     {
+                         Id = c.Id,
+                         Executive = string.Concat(c.ExecutiveNavigation.FirstName,"", c.ExecutiveNavigation.LastName),
+                         Distributor = string.Concat(c.DistributorNavigation.FirstName,"", c.DistributorNavigation.LastName),
+                         Retailor = string.Concat(c.RetailorNavigation.FirstName,"", c.RetailorNavigation.LastName),
+                         OrderBy = string.Concat(c.OrderByNavigation.FirstName,"", c.OrderByNavigation.LastName),
+                         CreatedDate = c.CreatedDate,
+                         ModifiedDate = c.ModifiedDate,
+                         TotalAmount = c.TotalAmount
 
+                     }).FirstOrDefaultAsync();
+
+            return dsr;
+        }
 
 
         private NaturalsContext NaturalDbContext

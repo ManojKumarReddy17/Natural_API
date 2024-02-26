@@ -1,4 +1,5 @@
 ﻿using Natural_Core.Models;
+using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,13 +9,16 @@ namespace Natural_Core.IServices
 {
     public interface IDsrService 
     {
-        Task<Dsr> GetDsrDetailsById(string DsrId);
+        //Task<Dsr> GetDsrDetailsById(string DsrId);
         Task<DsrResponse> DeleteDsr(string dsrId);
-        Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
+        //Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
+        Task<ProductResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
         Task<IEnumerable<Dsr>> GetAllDsr();
         Task<IEnumerable<DsrDistributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
         Task<IEnumerable<Product>> GetProductAsync();
         Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
+        Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId);
+        Task<Dsr> GetDsrbyId(string dsrid);
     }
 }

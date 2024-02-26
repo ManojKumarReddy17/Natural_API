@@ -35,6 +35,12 @@ namespace Natural_Data.Repositories
             await Context.Set<TEntity>().AddRangeAsync(entities);
         }
 
+        public void UpdateRange(IEnumerable<TEntity> entities)
+        {
+             Context.Set<TEntity>().UpdateRange(entities);
+        }
+
+
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return Context.Set<TEntity>().Where(predicate).ToList();
@@ -68,6 +74,7 @@ namespace Natural_Data.Repositories
             return Context.Set<TEntity>().SingleOrDefaultAsync(predicate);
         }
        
+
 
       
     }

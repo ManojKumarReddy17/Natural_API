@@ -41,7 +41,9 @@ namespace Natural_API.Mapping
             CreateMap<GetProduct, ProductResource>();
             CreateMap<DsrDistributor, DsrDistributorResource>();
             CreateMap<DsrRetailor, DsrRetailorResource>();
-
+            //added for getdsrbyid
+            CreateMap<Dsr,DsrInsertResource>();
+            CreateMap<Dsrdetail,DsrdetailProduct>();
 
 
 
@@ -78,7 +80,8 @@ namespace Natural_API.Mapping
             CreateMap<Product, GetProduct>();
             CreateMap<DsrdetailProduct, Dsrdetail>();
             CreateMap<DsrInsertResource, Dsr>();
-            CreateMap<DsrDetailsByIdResource, Dsr>();
+            CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))
+                                                    .ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
             
 
 

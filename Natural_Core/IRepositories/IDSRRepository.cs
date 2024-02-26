@@ -11,9 +11,10 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId);
        Task<IEnumerable<Dsr>> GetAllDsrAsync();
-        Task<Dsr> GetDetails(string dsrid);
+        //Task<Dsr> GetDetails(string dsrid);
         Task<IEnumerable<DsrDistributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
         Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
+        Task<Dsr> GetDsrbyId(string dsrid);
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
@@ -61,9 +62,29 @@ namespace Natural_API.Controllers
             return Ok(mapped);
         }
 
+        [HttpGet("ById/{DsrId}")]
+        // this method is for get dsr and dsrdetails by id
+
+        public async Task<ActionResult<DsrRetailorResource>> GetDsrByDsrId(string DsrId)
+        {
+            var dsr = await _dsrservice.GetDsrbyId(DsrId);
+          var dsrdetails =   await _dsrservice.GetDsrDetailsByDsrIdAsync(DsrId);
+            
+             var result =   _mapper.Map<Dsr, DsrInsertResource>(dsr);
+
+            var details = _mapper.Map<List<Dsrdetail>, List<DsrdetailProduct>>((List<Dsrdetail>)dsrdetails);
+           
+            result.product = (details);
+    
+            return Ok(result);
+        }
+
+
+
+
 
         [HttpPost("Search")]
-        public async Task<ActionResult<IEnumerable<Dsr>>> SearchDsr([FromForm] DsrDetailsByIdResource search)
+        public async Task<ActionResult<IEnumerable<Dsr>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
 
         {
            var mapped=  _mapper.Map<DsrDetailsByIdResource, Dsr>(search);

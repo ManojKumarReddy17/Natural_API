@@ -120,25 +120,36 @@ namespace Natural_Services
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
         {
             var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
-
-            string bucketName = _s3Config.BucketName;
-            string prefix = productResult.Image;
-            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            if (PresignedUrl.Any())
+            //if(productResult.Image!= null)
+            if (string.IsNullOrEmpty(productResult.Image))
             {
-                var isd = PresignedUrl.FirstOrDefault();
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
                 return productresoursze1;
+
             }
             else
             {
-                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                string bucketName = _s3Config.BucketName;
+                string prefix = productResult.Image;
+                var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+                if (PresignedUrl.Any())
+                {
+                    var isd = PresignedUrl.FirstOrDefault();
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                    productresoursze1.PresignedUrl = isd.PresignedUrl;
 
-                return productresoursze1;
+                    return productresoursze1;
+                }
+                else
+                {
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                    return productresoursze1;
+                }
 
             }
+
         }
 
 

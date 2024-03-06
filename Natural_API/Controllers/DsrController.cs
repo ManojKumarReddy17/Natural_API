@@ -72,27 +72,41 @@ namespace Natural_API.Controllers
             
              var result =   _mapper.Map<Dsr, DsrInsertResource>(dsr);
 
-            var details = _mapper.Map<List<Dsrdetail>, List<DsrdetailProduct>>((List<Dsrdetail>)dsrdetails);
-           
+            //var details = _mapper.Map<List<Dsrdetail>, List<DsrdetailProduct>>((List<Dsrdetail>)dsrdetails);
+            var details = _mapper.Map<List<DsrProduct>, List<DsrdetailProduct>>((List<DsrProduct>)dsrdetails);
+
             result.product = (details);
     
             return Ok(result);
         }
 
 
+        [HttpGet("ids/{DsrId}")]
+       
 
+        public async Task<ActionResult<DsrEditResource>> GetByDsrId(string DsrId)
+        {
+            var dsr = await _dsrservice.GetbyId(DsrId);
+            var result = _mapper.Map<Dsr, DsrEditResource>(dsr);
+            var dsrdet = await _dsrservice.GetDetTableByDsrIdAsync(DsrId);
+            var details = _mapper.Map<List<GetProduct>, List<DsrProductResource>>((List<GetProduct>)dsrdet);
+            result.dsrdetail = (details);
+            return Ok(result);
 
+        }
 
         [HttpPost("Search")]
-        public async Task<ActionResult<IEnumerable<Dsr>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
+      
+        public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
 
         {
-           var mapped=  _mapper.Map<DsrDetailsByIdResource, Dsr>(search);
+            var mapped = _mapper.Map<DsrDetailsByIdResource, Dsr>(search);
 
-            var selut =  await _dsrservice.SearchDsr(mapped);
-            return Ok(selut);
+            var selut = await _dsrservice.SearchDsr(mapped);
+         var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
+            
+            return Ok(RESULT);
         }
-    
 
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> Insertdsr([FromBody] DsrInsertResource dsrResource)
@@ -107,12 +121,38 @@ namespace Natural_API.Controllers
 
         }
 
-       
+        
+        //[HttpPut]
+        //public async Task<ActionResult<ResultResponse>> updatedsr(string Id,[FromBody] DsrInsertResource dsrResource)
+               [HttpPut("{DsrId}")]
+        public async Task<ActionResult<ResultResponse>> updatedsr(string DsrId, [FromBody] DsrInsertResource dsrResource)
+        {
+            var dsrdata = _mapper.Map<DsrInsertResource, Dsr>(dsrResource);
+            var productlist = dsrResource.product;
+            dsrdata.Id = DsrId;
+            var drsdetaildata = _mapper.Map<List<DsrdetailProduct>, List<Dsrdetail>>(productlist);
+
+            var creadted = await _dsrservice.UpdateDsrWithAssociationsAsync(dsrdata, drsdetaildata);
+
+            return StatusCode(creadted.StatusCode, creadted);
+
+        }
+
+
+
+
+
 
         [HttpDelete("{dsrId}")]
         public async Task<ActionResult<DsrResponse>> DeleteDsr(String dsrId)
         {
-            var response = await _dsrservice.DeleteDsr(dsrId);
+
+            var dsr = await _dsrservice.GetDsrbyId(dsrId);
+            var dsrdetails = await _dsrservice.GetDsrDetailsByDsrIdAsync(dsrId);
+
+            var drsdetaildata = _mapper.Map<List<DsrProduct>, List<Dsrdetail>>((List<DsrProduct>)dsrdetails);
+
+            var response = await _dsrservice.DeleteDsr(dsr, drsdetaildata, dsrId);
             return Ok(response);
         }
     }

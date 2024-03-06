@@ -60,24 +60,41 @@ namespace Natural_Services
         }
 
 
-      public async  Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId)
 
-        {  
-            
-       var dsrdetails =  await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
+        public async Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId)
+
+        {
+
+            var dsrdetails = await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
 
             return dsrdetails;
 
         }
 
 
-        public async Task<ResultResponse> UpadateDsrdetail(List<Dsrdetail> updatingRecord)
+       
+
+       public async Task<ResultResponse> UpadateDsrdetail(List<Dsrdetail> updatedrecord,  string dsrId)
         {
             var response = new ResultResponse();
+
             try
             {
-                
-                _unitOfWork.DsrdetailRepository.UpdateRange(updatingRecord);
+                var   existingrecord = await _unitOfWork.DsrdetailRepository.GetDetailTableByDsrIdAsync(dsrId);
+
+                existingrecord = existingrecord
+                    .Join(updatedrecord,
+                        od => od.Id,
+                        pd => pd.Id,
+                        (od, pd) => {
+                            od.Quantity = pd != null ? pd.Quantity : 0; // Update Quantity
+                            od.Price = pd != null ? pd.Price : 0;       // Update Price
+                            return od;
+                        })
+                    .ToList();
+         
+                _unitOfWork.DsrdetailRepository.UpdateRange(existingrecord);
+               
                 var updated = await _unitOfWork.CommitAsync();
                 if (updated != 0)
                 {
@@ -94,11 +111,18 @@ namespace Natural_Services
 
             return (response);
 
+        }
 
 
+        public async Task<IEnumerable<GetProduct>> GetDetailTableAsync(string dsrId)
+        {
 
+          var dsrdetailstable = await  _unitOfWork.DsrdetailRepository.GetDetailTableAsync(dsrId);
+            return dsrdetailstable;
 
         }
+
+
 
 
 

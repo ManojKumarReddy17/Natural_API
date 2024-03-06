@@ -1,4 +1,5 @@
-﻿using Natural_Core.IRepositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace Natural_Core
         IDsrdetailRepository DsrdetailRepository { get; }
 
         Task<int> CommitAsync();
+
+        IDbContextTransaction BeginTransaction(); // added for transaction
 
 
     }

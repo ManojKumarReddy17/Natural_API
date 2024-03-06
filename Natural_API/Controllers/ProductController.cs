@@ -61,14 +61,35 @@ namespace Natural_API.Controllers
         //[ValidateAntiForgeryToken]
 
         // first image is being uploaded to s3bucket and later product data to mysql
+        //public async Task<ActionResult<ProductResource>> Insertproduct([FromForm] ProductResource productResource, string? prefix)
+        //{
+        //    var file = productResource.UploadImage;
+        //    var result = await _ProductService.UploadFileAsync(file, prefix);
+        //    var createexecu = _mapper.Map<ProductResource, Product>(productResource);
+        //    createexecu.Image = result.Message;
+        //    var exe = await _ProductService.CreateProduct(createexecu);
+        //    return StatusCode(exe.StatusCode, exe);
+        //}
+
         public async Task<ActionResult<ProductResource>> Insertproduct([FromForm] ProductResource productResource, string? prefix)
         {
             var file = productResource.UploadImage;
-            var result = await _ProductService.UploadFileAsync(file, prefix);
-            var createexecu = _mapper.Map<ProductResource, Product>(productResource);
-            createexecu.Image = result.Message;
-            var exe = await _ProductService.CreateProduct(createexecu);
-            return StatusCode(exe.StatusCode, exe);
+
+            if (file != null && file.Length > 0)
+            {
+                var result = await _ProductService.UploadFileAsync(file, prefix);
+                var createexecu = _mapper.Map<ProductResource, Product>(productResource);
+                createexecu.Image = result.Message;
+                var exe = await _ProductService.CreateProduct(createexecu);
+                return StatusCode(exe.StatusCode, exe);
+            }
+            else
+            {
+                
+                var createexecu = _mapper.Map<ProductResource, Product>(productResource);
+                var exe = await _ProductService.CreateProduct(createexecu);
+                return StatusCode(exe.StatusCode, exe);
+            }
         }
 
 

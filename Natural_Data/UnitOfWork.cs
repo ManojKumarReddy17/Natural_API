@@ -1,4 +1,5 @@
 ﻿using Amazon.S3;
+using Microsoft.EntityFrameworkCore.Storage;
 using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.IServices;
@@ -68,6 +69,15 @@ namespace Natural_Data.Models
         {
             return await _context.SaveChangesAsync();
         }
+
+
+        // For Transactions 
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
+
 
         public void Dispose()
         {

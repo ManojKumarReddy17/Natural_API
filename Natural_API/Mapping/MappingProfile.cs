@@ -43,7 +43,15 @@ namespace Natural_API.Mapping
             CreateMap<DsrRetailor, DsrRetailorResource>();
             //added for getdsrbyid
             CreateMap<Dsr,DsrInsertResource>();
-            CreateMap<Dsrdetail,DsrdetailProduct>();
+            //CreateMap<Dsrdetail,DsrdetailProduct>();
+            CreateMap<DsrProduct, DsrdetailProduct>();
+
+            CreateMap<DsrProduct, Dsrdetail>();
+            CreateMap<Dsr, DsrEditResource>();
+            CreateMap<GetProduct, DsrProductResource>();
+
+
+
 
 
 
@@ -82,7 +90,7 @@ namespace Natural_API.Mapping
             CreateMap<DsrInsertResource, Dsr>();
             CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))
                                                     .ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
-            
+           
 
 
         }

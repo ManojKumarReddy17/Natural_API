@@ -16,6 +16,16 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
         Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
         Task<Dsr> GetDsrbyId(string dsrid);
-        
+        Task<IEnumerable<Dsr>> GetRetailorDetailsByDistributorId(string distributorId);
+        Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string distributorId, DateTime date);
+        Task<IEnumerable<Dsr>> GetRetailorDetailsByExecutiveId(string executiveId);
+
+
+
+
+
+
+
+
     }
 }

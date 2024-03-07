@@ -13,8 +13,6 @@ namespace Natural_Core.IServices
         Task<IEnumerable<Retailor>> GetRetailorsDetailsByDistributorId(string distributorId);
         Task<ResultResponse> AssignRetailorsToDistributor(RetailorToDistributor retailorToDistributorlist);
         Task<ResultResponse> DeleteAssignedRetailotorByid(string retailorId, string distributorId);
-
-
     }
 
 

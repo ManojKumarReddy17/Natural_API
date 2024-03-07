@@ -170,6 +170,21 @@ namespace Natural_Services
             var dsr = await _unitOfWork.dSRRepo.GetDsrbyId(dsrid);
             return dsr;
         }
+        
+        public async Task<IEnumerable<Dsr>> getRetailorListByDistributorId(string distributorId)
+        {
+            var retailorList = await _unitOfWork.dSRRepo.GetRetailorDetailsByDistributorId(distributorId);
+            return retailorList;
+        }
+        public async Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date)
+        {
+            return await _unitOfWork.dSRRepo.GetRetailorDetailsByDate(distributorId, date);
+        }
+        public  async Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId)
+        {
+            var retailorList = await _unitOfWork.dSRRepo.GetRetailorDetailsByExecutiveId(executiveId);
+            return retailorList;
+        }
 
         public async Task<Dsr> GetbyId(string dsrid)
         {

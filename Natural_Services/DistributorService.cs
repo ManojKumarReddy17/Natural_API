@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 #nullable disable
@@ -132,6 +133,51 @@ namespace Natural_Services
         {
             var searchdistributors = await _unitOfWork.DistributorRepo.SearchNonAssignedDistributorsAsync(search);
             return searchdistributors;
+        }
+        public async Task<AngularLoginResponse> LoginAsync(Distributor credentials)
+        {
+            AngularLoginResponse response = new AngularLoginResponse();
+            try
+            {
+                var user = await _unitOfWork.DistributorRepo.GetAllAsync();
+
+                var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
+
+
+                if (authenticatedUser != null)
+                {
+                    response.Id = authenticatedUser.Id;
+                    response.FirstName = authenticatedUser.FirstName;
+                    response.LastName = authenticatedUser.LastName;
+                    response.Email = authenticatedUser.Email;
+                    response.Address = authenticatedUser.Address;
+                    response.MobileNumber = authenticatedUser.MobileNumber;
+                    response.Executive = authenticatedUser.DistributorToExecutives.ToList();
+
+                    response.Statuscode = 200;
+                    response.Message = "LOGIN SUCCESSFUL";
+                    return response;
+                }
+                else
+                {
+                    response.Statuscode = 401;
+                    response.Message = "INVALID CREDENTIALS";
+                    return response;
+
+                }
+
+
+            }
+
+            catch (Exception)
+            {
+                response.Message = "INTERNAL SERVER ERROR";
+                response.Statuscode = 500;
+                return response;
+            }
+
+
+
         }
     }
 }

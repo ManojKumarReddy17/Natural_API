@@ -38,6 +38,8 @@ namespace Natural_Services
                 var IsAssignedDistributor = await _unitOfWork.distributorToExecutiveRepo.
                   IsDistirbutorAssignedToExecutiveAsync(new List<string> { model.DistributorId });
 
+
+
                 if (!IsAssignedDistributor)
                 {
 
@@ -102,6 +104,7 @@ namespace Natural_Services
 
             return response;
         }
+
 
     }
 }

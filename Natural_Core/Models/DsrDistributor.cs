@@ -1,4 +1,5 @@
 ﻿using System;
+#nullable disable
 namespace Natural_Core.Models
 {
 	public class DsrDistributor

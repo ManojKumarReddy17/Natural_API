@@ -8,8 +8,7 @@ namespace Natural_API.Resources
         public string Retailor { get; set; }
         public string OrderBy { get; set; }
 
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime createdDate { get; set; }
 
 
 

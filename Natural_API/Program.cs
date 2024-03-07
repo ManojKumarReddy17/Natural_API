@@ -19,6 +19,17 @@ using Natural_Core.S3Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var CorsPolicy = "CorsPolicy";
+builder.Services.AddCors(o =>
+{
+    o.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -122,6 +133,11 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityRequirement(requirement);
 });
 
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().
+     AllowAnyHeader());
+});
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -132,6 +148,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowOrigin");
+app.UseCors(CorsPolicy);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

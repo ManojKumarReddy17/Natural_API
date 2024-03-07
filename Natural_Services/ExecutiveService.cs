@@ -4,6 +4,7 @@ using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -123,6 +124,52 @@ namespace Natural_Services
         {
             var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
             return exec;
+        }
+
+        public async Task<AngularLoginResponse> LoginAsync(Executive credentials)
+        {
+            AngularLoginResponse response = new AngularLoginResponse();
+            try
+            {
+                var user = await _unitOfWork.ExecutiveRepo.GetAllAsync();
+
+                var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
+
+
+                if (authenticatedUser != null)
+                {
+                    response.Id = authenticatedUser.Id;
+                    response.FirstName = authenticatedUser.FirstName;
+                    response.LastName = authenticatedUser.LastName;
+                    response.Email = authenticatedUser.Email;
+                    response.Address = authenticatedUser.Address;
+                    response.MobileNumber = authenticatedUser.MobileNumber;
+
+                    response.Statuscode = 200;
+                    response.Message = "LOGIN SUCCESSFUL";
+                    return response;
+
+                }
+
+                else
+                {
+                    response.Statuscode = 401;
+                    response.Message = "INVALID CREDENTIALS";
+                    return response;
+
+                }
+
+
+            }
+
+            catch (Exception)
+            {
+                response.Message = "INTERNAL SERVER ERROR";
+                response.Statuscode = 500;
+                return response;
+            }
+
+
         }
     }
 }

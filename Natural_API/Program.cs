@@ -103,6 +103,9 @@ builder.Services.AddTransient<IDsrService,DsrService>();
 builder.Services.AddTransient<IDsrdetailRepository, DsrdetailRepository>();
 builder.Services.AddTransient<IDsrdetailService, DsrdetailService>();
 
+builder.Services.AddTransient<IDistributorSalesRepository, DistributorSalesRepository>();
+builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 

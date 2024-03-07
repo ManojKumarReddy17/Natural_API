@@ -33,7 +33,7 @@ namespace Natural_Core
         Task<int> CommitAsync();
 
         IDbContextTransaction BeginTransaction(); // added for transaction
-
+        IDistributorSalesRepository DistributorSalesRepositoryRepo { get; }
 
     }
 }

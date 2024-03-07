@@ -36,7 +36,8 @@ namespace Natural_Data
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-
+        // **this is StoreProcedure Model we have to include Mannually **
+        public virtual DbSet<DistributorSalesReport> DistributorSalesReports { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -560,6 +561,17 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("State_Name");
+            });
+            
+
+            //modelBuilder.Entity<DistributorSalesReport>(entity =>
+            //{
+
+            //    entity.HasKey(e => new { e.Executive, e.Distributor, e.Retailor }); //e.StartDate, e.EndDate });
+            //});
+            modelBuilder.Entity<DistributorSalesReport>(entity =>
+            {
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

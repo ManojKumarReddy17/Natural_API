@@ -21,7 +21,7 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
 
-        public Task<AngularLoginResponse> LoginAsync(Executive credentials);
+
 
 
 

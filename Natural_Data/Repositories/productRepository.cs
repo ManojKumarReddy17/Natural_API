@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#nullable disable
 
 namespace Natural_Data.Repositories
 {
@@ -84,6 +85,7 @@ namespace Natural_Data.Repositories
 
 
         //upload images to s3bucket
+        [Obsolete]
         public async Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix)
         {
             var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);

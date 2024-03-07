@@ -17,7 +17,8 @@ namespace Natural_Core.IServices
 
         Task<ResultResponse> DeleteAssignedDistributorByid(string distributorId,string ExecutiveId);
 
-        
+
+
 
 
     }

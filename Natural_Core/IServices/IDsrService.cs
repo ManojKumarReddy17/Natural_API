@@ -13,10 +13,11 @@ namespace Natural_Core.IServices
         //Task<DsrResponse> DeleteDsr(string dsrId);
         //Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
         Task<ProductResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
-        Task<IEnumerable<Dsr>> GetAllDsr();
+
         Task<IEnumerable<DsrDistributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
         Task<IEnumerable<Product>> GetProductAsync();
+        Task<IEnumerable<Dsr>> GetAllDsr();
         Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
         //Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId);
         Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId);
@@ -28,6 +29,10 @@ namespace Natural_Core.IServices
         Task<ProductResponse> UpdateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
 
 
+        Task<IEnumerable<Dsr>> getRetailorListByDistributorId(string distributorId);
+        Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date);
+
+        Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId);
     }
 
 }

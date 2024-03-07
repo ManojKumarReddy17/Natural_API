@@ -10,6 +10,7 @@ namespace Natural_Core.IRepositories
     {
         Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorsIdByDistributorIdAsync(string distributorId);
         Task<IEnumerable<Retailor>> GetAssignedRetailorDetailsByDistributorIdAsync(string distributorId);
+
         Task<bool> IsRetailorAssignedToDistirbutor(List<string> retailorid);
         Task<RetailorToDistributor> DeleteRetailorAsync(string RetailorID, string DistributorId);
     }

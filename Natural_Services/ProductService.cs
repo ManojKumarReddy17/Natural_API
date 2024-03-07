@@ -73,7 +73,7 @@ namespace Natural_Services
 
 
         //get all files //all images with presignedurl
-        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
+        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string prefix)
         {
             var Allfilename = await _unitOfWork.ProductRepository.GetAllFilesAsync(bucketName, prefix);
             return Allfilename;
@@ -89,7 +89,7 @@ namespace Natural_Services
 
 
         //get products with category name and presignred url//
-        public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix)
+        public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string prefix)
         {
             var productresoursze = await GetAllProduct();
 
@@ -217,7 +217,7 @@ namespace Natural_Services
 
 
         //upload images to s3 bucket
-        public async Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix)
+        public async Task<UploadResult> UploadFileAsync(IFormFile file, string prefix)
         {
            
             string bucketName = _s3Config.BucketName;

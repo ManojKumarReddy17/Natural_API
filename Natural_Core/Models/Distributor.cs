@@ -31,5 +31,7 @@ namespace Natural_Core.Models
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }
         public virtual ICollection<RetailorToDistributor> RetailorToDistributors { get; set; }
+
+
     }
 }

@@ -109,16 +109,6 @@ namespace Natural_API.Controllers
             return execget;
         }
 
-        [HttpPost("Login")]
-        public async Task<ActionResult<AngularLoginResponse>> Login([FromBody] AngularLoginResourse loginModel)
-        {
-            var credentials = _mapper.Map<AngularLoginResourse, Executive>(loginModel);
-            var user = await _executiveService.LoginAsync(credentials);
-
-            return StatusCode(user.Statuscode, user);
-
-        }
-
 
 
     }

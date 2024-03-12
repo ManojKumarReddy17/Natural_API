@@ -29,6 +29,8 @@ namespace Natural_Core
         IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
         IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo { get; }
         IDsrdetailRepository DsrdetailRepository { get; }
+        INotificationRepository NotificationRepository { get; }
+        INotificationDistributorRepository NotificationDistributorRepository { get; }
 
         Task<int> CommitAsync();
 

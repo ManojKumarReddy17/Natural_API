@@ -107,8 +107,8 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
 
         {
-            var mapped = _mapper.Map<DsrDetailsByIdResource, Dsr>(search);
-
+            //var mapped = _mapper.Map<DsrDetailsByIdResource, Dsr>(search); 
+var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
             var selut = await _dsrservice.SearchDsr(mapped);
          var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
             

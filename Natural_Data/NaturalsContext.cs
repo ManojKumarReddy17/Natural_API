@@ -31,10 +31,13 @@ namespace Natural_Data
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<NotificationDistributor> NotificationDistributors { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
+        
 
         // **this is StoreProcedure Model we have to include Mannually **
         public virtual DbSet<DistributorSalesReport> DistributorSalesReports { get; set; }
@@ -46,7 +49,7 @@ namespace Natural_Data
             SetTimestamps<Retailor>();
             SetTimestamps<Product>();
             SetTimestamps<Dsr>();
-
+            SetTimestamps<Notification>();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -194,6 +197,9 @@ namespace Natural_Data
                     .HasConstraintName("Distributor_ibfk_3");
             });
 
+
+            
+
             modelBuilder.Entity<DistributorToExecutive>(entity =>
             {
                 entity.ToTable("DistributorToExecutive");
@@ -277,38 +283,7 @@ namespace Natural_Data
                     .HasConstraintName("DSR_ibfk_3");
             });
 
-            //modelBuilder.Entity<Dsrdetail>(entity =>
-            //{
-            //    entity.HasNoKey();
-
-            //    entity.ToTable("DSRDetails");
-
-            //    entity.HasIndex(e => e.Dsr, "DSRDetails_ibfk_2");
-
-            //    entity.HasIndex(e => e.Product, "Product");
-
-            //    entity.Property(e => e.Dsr)
-            //        .IsRequired()
-            //        .HasMaxLength(50);
-
-            //    entity.Property(e => e.Price).HasPrecision(20, 3);
-
-            //    entity.Property(e => e.Product)
-            //        .IsRequired()
-            //        .HasMaxLength(50);
-
-            //    entity.HasOne(d => d.DsrNavigation)
-            //        .WithMany()
-            //        .HasForeignKey(d => d.Dsr)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("DSRDetails_ibfk_2");
-
-            //    entity.HasOne(d => d.ProductNavigation)
-            //        .WithMany()
-            //        .HasForeignKey(d => d.Product)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("DSRDetails_ibfk_1");
-            //});
+        
 
             modelBuilder.Entity<Dsrdetail>(entity =>
             {
@@ -430,6 +405,48 @@ namespace Natural_Data
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("Notification");
+
+                entity.Property(e => e.Id).HasMaxLength(50);
+
+                entity.Property(e => e.Body).HasMaxLength(3000);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Subject).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<NotificationDistributor>(entity =>
+            {
+                entity.ToTable("Notification_Distributor");
+
+                entity.HasIndex(e => e.Distributor, "Distributor");
+
+                entity.HasIndex(e => e.Notification, "Notification");
+
+                entity.Property(e => e.Distributor).HasMaxLength(50);
+
+                entity.Property(e => e.Notification).HasMaxLength(50);
+
+                entity.HasOne(d => d.DistributorNavigation)
+                    .WithMany(p => p.NotificationDistributors)
+                    .HasForeignKey(d => d.Distributor)
+                    .HasConstraintName("Notification_Distributor_ibfk_1");
+
+                entity.HasOne(d => d.NotificationNavigation)
+                    .WithMany(p => p.NotificationDistributors)
+                    .HasForeignKey(d => d.Notification)
+                    .HasConstraintName("Notification_Distributor_ibfk_2");
+            });
+
+
+
+
 
             modelBuilder.Entity<Product>(entity =>
             {

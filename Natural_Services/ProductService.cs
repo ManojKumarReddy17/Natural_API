@@ -120,7 +120,7 @@ namespace Natural_Services
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
         {
             var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
-            //if(productResult.Image!= null)
+           
             if (string.IsNullOrEmpty(productResult.Image))
             {
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);

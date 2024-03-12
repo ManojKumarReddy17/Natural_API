@@ -20,7 +20,6 @@ namespace Natural_Data.Models
         private readonly IAmazonS3 _S3Client;
 
         private ILoginRepository _loginRepository;
-
         private IDistributorRepository _distributorRepository;
         private ICityRepository _cityRepository;
         private IAreaRepository _areaRepository;
@@ -31,10 +30,15 @@ namespace Natural_Data.Models
         private IProductRepository _ProductRepository;
         private IDsrRepository _dsrRepository;
         private IAssignDistributorToExecutiveRepository _dstributorToExecutiveRepository;
-
+        
         private IAssignRetailorToDistributorRepository _retailorToDistributorRepository;
         private IDsrdetailRepository _dsrdetailRepository;
         private IDistributorSalesRepository _distributorSalesRepository;
+
+        private INotificationRepository _NotificationRepository;
+        private INotificationDistributorRepository _NotificationDistributorRepository;
+
+
 
         public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
         {
@@ -63,9 +67,16 @@ namespace Natural_Data.Models
 
         public IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo => _retailorToDistributorRepository = _retailorToDistributorRepository ?? new AssignRetailorToDistributorRepository(_context);
         public IDsrdetailRepository DsrdetailRepository => _dsrdetailRepository = _dsrdetailRepository ?? new DsrdetailRepository(_context);
+
         public IDistributorSalesRepository DistributorSalesRepositoryRepo => _distributorSalesRepository = _distributorSalesRepository ?? new DistributorSalesRepository(_context);
 
 
+        
+
+
+        public INotificationRepository NotificationRepository => _NotificationRepository = _NotificationRepository ?? new NotificationRepository(_context);
+
+        public INotificationDistributorRepository NotificationDistributorRepository => _NotificationDistributorRepository = _NotificationDistributorRepository ?? new NotificationDistributorRepository(_context);
 
         public async Task<int> CommitAsync()
         {

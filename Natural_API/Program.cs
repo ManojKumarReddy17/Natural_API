@@ -14,6 +14,7 @@ using Amazon.S3;
 using Amazon.Util;
 using Amazon;
 using Natural_Core.S3Models;
+using Natural_API.Resources;
 #nullable disable
 
 
@@ -103,8 +104,16 @@ builder.Services.AddTransient<IDsrService,DsrService>();
 builder.Services.AddTransient<IDsrdetailRepository, DsrdetailRepository>();
 builder.Services.AddTransient<IDsrdetailService, DsrdetailService>();
 
+
 builder.Services.AddTransient<IDistributorSalesRepository, DistributorSalesRepository>();
 builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>();
+
+
+
+builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
+builder.Services.AddTransient<INotificationDistributorRepository, NotificationDistributorRepository>();
+builder.Services.AddTransient<INotificationDistributorService, NotificationDistributorService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 

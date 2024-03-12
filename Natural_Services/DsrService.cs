@@ -158,12 +158,20 @@ namespace Natural_Services
             return await _unitOfWork.ProductRepository.GetProducttAsync();
         }
 
-        public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
+        //public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
+        //{
+        //    var searchedDsr = await _unitOfWork.dSRRepo.SearchDsr(search);
+
+        //    return searchedDsr;
+        //}
+
+        public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
         {
             var searchedDsr = await _unitOfWork.dSRRepo.SearchDsr(search);
 
             return searchedDsr;
         }
+
 
         public async Task<Dsr> GetDsrbyId(string dsrid)
         {
@@ -180,6 +188,7 @@ namespace Natural_Services
         {
             return await _unitOfWork.dSRRepo.GetRetailorDetailsByDate(distributorId, date);
         }
+
         public  async Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId)
         {
             var retailorList = await _unitOfWork.dSRRepo.GetRetailorDetailsByExecutiveId(executiveId);
@@ -243,7 +252,55 @@ namespace Natural_Services
                     }).ToList();
 
 
+             var deleteproducts = create.Where(s => s.Quantity == 0)
+                              .Select(s => new Dsrdetail
+                               {
+                               Product = s.Product,
+                               Quantity = s.Quantity,
+                               Price = s.Price,
+                                  Dsr =s.Dsr
+                              })
+                               .ToList();
+
+                    var resultODelete = await GetDetailTableByDsrIdAsync(dsr.Id);
+
+                  var  resulttodELETE = resultODelete
+                            .Join(deleteproducts,
+                             s1 => s1.Dsr,
+                             s2 => s2.Dsr,
+                            (s1, s2) => new { s1, s2 })
+                            .OrderBy(c => c.s1.Product)
+                           .Where(c => c.s1.Product == c.s2.Product)
+                           .Select(c => new Dsrdetail
+                           {
+                               Id = c.s1.Id,
+                               Product = c.s1.Product,
+                               Quantity = c.s2.Quantity,
+                               Price = c.s2.Price != null ? c.s2.Price : 0,
+                               Dsr = c.s1.Dsr
+                           })
+                          .ToList();
+
+                    resultODelete = resultODelete
+.Join(resulttodELETE,
+od => od.Id,
+pd => pd.Id,
+(od, pd) => {
+ od.Quantity = pd != null ? pd.Quantity : od.Id; // Update Quantity
+ od.Price = pd != null ? pd.Price : pd.Id;       // Update Price
+ return od;
+})
+.ToList();
+
+                    _unitOfWork.DsrdetailRepository.RemoveRange(resultODelete);
+                    var deted = await _unitOfWork.CommitAsync();
+
+
+
                     List<Dsrdetail> result=  new List<Dsrdetail>();
+
+
+
 
                     var result1 = await GetDetailTableByDsrIdAsync(dsr.Id);
    
@@ -264,6 +321,7 @@ namespace Natural_Services
                               })
                             .ToList();
 
+
                     result1 = result1
     .Join(result,
         od => od.Id,
@@ -282,6 +340,7 @@ namespace Natural_Services
 
                     var inserdsr = create
     .Where(s2 => !result1.Any(s1 => s1.Product == s2.Product))
+    .Where(s2 => s2.Quantity != 0)
     .OrderBy(s2 => s2.Product)
     .Select(s2 => new Dsrdetail
     {

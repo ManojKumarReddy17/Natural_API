@@ -48,7 +48,40 @@ namespace Natural_Data.Repositories
 
         }
 
-        public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
+        //public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
+        //{
+        //    var dsr = NaturalDbContext.Dsrs
+        //         .Include(c => c.ExecutiveNavigation)
+        //         .Include(c => c.DistributorNavigation)
+        //         .Include(c => c.RetailorNavigation)
+        //          .Include(c => c.OrderByNavigation)
+        //              .Where(c =>
+        //            (string.IsNullOrEmpty(search.Executive) || c.Executive ==search.Executive) &&
+        //            (string.IsNullOrEmpty(search.Distributor) || c.Distributor ==search.Distributor) &&
+        //            (string.IsNullOrEmpty(search.Retailor) || c.Retailor ==search.Retailor) &&
+        //            (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
+        //            &&
+                    
+        //              (search.CreatedDate == null || c.CreatedDate.Date >= search.CreatedDate.Date && c.CreatedDate.Date <= search.ModifiedDate.Date))
+                      
+        //        .Select(c => new Dsr
+        //        {
+        //            Id =  c.Id,
+        //            Executive = string.Concat(c.ExecutiveNavigation.FirstName, c.ExecutiveNavigation.LastName),
+        //            Distributor = string.Concat(c.DistributorNavigation.FirstName, c.DistributorNavigation.LastName),
+        //            Retailor = string.Concat(c.RetailorNavigation.FirstName, c.RetailorNavigation.LastName),
+        //            TotalAmount = c.TotalAmount,
+        //            OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
+        //            CreatedDate = c.CreatedDate
+                   
+        //        })
+        //        .ToList();
+        //    return dsr;
+
+        //}
+
+
+        public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
         {
             var dsr = NaturalDbContext.Dsrs
                  .Include(c => c.ExecutiveNavigation)
@@ -56,29 +89,31 @@ namespace Natural_Data.Repositories
                  .Include(c => c.RetailorNavigation)
                   .Include(c => c.OrderByNavigation)
                       .Where(c =>
-                    (string.IsNullOrEmpty(search.Executive) || c.Executive ==search.Executive) &&
-                    (string.IsNullOrEmpty(search.Distributor) || c.Distributor ==search.Distributor) &&
-                    (string.IsNullOrEmpty(search.Retailor) || c.Retailor ==search.Retailor) &&
+                    (string.IsNullOrEmpty(search.Executive) || c.Executive == search.Executive) &&
+                    (string.IsNullOrEmpty(search.Distributor) || c.Distributor == search.Distributor) &&
+                    (string.IsNullOrEmpty(search.Retailor) || c.Retailor == search.Retailor) &&
                     (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
                     &&
-                    
-                      (search.CreatedDate == null || c.CreatedDate.Date >= search.CreatedDate.Date && c.CreatedDate.Date <= search.ModifiedDate.Date))
-                      
+
+                      (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
+
                 .Select(c => new Dsr
                 {
-                    Id =  c.Id,
+                    Id = c.Id,
                     Executive = string.Concat(c.ExecutiveNavigation.FirstName, c.ExecutiveNavigation.LastName),
                     Distributor = string.Concat(c.DistributorNavigation.FirstName, c.DistributorNavigation.LastName),
                     Retailor = string.Concat(c.RetailorNavigation.FirstName, c.RetailorNavigation.LastName),
                     TotalAmount = c.TotalAmount,
                     OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
                     CreatedDate = c.CreatedDate
-                   
+
                 })
                 .ToList();
             return dsr;
 
         }
+
+
 
 
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)

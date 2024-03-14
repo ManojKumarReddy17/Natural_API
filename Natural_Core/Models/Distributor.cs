@@ -9,7 +9,6 @@ namespace Natural_Core.Models
     {
         public Distributor()
         {
-            
             DistributorToExecutives = new HashSet<DistributorToExecutive>();
             Dsrs = new HashSet<Dsr>();
             NotificationDistributors = new HashSet<NotificationDistributor>();
@@ -29,16 +28,17 @@ namespace Natural_Core.Models
         public DateTime ModifiedDate { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string Image { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
-        
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }
         public virtual ICollection<NotificationDistributor> NotificationDistributors { get; set; }
         public virtual ICollection<RetailorToDistributor> RetailorToDistributors { get; set; }
-
-
     }
 }

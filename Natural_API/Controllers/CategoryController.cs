@@ -80,7 +80,21 @@ namespace Natural_API.Controllers
         /// <summary>
         /// DELETING CATEGORY BY ID
         /// </summary>
-       
+
+        //[HttpDelete("{CategoryId}")]
+        //public async Task<ActionResult> DeleteCategory(string CategoryId)
+        //{
+        //    var response = await _categoryService.DeleteCategory(CategoryId);
+
+        //    if (response.StatusCode == 200)
+        //    {
+        //        return Ok(response);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(response);
+        //    }
+        //}
         [HttpDelete("{CategoryId}")]
         public async Task<ActionResult> DeleteCategory(string CategoryId)
         {

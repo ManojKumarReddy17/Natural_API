@@ -19,7 +19,7 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string distributorId, DateTime date);
         Task<IEnumerable<Dsr>> GetRetailorDetailsByExecutiveId(string executiveId);
 
-
+        Task<IEnumerable<DSRretailorDetails>> GetRetailorDetails(string ExecutiveId);
 
 
 

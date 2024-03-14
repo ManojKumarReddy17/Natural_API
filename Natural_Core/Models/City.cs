@@ -18,6 +18,7 @@ namespace Natural_Core.Models
         public string Id { get; set; }
         public string CityName { get; set; }
         public string StateId { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual State State { get; set; }
         public virtual ICollection<Area> Areas { get; set; }

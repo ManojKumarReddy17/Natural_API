@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Data.Repositories;
+using System.Linq;
 
 #nullable disable
 
@@ -22,11 +23,14 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-        
+
+       
         public async Task<IEnumerable<Retailor>> GetAllRetailors()
         {
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
-            return result;
+            var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+            
+            return presentRetailor;
         }
 
 
@@ -35,14 +39,31 @@ namespace Natural_Services
             var result = await _unitOfWork.RetailorRepo.GetNonAssignedRetailorsAsync();
             return result;
         }
+
+
+
         public async Task<Retailor> GetRetailorDetailsById(string retailorId)
         {
             return await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
         }
+
+
+
+
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {
-            return await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+            var result = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+
+            if (result.IsDeleted == false)
+            {
+                return result;
+            }
+
+            return null;
         }
+
+
+        
 
         public async Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {
@@ -99,7 +120,7 @@ namespace Natural_Services
         }
 
 
-        public async Task<ResultResponse> DeleteRetailor(string retailorId)
+        public async Task<ResultResponse> SoftDelete(string retailorId)
         {
             var response = new ResultResponse();
 
@@ -107,9 +128,10 @@ namespace Natural_Services
             {
                 var retailor = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
 
-                if (retailor!= null)
+                if (retailor != null)
                 {
-                    _unitOfWork.RetailorRepo.Remove(retailor);
+                    retailor.IsDeleted = true;
+                    _unitOfWork.RetailorRepo.Update(retailor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

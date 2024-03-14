@@ -10,6 +10,7 @@ namespace Natural_Core.Models
         public int Id { get; set; }
         public string Distributor { get; set; }
         public string Notification { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual Distributor DistributorNavigation { get; set; }
         public virtual Notification NotificationNavigation { get; set; }

@@ -232,7 +232,14 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
 
 
 
+        [HttpGet("ExecId")]
+        public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByExe(string ExecId)
+        {
 
+            var dsrrestils = await _dsrservice.GetDetailsByIdAsync(ExecId);
+            return Ok(dsrrestils);
+
+        }
 
 
 

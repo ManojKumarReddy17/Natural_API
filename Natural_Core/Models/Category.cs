@@ -14,6 +14,7 @@ namespace Natural_Core.Models
 
         public string Id { get; set; }
         public string CategoryName { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

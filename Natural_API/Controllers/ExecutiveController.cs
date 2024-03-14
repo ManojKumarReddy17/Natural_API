@@ -90,12 +90,12 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpDelete("{ExecutiveId}")]
+      
         public async Task<ActionResult<ResultResponse>> DeleteExecutive(string ExecutiveId)
         {
             var response = await _executiveService.DeleteExecutive(ExecutiveId);
             return Ok(response);
         }
-
 
         /// <summary>
         /// SEARCH EXECUTIVE 

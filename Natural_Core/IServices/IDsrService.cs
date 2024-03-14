@@ -34,6 +34,8 @@ namespace Natural_Core.IServices
         Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date);
 
         Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId);
+
+        Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId);
     }
 
 }

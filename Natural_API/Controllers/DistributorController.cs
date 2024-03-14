@@ -109,14 +109,23 @@ namespace Natural_API.Controllers
         /// </summary>
 
 
-        [HttpDelete("{DistributorId}")]
+        //[HttpDelete("{DistributorId}")]
 
+        //public async Task<ActionResult<ResultResponse>> DeleteDistributor(string DistributorId)
+        //{
+        //    var response = await _DistributorService.DeleteDistributor(DistributorId);
+
+        //    return Ok(response);
+        //}
+
+        [HttpDelete("{DistributorId}")]
         public async Task<ActionResult<ResultResponse>> DeleteDistributor(string DistributorId)
         {
-            var response = await _DistributorService.DeleteDistributor(DistributorId);
+            var response = await _DistributorService.SoftDelete(DistributorId);
 
-            return Ok(response);
+            return response;
         }
+
 
         /// <summary>
         /// SEARCH DISTRIBUTOR 

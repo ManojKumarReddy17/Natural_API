@@ -346,7 +346,41 @@ namespace Natural_Data.Repositories
             return dsrs;
         }
 
-        
+        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetails(string ExecutiveId)
+        {
+            var dsr = await NaturalDbContext.Dsrs
+                       .Include(c => c.ExecutiveNavigation)
+                   .Include(c => c.DistributorNavigation)
+                   .Include(c => c.RetailorNavigation)
+                   .ThenInclude(a => a.AreaNavigation)
+                   //.ThenInclude(v => v.City.CityName)
+
+                   //Include(c => c.OrderByNavigation)
+                   .Where(d => d.Executive == ExecutiveId)
+
+                   .Select(c => new DSRretailorDetails
+                   {
+                       //Id = c.Id,
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                       //OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                       MobileNumber = c.RetailorNavigation.MobileNumber,
+                       Address = c.RetailorNavigation.Address,
+                       City = c.RetailorNavigation.CityNavigation.CityName,
+                       State = c.RetailorNavigation.StateNavigation.StateName,
+                       OrderBy = c.OrderBy,
+                       TotalAmount = c.TotalAmount,
+                       CreatedDate = c.RetailorNavigation.CreatedDate,
+                       ModifiedDate = c.RetailorNavigation.ModifiedDate,
+                       Area = c.RetailorNavigation.AreaNavigation.AreaName
+
+                      
+
+                   }).ToListAsync();
+            return dsr;
+
+        }
 
         private NaturalsContext NaturalDbContext
         {

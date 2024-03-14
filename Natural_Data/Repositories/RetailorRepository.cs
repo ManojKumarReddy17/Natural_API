@@ -19,12 +19,15 @@ namespace Natural_Data.Repositories
         {
 
         }
+      
+
         public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync()
         {
             var retailors = await (from Retailor in NaturalDbContext.Retailors
                                    join area in NaturalDbContext.Areas on Retailor.Area equals area.Id
                                    join city in NaturalDbContext.Cities on area.CityId equals city.Id
                                    join state in NaturalDbContext.States on city.StateId equals state.Id
+                                   where Retailor.IsDeleted != true
                                    select new
                                    {
                                        retailor = Retailor,
@@ -32,7 +35,8 @@ namespace Natural_Data.Repositories
                                        City = city,
                                        State = state
                                    }).ToListAsync();
-            var result = retailors.Select(c => new Retailor
+            var result = retailors.
+                Select(c => new Retailor
             {
 
                 Id = c.retailor.Id,
@@ -48,6 +52,8 @@ namespace Natural_Data.Repositories
 
             return result;
         }
+
+
         public async Task<Retailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
@@ -114,6 +120,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                        .Where(c =>
+                       (c.IsDeleted != true) &&
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&

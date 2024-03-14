@@ -12,6 +12,7 @@ namespace Natural_Core.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public int Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual Dsr DsrNavigation { get; set; }
         public virtual Product ProductNavigation { get; set; }

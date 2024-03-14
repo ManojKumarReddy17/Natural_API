@@ -90,6 +90,8 @@ namespace Natural_Data
                     .HasMaxLength(20)
                     .HasColumnName("City_Id");
 
+                
+
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Areas)
                     .HasForeignKey(d => d.CityId)
@@ -103,6 +105,8 @@ namespace Natural_Data
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
+
+                
             });
 
             modelBuilder.Entity<City>(entity =>
@@ -115,10 +119,13 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("City_Name");
+               
 
                 entity.Property(e => e.StateId)
                     .HasMaxLength(20)
                     .HasColumnName("State_Id");
+
+               
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.Cities)
@@ -159,10 +166,18 @@ namespace Natural_Data
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
+
+                
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -177,6 +192,7 @@ namespace Natural_Data
                     .HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
+
 
                 entity.HasOne(d => d.AreaNavigation)
                     .WithMany(p => p.Distributors)
@@ -213,6 +229,7 @@ namespace Natural_Data
                 entity.Property(e => e.DistributorId).HasMaxLength(10);
 
                 entity.Property(e => e.ExecutiveId).HasMaxLength(10);
+                
 
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.DistributorToExecutives)
@@ -248,6 +265,7 @@ namespace Natural_Data
                 entity.Property(e => e.Executive)
                     .IsRequired()
                     .HasMaxLength(50);
+                
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -296,6 +314,7 @@ namespace Natural_Data
                 entity.Property(e => e.Dsr)
                     .IsRequired()
                     .HasMaxLength(50);
+               
 
                 entity.Property(e => e.Price).HasPrecision(20, 3);
 
@@ -349,10 +368,17 @@ namespace Natural_Data
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
 
+               
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -398,10 +424,12 @@ namespace Natural_Data
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
+                
+
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
-                entity.Property(e => e.Password).HasMaxLength(20);
+                entity.Property(e => e.Password).HasMaxLength(100);
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });
@@ -415,6 +443,8 @@ namespace Natural_Data
                 entity.Property(e => e.Body).HasMaxLength(3000);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+                
+
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -428,8 +458,11 @@ namespace Natural_Data
                 entity.HasIndex(e => e.Distributor, "Distributor");
 
                 entity.HasIndex(e => e.Notification, "Notification");
+               
+
 
                 entity.Property(e => e.Distributor).HasMaxLength(50);
+               
 
                 entity.Property(e => e.Notification).HasMaxLength(50);
 
@@ -461,6 +494,8 @@ namespace Natural_Data
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Image).HasMaxLength(50);
+               
+
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -511,10 +546,18 @@ namespace Natural_Data
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
+
+               
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -556,6 +599,7 @@ namespace Natural_Data
                 entity.Property(e => e.Id).HasMaxLength(10);
 
                 entity.Property(e => e.DistributorId).HasMaxLength(10);
+                
 
                 entity.Property(e => e.RetailorId).HasMaxLength(10);
 
@@ -573,6 +617,7 @@ namespace Natural_Data
             modelBuilder.Entity<State>(entity =>
             {
                 entity.Property(e => e.Id).HasMaxLength(20);
+               
 
                 entity.Property(e => e.StateName)
                     .IsRequired()

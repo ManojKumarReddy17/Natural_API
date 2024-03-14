@@ -15,11 +15,9 @@ namespace Natural_Core.Models
         public string Id { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-        //public DateTime? CreatedDate { get; set; }
-        //public DateTime? ModifiedDate { get; set; }
-
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual ICollection<NotificationDistributor> NotificationDistributors { get; set; }
     }

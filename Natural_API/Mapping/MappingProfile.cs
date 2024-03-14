@@ -72,13 +72,13 @@ namespace Natural_API.Mapping
              CreateMap<Dsr, DSRRetailorsListResource>();
              CreateMap< Notification, NotificationResource>();
              CreateMap<NotificationDistributor, NotificationDistributorResource>();
-           
+            CreateMap<DSRretailorDetails, DSRretailorDetailsResources>();
 
 
 
-                        //// RESOURCE TO DOMAIN
+            //// RESOURCE TO DOMAIN
 
-             CreateMap<LoginResource, Login>();
+            CreateMap<LoginResource, Login>();
              CreateMap<DistributorGetResource, Distributor>();
              CreateMap<InsertUpdateResource, Distributor>();
              CreateMap<StateResource, State>();
@@ -122,7 +122,7 @@ namespace Natural_API.Mapping
              CreateMap<RetailorToDistributorResource, RetailorToDistributor>();
              CreateMap<DistributorToExecutiveResource, DistributorToExecutive>();
              CreateMap<DistributorSalesReportResuorce, DistributorSalesReport>();
-
+            CreateMap< DSRretailorDetailsResources, DSRretailorDetails>();
         }
     }
 }

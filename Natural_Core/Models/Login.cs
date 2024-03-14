@@ -14,9 +14,10 @@ namespace Natural_Core.Models
 
         public string Id { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public byte[] Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual ICollection<Dsr> Dsrs { get; set; }
     }

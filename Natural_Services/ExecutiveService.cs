@@ -19,21 +19,31 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
 
-        public  async Task<IEnumerable<Executive>> GetAllExecutives()
+       
+        public async Task<IEnumerable<Executive>> GetAllExecutives()
         {
             var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
-            return result;
+            var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+            return presentRetailor;
         }
-
         public  async Task<Executive> GetExecutiveDetailsById(string DetailsId)
             {
             return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
         }
 
+       
+
         public async Task<Executive> GetExecutiveById(string ExecutiveId)
         {
-            return await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+            var result = await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+            if (result.IsDeleted == false)
+            {
+                return result;
+            }
+            return null;
         }
+
+
 
         public async Task<ResultResponse> UpadateExecutive(Executive executive)
         {
@@ -91,6 +101,8 @@ namespace Natural_Services
             }
         }
 
+       
+
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {
             var response = new ResultResponse();
@@ -101,7 +113,8 @@ namespace Natural_Services
 
                 if (exec != null)
                 {
-                    _unitOfWork.ExecutiveRepo.Remove(exec);
+                    exec.IsDeleted = true;
+                    _unitOfWork.ExecutiveRepo.Update(exec);
                     await _unitOfWork.CommitAsync();
                     response.Message = "Successfully Deleted";
                     response.StatusCode = 200;
@@ -118,10 +131,11 @@ namespace Natural_Services
             }
 
             return response;
-        }
+        }
 
         public async Task<IEnumerable<Executive>> SearchExecutives(SearchModel search)
         {
+
             var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
             return exec;
         }

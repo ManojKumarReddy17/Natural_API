@@ -26,6 +26,7 @@ namespace Natural_Data.Repositories
                 .Include(c => c.AreaNavigation)
                  .ThenInclude(a => a.City)
                 .ThenInclude(ct => ct.State)
+                .Where(d => d.IsDeleted != true)
                  .ToListAsync();
 
                 var result = exec.Select(c => new Executive
@@ -91,6 +92,7 @@ namespace Natural_Data.Repositories
                     .ThenInclude(a => a.City)
                    .ThenInclude(ct => ct.State)
                    .Where(c =>
+                   (c.IsDeleted != true)&&
     (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
     (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
     (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&

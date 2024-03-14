@@ -19,6 +19,36 @@ namespace Natural_Data.Repositories
         public DistributorRepository(NaturalsContext context) : base(context)
         {
         }
+        //public async Task<List<Distributor>> GetAllDistributorstAsync()
+        //{
+
+        //    var distributors = await NaturalDbContext.Distributors
+        //    .Include(c => c.AreaNavigation)
+        //     .ThenInclude(a => a.City)
+        //    .ThenInclude(ct => ct.State)
+        //     .ToListAsync();
+
+        //    var result = distributors.Select(c => new Distributor
+        //    {
+        //        Id = c.Id,
+        //        FirstName = c.FirstName,
+        //        LastName = c.LastName,
+        //        MobileNumber = c.MobileNumber,
+        //        Address = c.Address,
+        //        Email = c.Email,
+        //        UserName = c.UserName,
+        //        Password = c.Password,
+        //        Area = c.AreaNavigation.AreaName,
+        //        City = c.AreaNavigation.City.CityName,
+        //        State = c.AreaNavigation.City.State.StateName,
+
+        //    }).ToList();
+
+        //    return result;
+        //}
+
+
+
         public async Task<List<Distributor>> GetAllDistributorstAsync()
         {
 
@@ -26,6 +56,7 @@ namespace Natural_Data.Repositories
             .Include(c => c.AreaNavigation)
              .ThenInclude(a => a.City)
             .ThenInclude(ct => ct.State)
+            .Where(d => d.IsDeleted != true)
              .ToListAsync();
 
             var result = distributors.Select(c => new Distributor
@@ -41,7 +72,7 @@ namespace Natural_Data.Repositories
                 Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
-              
+
             }).ToList();
 
             return result;
@@ -90,6 +121,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                        .Where(c =>
+                       (c.IsDeleted != true) &&
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
@@ -128,7 +160,9 @@ namespace Natural_Data.Repositories
                     .ToListAsync();
 
                 var nonAssignedDistributors = distributors
-                    .Where(c => !assignedDistributorIds.Contains(c.Id))
+                    .Where(c => !assignedDistributorIds.Contains(c.Id)) 
+                    .Where(c => c.IsDeleted != true) // this is added for soft delete
+
                     .Select(c => new Distributor
                     {
                         Id = c.Id,
@@ -155,6 +189,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                       .ThenInclude(ct => ct.State)
                       .Where(c =>
+                       (c.IsDeleted != true) &&
        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
        (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&

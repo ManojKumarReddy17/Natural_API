@@ -23,7 +23,8 @@ namespace Natural_Services
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
-            return result;
+            var presentDistributors = result.Where(d => d.IsDeleted != true ).ToList();
+            return presentDistributors;
         }
 
         public async Task<IEnumerable<Distributor>> GetNonAssignedDistributors()
@@ -33,11 +34,19 @@ namespace Natural_Services
         }
 
 
+        
+
+         
+       
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
-            return await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+            var result = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+            if(result.IsDeleted == false)
+            {
+                return result;
+            }
+            return null;
         }
-
 
         public async Task<Distributor> GetDistributorDetailsById(string distributorId)
         {
@@ -178,6 +187,40 @@ namespace Natural_Services
 
 
 
+        }
+
+
+
+        public async Task<ResultResponse> SoftDelete(string distributorId)
+        {
+            var response = new ResultResponse();
+
+            try
+            {
+                var distributor = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+                
+                
+                if (distributor != null)
+                {
+                    
+                    distributor.IsDeleted = true;
+                    _unitOfWork.DistributorRepo.Update(distributor);
+                     await _unitOfWork.CommitAsync();
+                    response.Message = "SUCCESSFULLY DELETED";
+                    response.StatusCode = 200;
+                }
+                else
+                {
+                    response.Message = "DISTRIBUTOR NOT FOUND";
+                    response.StatusCode = 404;
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Internal Server Error";
+            }
+
+            return response;
         }
     }
 }

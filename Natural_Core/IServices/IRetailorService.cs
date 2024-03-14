@@ -13,14 +13,14 @@ namespace Natural_Core.IServices
         Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor distributor);
         Task<ResultResponse> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
 
-        Task<ResultResponse> DeleteRetailor(string retailorId);
+        //Task<ResultResponse> DeleteRetailor(string retailorId);
         Task<Retailor> GetRetailorsById(string retailorId);
         Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 
         Task<IEnumerable<Retailor>> GetNonAssignedRetailors();
         Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
 
-
+        Task<ResultResponse> SoftDelete(string retailorId);
 
 
     }

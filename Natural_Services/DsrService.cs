@@ -376,5 +376,16 @@ pd => pd.Id,
 
         }
 
+
+        public async Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId)
+
+        {
+            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetails(ExecutiveId);
+
+
+            return dsrRetilordetails;
+
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace Natural_Core.IServices
 
         public Task<AngularLoginResponse> LoginAsync(Executive credentials);
 
-
+        
 
 
     }

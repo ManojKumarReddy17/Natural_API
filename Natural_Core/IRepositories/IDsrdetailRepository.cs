@@ -7,7 +7,7 @@ namespace Natural_Core.IRepositories
 {
 	public interface IDsrdetailRepository: IRepository<Dsrdetail>
     {
-        //Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId);
+        
         Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId);
         Task<IEnumerable<Dsrdetail>> GetDetailTableByDsrIdAsync(string dsrId);
         Task<IEnumerable<GetProduct>> GetDetailTableAsync(string dsrId);

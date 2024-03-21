@@ -153,33 +153,9 @@ namespace Natural_Services
         }
 
 
+
+   
         //get product by id as in tabel and asign presigned url
-        //public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
-        //{
-           
-        //    var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-          
-        //    string bucketName = _s3Config.BucketName;
-        //    string prefix = productResult.Image;
-        //    var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-
-        //    if (PresignedUrl.Any())
-        //    {
-        //        var isd = PresignedUrl.FirstOrDefault();
-        //        var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-        //        productresoursze1.PresignedUrl = isd.PresignedUrl;
-
-        //        return productresoursze1;
-        //    }
-        //    else
-        //    {
-        //        var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-
-        //        return productresoursze1;
-
-        //    }
-        //}
-
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
 

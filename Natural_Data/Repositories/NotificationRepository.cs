@@ -38,55 +38,7 @@ namespace Natural_Data.Repositories
         }
 
 
-        //public Task AddAsync(Notification entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task AddRangeAsync(IEnumerable<Notification> entities)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public IEnumerable<Notification> Find(Expression<Func<Notification, bool>> predicate)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<IEnumerable<Notification>> GetAllAsync()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public ValueTask<Notification> GetByIdAsync(string id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void Remove(Notification entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void RemoveRange(IEnumerable<Notification> entities)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<Notification> SingleOrDefaultAsync(Expression<Func<Notification, bool>> predicate)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void Update(Notification entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public void UpdateRange(IEnumerable<Notification> entities)
-        //{
-        //    throw new NotImplementedException();
-        //}
+       
 
 
         private NaturalsContext NaturalDbContext

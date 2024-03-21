@@ -79,7 +79,7 @@ namespace Natural_API.Controllers
             
              var result =   _mapper.Map<Dsr, DsrInsertResource>(dsr);
 
-            //var details = _mapper.Map<List<Dsrdetail>, List<DsrdetailProduct>>((List<Dsrdetail>)dsrdetails);
+            
             var details = _mapper.Map<List<DsrProduct>, List<DsrdetailProduct>>((List<DsrProduct>)dsrdetails);
 
             result.product = (details);
@@ -107,7 +107,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
 
         {
-            //var mapped = _mapper.Map<DsrDetailsByIdResource, Dsr>(search); 
+            
 var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
             var selut = await _dsrservice.SearchDsr(mapped);
          var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
@@ -129,8 +129,8 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
         }
 
         
-        //[HttpPut]
-        //public async Task<ActionResult<ResultResponse>> updatedsr(string Id,[FromBody] DsrInsertResource dsrResource)
+       
+       
                [HttpPut("{DsrId}")]
         public async Task<ActionResult<ResultResponse>> updatedsr(string DsrId, [FromBody] DsrInsertResource dsrResource)
         {

@@ -37,7 +37,7 @@ namespace Natural_Services
                 try
                 {
                     dsr.Id = "DSR" + new Random().Next(10000, 99999).ToString();
-
+                    dsr.ModifiedDate = dsr.CreatedDate;
 
                     await _unitOfWork.dSRRepo.AddAsync(dsr);
 
@@ -234,6 +234,7 @@ namespace Natural_Services
                     updatedsr.Executive = dsr.Executive;
                     updatedsr.Distributor=dsr.Distributor;
                     updatedsr.Retailor = dsr.Retailor;
+                    updatedsr.ModifiedDate = dsr.CreatedDate;
 
                     _unitOfWork.dSRRepo.Update(updatedsr);
 

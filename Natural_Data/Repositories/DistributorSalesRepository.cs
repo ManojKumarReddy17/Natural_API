@@ -25,7 +25,7 @@ namespace Natural_Data.Repositories
 
             //// Construct the SQL query and retrieve the data
             var saleReport = await NaturalDbContext.DistributorSalesReports
-                .FromSqlInterpolated($"CALL Naturals.SaleReportDS({DSReport.Executive}, {DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate}, {DSReport.EndDate})")
+                .FromSqlInterpolated($"CALL Naturals.SaleReportDS({DSReport.Executive}, {DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate.Date}, {DSReport.EndDate.Date})")
                 .ToListAsync();
 
             // Apply filtering based on the provided parameters
@@ -34,7 +34,7 @@ namespace Natural_Data.Repositories
                     (string.IsNullOrEmpty(DSReport.Executive) || report.Executive == DSReport.Executive) &&
                     (string.IsNullOrEmpty(DSReport.Distributor) || report.Distributor == DSReport.Distributor) &&
                     (string.IsNullOrEmpty(DSReport.Retailor) || report.Retailor == DSReport.Retailor) &&
-                    (report.CreatedDate >= DSReport.StartDate && report.CreatedDate <= DSReport.EndDate)).ToList();
+                   (report.CreatedDate.Date >= DSReport.StartDate.Date && report.CreatedDate.Date <= DSReport.EndDate.Date)).ToList();
 
             return filteredResults;
         }

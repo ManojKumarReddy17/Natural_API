@@ -48,7 +48,7 @@ namespace Natural_Data
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
             SetTimestamps<Product>();
-            SetTimestamps<Dsr>();
+            //SetTimestamps<Dsr>();
             SetTimestamps<Notification>();
 
             return await base.SaveChangesAsync(cancellationToken);

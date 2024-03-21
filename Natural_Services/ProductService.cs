@@ -154,33 +154,67 @@ namespace Natural_Services
 
 
         //get product by id as in tabel and asign presigned url
+        //public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
+        //{
+           
+        //    var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+          
+        //    string bucketName = _s3Config.BucketName;
+        //    string prefix = productResult.Image;
+        //    var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+
+        //    if (PresignedUrl.Any())
+        //    {
+        //        var isd = PresignedUrl.FirstOrDefault();
+        //        var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+        //        productresoursze1.PresignedUrl = isd.PresignedUrl;
+
+        //        return productresoursze1;
+        //    }
+        //    else
+        //    {
+        //        var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+        //        return productresoursze1;
+
+        //    }
+        //}
+
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
-           
-            var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-          
-            string bucketName = _s3Config.BucketName;
-            string prefix = productResult.Image;
-            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-            if (PresignedUrl.Any())
+            var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+
+            if (string.IsNullOrEmpty(productResult.Image))
             {
-                var isd = PresignedUrl.FirstOrDefault();
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
                 return productresoursze1;
+
             }
             else
             {
-                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                string bucketName = _s3Config.BucketName;
+                string prefix = productResult.Image;
+                var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-                return productresoursze1;
+                if (PresignedUrl.Any())
+                {
+                    var isd = PresignedUrl.FirstOrDefault();
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                    productresoursze1.PresignedUrl = isd.PresignedUrl;
 
+                    return productresoursze1;
+                }
+                else
+                {
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                    return productresoursze1;
+
+                }
             }
         }
-
-
         //get product by id as in tabel 
         public async Task<Product> GetProductByIdAsync(string ProductId)
         {

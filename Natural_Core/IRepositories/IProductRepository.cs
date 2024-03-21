@@ -12,7 +12,7 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<string>> GetAllBucketAsync();
         Task<List<Product>> GetProducttAsync();
-        //Task<IEnumerable<Product>> GetAllProductAsync();
+        
         Task<Product> GetProductByIdAsync(string ProductId);
         Task<IEnumerable<Natural_Core.S3Models.S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
 

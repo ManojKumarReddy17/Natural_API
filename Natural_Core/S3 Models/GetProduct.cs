@@ -14,6 +14,6 @@ namespace Natural_Core.Models
         public string PresignedUrl { get; set; }
         public int? Quantity { get; set; }
         public decimal? Weight { get; set; }
-
+        public bool IsDeleted { get; set; }
     }
 }

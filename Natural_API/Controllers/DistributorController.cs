@@ -108,16 +108,6 @@ namespace Natural_API.Controllers
         /// DELETING DISTRIBUTOR BY ID
         /// </summary>
 
-
-        //[HttpDelete("{DistributorId}")]
-
-        //public async Task<ActionResult<ResultResponse>> DeleteDistributor(string DistributorId)
-        //{
-        //    var response = await _DistributorService.DeleteDistributor(DistributorId);
-
-        //    return Ok(response);
-        //}
-
         [HttpDelete("{DistributorId}")]
         public async Task<ActionResult<ResultResponse>> DeleteDistributor(string DistributorId)
         {

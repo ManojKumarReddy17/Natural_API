@@ -41,7 +41,9 @@ namespace Natural_Data.Repositories
                     UserName= c.UserName,
                     Password= c.Password,
                     City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName
+                    State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude
                 }).ToList();
 
                 return result;
@@ -71,7 +73,9 @@ namespace Natural_Data.Repositories
                         UserName= exec.UserName,
                         Password= exec.Password,
                         City = exec.AreaNavigation.City.CityName,
-                        State = exec.AreaNavigation.City.State.StateName
+                        State = exec.AreaNavigation.City.State.StateName,
+                        Latitude = exec.Latitude,
+                        Longitude = exec.Longitude
                     };
 
                     return result;
@@ -112,7 +116,9 @@ namespace Natural_Data.Repositories
                 UserName = c.UserName,
                 Password = c.Password,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+                 Latitude = c.Latitude,
+                Longitude = c.Longitude
             }).ToList();
             return result;
         }

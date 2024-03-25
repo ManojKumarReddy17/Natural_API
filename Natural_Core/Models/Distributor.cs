@@ -10,6 +10,7 @@ namespace Natural_Core.Models
         public Distributor()
         {
             DistributorToExecutives = new HashSet<DistributorToExecutive>();
+            DistributorbyAreas = new HashSet<DistributorbyArea>();
             Dsrs = new HashSet<Dsr>();
             NotificationDistributors = new HashSet<NotificationDistributor>();
             RetailorToDistributors = new HashSet<RetailorToDistributor>();
@@ -37,6 +38,7 @@ namespace Natural_Core.Models
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
+        public virtual ICollection<DistributorbyArea> DistributorbyAreas { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }
         public virtual ICollection<NotificationDistributor> NotificationDistributors { get; set; }
         public virtual ICollection<RetailorToDistributor> RetailorToDistributors { get; set; }

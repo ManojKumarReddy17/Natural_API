@@ -154,10 +154,17 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
         public async Task<ActionResult<DsrResponse>> DeleteDsr(String dsrId)
         {
 
-            var dsr = await _dsrservice.GetDsrbyId(dsrId);
-            var dsrdetails = await _dsrservice.GetDsrDetailsByDsrIdAsync(dsrId);
+            var dsr = await _dsrservice.GetbyId(dsrId);
+            dsr.IsDeleted = true;
+            var dsrdetails = await _dsrservice.GetDetailTableByDsrIdAsync(dsrId);
+            foreach (var distribution in dsrdetails)
+            {
+                distribution.IsDeleted = true;
+            }
 
-            var drsdetaildata = _mapper.Map<List<DsrProduct>, List<Dsrdetail>>((List<DsrProduct>)dsrdetails);
+            var drsdetaildata = (List<Dsrdetail>)dsrdetails;
+
+            //var drsdetaildata = _mapper.Map<List<DsrProduct>, List<Dsrdetail>>((List<DsrProduct>)dsrdetails);
 
             var response = await _dsrservice.DeleteDsr(dsr, drsdetaildata, dsrId);
             return Ok(response);

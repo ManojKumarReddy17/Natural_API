@@ -10,7 +10,7 @@ namespace Natural_Core.Models
         public string Category { get; set; }
         public string Dsr { get; set; }
 
-
+        public bool IsDeleted { get; set; }
 
 
     }

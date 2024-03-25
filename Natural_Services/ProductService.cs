@@ -84,6 +84,7 @@ namespace Natural_Services
         public async Task<IEnumerable<Product>> GetAllProduct()
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
+            //var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
             return result;
         }
 
@@ -153,13 +154,13 @@ namespace Natural_Services
         }
 
 
-
-   
-        //get product by id as in tabel and asign presigned url
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
 
+
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+           
+          
 
             if (string.IsNullOrEmpty(productResult.Image))
             {
@@ -192,11 +193,25 @@ namespace Natural_Services
             }
         }
         //get product by id as in tabel 
+
         public async Task<Product> GetProductByIdAsync(string ProductId)
         {
 
+            //var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+
+            //return productResult;
+
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-            return productResult;
+            if (productResult != null && productResult.IsDeleted != true)
+            {
+                return productResult;
+            }
+            else
+            {
+                
+                return null;
+            }
+
 
         }
 
@@ -257,6 +272,43 @@ namespace Natural_Services
 
 
         //if you want to delete Product complete from db including image
+        //public async Task<ProductResponse> DeleteProduct(string ProductId)
+        //{
+
+        //    var response = new ProductResponse();
+        //    try
+        //    {
+        //        var product1 = await GetProductByIdAsync(ProductId);
+
+        //        if (product1 != null)
+        //        {
+                   
+        //            string bucketName = _s3Config.BucketName;
+        //            string key = product1.Image;
+        //            bool imageDeletionResult = await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
+                    
+        //            _unitOfWork.ProductRepository.Remove(product1);
+        //            await _unitOfWork.CommitAsync();
+        //            response.Message = "SUCCESSFULLY DELETED";
+        //            response.StatusCode = 200;
+        //        }
+                
+        //        else
+        //        {
+        //            response.Message = "Product NOT FOUND";
+        //            response.StatusCode = 404;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        response.Message = "Internal Server Error";
+        //    }
+
+        //    return response;
+        //}
+
+
+
         public async Task<ProductResponse> DeleteProduct(string ProductId)
         {
 
@@ -267,17 +319,17 @@ namespace Natural_Services
 
                 if (product1 != null)
                 {
-                   
+                    product1.IsDeleted = true;
                     string bucketName = _s3Config.BucketName;
                     string key = product1.Image;
                     bool imageDeletionResult = await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
-                    
-                    _unitOfWork.ProductRepository.Remove(product1);
+
+                    _unitOfWork.ProductRepository.Update(product1);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;
                 }
-                
+
                 else
                 {
                     response.Message = "Product NOT FOUND";
@@ -305,6 +357,7 @@ namespace Natural_Services
              .Where(c =>
                     (string.IsNullOrEmpty(search.Category) || c.Category.StartsWith(search.Category)) &&
                     (string.IsNullOrEmpty(search.ProductName) || c.ProductName.StartsWith(search.ProductName, StringComparison.OrdinalIgnoreCase))
+                    && c.IsDeleted != true
                 )
                 .Select(c => new GetProduct
                 {

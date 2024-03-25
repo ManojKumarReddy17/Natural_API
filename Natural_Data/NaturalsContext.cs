@@ -27,6 +27,8 @@ namespace Natural_Data
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
         public virtual DbSet<DistributorToExecutive> DistributorToExecutives { get; set; }
+        public virtual DbSet<DistributorbyArea> DistributorbyAreas { get; set; }
+
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
@@ -89,8 +91,11 @@ namespace Natural_Data
                 entity.Property(e => e.CityId)
                     .HasMaxLength(20)
                     .HasColumnName("City_Id");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
-                
+
+
+
 
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Areas)
@@ -101,6 +106,9 @@ namespace Natural_Data
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Category");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
@@ -114,6 +122,9 @@ namespace Natural_Data
                 entity.HasIndex(e => e.StateId, "State_Id");
 
                 entity.Property(e => e.Id).HasMaxLength(20);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.CityName)
                     .IsRequired()
@@ -162,6 +173,8 @@ namespace Natural_Data
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -221,6 +234,9 @@ namespace Natural_Data
                 entity.ToTable("DistributorToExecutive");
 
                 entity.HasIndex(e => e.DistributorId, "FK_Distributor");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.HasIndex(e => e.ExecutiveId, "FK_Executive");
 
@@ -240,6 +256,28 @@ namespace Natural_Data
                     .WithMany(p => p.DistributorToExecutives)
                     .HasForeignKey(d => d.ExecutiveId)
                     .HasConstraintName("DistributorToExecutive_ibfk_1");
+            });
+            modelBuilder.Entity<DistributorbyArea>(entity =>
+            {
+                entity.ToTable("DistributorbyArea");
+
+                entity.HasIndex(e => e.AreaId, "AreaId");
+
+                entity.HasIndex(e => e.DistributorId, "DistributorId");
+
+                entity.Property(e => e.AreaId).HasMaxLength(20);
+
+                entity.Property(e => e.DistributorId).HasMaxLength(50);
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.DistributorbyAreas)
+                    .HasForeignKey(d => d.AreaId)
+                    .HasConstraintName("DistributorbyArea_ibfk_2");
+
+                entity.HasOne(d => d.Distributor)
+                    .WithMany(p => p.DistributorbyAreas)
+                    .HasForeignKey(d => d.DistributorId)
+                    .HasConstraintName("DistributorbyArea_ibfk_1");
             });
 
             modelBuilder.Entity<Dsr>(entity =>
@@ -265,7 +303,9 @@ namespace Natural_Data
                 entity.Property(e => e.Executive)
                     .IsRequired()
                     .HasMaxLength(50);
-                
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -327,6 +367,8 @@ namespace Natural_Data
                     .HasForeignKey(d => d.Dsr)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DSRDetails_ibfk_2");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.HasOne(d => d.ProductNavigation)
                     .WithMany(p => p.Dsrdetails)
@@ -370,7 +412,9 @@ namespace Natural_Data
                     .HasMaxLength(50);
                 entity.Property(e => e.Image).HasMaxLength(50);
 
-               
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -424,7 +468,9 @@ namespace Natural_Data
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
-                
+
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
@@ -443,7 +489,9 @@ namespace Natural_Data
                 entity.Property(e => e.Body).HasMaxLength(3000);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-                
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
@@ -458,7 +506,9 @@ namespace Natural_Data
                 entity.HasIndex(e => e.Distributor, "Distributor");
 
                 entity.HasIndex(e => e.Notification, "Notification");
-               
+
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
 
                 entity.Property(e => e.Distributor).HasMaxLength(50);
@@ -494,7 +544,9 @@ namespace Natural_Data
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Image).HasMaxLength(50);
-               
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
@@ -536,6 +588,8 @@ namespace Natural_Data
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(20);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
@@ -599,7 +653,9 @@ namespace Natural_Data
                 entity.Property(e => e.Id).HasMaxLength(10);
 
                 entity.Property(e => e.DistributorId).HasMaxLength(10);
-                
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.RetailorId).HasMaxLength(10);
 
@@ -617,7 +673,9 @@ namespace Natural_Data
             modelBuilder.Entity<State>(entity =>
             {
                 entity.Property(e => e.Id).HasMaxLength(20);
-               
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.StateName)
                     .IsRequired()

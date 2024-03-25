@@ -23,8 +23,8 @@ namespace Natural_Services
         public async Task<IEnumerable<Executive>> GetAllExecutives()
         {
             var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
-            var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
-            return presentRetailor;
+            //var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+            return result;
         }
         public  async Task<Executive> GetExecutiveDetailsById(string DetailsId)
             {
@@ -68,40 +68,74 @@ namespace Natural_Services
             return (response);
         }
 
+        //public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+        //{
+        //    {
+        //        var response = new ResultResponse();
+
+        //        try
+        //        {
+
+        //            executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
+
+
+        //            await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+
+        //            var created = await _unitOfWork.CommitAsync();
+
+        //            if (created != 0)
+        //            {
+        //                response.Message = "Insertion Successful";
+        //                response.StatusCode = 200;
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+
+        //            response.Message = "Insertion Failed";
+        //            response.StatusCode = 401;
+        //        }
+
+        //        return response;
+        //    }
+        //}
+
+
         public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
         {
+            var response = new ResultResponse();
+
+            try
             {
-                var response = new ResultResponse();
+                executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
 
-                try
+                
+                //if (executive.IsDeleted == null)
+                //{
+                //    executive.IsDeleted = false; 
+                //}
+
+              
+
+                await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+                var created = await _unitOfWork.CommitAsync();
+
+                if (created != 0)
                 {
-
-                    executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
-
-
-                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-               
-                    var created = await _unitOfWork.CommitAsync();
-
-                    if (created != 0)
-                    {
-                        response.Message = "Insertion Successful";
-                        response.StatusCode = 200;
-                    }
+                    response.Message = "Insertion Successful";
+                    response.StatusCode = 200;
                 }
-                catch (Exception)
-                {
-
-                    response.Message = "Insertion Failed";
-                    response.StatusCode = 401;
-                }
-
-                return response;
             }
-        }
+            catch (Exception)
+            {
+                response.Message = "Insertion Failed";
+                response.StatusCode = 401;
+            }
 
-       
+            return response;
+        }
 
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {

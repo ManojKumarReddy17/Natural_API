@@ -13,6 +13,7 @@ namespace Natural_API.Resources
         public string Area { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

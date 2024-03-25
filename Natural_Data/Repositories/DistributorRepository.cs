@@ -19,36 +19,7 @@ namespace Natural_Data.Repositories
         public DistributorRepository(NaturalsContext context) : base(context)
         {
         }
-        //public async Task<List<Distributor>> GetAllDistributorstAsync()
-        //{
-
-        //    var distributors = await NaturalDbContext.Distributors
-        //    .Include(c => c.AreaNavigation)
-        //     .ThenInclude(a => a.City)
-        //    .ThenInclude(ct => ct.State)
-        //     .ToListAsync();
-
-        //    var result = distributors.Select(c => new Distributor
-        //    {
-        //        Id = c.Id,
-        //        FirstName = c.FirstName,
-        //        LastName = c.LastName,
-        //        MobileNumber = c.MobileNumber,
-        //        Address = c.Address,
-        //        Email = c.Email,
-        //        UserName = c.UserName,
-        //        Password = c.Password,
-        //        Area = c.AreaNavigation.AreaName,
-        //        City = c.AreaNavigation.City.CityName,
-        //        State = c.AreaNavigation.City.State.StateName,
-
-        //    }).ToList();
-
-        //    return result;
-        //}
-
-
-
+        
         public async Task<List<Distributor>> GetAllDistributorstAsync()
         {
 
@@ -72,7 +43,8 @@ namespace Natural_Data.Repositories
                 Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
-
+                Latitude=c.Latitude,
+                Longitude=c.Longitude
             }).ToList();
 
             return result;
@@ -84,7 +56,7 @@ namespace Natural_Data.Repositories
                        .Include(c => c.AreaNavigation)
                         .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
-                        .FirstOrDefaultAsync(c => c.Id == distributorid);
+                        .FirstOrDefaultAsync(c => c.Id == distributorid && c.IsDeleted != true);
 
             if (distributors != null)
             {
@@ -100,7 +72,9 @@ namespace Natural_Data.Repositories
                     City = distributors.AreaNavigation.City.CityName,
                     State = distributors.AreaNavigation.City.State.StateName,
                     UserName = distributors.UserName,
-                    Password = distributors.Password
+                    Password = distributors.Password,
+                    Latitude = distributors.Latitude,
+                        Longitude= distributors.Longitude
                 };
 
                 return result;
@@ -141,7 +115,9 @@ namespace Natural_Data.Repositories
                 UserName = c.UserName,
                 Password = c.Password,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+                Latitude = c.Latitude,
+                Longitude = c.Longitude
             }).ToList();
                 return result;
             }
@@ -176,6 +152,7 @@ namespace Natural_Data.Repositories
                         Area = c.AreaNavigation.AreaName,
                         City = c.AreaNavigation.City.CityName,
                         State = c.AreaNavigation.City.State.StateName,
+                        Latitude=c.Latitude, Longitude=c.Longitude
                     })
                     .ToList();
 
@@ -217,11 +194,34 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
+                    Latitude = c.Latitude,
+                    Longitude=c.Longitude
                 })
                 .ToList();
 
             return nonAssignedDistributors;
         }
+
+
+
+
+        //public async Task<IEnumerable<AngularLoginResponse>> GetExe(string Id)
+        //{
+        //    var distirbutors = await NaturalDbContext.Distributors
+        //        .Include(c => c.ExecutiveNavigation)
+        //        .Where(c => c.Id == Id)
+        //         .Select(c => new AngularLoginResponse
+        //         {
+        //             Id = c.Id,
+
+        //             //Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
+        //             Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
+        //         }).ToListAsync();
+        //    return distirbutors;
+
+        //}
+
+
         private NaturalsContext NaturalDbContext
         {
             get 

@@ -30,14 +30,19 @@ namespace Natural_Services
         {
 
            var notification = await _unitOfWork.NotificationRepository.GetAllAsync();
-
-            return notification;
+            var PresentNotif = notification.Where(c => c.IsDeleted ==  false).ToList();
+            return PresentNotif;
         }
 
         public async Task<Notification> GetNotificationByIdAsync(string Id)
         {
         var notification =  await   _unitOfWork.NotificationRepository.GetByIdAsync(Id);
-            return notification;
+            //   var PresentNotif = notification.Where(c => c.IsDeleted == false).ToList();
+            if ( notification.IsDeleted == false)
+            {
+                return notification;
+            }
+            return null;
         }
 
 
@@ -46,7 +51,7 @@ namespace Natural_Services
 
 
           var distributorslist =   await _unitOfWork.NotificationDistributorRepository.GetDistributorByNotificationIdAsync(notificationId);
-
+            //var PresentDist = distributorslist.Where(c => c.IsDeleted != true).ToList();
             return distributorslist;
 
         }
@@ -54,6 +59,7 @@ namespace Natural_Services
        public async Task<IEnumerable<NotificationDistributor>> GetDistableByNotificationIdAsync(string notificationId)
         {
            var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDisTableByNotificationIdAsync(notificationId);
+           // var PresentDist = distributorslist.Where(c => c.IsDeleted!= true).ToList();
             return distributorslist;
 
         }
@@ -104,10 +110,48 @@ namespace Natural_Services
 
         }
 
+        //public async Task<DsrResponse> DeleteNotification(string id)
+        //{
+
+        //  var notification= await GetNotificationByIdAsync(id);
+        //    var distributionlist = await GetDistableByNotificationIdAsync(id);
+
+        //    using (var transaction = _unitOfWork.BeginTransaction())
+        //    {
+        //        var response = new DsrResponse();
+
+        //        try
+        //        {
+        //           // notification.IsDeleted = true;
+        //            _unitOfWork.NotificationDistributorRepository.RemoveRange(distributionlist);
+        //            var commit = await _unitOfWork.CommitAsync();
+
+        //            _unitOfWork.NotificationRepository.Remove(notification);
+        //            var commit1 = await _unitOfWork.CommitAsync();
+
+        //            transaction.Commit();
+        //            response.Message = "SUCCESSFULLY DELETED";
+        //            response.StatusCode = 200;
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            transaction.Rollback();
+        //            response.Message = "delete Failed";
+        //            response.StatusCode = 401;
+        //        }
+
+        //        return response;
+        //    }
+
+
+        //}
+
+
         public async Task<DsrResponse> DeleteNotification(string id)
         {
 
-          var notification= await GetNotificationByIdAsync(id);
+            var notification = await GetNotificationByIdAsync(id);
             var distributionlist = await GetDistableByNotificationIdAsync(id);
 
             using (var transaction = _unitOfWork.BeginTransaction())
@@ -116,10 +160,20 @@ namespace Natural_Services
 
                 try
                 {
+                    //foreach (var distribution in distributionlist)
+                    //{
+                    //    distribution.IsDeleted = true;
+                    //}
 
-                    _unitOfWork.NotificationDistributorRepository.RemoveRange(distributionlist);
-                    var commit = await _unitOfWork.CommitAsync();
-                    _unitOfWork.NotificationRepository.Remove(notification);
+                    //_unitOfWork.NotificationDistributorRepository.UpdateRange(distributionlist);
+                    //var commit = await _unitOfWork.CommitAsync();
+                    foreach (var distribution in distributionlist)
+                    {
+                        distribution.IsDeleted = true;
+                        _unitOfWork.NotificationDistributorRepository.Update(distribution);
+                    }
+                    notification.IsDeleted = true;
+                    _unitOfWork.NotificationRepository.Update(notification);
                     var commit1 = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
@@ -143,6 +197,7 @@ namespace Natural_Services
         public async Task<string> executiveid(string distributorId)
         {
           var executiveId =   await _unitOfWork.NotificationDistributorRepository.executiveid(distributorId);
+           
             return executiveId;
         }
 

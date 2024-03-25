@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 #nullable disable
 
@@ -18,9 +19,17 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
+        //public async Task<IEnumerable<State>> GetStatesAsync()
+        //{
+        //    return await _unitOfWork.StateRepo.GetAllAsync();
+
+        //}
         public async Task<IEnumerable<State>> GetStatesAsync()
         {
-            return await _unitOfWork.StateRepo.GetAllAsync();
+
+            var result = await _unitOfWork.StateRepo.GetAllAsync();
+            var presentSates = result.Where(c => c.IsDeleted == false).ToList();
+            return presentSates;
 
         }
     }

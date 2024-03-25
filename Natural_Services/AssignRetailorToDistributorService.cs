@@ -84,7 +84,8 @@ namespace Natural_Services
 
                 if (retailor != null)
                 {
-                    _unitOfWork.RetailorToDistributorRepositoryRepo.Remove(retailor);
+                    retailor.IsDeleted = true;
+                    _unitOfWork.RetailorToDistributorRepositoryRepo.Update(retailor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

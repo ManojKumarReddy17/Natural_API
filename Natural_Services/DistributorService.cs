@@ -27,6 +27,7 @@ namespace Natural_Services
             return presentDistributors;
         }
 
+
         public async Task<IEnumerable<Distributor>> GetNonAssignedDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetNonAssignedDistributorsAsync();
@@ -34,10 +35,8 @@ namespace Natural_Services
         }
 
 
-        
 
-         
-       
+
         public async Task<Distributor> GetDistributorById(string distributorId)
         {
             var result = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
@@ -161,8 +160,8 @@ namespace Natural_Services
                     response.Email = authenticatedUser.Email;
                     response.Address = authenticatedUser.Address;
                     response.MobileNumber = authenticatedUser.MobileNumber;
-                    response.Executive = authenticatedUser.DistributorToExecutives.ToList();
-
+                  //  response.Executive = authenticatedUser.DistributorToExecutives.ToList();
+                    
                     response.Statuscode = 200;
                     response.Message = "LOGIN SUCCESSFUL";
                     return response;

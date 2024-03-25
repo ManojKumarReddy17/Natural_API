@@ -20,7 +20,7 @@ namespace Natural_Data.Repositories
 
          var distributors =    await NaturalDbContext.NotificationDistributors
                 .Include(c => c.DistributorNavigation)
-                .Where(c => c.Notification == notificationId)
+                .Where(c => c.Notification == notificationId && c.IsDeleted == false)
                 .Select(c => new NotificationDistributor
                 {
                     Distributor = c.DistributorNavigation.FirstName + " " + c.DistributorNavigation.LastName,
@@ -33,7 +33,7 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<NotificationDistributor>> GetDisTableByNotificationIdAsync(string notificationId)
         {
-           var distributorslist = await NaturalDbContext.NotificationDistributors.Where(x => x.Notification == notificationId).ToListAsync();
+           var distributorslist = await NaturalDbContext.NotificationDistributors.Where(x => x.Notification == notificationId && x.IsDeleted == false).ToListAsync();
             return distributorslist;
 
         }
@@ -41,7 +41,7 @@ namespace Natural_Data.Repositories
 
         public async Task<string> executiveid(string notificationId)
         {
-            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId).Select(x => x.ExecutiveId)
+            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId && x.IsDeleted != true).Select(x => x.ExecutiveId )
             .FirstOrDefaultAsync();
             return executiveId;
 

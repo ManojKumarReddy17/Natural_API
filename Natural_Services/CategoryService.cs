@@ -91,39 +91,6 @@ namespace Natural_Services
             return response;
         }
 
-        //public async Task<ResultResponse> DeleteCategory(string categoryId)
-        //{
-        //    var response = new ResultResponse();
-
-        //    try
-        //    {
-        //        var existingCategory = await _unitOfWork.CategoryRepo.GetByIdAsync(categoryId);
-
-        //        _unitOfWork.CategoryRepo.Remove(existingCategory);
-        //        await _unitOfWork.CommitAsync();
-
-        //        if (existingCategory == null)
-        //        {
-        //            response.Message = "Category not found";
-        //            response.StatusCode = 404;
-        //        }
-        //        else
-        //        {
-        //            response.Message = "Delete Successful";
-        //            response.StatusCode = 200;
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response.Message = "Delete Failed";
-        //        response.StatusCode = 500;
-        //    }
-
-        //    return response;
-        //}
-
-
-
         public async Task<ResultResponse> DeleteCategory(string categoryId)
         {
             var response = new ResultResponse();

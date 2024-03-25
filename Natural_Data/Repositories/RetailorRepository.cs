@@ -48,6 +48,8 @@ namespace Natural_Data.Repositories
                 Email = c.retailor.Email,
                 City = c.City.CityName,
                 State = c.State.StateName,
+                Latitude=c.retailor.Latitude,
+                Longitude=c.retailor.Longitude
             });
 
             return result;
@@ -82,6 +84,9 @@ namespace Natural_Data.Repositories
                     Area = retailorDetails.Area.AreaName,
                     City = retailorDetails.City.CityName,
                     State = retailorDetails.State.StateName,
+                    Latitude=retailorDetails.Retailor.Latitude,
+                    Longitude=retailorDetails.Retailor.Longitude
+                    
                 };
 
                 return result;
@@ -103,7 +108,8 @@ namespace Natural_Data.Repositories
                 existingRetailor.City = retailor.City;
                 existingRetailor.State = retailor.State;
                 existingRetailor.Area = retailor.Area;
-
+                existingRetailor.Latitude = retailor.Latitude;
+                existingRetailor.Longitude = retailor.Longitude;
 
                 await NaturalDbContext.SaveChangesAsync();
 
@@ -137,7 +143,9 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     Email = c.Email,
                     City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName
+                    State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude
                 }).ToList();
                 return result;
             }
@@ -170,6 +178,8 @@ namespace Natural_Data.Repositories
                         Area = c.AreaNavigation.AreaName,
                         City = c.AreaNavigation.City.CityName,
                         State = c.AreaNavigation.City.State.StateName,
+                        Latitude=c.Latitude,
+                        Longitude = c.Longitude
                     })
                     .ToList();
 
@@ -208,6 +218,8 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude
                 })
                 .ToList();
 

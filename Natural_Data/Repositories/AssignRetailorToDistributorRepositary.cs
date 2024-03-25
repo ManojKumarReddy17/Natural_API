@@ -16,7 +16,7 @@ namespace Natural_Data.Repositories
         }
         public async Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorsIdByDistributorIdAsync(string distributorId)
         {
-            var AssignedList = await NaturalDbContext.RetailorToDistributors.Where(c=>c.DistributorId == distributorId).ToListAsync();
+            var AssignedList = await NaturalDbContext.RetailorToDistributors.Where(c=>c.DistributorId == distributorId && c.IsDeleted == false).ToListAsync();
             return AssignedList;       
 
         }
@@ -28,7 +28,7 @@ namespace Natural_Data.Repositories
                 .ThenInclude(a => a.City)
                 .ThenInclude(c => c.State)
                 .Include(D => D.Distributor)
-                .Where(rt => rt.DistributorId == distributorId )
+                .Where(rt => rt.DistributorId == distributorId  && rt.IsDeleted == false)
                 .ToListAsync();
 
             var result = AssignedList.Select(c => new Retailor
@@ -55,7 +55,7 @@ namespace Natural_Data.Repositories
         public async Task<bool> IsRetailorAssignedToDistirbutor(List<string> retailorid)
         {
             var existingAssignment = await NaturalDbContext.RetailorToDistributors
-                           .AnyAsync(d => retailorid.Contains(d.RetailorId));
+                           .AnyAsync(d => retailorid.Contains(d.RetailorId) );
 
             return existingAssignment;
         }
@@ -64,7 +64,7 @@ namespace Natural_Data.Repositories
         public async Task<RetailorToDistributor> DeleteRetailorAsync(string RetailorID, string DistributorId)
         {
             var result = await NaturalDbContext.RetailorToDistributors
-                .Where(d => d.DistributorId == RetailorID && d.DistributorId == DistributorId)
+                .Where(d => d.DistributorId == RetailorID && d.DistributorId == DistributorId )
                 .FirstOrDefaultAsync();
 
             return result;

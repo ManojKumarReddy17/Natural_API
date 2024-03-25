@@ -3,6 +3,7 @@ using Natural_Core;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Core.S3Models;
+using Natural_Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,13 +87,29 @@ namespace Natural_Services
             return result;
         }
 
+        //public async Task<IEnumerable<Dsr>> GetAllDsr()
+        //{
+        //    var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
+        //    var getdsr = result.Where(c => c.IsDeleted == false);
+        //    return getdsr;
+        //}
 
+
+        //public async Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId)
+
+        //{
+
+        //    var dsrdetails = await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
+
+        //    return dsrdetails;
+
+        //}
         public async Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId)
 
         {
 
             var dsrdetails = await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
-
+            //var dsrbyid = dsrdetails.Where(d => d.IsDeleted == false);
             return dsrdetails;
 
         }
@@ -108,11 +125,16 @@ namespace Natural_Services
 
                 try
                 {
-
-                    _unitOfWork.DsrdetailRepository.RemoveRange(dsrdetails);
-                    var commit = await _unitOfWork.CommitAsync();
-                    _unitOfWork.dSRRepo.Remove(dsr);
+                    _unitOfWork.dSRRepo.Update(dsr);
                     var commit1 = await _unitOfWork.CommitAsync();
+
+                    //_unitOfWork.DsrdetailRepository.RemoveRange(dsrdetails);
+                    _unitOfWork.DsrdetailRepository.UpdateRange(dsrdetails);
+                    var commit = await _unitOfWork.CommitAsync();
+                   
+                    ////_unitOfWork.dSRRepo.Remove(dsr);
+                    //_unitOfWork.dSRRepo.Update(dsr);
+                    //var commit1 = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
                     response.Message = "SUCCESSFULLY DELETED";
@@ -203,7 +225,6 @@ namespace Natural_Services
 
         //dsrdetails as in table ids
         public async Task<IEnumerable<Dsrdetail>> GetDetailTableByDsrIdAsync(string dsrId)
-
 
         {
             var dsedetail = await _unitOfWork.DsrdetailRepository.GetDetailTableByDsrIdAsync(dsrId);

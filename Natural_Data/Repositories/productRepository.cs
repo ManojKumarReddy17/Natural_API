@@ -28,7 +28,9 @@ namespace Natural_Data.Repositories
         {
 
             var Products = await NaturalDbContext.Products
-           .Include(p => p.CategoryNavigation).ToListAsync();
+           .Include(p => p.CategoryNavigation)
+           .Where(c => c.IsDeleted != true)
+           .ToListAsync();
          
             var result = Products.Select(p => new Product
             {
@@ -118,6 +120,7 @@ namespace Natural_Data.Repositories
             {
                 var prod = await NaturalDbContext.Products
                            .Include(p => p.CategoryNavigation)
+                           .Where(c => c.IsDeleted != true)
                             .FirstOrDefaultAsync(p => p.Id == ProductId);
 
                 if (prod != null)

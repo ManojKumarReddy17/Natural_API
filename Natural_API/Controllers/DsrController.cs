@@ -70,7 +70,6 @@ namespace Natural_API.Controllers
         }
 
         [HttpGet("ById/{DsrId}")]
-        // this method is for get dsr and dsrdetails by id
 
         public async Task<ActionResult<DsrRetailorResource>> GetDsrByDsrId(string DsrId)
         {
@@ -192,27 +191,7 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
 
         }
 
-        [HttpGet("Retailor/details/{executiveId}")]
-        public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetRetailorListByExecutiveId(string executiveId)
-        {
-            var retailorsList = await _dsrservice.getRetailorListByExecutiveId(executiveId);
-            var retailorDetails = await _distributorToExecutiveService.AssignedDistributorsByExecutiveId(executiveId);
-
-            var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
-            //foreach (var retailor in retailorDetails)
-            //{
-            //    string fullname = string.Concat(retailor.FirstName + retailor.LastName);
-            //    foreach (var retdetail in retailors)
-            //    {
-            //        if (retdetail.Retailor == fullname)
-            //        {
-            //            retdetail.Address = retailor.Address;
-            //            retdetail.Phonenumber = retailor.MobileNumber;
-            //        }
-            //    }
-            //}
-            return Ok(retailors);
-        }
+       
 
 
         [HttpGet("RetailorDetails/{distributorId}/{date}")]

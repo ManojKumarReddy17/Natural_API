@@ -1,14 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.CodeAnalysis;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
-using Natural_Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 #nullable disable
@@ -277,8 +273,9 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetails(string ExecutiveId)
         {
+
             var dsr = await NaturalDbContext.Dsrs
-                       .Include(c => c.ExecutiveNavigation)
+                   .Include(c => c.ExecutiveNavigation)
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .ThenInclude(a => a.AreaNavigation)
@@ -287,12 +284,11 @@ namespace Natural_Data.Repositories
 
                    .Select(c => new DSRretailorDetails
                    {
-                       //Id = c.Id,
+                       Id = c.Id,
                        Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
                        Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
                        Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                       //OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
-                       MobileNumber = c.RetailorNavigation.MobileNumber,
+                       Phonenumber = c.RetailorNavigation.MobileNumber,
                        Address = c.RetailorNavigation.Address,
                        City = c.RetailorNavigation.CityNavigation.CityName,
                        State = c.RetailorNavigation.StateNavigation.StateName,
@@ -305,6 +301,7 @@ namespace Natural_Data.Repositories
                       
 
                    }).ToListAsync();
+
             return dsr;
 
         }

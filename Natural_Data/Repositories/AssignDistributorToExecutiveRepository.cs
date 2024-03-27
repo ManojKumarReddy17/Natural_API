@@ -22,7 +22,7 @@ namespace Natural_Data.Repositories
         public async Task<IEnumerable<DistributorToExecutive>> GetAssignedDistributorByExecutiveIdAsync(string ExecutiveId)
         {
             return await NaturalDbContext.DistributorToExecutives.
-             Where(c => c.ExecutiveId == ExecutiveId).ToListAsync();
+             Where(c => c.ExecutiveId == ExecutiveId && c.IsDeleted == false).ToListAsync();
         }
 
         public async Task<IEnumerable<Distributor>> GetAssignedDistributorDetailsByExecutiveIdAsync(string ExecutiveId)
@@ -33,7 +33,7 @@ namespace Natural_Data.Repositories
                 .ThenInclude(a => a.City)    
                 .ThenInclude(c => c.State)           
                 .Include(D => D.Executive)
-                .Where(c => c.ExecutiveId == ExecutiveId)
+                .Where(c => c.ExecutiveId == ExecutiveId && c.IsDeleted == false)
                 .ToListAsync();
 
             var result = AssignedList.Select(c => new Distributor
@@ -42,6 +42,7 @@ namespace Natural_Data.Repositories
                 FirstName = c.Distributor.FirstName,
                 LastName = c.Distributor.LastName,
                 MobileNumber = c.Distributor.MobileNumber,
+                Address = c.Distributor.Address,
                 Email = c.Distributor.Email,
                 Area = c.Distributor.AreaNavigation.AreaName,
                 City = c.Distributor.AreaNavigation.City.CityName,
@@ -61,7 +62,7 @@ namespace Natural_Data.Repositories
         public async Task<DistributorToExecutive> DeleteDistributorAsync(string distributorId, string ExecutiveId)
         {
             var result = await NaturalDbContext.DistributorToExecutives
-                .Where(d => d.DistributorId == distributorId && d.ExecutiveId == ExecutiveId)
+                .Where(d => d.DistributorId == distributorId && d.ExecutiveId == ExecutiveId )
                 .FirstOrDefaultAsync();
 
             return result;

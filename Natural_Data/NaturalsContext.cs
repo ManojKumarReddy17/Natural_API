@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -23,21 +26,48 @@ namespace Natural_Core.Models
         public virtual DbSet<Distributor> Distributors { get; set; }
         public virtual DbSet<DistributorNotification> DistributorNotifications { get; set; }
         public virtual DbSet<DistributorToExecutive> DistributorToExecutives { get; set; }
+        public virtual DbSet<DistributorbyArea> DistributorbyAreas { get; set; }
+
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<NotificationDistributor> NotificationDistributors { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
+        
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // **this is StoreProcedure Model we have to include Mannually **
+        public virtual DbSet<DistributorSalesReport> DistributorSalesReports { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (!optionsBuilder.IsConfigured)
+            SetTimestamps<Distributor>();
+            SetTimestamps<Executive>();
+            SetTimestamps<Retailor>();
+            SetTimestamps<Product>();
+            //SetTimestamps<Dsr>();
+            SetTimestamps<Notification>();
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetTimestamps<T>() where T : class
+        {
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is T && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entry in entries)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql("server=naturals-mysql.c23wiuavicdg.ap-south-1.rds.amazonaws.com;database=Naturals;username=admin;password=Admin123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.35-mysql"));
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
+                }
+
+                entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
             }
         }
 
@@ -60,6 +90,11 @@ namespace Natural_Core.Models
                 entity.Property(e => e.CityId)
                     .HasMaxLength(20)
                     .HasColumnName("City_Id");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
+
+
 
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Areas)
@@ -70,10 +105,15 @@ namespace Natural_Core.Models
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Category");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
+
+                
             });
 
             modelBuilder.Entity<City>(entity =>
@@ -81,15 +121,21 @@ namespace Natural_Core.Models
                 entity.HasIndex(e => e.StateId, "State_Id");
 
                 entity.Property(e => e.Id).HasMaxLength(20);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.CityName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("City_Name");
+               
 
                 entity.Property(e => e.StateId)
                     .HasMaxLength(20)
                     .HasColumnName("State_Id");
+
+               
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.Cities)
@@ -126,14 +172,24 @@ namespace Natural_Core.Models
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
+
+                
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -148,6 +204,7 @@ namespace Natural_Core.Models
                     .HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
+
 
                 entity.HasOne(d => d.AreaNavigation)
                     .WithMany(p => p.Distributors)
@@ -168,40 +225,17 @@ namespace Natural_Core.Models
                     .HasConstraintName("Distributor_ibfk_3");
             });
 
-            modelBuilder.Entity<DistributorNotification>(entity =>
-            {
-                entity.ToTable("Distributor_Notification");
 
-                entity.HasIndex(e => e.Distributor, "Distributor");
-
-                entity.Property(e => e.Body)
-                    .IsRequired()
-                    .HasMaxLength(3000);
-
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Distributor)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Subject)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.HasOne(d => d.DistributorNavigation)
-                    .WithMany(p => p.DistributorNotifications)
-                    .HasForeignKey(d => d.Distributor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Distributor_Notification_ibfk_1");
-            });
+            
 
             modelBuilder.Entity<DistributorToExecutive>(entity =>
             {
                 entity.ToTable("DistributorToExecutive");
 
                 entity.HasIndex(e => e.DistributorId, "FK_Distributor");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.HasIndex(e => e.ExecutiveId, "FK_Executive");
 
@@ -210,6 +244,7 @@ namespace Natural_Core.Models
                 entity.Property(e => e.DistributorId).HasMaxLength(10);
 
                 entity.Property(e => e.ExecutiveId).HasMaxLength(10);
+                
 
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.DistributorToExecutives)
@@ -220,6 +255,28 @@ namespace Natural_Core.Models
                     .WithMany(p => p.DistributorToExecutives)
                     .HasForeignKey(d => d.ExecutiveId)
                     .HasConstraintName("DistributorToExecutive_ibfk_1");
+            });
+            modelBuilder.Entity<DistributorbyArea>(entity =>
+            {
+                entity.ToTable("DistributorbyArea");
+
+                entity.HasIndex(e => e.AreaId, "AreaId");
+
+                entity.HasIndex(e => e.DistributorId, "DistributorId");
+
+                entity.Property(e => e.AreaId).HasMaxLength(20);
+
+                entity.Property(e => e.DistributorId).HasMaxLength(50);
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.DistributorbyAreas)
+                    .HasForeignKey(d => d.AreaId)
+                    .HasConstraintName("DistributorbyArea_ibfk_2");
+
+                entity.HasOne(d => d.Distributor)
+                    .WithMany(p => p.DistributorbyAreas)
+                    .HasForeignKey(d => d.DistributorId)
+                    .HasConstraintName("DistributorbyArea_ibfk_1");
             });
 
             modelBuilder.Entity<Dsr>(entity =>
@@ -245,6 +302,9 @@ namespace Natural_Core.Models
                 entity.Property(e => e.Executive)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -291,6 +351,7 @@ namespace Natural_Core.Models
                 entity.Property(e => e.Dsr)
                     .IsRequired()
                     .HasMaxLength(50);
+               
 
                 entity.Property(e => e.Price).HasPrecision(20, 3);
 
@@ -303,6 +364,8 @@ namespace Natural_Core.Models
                     .HasForeignKey(d => d.Dsr)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DSRDetails_ibfk_2");
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.HasOne(d => d.ProductNavigation)
                     .WithMany(p => p.Dsrdetails)
@@ -344,12 +407,19 @@ namespace Natural_Core.Models
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
 
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
                 entity.Property(e => e.Image).HasMaxLength(50);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -396,12 +466,67 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
                 entity.Property(e => e.Password).HasMaxLength(100);
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("Notification");
+
+                entity.Property(e => e.Id).HasMaxLength(50);
+
+                entity.Property(e => e.Body).HasMaxLength(3000);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Subject).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<NotificationDistributor>(entity =>
+            {
+                entity.ToTable("Notification_Distributor");
+
+                entity.HasIndex(e => e.Distributor, "Distributor");
+
+                entity.HasIndex(e => e.Notification, "Notification");
+
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
+                entity.Property(e => e.Distributor).HasMaxLength(50);
+               
+
+                entity.Property(e => e.Notification).HasMaxLength(50);
+
+                entity.HasOne(d => d.DistributorNavigation)
+                    .WithMany(p => p.NotificationDistributors)
+                    .HasForeignKey(d => d.Distributor)
+                    .HasConstraintName("Notification_Distributor_ibfk_1");
+
+                entity.HasOne(d => d.NotificationNavigation)
+                    .WithMany(p => p.NotificationDistributors)
+                    .HasForeignKey(d => d.Notification)
+                    .HasConstraintName("Notification_Distributor_ibfk_2");
+            });
+
+
+
+
 
             modelBuilder.Entity<Product>(entity =>
             {
@@ -416,6 +541,10 @@ namespace Natural_Core.Models
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Image).HasMaxLength(50);
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -456,6 +585,8 @@ namespace Natural_Core.Models
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(20);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
@@ -466,10 +597,18 @@ namespace Natural_Core.Models
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(50);
+
+               
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+
 
                 entity.Property(e => e.MobileNumber)
                     .IsRequired()
@@ -511,6 +650,9 @@ namespace Natural_Core.Models
                 entity.Property(e => e.Id).HasMaxLength(10);
 
                 entity.Property(e => e.DistributorId).HasMaxLength(10);
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
 
                 entity.Property(e => e.RetailorId).HasMaxLength(10);
 
@@ -529,10 +671,24 @@ namespace Natural_Core.Models
             {
                 entity.Property(e => e.Id).HasMaxLength(20);
 
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+
                 entity.Property(e => e.StateName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("State_Name");
+            });
+            
+
+            //modelBuilder.Entity<DistributorSalesReport>(entity =>
+            //{
+
+            //    entity.HasKey(e => new { e.Executive, e.Distributor, e.Retailor }); //e.StartDate, e.EndDate });
+            //});
+            modelBuilder.Entity<DistributorSalesReport>(entity =>
+            {
+                entity.HasNoKey();
             });
 
             OnModelCreatingPartial(modelBuilder);

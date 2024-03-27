@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Natural_API.Resources;
 using Natural_Core;
 using Natural_Core.Models;
@@ -14,39 +15,65 @@ namespace Natural_API.Mapping
             {
                 // DOMAIN TO RESOURCE 
 
-                CreateMap<Login, LoginResource>();
-                CreateMap<Distributor, DistributorGetResource>();
-                CreateMap<Distributor, InsertUpdateResource>();
-                CreateMap<State, StateResource>();
-                CreateMap<Area, AreaResource>();
-                CreateMap<City, CityResource>();
-                CreateMap<Category, CategoryResource>();
-                CreateMap<Retailor , RetailorResource>();
-                CreateMap<Retailor, RetailorPostResource>();
-                CreateMap <GetExecutive, ExecutiveGetResource>();
-                CreateMap<Executive, InsertUpdateResource>();
-                CreateMap<Category , CategoryInsertResource>();
-
-                CreateMap<Dsr,DsrResource>();
-                CreateMap<Dsr, DsrPostResource>();
-                CreateMap<Dsrdetail, DsrDetailResource>();
-                CreateMap<InsertDEmapper, DistributorToExecutive>();
-                CreateMap<Distributor , DistributorToExecutiveResource>();
-                CreateMap<Dsrdetail,DsrDetailPostResource>();
-                CreateMap<Retailor, RetailorToDistributorResource>();
-                CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
-            CreateMap<RetailorToDistributor,InsertRTDResource>();
-            CreateMap<Product,DsrProductResource>();
-            CreateMap<Dsr,DsrDetailsByIdResource>();
-            CreateMap<Product, ProductResource>();
-            CreateMap<GetProduct, ProductResource>();
-            CreateMap<DsrDistributor, DsrDistributorResource>();
-            CreateMap<DsrRetailor, DsrRetailorResource>();
-            //added for getdsrbyid
-            CreateMap<Dsr,DsrInsertResource>();
-            CreateMap<Dsrdetail,DsrdetailProduct>();
-
-
+             CreateMap<Login, LoginResource>();
+             CreateMap<Distributor, DistributorGetResource>();
+             CreateMap<Executive, AngularLoginResourse>();
+             CreateMap<Distributor, AngularLoginResourse>();
+             CreateMap<Distributor, DistributorGetResource>();
+             CreateMap<Distributor, InsertUpdateResource>();
+             CreateMap<State, StateResource>();
+             CreateMap<Area, AreaResource>();
+             CreateMap<City, CityResource>();
+             CreateMap<Category, CategoryResource>();
+             CreateMap<Retailor , RetailorResource>();
+             CreateMap<Retailor, RetailorPostResource>();
+             CreateMap <Executive, ExecutiveGetResource>();
+             CreateMap<Executive, InsertUpdateResource>();
+             CreateMap<Category , CategoryInsertResource>();
+             CreateMap<Dsr,DsrResource>();
+             CreateMap<Dsr, DsrPostResource>();
+             CreateMap<Dsrdetail, DsrDetailResource>();
+             CreateMap<InsertDEmapper, DistributorToExecutive>();
+             CreateMap<Distributor , DistributorToExecutiveResource>();
+             CreateMap<Dsrdetail,DsrDetailPostResource>();
+             CreateMap<Retailor, RetailorToDistributorResource>();
+             CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
+             CreateMap<RetailorToDistributor,InsertRTDResource>();
+             CreateMap<Product,DsrProductResource>();
+             CreateMap<Dsr,DsrDetailsByIdResource>();
+             CreateMap<Product, ProductResource>();
+             CreateMap<GetProduct, ProductResource>();
+             CreateMap<DsrDistributor, DsrDistributorResource>();
+             CreateMap<DsrRetailor, DsrRetailorResource>();
+             CreateMap<Dsr,DsrInsertResource>();
+             CreateMap<DsrProduct, DsrdetailProduct>();
+             CreateMap<DsrProduct, Dsrdetail>();
+             CreateMap<Dsr, DsrEditResource>();
+             CreateMap<GetProduct, DsrProductResource>();
+             CreateMap<DistributorSalesReport, DistributorSalesReportResuorce>();
+             CreateMap<RetailorToDistributor, RetailorToDistributorResource>();
+             CreateMap<DistributorToExecutive, DistributorToExecutiveResource>();
+             CreateMap<Dsr,DsrResource>();
+             CreateMap<Dsr, DsrPostResource>();
+             CreateMap<Dsrdetail, DsrDetailResource>();
+             CreateMap<InsertDEmapper, DistributorToExecutive>();
+             CreateMap<Distributor , DistributorToExecutiveResource>();
+             CreateMap<Dsrdetail,DsrDetailPostResource>();
+             CreateMap<Retailor, RetailorToDistributorResource>();
+             CreateMap<RetailorToDistributor, AssignRetailorToDistributorResource>();
+             CreateMap<RetailorToDistributor,InsertRTDResource>();
+             CreateMap<Product,DsrProductResource>();
+             CreateMap<Dsr,DsrDetailsByIdResource>();
+             CreateMap<Product, ProductResource>();
+             CreateMap<GetProduct, ProductResource>();
+             CreateMap<DsrDistributor, DsrDistributorResource>();
+             CreateMap<DsrRetailor, DsrRetailorResource>();
+             CreateMap<Dsr,DsrInsertResource>();
+             CreateMap<Dsrdetail,DsrdetailProduct>();
+             CreateMap<Dsr, DSRRetailorsListResource>();
+             CreateMap< Notification, NotificationResource>();
+             CreateMap<NotificationDistributor, NotificationDistributorResource>();
+            CreateMap<DSRretailorDetails, DSRretailorDetailsResources>();
 
 
 
@@ -89,7 +116,18 @@ namespace Natural_API.Mapping
                                                     .ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
             
 
+             //CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c => c.CreatedDate, (obj) => obj.MapFrom(s => s.createdDate));
+             //.ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
 
+             CreateMap<AngularLoginResourse,Executive>();
+             CreateMap<AngularLoginResourse,Distributor>();
+             CreateMap<DSRRetailorsListResource, Dsr>();
+             CreateMap<NotificationResource, Notification>();
+             CreateMap<NotificationDistributorResource, NotificationDistributor>();
+             CreateMap<RetailorToDistributorResource, RetailorToDistributor>();
+             CreateMap<DistributorToExecutiveResource, DistributorToExecutive>();
+             CreateMap<DistributorSalesReportResuorce, DistributorSalesReport>();
+            CreateMap< DSRretailorDetailsResources, DSRretailorDetails>();
         }
     }
 }

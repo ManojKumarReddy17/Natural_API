@@ -73,7 +73,7 @@ namespace Natural_Services
 
 
         //get all files //all images with presignedurl
-        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
+        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string prefix)
         {
             var Allfilename = await _unitOfWork.ProductRepository.GetAllFilesAsync(bucketName, prefix);
             return Allfilename;
@@ -84,12 +84,13 @@ namespace Natural_Services
         public async Task<IEnumerable<Product>> GetAllProduct()
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
+            //var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
             return result;
         }
 
 
         //get products with category name and presignred url//
-        public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix)
+        public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string prefix)
         {
             var productresoursze = await GetAllProduct();
 
@@ -120,62 +121,97 @@ namespace Natural_Services
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
         {
             var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
-
-            string bucketName = _s3Config.BucketName;
-            string prefix = productResult.Image;
-            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            if (PresignedUrl.Any())
+           
+            if (string.IsNullOrEmpty(productResult.Image))
             {
-                var isd = PresignedUrl.FirstOrDefault();
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
                 return productresoursze1;
+
             }
             else
             {
-                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                string bucketName = _s3Config.BucketName;
+                string prefix = productResult.Image;
+                var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+                if (PresignedUrl.Any())
+                {
+                    var isd = PresignedUrl.FirstOrDefault();
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                    productresoursze1.PresignedUrl = isd.PresignedUrl;
 
-                return productresoursze1;
+                    return productresoursze1;
+                }
+                else
+                {
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                    return productresoursze1;
+                }
 
             }
+
         }
 
 
-        //get product by id as in tabel and asign presigned url
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)
         {
-           
-            var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-          
-            string bucketName = _s3Config.BucketName;
-            string prefix = productResult.Image;
-            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-            if (PresignedUrl.Any())
+
+            var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+           
+          
+
+            if (string.IsNullOrEmpty(productResult.Image))
             {
-                var isd = PresignedUrl.FirstOrDefault();
                 var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
-                productresoursze1.PresignedUrl = isd.PresignedUrl;
 
                 return productresoursze1;
+
             }
             else
             {
-                var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                string bucketName = _s3Config.BucketName;
+                string prefix = productResult.Image;
+                var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-                return productresoursze1;
+                if (PresignedUrl.Any())
+                {
+                    var isd = PresignedUrl.FirstOrDefault();
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+                    productresoursze1.PresignedUrl = isd.PresignedUrl;
 
+                    return productresoursze1;
+                }
+                else
+                {
+                    var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
+
+                    return productresoursze1;
+
+                }
             }
         }
-
-
         //get product by id as in tabel 
+
         public async Task<Product> GetProductByIdAsync(string ProductId)
         {
 
+            //var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
+
+            //return productResult;
+
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-            return productResult;
+            if (productResult != null && productResult.IsDeleted != true)
+            {
+                return productResult;
+            }
+            else
+            {
+                
+                return null;
+            }
+
 
         }
 
@@ -206,7 +242,7 @@ namespace Natural_Services
 
 
         //upload images to s3 bucket
-        public async Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix)
+        public async Task<UploadResult> UploadFileAsync(IFormFile file, string prefix)
         {
            
             string bucketName = _s3Config.BucketName;
@@ -236,6 +272,43 @@ namespace Natural_Services
 
 
         //if you want to delete Product complete from db including image
+        //public async Task<ProductResponse> DeleteProduct(string ProductId)
+        //{
+
+        //    var response = new ProductResponse();
+        //    try
+        //    {
+        //        var product1 = await GetProductByIdAsync(ProductId);
+
+        //        if (product1 != null)
+        //        {
+                   
+        //            string bucketName = _s3Config.BucketName;
+        //            string key = product1.Image;
+        //            bool imageDeletionResult = await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
+                    
+        //            _unitOfWork.ProductRepository.Remove(product1);
+        //            await _unitOfWork.CommitAsync();
+        //            response.Message = "SUCCESSFULLY DELETED";
+        //            response.StatusCode = 200;
+        //        }
+                
+        //        else
+        //        {
+        //            response.Message = "Product NOT FOUND";
+        //            response.StatusCode = 404;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        response.Message = "Internal Server Error";
+        //    }
+
+        //    return response;
+        //}
+
+
+
         public async Task<ProductResponse> DeleteProduct(string ProductId)
         {
 
@@ -246,17 +319,17 @@ namespace Natural_Services
 
                 if (product1 != null)
                 {
-                   
+                    product1.IsDeleted = true;
                     string bucketName = _s3Config.BucketName;
                     string key = product1.Image;
                     bool imageDeletionResult = await _unitOfWork.ProductRepository.DeleteImageAsync(bucketName, key);
-                    
-                    _unitOfWork.ProductRepository.Remove(product1);
+
+                    _unitOfWork.ProductRepository.Update(product1);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;
                 }
-                
+
                 else
                 {
                     response.Message = "Product NOT FOUND";
@@ -284,6 +357,7 @@ namespace Natural_Services
              .Where(c =>
                     (string.IsNullOrEmpty(search.Category) || c.Category.StartsWith(search.Category)) &&
                     (string.IsNullOrEmpty(search.ProductName) || c.ProductName.StartsWith(search.ProductName, StringComparison.OrdinalIgnoreCase))
+                    && c.IsDeleted != true
                 )
                 .Select(c => new GetProduct
                 {

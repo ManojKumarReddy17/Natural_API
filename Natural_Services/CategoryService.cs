@@ -3,6 +3,7 @@ using Natural_Core.IServices;
 using Natural_Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,16 +48,22 @@ namespace Natural_Services
 
 
 
+       
         public async Task<IEnumerable<Category>> GetAllCategories()
         {
             var result = await _unitOfWork.CategoryRepo.GetAllAsync();
-            return result;
+            var presentCategory = result.Where(d => d.IsDeleted != true);
+            return presentCategory;
         }
-
+       
         public async Task<Category> GetCategoryById(string CategoryId)
         {
-            return await _unitOfWork.CategoryRepo.GetByIdAsync(CategoryId);
-
+            var result = await _unitOfWork.CategoryRepo.GetByIdAsync(CategoryId);
+            if (result.IsDeleted == false)
+            {
+                return result;
+            }
+            return null;
         }
 
         public async Task<ResultResponse> UpdateCategory(Category updatecategory)
@@ -91,8 +98,8 @@ namespace Natural_Services
             try
             {
                 var existingCategory = await _unitOfWork.CategoryRepo.GetByIdAsync(categoryId);
-
-                _unitOfWork.CategoryRepo.Remove(existingCategory);
+                existingCategory.IsDeleted = true;
+                _unitOfWork.CategoryRepo.Update(existingCategory);
                 await _unitOfWork.CommitAsync();
 
                 if (existingCategory == null)

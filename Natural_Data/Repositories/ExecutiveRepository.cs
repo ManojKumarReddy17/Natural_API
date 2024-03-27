@@ -97,6 +97,7 @@ namespace Natural_Data.Repositories
                 .Include(c => c.AreaNavigation)
                  .ThenInclude(a => a.City)
                 .ThenInclude(ct => ct.State)
+                .Where(d => d.IsDeleted != true)
                  .ToListAsync();
 
                 var result = exec.Select(c => new Executive
@@ -112,6 +113,8 @@ namespace Natural_Data.Repositories
                     Password = c.Password,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude,
                     Image = c.Image
                 }).ToList();
 
@@ -144,7 +147,9 @@ namespace Natural_Data.Repositories
                         Password= exec.Password,
                         Image = exec.Image,
                         City = exec.AreaNavigation.City.CityName,
-                        State = exec.AreaNavigation.City.State.StateName
+                        State = exec.AreaNavigation.City.State.StateName,
+                        Latitude = exec.Latitude,
+                        Longitude = exec.Longitude
                     };
 
                     return result;
@@ -165,6 +170,7 @@ namespace Natural_Data.Repositories
                     .ThenInclude(a => a.City)
                    .ThenInclude(ct => ct.State)
                    .Where(c =>
+                   (c.IsDeleted != true)&&
     (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
     (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
     (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
@@ -184,7 +190,9 @@ namespace Natural_Data.Repositories
                 UserName = c.UserName,
                 Password = c.Password,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+                 Latitude = c.Latitude,
+                Longitude = c.Longitude
             }).ToList();
             return result;
         }

@@ -14,10 +14,22 @@ using Amazon.S3;
 using Amazon.Util;
 using Amazon;
 using Natural_Core.S3Models;
+using Natural_API.Resources;
 #nullable disable
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+var CorsPolicy = "CorsPolicy";
+builder.Services.AddCors(o =>
+{
+    o.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
@@ -92,6 +104,17 @@ builder.Services.AddTransient<IDsrService,DsrService>();
 builder.Services.AddTransient<IDsrdetailRepository, DsrdetailRepository>();
 builder.Services.AddTransient<IDsrdetailService, DsrdetailService>();
 
+
+builder.Services.AddTransient<IDistributorSalesRepository, DistributorSalesRepository>();
+builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>();
+
+
+
+builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
+builder.Services.AddTransient<INotificationDistributorRepository, NotificationDistributorRepository>();
+builder.Services.AddTransient<INotificationDistributorService, NotificationDistributorService>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 
@@ -122,6 +145,11 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityRequirement(requirement);
 });
 
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().
+     AllowAnyHeader());
+});
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -132,6 +160,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowOrigin");
+app.UseCors(CorsPolicy);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

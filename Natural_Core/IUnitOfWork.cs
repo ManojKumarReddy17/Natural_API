@@ -1,4 +1,5 @@
-﻿using Natural_Core.IRepositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using System;
 using System.Collections.Generic;
@@ -28,9 +29,13 @@ namespace Natural_Core
         IAssignDistributorToExecutiveRepository distributorToExecutiveRepo { get; }
         IAssignRetailorToDistributorRepository RetailorToDistributorRepositoryRepo { get; }
         IDsrdetailRepository DsrdetailRepository { get; }
+        INotificationRepository NotificationRepository { get; }
+        INotificationDistributorRepository NotificationDistributorRepository { get; }
 
         Task<int> CommitAsync();
 
+        IDbContextTransaction BeginTransaction(); // added for transaction
+        IDistributorSalesRepository DistributorSalesRepositoryRepo { get; }
 
     }
 }

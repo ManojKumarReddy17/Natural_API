@@ -24,9 +24,14 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Cities.ToListAsync();
         }
 
+        //public async Task<IEnumerable<City>> GetCitywithStateId(string StateId)
+        //{
+        //    return await NaturalDbContext.Cities.Where(m => m.StateId == StateId  ).ToListAsync();
+        //}
+
         public async Task<IEnumerable<City>> GetCitywithStateId(string StateId)
         {
-            return await NaturalDbContext.Cities.Where(m => m.StateId == StateId).ToListAsync();
+            return await NaturalDbContext.Cities.Where(m => m.StateId == StateId && m.IsDeleted == false).ToListAsync();
         }
 
         private NaturalsContext NaturalDbContext

@@ -19,12 +19,15 @@ namespace Natural_Data.Repositories
         {
 
         }
+      
+
         public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync()
         {
             var retailors = await (from Retailor in NaturalDbContext.Retailors
                                    join area in NaturalDbContext.Areas on Retailor.Area equals area.Id
                                    join city in NaturalDbContext.Cities on area.CityId equals city.Id
                                    join state in NaturalDbContext.States on city.StateId equals state.Id
+                                   where Retailor.IsDeleted != true
                                    select new
                                    {
                                        retailor = Retailor,
@@ -32,7 +35,8 @@ namespace Natural_Data.Repositories
                                        City = city,
                                        State = state
                                    }).ToListAsync();
-            var result = retailors.Select(c => new Retailor
+            var result = retailors.
+                Select(c => new Retailor
             {
 
                 Id = c.retailor.Id,
@@ -44,10 +48,14 @@ namespace Natural_Data.Repositories
                 Email = c.retailor.Email,
                 City = c.City.CityName,
                 State = c.State.StateName,
+                Latitude=c.retailor.Latitude,
+                Longitude=c.retailor.Longitude
             });
 
             return result;
         }
+
+
         public async Task<Retailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
@@ -76,6 +84,9 @@ namespace Natural_Data.Repositories
                     Area = retailorDetails.Area.AreaName,
                     City = retailorDetails.City.CityName,
                     State = retailorDetails.State.StateName,
+                    Latitude=retailorDetails.Retailor.Latitude,
+                    Longitude=retailorDetails.Retailor.Longitude
+                    
                 };
 
                 return result;
@@ -97,7 +108,8 @@ namespace Natural_Data.Repositories
                 existingRetailor.City = retailor.City;
                 existingRetailor.State = retailor.State;
                 existingRetailor.Area = retailor.Area;
-
+                existingRetailor.Latitude = retailor.Latitude;
+                existingRetailor.Longitude = retailor.Longitude;
 
                 await NaturalDbContext.SaveChangesAsync();
 
@@ -114,6 +126,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                        .Where(c =>
+                       (c.IsDeleted != true) &&
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
@@ -130,7 +143,9 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     Email = c.Email,
                     City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName
+                    State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude
                 }).ToList();
                 return result;
             }
@@ -163,6 +178,8 @@ namespace Natural_Data.Repositories
                         Area = c.AreaNavigation.AreaName,
                         City = c.AreaNavigation.City.CityName,
                         State = c.AreaNavigation.City.State.StateName,
+                        Latitude=c.Latitude,
+                        Longitude = c.Longitude
                     })
                     .ToList();
 
@@ -201,6 +218,8 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
+                    Latitude=c.Latitude,
+                    Longitude=c.Longitude
                 })
                 .ToList();
 

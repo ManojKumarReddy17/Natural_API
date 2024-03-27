@@ -27,7 +27,8 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<Area>> GetAreasWithCityID(string CityId)
         {
-            return await NaturalDbContext.Areas.Where(m => m.CityId == CityId).ToListAsync();
+             return await NaturalDbContext.Areas.Where(m => m.CityId == CityId && m.IsDeleted != true).ToListAsync();
+            
         }
         private NaturalsContext NaturalDbContext
         {

@@ -9,6 +9,9 @@ namespace Natural_API.Resources
         public string? OrderBy { get; set; }
         public decimal TotalAmount { get; set; }
 
+        public DateTime CreatedDate { get; set; } //added 14 
+        public DateTime ModifiedDate { get; set; }//added 14 
+
         public List<DsrdetailProduct> product { get; set; }
     }
 }

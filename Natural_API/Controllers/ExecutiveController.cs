@@ -107,12 +107,12 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpDelete("{ExecutiveId}")]
+      
         public async Task<ActionResult<ResultResponse>> DeleteExecutive(string ExecutiveId)
         {
             var response = await _executiveService.DeleteExecutive(ExecutiveId);
             return Ok(response);
         }
-
 
         /// <summary>
         /// SEARCH EXECUTIVE 
@@ -124,6 +124,16 @@ namespace Natural_API.Controllers
            var exe = await _executiveService.SearchExecutives(search);
             var execget = _mapper.Map<IEnumerable<Executive>, IEnumerable<ExecutiveGetResource>>(exe);
             return execget;
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<AngularLoginResponse>> Login([FromBody] AngularLoginResourse loginModel)
+        {
+            var credentials = _mapper.Map<AngularLoginResourse, Executive>(loginModel);
+            var user = await _executiveService.LoginAsync(credentials);
+
+            return StatusCode(user.Statuscode, user);
+
         }
 
 

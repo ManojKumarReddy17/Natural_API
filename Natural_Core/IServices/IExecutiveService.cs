@@ -22,11 +22,15 @@ namespace Natural_Core.IServices
         Task<GetExecutive> GetExecutivePresignedUrlbyId(string ExecutiveId);
 
         Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
+
         Task<ResultResponse> DeleteExecutive(string executiveId);
 
         Task<ResultResponse> UpadateExecutive(Executive executive);
 
         Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
+
+        public Task<AngularLoginResponse> LoginAsync(Executive credentials);
+
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         //Task UpadateExecutive(GetExecutive mappedexecutive);
     }

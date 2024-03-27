@@ -27,7 +27,9 @@ namespace Natural_Core.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Image { get; set; }
-        //public string PresignedUrl { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }

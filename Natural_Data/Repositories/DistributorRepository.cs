@@ -19,6 +19,7 @@ namespace Natural_Data.Repositories
         public DistributorRepository(NaturalsContext context) : base(context)
         {
         }
+        
         public async Task<List<Distributor>> GetAllDistributorstAsync()
         {
 
@@ -26,6 +27,7 @@ namespace Natural_Data.Repositories
             .Include(c => c.AreaNavigation)
              .ThenInclude(a => a.City)
             .ThenInclude(ct => ct.State)
+            .Where(d => d.IsDeleted != true)
              .ToListAsync();
 
             var result = distributors.Select(c => new Distributor
@@ -41,7 +43,8 @@ namespace Natural_Data.Repositories
                 Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
-              
+                Latitude=c.Latitude,
+                Longitude=c.Longitude
             }).ToList();
 
             return result;
@@ -53,7 +56,7 @@ namespace Natural_Data.Repositories
                        .Include(c => c.AreaNavigation)
                         .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
-                        .FirstOrDefaultAsync(c => c.Id == distributorid);
+                        .FirstOrDefaultAsync(c => c.Id == distributorid && c.IsDeleted != true);
 
             if (distributors != null)
             {
@@ -69,7 +72,9 @@ namespace Natural_Data.Repositories
                     City = distributors.AreaNavigation.City.CityName,
                     State = distributors.AreaNavigation.City.State.StateName,
                     UserName = distributors.UserName,
-                    Password = distributors.Password
+                    Password = distributors.Password,
+                    Latitude = distributors.Latitude,
+                        Longitude= distributors.Longitude
                 };
 
                 return result;
@@ -90,6 +95,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                        .ThenInclude(ct => ct.State)
                        .Where(c =>
+                       (c.IsDeleted != true) &&
         (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
@@ -109,7 +115,9 @@ namespace Natural_Data.Repositories
                 UserName = c.UserName,
                 Password = c.Password,
                 City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName
+                State = c.AreaNavigation.City.State.StateName,
+                Latitude = c.Latitude,
+                Longitude = c.Longitude
             }).ToList();
                 return result;
             }
@@ -128,7 +136,9 @@ namespace Natural_Data.Repositories
                     .ToListAsync();
 
                 var nonAssignedDistributors = distributors
-                    .Where(c => !assignedDistributorIds.Contains(c.Id))
+                    .Where(c => !assignedDistributorIds.Contains(c.Id)) 
+                    .Where(c => c.IsDeleted != true) // this is added for soft delete
+
                     .Select(c => new Distributor
                     {
                         Id = c.Id,
@@ -142,6 +152,7 @@ namespace Natural_Data.Repositories
                         Area = c.AreaNavigation.AreaName,
                         City = c.AreaNavigation.City.CityName,
                         State = c.AreaNavigation.City.State.StateName,
+                        Latitude=c.Latitude, Longitude=c.Longitude
                     })
                     .ToList();
 
@@ -155,6 +166,7 @@ namespace Natural_Data.Repositories
                        .ThenInclude(a => a.City)
                       .ThenInclude(ct => ct.State)
                       .Where(c =>
+                       (c.IsDeleted != true) &&
        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
        (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
@@ -182,11 +194,34 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
+                    Latitude = c.Latitude,
+                    Longitude=c.Longitude
                 })
                 .ToList();
 
             return nonAssignedDistributors;
         }
+
+
+
+
+        //public async Task<IEnumerable<AngularLoginResponse>> GetExe(string Id)
+        //{
+        //    var distirbutors = await NaturalDbContext.Distributors
+        //        .Include(c => c.ExecutiveNavigation)
+        //        .Where(c => c.Id == Id)
+        //         .Select(c => new AngularLoginResponse
+        //         {
+        //             Id = c.Id,
+
+        //             //Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
+        //             Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
+        //         }).ToListAsync();
+        //    return distirbutors;
+
+        //}
+
+
         private NaturalsContext NaturalDbContext
         {
             get 

@@ -21,6 +21,7 @@ namespace Natural_API.Controllers
 
         [HttpGet("{distributorId}")]
         public async Task<ActionResult<IEnumerable<RetailorToDistributorResource>>> GetRetailorByDistributorIdAsync(string distributorId)
+        
         {
             var retailers = await _retailortodistributorservice.GetRetailorsIdByDistributorId(distributorId);
             var rtdresources = _mapper.Map<IEnumerable<RetailorToDistributor>, IEnumerable<RetailorToDistributorResource>>(retailers);
@@ -28,7 +29,7 @@ namespace Natural_API.Controllers
         }
 
         [HttpGet("Details/{distributorId}")]
-        public async Task<ActionResult<IEnumerable<RetailorToDistributorResource>>> GetRetailorsDetailsByDistributorId(string distributorId)
+        public async Task<ActionResult<IEnumerable<RetailorToDistributor>>> GetRetailorsDetailsByDistributorId(string distributorId)
         {
             var retailers = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
             var rtdresources = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorToDistributorResource>>(retailers);

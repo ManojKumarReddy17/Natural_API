@@ -80,7 +80,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// DELETING CATEGORY BY ID
         /// </summary>
-       
+
         [HttpDelete("{CategoryId}")]
         public async Task<ActionResult> DeleteCategory(string CategoryId)
         {

@@ -10,15 +10,32 @@ namespace Natural_Core.IServices
     public interface IDsrService 
     {
         //Task<Dsr> GetDsrDetailsById(string DsrId);
-        Task<DsrResponse> DeleteDsr(string dsrId);
+        //Task<DsrResponse> DeleteDsr(string dsrId);
         //Task<ResultResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
         Task<ProductResponse> CreateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
-        Task<IEnumerable<Dsr>> GetAllDsr();
+
         Task<IEnumerable<DsrDistributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
         Task<IEnumerable<Product>> GetProductAsync();
-        Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
-        Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId);
+        Task<IEnumerable<Dsr>> GetAllDsr();
+        //Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
+        Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search);
+        //Task<IEnumerable<Dsrdetail>> GetDsrDetailsByDsrIdAsync(string dsrId);
+        Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId);
         Task<Dsr> GetDsrbyId(string dsrid);
+        Task<DsrResponse> DeleteDsr(Dsr dsr, List<Dsrdetail> dsrdetails, string dsrId);
+        Task<Dsr> GetbyId(string dsrid);
+        Task<IEnumerable<Dsrdetail>> GetDetailTableByDsrIdAsync(string dsrId);
+        Task<IEnumerable<GetProduct>> GetDetTableByDsrIdAsync(string dsrId);
+        Task<ProductResponse> UpdateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
+
+
+        Task<IEnumerable<Dsr>> getRetailorListByDistributorId(string distributorId);
+        Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date);
+
+        Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId);
+
+        Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId);
     }
+
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#nullable disable
 
 namespace Natural_Data.Repositories
 {
@@ -27,7 +28,9 @@ namespace Natural_Data.Repositories
         {
 
             var Products = await NaturalDbContext.Products
-           .Include(p => p.CategoryNavigation).ToListAsync();
+           .Include(p => p.CategoryNavigation)
+           .Where(c => c.IsDeleted != true)
+           .ToListAsync();
          
             var result = Products.Select(p => new Product
             {
@@ -84,6 +87,7 @@ namespace Natural_Data.Repositories
 
 
         //upload images to s3bucket
+        [Obsolete]
         public async Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix)
         {
             var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);
@@ -116,6 +120,7 @@ namespace Natural_Data.Repositories
             {
                 var prod = await NaturalDbContext.Products
                            .Include(p => p.CategoryNavigation)
+                           .Where(c => c.IsDeleted != true)
                             .FirstOrDefaultAsync(p => p.Id == ProductId);
 
                 if (prod != null)

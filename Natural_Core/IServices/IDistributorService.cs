@@ -22,7 +22,8 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<Distributor>> GetNonAssignedDistributors();
         Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
-
+        public Task<AngularLoginResponse> LoginAsync(Distributor credentials);
+        Task<ResultResponse> SoftDelete(string distributorId);
 
 
     }

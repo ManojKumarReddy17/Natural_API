@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Data
-
+namespace Natural_Core.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -26,6 +21,7 @@ namespace Natural_Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
+        public virtual DbSet<DistributorNotification> DistributorNotifications { get; set; }
         public virtual DbSet<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
@@ -36,33 +32,12 @@ namespace Natural_Data
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
 
-
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            SetTimestamps<Distributor>();
-            SetTimestamps<Executive>();
-            SetTimestamps<Retailor>();
-            SetTimestamps<Product>();
-            SetTimestamps<Dsr>();
-
-
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        private void SetTimestamps<T>() where T : class
-        {
-            var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is T && (e.State == EntityState.Added || e.State == EntityState.Modified));
-
-            foreach (var entry in entries)
+            if (!optionsBuilder.IsConfigured)
             {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow;
-                }
-
-                entry.Property("ModifiedDate").CurrentValue = DateTime.UtcNow;
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseMySql("server=naturals-mysql.c23wiuavicdg.ap-south-1.rds.amazonaws.com;database=Naturals;username=admin;password=Admin123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.35-mysql"));
             }
         }
 
@@ -193,6 +168,35 @@ namespace Natural_Data
                     .HasConstraintName("Distributor_ibfk_3");
             });
 
+            modelBuilder.Entity<DistributorNotification>(entity =>
+            {
+                entity.ToTable("Distributor_Notification");
+
+                entity.HasIndex(e => e.Distributor, "Distributor");
+
+                entity.Property(e => e.Body)
+                    .IsRequired()
+                    .HasMaxLength(3000);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Distributor)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Subject)
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                entity.HasOne(d => d.DistributorNavigation)
+                    .WithMany(p => p.DistributorNotifications)
+                    .HasForeignKey(d => d.Distributor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Distributor_Notification_ibfk_1");
+            });
+
             modelBuilder.Entity<DistributorToExecutive>(entity =>
             {
                 entity.ToTable("DistributorToExecutive");
@@ -276,39 +280,6 @@ namespace Natural_Data
                     .HasConstraintName("DSR_ibfk_3");
             });
 
-            //modelBuilder.Entity<Dsrdetail>(entity =>
-            //{
-            //    entity.HasNoKey();
-
-            //    entity.ToTable("DSRDetails");
-
-            //    entity.HasIndex(e => e.Dsr, "DSRDetails_ibfk_2");
-
-            //    entity.HasIndex(e => e.Product, "Product");
-
-            //    entity.Property(e => e.Dsr)
-            //        .IsRequired()
-            //        .HasMaxLength(50);
-
-            //    entity.Property(e => e.Price).HasPrecision(20, 3);
-
-            //    entity.Property(e => e.Product)
-            //        .IsRequired()
-            //        .HasMaxLength(50);
-
-            //    entity.HasOne(d => d.DsrNavigation)
-            //        .WithMany()
-            //        .HasForeignKey(d => d.Dsr)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("DSRDetails_ibfk_2");
-
-            //    entity.HasOne(d => d.ProductNavigation)
-            //        .WithMany()
-            //        .HasForeignKey(d => d.Product)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("DSRDetails_ibfk_1");
-            //});
-
             modelBuilder.Entity<Dsrdetail>(entity =>
             {
                 entity.ToTable("DSRDetails");
@@ -374,6 +345,8 @@ namespace Natural_Data
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.Image).HasMaxLength(50);
+
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -425,7 +398,7 @@ namespace Natural_Data
 
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
-                entity.Property(e => e.Password).HasMaxLength(20);
+                entity.Property(e => e.Password).HasMaxLength(100);
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
             });

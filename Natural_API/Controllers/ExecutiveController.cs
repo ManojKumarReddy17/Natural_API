@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3_Models;
 using Natural_Data.Repositories;
 using Natural_Services;
 
@@ -24,26 +25,26 @@ namespace Natural_API.Controllers
         /// <summary>
         /// GETTING LIST OF EXECUTIVE DETAILS
         /// </summary>
+        
         [HttpGet]
-        public async Task<IEnumerable<ExecutiveGetResource>> GetAllExecutives()
+        public async Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix)
         {
-            var executive = await _executiveService.GetAllExecutives();
-            var execget=_mapper.Map<IEnumerable<Executive>,IEnumerable<ExecutiveGetResource>>(executive);
-            return execget;
+            var executive = await _executiveService.GetAllExecutiveDetailsAsync(prefix);
+            return executive;
         }
 
         /// <summary>
         /// GETTING EXECUTIVE BY ID
         /// </summary>
-    
+
         [HttpGet("{ExecutiveId}")]
-        public async Task<ActionResult<ResultResponse>> GetExecutiveById(string ExecutiveId)
+        public async Task<ActionResult<Executive>> GetExecutiveById(string ExecutiveId)
         {
-            var executive = await _executiveService.GetExecutiveById(ExecutiveId);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
-            return Ok(exec);
+            var executive = await _executiveService.GetExecutivePresignedUrlbyId(ExecutiveId);
+            return Ok(executive);
         }
 
+        
         /// <summary>
         /// GETTING EXECUTIVE DETAILS BY ID
         /// </summary>
@@ -52,19 +53,22 @@ namespace Natural_API.Controllers
   
         public async Task<ActionResult<ResultResponse>> GetExecutiveDetailsById(string ExecutiveId)
         {
-            var executive = await _executiveService.GetExecutiveDetailsById(ExecutiveId);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
-            return Ok(exec);
+            var executive = await _executiveService.GetExecutiveDetailsPresignedUrlById(ExecutiveId);
+            return Ok(executive);
         }
 
         /// <summary>
         /// CREATING NEW EXECUTIVE
         /// </summary>
 
+        
         [HttpPost]
-        public async Task<ActionResult<ResultResponse>> InsertExecutiveWithAssociations([FromBody] InsertUpdateResource executiveResource)
+        public async Task<ActionResult<ResultResponse>> InsertExecutiveWithAssociations([FromForm] InsertUpdateResource executiveResource, string? prefix)
         {
+            var file = executiveResource.UploadImage;
+            var result = await _executiveService.UploadFileAsync(file, prefix);
             var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+            createexecu.Image = result.Message;
             var exe = await _executiveService.CreateExecutiveWithAssociationsAsync(createexecu);
 
             return StatusCode(exe.StatusCode, exe);
@@ -74,16 +78,29 @@ namespace Natural_API.Controllers
         /// UPDATING EXECUTIVE BY ID
         /// </summary>
 
-        [HttpPut("{ExecutiveId}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateExecutive(string ExecutiveId, [FromBody] InsertUpdateResource updatedexecutive)
+
+        [HttpPut]
+        public async Task<ActionResult<InsertUpdateResource>> UpdateExecutive(string ExecutiveId, [FromForm] InsertUpdateResource updatedexecutive, string? prefix)
         {
-            var existingexectutive= await _executiveService.GetExecutiveById(ExecutiveId);
+            
+            var existingexectutive = await _executiveService.GetExecutiveByIdAsync(ExecutiveId);
 
-            var mappedexecutive = _mapper.Map(updatedexecutive,existingexectutive);
-            var Updateresponse = await _executiveService.UpadateExecutive(mappedexecutive);
+            var file = updatedexecutive.UploadImage;
+            if (file != null && file.Length > 0)
+            {
+                var result = await _executiveService.UploadFileAsync(file, prefix); //change uploadfile to image
+                var mappedexecutive = _mapper.Map(updatedexecutive, existingexectutive);
+                mappedexecutive.Image = result.Message;
+                var Updateresponse = await _executiveService.UpadateExecutive(mappedexecutive);
+                return StatusCode(Updateresponse.StatusCode, Updateresponse);
+            }
 
-            return StatusCode(Updateresponse.StatusCode, Updateresponse);
+            var mappedexecutive1 = _mapper.Map(updatedexecutive, existingexectutive);
+            var Updateresponse1 = await _executiveService.UpadateExecutive(mappedexecutive1);
+
+            return StatusCode(Updateresponse1.StatusCode, Updateresponse1);
         }
+
 
         /// <summary>
         /// DELETING EXECUTIVE BY ID

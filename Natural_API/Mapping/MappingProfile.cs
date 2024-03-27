@@ -2,6 +2,7 @@
 using Natural_API.Resources;
 using Natural_Core;
 using Natural_Core.Models;
+using Natural_Core.S3_Models;
 
 #nullable disable
 namespace Natural_API.Mapping
@@ -22,7 +23,7 @@ namespace Natural_API.Mapping
                 CreateMap<Category, CategoryResource>();
                 CreateMap<Retailor , RetailorResource>();
                 CreateMap<Retailor, RetailorPostResource>();
-                CreateMap <Executive, ExecutiveGetResource>();
+                CreateMap <GetExecutive, ExecutiveGetResource>();
                 CreateMap<Executive, InsertUpdateResource>();
                 CreateMap<Category , CategoryInsertResource>();
 
@@ -78,6 +79,10 @@ namespace Natural_API.Mapping
             CreateMap<DsrDetailsByIdResource, Dsr>();
             CreateMap<ProductResource, Product>();
             CreateMap<Product, GetProduct>();
+
+            CreateMap<Executive, GetExecutive>();
+            CreateMap<Executive, ExecutiveGetResource>();
+
             CreateMap<DsrdetailProduct, Dsrdetail>();
             CreateMap<DsrInsertResource, Dsr>();
             CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))

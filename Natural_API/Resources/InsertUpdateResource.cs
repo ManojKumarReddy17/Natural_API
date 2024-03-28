@@ -15,5 +15,6 @@ namespace Natural_API.Resources
         public string State { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        public IFormFile UploadImage { get; set; }
     }
 }

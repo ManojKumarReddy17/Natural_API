@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Natural_Core.Models;
 
 #nullable disable
 
-namespace Natural_Data
-
+namespace Natural_Core.Models
 {
     public partial class NaturalsContext : DbContext
     {
@@ -26,6 +24,7 @@ namespace Natural_Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Distributor> Distributors { get; set; }
+        public virtual DbSet<DistributorNotification> DistributorNotifications { get; set; }
         public virtual DbSet<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual DbSet<DistributorbyArea> DistributorbyAreas { get; set; }
 
@@ -341,8 +340,6 @@ namespace Natural_Data
                     .HasConstraintName("DSR_ibfk_3");
             });
 
-        
-
             modelBuilder.Entity<Dsrdetail>(entity =>
             {
                 entity.ToTable("DSRDetails");
@@ -413,7 +410,7 @@ namespace Natural_Data
                 entity.Property(e => e.Image).HasMaxLength(50);
 
                 entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
-
+                entity.Property(e => e.Image).HasMaxLength(50);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()

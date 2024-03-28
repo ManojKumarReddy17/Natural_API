@@ -3,6 +3,7 @@ using AutoMapper;
 using Natural_API.Resources;
 using Natural_Core;
 using Natural_Core.Models;
+using Natural_Core.S3_Models;
 
 #nullable disable
 namespace Natural_API.Mapping
@@ -79,37 +80,41 @@ namespace Natural_API.Mapping
             //// RESOURCE TO DOMAIN
 
             CreateMap<LoginResource, Login>();
-             CreateMap<DistributorGetResource, Distributor>();
-             CreateMap<InsertUpdateResource, Distributor>();
-             CreateMap<StateResource, State>();
-             CreateMap<AreaResource, Area>();
-             CreateMap<CityResource, City>();
-             CreateMap<CategoryResource,Category>();
-             CreateMap<RetailorPostResource, Retailor>();
-             CreateMap<ExecutiveGetResource, Executive>();   
-             CreateMap<InsertUpdateResource, Executive>();
-             CreateMap<ExecutiveGetResource, Executive>();
-             CreateMap<CategoryInsertResource, Category>();
-             CreateMap<DsrResource, Dsr>();
-             CreateMap<DsrPostResource, Dsr>();
-             CreateMap<DsrDetailResource,Dsrdetail>();
-             CreateMap<DsrDetailPostResource, Dsrdetail>();
-             CreateMap<DistributorToExecutive, InsertDEmapper>();
-             CreateMap<DistributorToExecutiveResource, Distributor>();
-             CreateMap<DistributorToExecutive, InsertDEmapper>();
-             CreateMap<RetailorToDistributorResource, Retailor>();
-             CreateMap<AssignRetailorToDistributorResource, RetailorToDistributor>();
-             CreateMap<InsertRTDResource, RetailorToDistributor>();
-             CreateMap<DsrProductResource,Product>();
-             CreateMap<DsrDetailsByIdResource, Dsr>();
-             CreateMap<ProductResource, Product>();
-             CreateMap<Product, GetProduct>();
-             CreateMap<DsrdetailProduct, Dsrdetail>();
-             CreateMap<DsrInsertResource, Dsr>();
-            //CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))
-            //                                        .ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
+                CreateMap<DistributorGetResource, Distributor>();
+                CreateMap<InsertUpdateResource, Distributor>();
+                CreateMap<StateResource, State>();
+                CreateMap<AreaResource, Area>();
+                CreateMap<CityResource, City>();
+                CreateMap<CategoryResource,Category>();
+                CreateMap<RetailorPostResource, Retailor>();
+                CreateMap<ExecutiveGetResource, Executive>();   
+                CreateMap<InsertUpdateResource, Executive>();
+                CreateMap<ExecutiveGetResource, Executive>();
 
-             CreateMap<DsrDetailsByIdResource, EdittDSR>();
+                CreateMap<CategoryInsertResource, Category>();
+                CreateMap<DsrResource, Dsr>();
+                CreateMap<DsrPostResource, Dsr>();
+            CreateMap<DsrDetailResource,Dsrdetail>();
+            CreateMap<DsrDetailPostResource, Dsrdetail>();
+            CreateMap<DistributorToExecutive, InsertDEmapper>();
+            CreateMap<DistributorToExecutiveResource, Distributor>();
+                CreateMap<DistributorToExecutive, InsertDEmapper>();
+                CreateMap<RetailorToDistributorResource, Retailor>();
+                CreateMap<AssignRetailorToDistributorResource, RetailorToDistributor>();
+            CreateMap<InsertRTDResource, RetailorToDistributor>();
+            CreateMap<DsrProductResource,Product>();
+            CreateMap<DsrDetailsByIdResource, Dsr>();
+            CreateMap<ProductResource, Product>();
+            CreateMap<Product, GetProduct>();
+
+            CreateMap<Executive, GetExecutive>();
+            CreateMap<Executive, ExecutiveGetResource>();
+
+            CreateMap<DsrdetailProduct, Dsrdetail>();
+            CreateMap<DsrInsertResource, Dsr>();
+            CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))
+                                                    .ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
+            
 
              //CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c => c.CreatedDate, (obj) => obj.MapFrom(s => s.createdDate));
              //.ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));

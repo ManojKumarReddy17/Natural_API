@@ -4,6 +4,7 @@ using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
 using Natural_Data.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Natural_Data.Models
     {
         private readonly NaturalsContext _context;
         private readonly IAmazonS3 _S3Client;
-
+        
         private ILoginRepository _loginRepository;
         private IDistributorRepository _distributorRepository;
         private ICityRepository _cityRepository;
@@ -48,7 +49,7 @@ namespace Natural_Data.Models
 
         public ILoginRepository Login => _loginRepository = _loginRepository ?? new LoginRepository(_context);
         public IDistributorRepository DistributorRepo => _distributorRepository = _distributorRepository ?? new DistributorRepository(_context);
-        public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context);
+        public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context, _S3Client);
         public ICityRepository CityRepo => _cityRepository = _cityRepository ?? new CityRepository(_context);
         public IStateRepository StateRepo => _stateRepository = _stateRepository ?? new StateRepository(_context);
 

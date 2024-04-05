@@ -8,6 +8,7 @@ namespace Natural_Core.Models
     public class AngularLoginResponse
     {
         public string Id { get; set; }
+         public string PresignedUrl { get; set; }
         [JsonPropertyName("FirstName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string FirstName { get; set; }

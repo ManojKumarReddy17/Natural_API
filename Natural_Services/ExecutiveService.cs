@@ -1,20 +1,17 @@
 ﻿using Natural_Core;
-using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Microsoft.AspNetCore.Http;
 using Natural_Core.S3Models;
 using Microsoft.Extensions.Options;
 using Natural_Core.S3_Models;
-using System.Linq;
 using AutoMapper;
+
 
 namespace Natural_Services
 {
@@ -395,16 +392,21 @@ namespace Natural_Services
 
             return leftJoinQuery;
         }
+        private async Task<string?> GetPresignedUrlForImage(string imageName)
+        {
+            string bucketName = _s3Config.BucketName;
+            var presignedUrls = await GetAllFilesAsync(bucketName, ""); 
+            return presignedUrls.FirstOrDefault(p => p.Image == imageName)?.PresignedUrl;
+        }
 
         public async Task<AngularLoginResponse> LoginAsync(Executive credentials)
         {
             AngularLoginResponse response = new AngularLoginResponse();
             try
             {
-                var user = await _unitOfWork.ExecutiveRepo.GetAllAsync();
+                var user = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
 
                 var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
-
 
                 if (authenticatedUser != null)
                 {
@@ -415,23 +417,18 @@ namespace Natural_Services
                     response.Address = authenticatedUser.Address;
                     response.MobileNumber = authenticatedUser.MobileNumber;
 
+                    response.PresignedUrl = await GetPresignedUrlForImage(authenticatedUser.Image);
                     response.Statuscode = 200;
                     response.Message = "LOGIN SUCCESSFUL";
                     return response;
-
                 }
-
                 else
                 {
                     response.Statuscode = 401;
                     response.Message = "INVALID CREDENTIALS";
                     return response;
-
                 }
-
-
             }
-
             catch (Exception)
             {
                 response.Message = "INTERNAL SERVER ERROR";
@@ -463,7 +460,6 @@ namespace Natural_Services
 
     }
 }
-
 
 
 

@@ -112,7 +112,7 @@ namespace Natural_Services
 
                 if (distributor != null)
                 {
-                    _unitOfWork.DistributorRepo.Remove(distributor);
+                    _unitOfWork.DistributorRepo.Update(distributor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

@@ -31,6 +31,8 @@ namespace Natural_Core.Models
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
+        public virtual DbSet<ExecutiveGp> ExecutiveGps { get; set; }
+
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationDistributor> NotificationDistributors { get; set; }
@@ -456,6 +458,23 @@ namespace Natural_Core.Models
                     .HasForeignKey(d => d.State)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Executive_ibfk_3");
+            });
+            modelBuilder.Entity<ExecutiveGp>(entity =>
+            {
+                entity.ToTable("Executive_GPS");
+
+                entity.HasIndex(e => e.ExecutiveId, "ExecutiveId");
+
+                entity.Property(e => e.ExecutiveId).HasMaxLength(50);
+
+                entity.Property(e => e.Latitude).HasMaxLength(50);
+
+                entity.Property(e => e.Longitude).HasMaxLength(50);
+
+                entity.HasOne(d => d.Executive)
+                    .WithMany(p => p.ExecutiveGps)
+                    .HasForeignKey(d => d.ExecutiveId)
+                    .HasConstraintName("Executive_GPS_ibfk_1");
             });
 
             modelBuilder.Entity<Login>(entity =>

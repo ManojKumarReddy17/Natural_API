@@ -38,7 +38,7 @@ namespace Natural_Data.Models
 
         private INotificationRepository _NotificationRepository;
         private INotificationDistributorRepository _NotificationDistributorRepository;
-
+        private IExecutiveGpsRepository _executiveGpsRepository;
 
 
         public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
@@ -78,7 +78,7 @@ namespace Natural_Data.Models
         public INotificationRepository NotificationRepository => _NotificationRepository = _NotificationRepository ?? new NotificationRepository(_context);
 
         public INotificationDistributorRepository NotificationDistributorRepository => _NotificationDistributorRepository = _NotificationDistributorRepository ?? new NotificationDistributorRepository(_context);
-
+        public IExecutiveGpsRepository executiveGpsRepo => _executiveGpsRepository = _executiveGpsRepository ?? new ExecutiveGpsRepository(_context);
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

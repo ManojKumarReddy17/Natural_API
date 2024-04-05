@@ -36,5 +36,6 @@ namespace Natural_Core.Models
         public virtual State StateNavigation { get; set; }
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }
+        public virtual ICollection<ExecutiveGp> ExecutiveGps { get; set; }
     }
 }

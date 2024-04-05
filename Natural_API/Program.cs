@@ -114,7 +114,8 @@ builder.Services.AddTransient<INotificationRepository, NotificationRepository>()
 builder.Services.AddTransient<INotificationDistributorRepository, NotificationDistributorRepository>();
 builder.Services.AddTransient<INotificationDistributorService, NotificationDistributorService>();
 
-
+builder.Services.AddTransient<IExecutiveGpsRepository, ExecutiveGpsRepository>();
+builder.Services.AddTransient<IExecutiveGpsService, ExecutiveGpsService>();
 builder.Services.AddEndpointsApiExplorer();
 
 

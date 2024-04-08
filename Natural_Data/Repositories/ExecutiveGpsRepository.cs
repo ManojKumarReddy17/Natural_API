@@ -14,9 +14,6 @@ namespace Natural_Data.Repositories
         {
 
         }
-        
-
-
        
       public async Task<ExecutiveGp> GetByExeId(string executiveId)
       {

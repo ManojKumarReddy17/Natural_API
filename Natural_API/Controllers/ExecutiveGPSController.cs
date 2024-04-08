@@ -34,7 +34,6 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> CreateOrUpdateExecutive([FromBody] ExecutiveGpsResource executive)
         {
 
-            //  var executiveGp = _mapper.Map<IEnumerable<ExecutiveGp>, IEnumerable<ExecutiveGpsResource>>(executive);
 
              var executiveGp = _mapper.Map<ExecutiveGpsResource, ExecutiveGp>(executive);
             var result = await _executiveGpsService.CreateOrUpdate(executiveGp);

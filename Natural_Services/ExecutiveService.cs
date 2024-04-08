@@ -58,41 +58,12 @@ namespace Natural_Services
         public async Task<IEnumerable<Executive>> GetAllExecutives()
         {
             var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
-            //var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+            
 
             return result;
         }
 
-        //public async Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix)
-        //{
-
-        //    var executives = await GetAllExecutives();
-
-        //    string bucketName = _s3Config.BucketName;
-        //    var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
-
-        //    var leftJoinQuery = from executive in executives
-        //                        join presigned in presignedUrls
-        //                        on executive.Image equals presigned.Image into newUrl
-        //                        from sub in newUrl.DefaultIfEmpty()
-        //                        select new GetExecutive
-        //                        {
-        //                            Id = executive.Id,
-        //                            FirstName = executive.FirstName,
-        //                            LastName = executive.LastName,
-        //                            MobileNumber = executive.MobileNumber,
-        //                            Address = executive.Address,
-        //                            Area = executive.Area,
-        //                            Email = executive.Email,
-        //                            UserName = executive.UserName,
-        //                            Password = executive.Password,
-        //                            City = executive.City,
-        //                            State = executive.State,
-        //                            PresignedUrl = sub?.PresignedUrl
-        //                        };
-
-        //    return leftJoinQuery;
-        //}
+       
 
         public async Task<IEnumerable<InsertUpdateModel>> GetAllExecutiveDetailsAsync(string? prefix)
         {
@@ -128,8 +99,7 @@ namespace Natural_Services
         }
 
 
-        //    return result;
-        //}
+        
 
         public async Task<Executive> GetExecutiveDetailsById(string DetailsId)
         {
@@ -191,7 +161,7 @@ namespace Natural_Services
 
         public async Task<InsertUpdateModel> GetExecutivePresignedUrlbyId(string ExecutiveId)
         {
-            //var executiveResult = await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+           
             var executiveResult = await GetExecutiveByIdAsync(ExecutiveId);
 
             string bucketName = _s3Config.BucketName;
@@ -216,34 +186,11 @@ namespace Natural_Services
 
         }
 
-        //public async Task<ResultResponse> UpadateExecutive(Executive executive)
-        //{
-        //    var response = new ResultResponse();
-        //    try
-        //    {
-        //        _unitOfWork.ExecutiveRepo.Update(executive);
-        //        var updated = await _unitOfWork.CommitAsync();
-        //        if (updated != 0)
-        //        {
-
-        //            response.Message = "updatesuceesfull";
-        //            response.StatusCode = 200;
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response.Message = "Failed";
-        //        response.StatusCode = 500;
-        //    }
-        //}
+   
         public async Task<List<ExecutiveArea>> GetExecutiveAreaById(string ExecutiveId)
         {
             var result = await _unitOfWork.ExecutiveAreaRepository.GetExAreaByIdAsync(ExecutiveId);
-            //if (result.IsDeleted == false)
-            //{
-            //    return result;
-            //}
-            //return null;
+           
             return result;
         }
 
@@ -252,63 +199,7 @@ namespace Natural_Services
 
 
 
-        //public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
-        //{
-        //    var response = new ResultResponse();
-
-        //    try
-        //    {
-        //        executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
-
-
-        //        //if (executive.IsDeleted == null)
-        //        //{
-        //        //    executive.IsDeleted = false; 
-        //        //}
-
-
-
-        //        await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-        //        var created = await _unitOfWork.CommitAsync();
-
-        //        if (created != 0)
-        //        {
-        //            response.Message = "Insertion Successful";
-        //            response.StatusCode = 200;
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response.Message = "Insertion Failed";
-        //        response.StatusCode = 401;
-        //    }
-
-        //    return response;
-        //}
-
-        //public async Task<ResultResponse> UpadateExecutive(Executive executive)
-        //{
-        //    var response = new ResultResponse();
-        //    try
-        //    {
-        //        _unitOfWork.ExecutiveRepo.Update(executive);                             
-        //       var updated = await _unitOfWork.CommitAsync();
-        //        if (updated != 0)
-        //        {
-
-        //            response.Message = "updatesuceesfull";
-        //            response.StatusCode = 200;
-        //        }
-        //    }
-        //    catch  (Exception)
-        //    {
-        //        response.Message = "Failed";
-        //        response.StatusCode = 500;
-        //}
-
-        //    return (response);
-        //}
+      
 
         public async Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id)
 
@@ -342,8 +233,7 @@ namespace Natural_Services
 
 
 
-                    //var existingdist = await GetExecutiveAreaById(Id);
-                    //var result = _mapper.Map<List<NotificationDistributor>>(existingdist);
+             
                     var result = await GetExecutiveAreaById(Id);
 
                     var differentRecords = executiveArea.Except(result, new ExecutiveComparer()).ToList();
@@ -381,38 +271,7 @@ namespace Natural_Services
 
 
         }
-        //public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
-        //{
-        //    {
-        //        var response = new ResultResponse();
-
-        //        try
-        //        {
-
-        //            executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
-
-
-        //            await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-
-        //            var created = await _unitOfWork.CommitAsync();
-
-        //            if (created != 0)
-        //            {
-        //                response.Message = "Insertion Successful";
-        //                response.StatusCode = 200;
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-
-        //            response.Message = "Insertion Failed";
-        //            response.StatusCode = 401;
-        //        }
-
-        //        return response;
-        //    }
-        //}
+   
 
         public async Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea)
         {
@@ -463,7 +322,7 @@ namespace Natural_Services
         }
 
 
-        //>>>>>>> Stashed changes
+       
 
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {
@@ -495,17 +354,46 @@ namespace Natural_Services
             return response;
         }
 
-        //public async Task<IEnumerable<Executive>> SearchExecutives(SearchModel search)
+       
+        //public async Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search)
         //{
 
         //    var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
         //    return exec;
         //}
+
+
         public async Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search)
         {
 
-            var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
-            return exec;
+            var executives = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
+            string bucketName = _s3Config.BucketName;
+            string prefix = null;
+            var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
+
+            var leftJoinQuery = from executive in executives
+                                join presigned in presignedUrls
+                                on executive.Image equals presigned.Image into newUrl
+                                from sub in newUrl.DefaultIfEmpty()
+                                select new InsertUpdateModel
+                                {
+                                    Id = executive.Id,
+                                    FirstName = executive.FirstName,
+                                    LastName = executive.LastName,
+                                    MobileNumber = executive.MobileNumber,
+                                    Address = executive.Address,
+                                    Area = executive.Area,
+                                    Email = executive.Email,
+                                    UserName = executive.UserName,
+                                    Password = executive.Password,
+                                    City = executive.City,
+                                    State = executive.State,
+                                    PresignedUrl = sub?.PresignedUrl,
+                                    Latitude = executive.Latitude,
+                                    Longitude = executive.Longitude
+                                };
+
+            return leftJoinQuery;
         }
 
         public async Task<AngularLoginResponse> LoginAsync(Executive credentials)
@@ -557,7 +445,7 @@ namespace Natural_Services
 
 
     class ExecutiveComparer : IEqualityComparer<ExecutiveArea>
-    //class ExecutiveComparer : IEqualityComparer<ExecutiveArea>
+    
     {
         public bool Equals(ExecutiveArea x, ExecutiveArea y)
         {

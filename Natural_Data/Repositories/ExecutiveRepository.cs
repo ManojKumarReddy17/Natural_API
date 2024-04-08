@@ -90,47 +90,289 @@ namespace Natural_Data.Repositories
 
         }
 
-        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
+
+
+        public async Task<IEnumerable<InsertUpdateModel>> SearchExecutiveAsync(SearchModel search)
+
         {
+            if (string.IsNullOrEmpty(search.Area))
             {
                 var exec = await NaturalDbContext.Executives
-                .Include(c => c.AreaNavigation)
-                 .ThenInclude(a => a.City)
-                .ThenInclude(ct => ct.State)
-                .Where(d => d.IsDeleted != true)
-                 .ToListAsync();
-
-                var result = exec.Select(c => new Executive
+                     .Include(c => c.CityNavigation)
+                     .ThenInclude(ct => ct.State)
+                     .Where(c =>
+                      (c.IsDeleted != true) &&
+                      (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+                      (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+                      (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+                       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+                      (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
+                     .ToListAsync();
+                var result = exec.Select(c => new InsertUpdateModel
                 {
                     Id = c.Id,
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     MobileNumber = c.MobileNumber,
                     Address = c.Address,
-                    Area = c.AreaNavigation.AreaName,
                     Email = c.Email,
                     UserName = c.UserName,
                     Password = c.Password,
-                    City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName,
-                    Latitude=c.Latitude,
-                    Longitude=c.Longitude,
-                    Image = c.Image
-                }).ToList();
 
+                    //City = c.AreaNavigation.City.CityName,
+                    //State = c.AreaNavigation.City.State.StateName,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude,
+                    Image = c.Image,
+
+                    City = c.CityNavigation.CityName,
+                    State = c.CityNavigation.State.StateName,
+                    Area = NaturalDbContext.ExecutiveAreas
+                          .Where(execArea => execArea.Executive == c.Id)
+                          .Select(ea => ea.AreaNavigation.AreaName)
+                          .ToList()
+
+                }).ToList();
                 return result;
             }
+            else
+            {
+                var executiveNames = await NaturalDbContext.ExecutiveAreas
+                 .Where(x => x.Area == search.Area)
+                 .Select(x => x.Executive)
+                 .ToListAsync();
+
+                List<InsertUpdateModel> resultList = new List<InsertUpdateModel>();
+
+                //foreach (var executiveName in executiveNames)
+                //{
+                //    // Call the GetMethodById method and store the result in a variable
+                //    var result = await GetxecutiveAsyncbyId(executiveName); // Assuming GetMethodById returns an instance of YourModel
+                //    if (result != null)
+                //    // Add the result to the resultList
+                //    { resultList.Add(result); }
+                //}
+                //return resultList;
+
+                foreach (var executiveName in executiveNames)
+                {
+                    // Call the GetMethodById method and store the result in a variable
+                    var result = await GetxecutiveAsyncbyId(executiveName); // Assuming GetMethodById returns an instance of YourModel
+                    if (result != null)
+                    // Add the result to the resultList
+                    { resultList.Add(result); }
+                }
+
+                if (string.IsNullOrEmpty(search.FullName) && string.IsNullOrEmpty(search.FirstName) && string.IsNullOrEmpty(search.LastName))
+
+                { return resultList; }
+                else
+                {
+                    var exec = resultList
+                    //.Where(c =>
+                    // string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+                    // c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+                    // (c.FirstName + " " + c.LastName).StartsWith(search.FullName))
+                    // .ToList();
+                    .Where(c =>
+                               string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                               c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) || (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                               (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+                               .ToList();
+                    return exec;
+
+                }
+                // Assuming executiveNames is a List<string> containing the names of executives
+                //List<YourModel> resultList = executiveNames
+                //    .Select(executiveName => GetMethodById(executiveName)) // Call GetMethodById for each string and project the result to YourModel
+                //    .ToList();
+
+                //var result1 = executiveNames
+                //      .Select(async x =>await  NaturalDbContext.Executives
+
+                //                 .Include(c => c.CityNavigation)
+                //                  .ThenInclude(ct => ct.State)
+                //                 .Where(d => d.IsDeleted != true)
+                //                  .Where(d => d.Id == x)
+                //                  .Select(c => new InsertUpdateModel
+                //                  {
+                //                      Id = c.Id,
+                //                      FirstName = c.FirstName,
+                //                      LastName = c.LastName,
+                //                      MobileNumber = c.MobileNumber,
+                //                      Address = c.Address,
+                //                      //Area = c.AreaNavigation.AreaName,
+                //                      Email = c.Email,
+                //                      UserName = c.UserName,
+                //                      Password = c.Password,
+                //                      City = c.CityNavigation.CityName,
+                //                      State = c.CityNavigation.State.StateName,
+                //                      Area = NaturalDbContext.ExecutiveAreas
+                //      .Where(execArea => execArea.Executive == c.Id)
+                //      .Select(ea => ea.AreaNavigation.AreaName)
+                //      .ToList()
+                //                  }).FirstOrDefaultAsync()).ToList();
+
+                //return result1;
+
+                // Execute all asynchronous operations concurrently and await their completion
+                //var tasks = executiveNames.Select(async x =>
+                //{
+                //    var result = await NaturalDbContext.Executives
+                //        .Include(c => c.CityNavigation)
+                //        .ThenInclude(ct => ct.State)
+                //        .Where(d => d.IsDeleted != true)
+                //        .Where(d => d.Id == x)
+                //        .Select(c => new InsertUpdateModel
+                //        {
+                //            Id = c.Id,
+                //            FirstName = c.FirstName,
+                //            LastName = c.LastName,
+                //            MobileNumber = c.MobileNumber,
+                //            Address = c.Address,
+                //            Email = c.Email,
+                //            UserName = c.UserName,
+                //            Password = c.Password,
+                //            City = c.CityNavigation.CityName,
+                //            State = c.CityNavigation.State.StateName,
+                //            Area =  NaturalDbContext.ExecutiveAreas
+                //                .Where(execArea => execArea.Executive == c.Id)
+                //                .Select(ea => ea.AreaNavigation.AreaName)
+                //                .ToList()
+                //        }).FirstOrDefaultAsync();
+
+                //    return result;
+                //}).ToList();
+
+                //var result1 = await Task.WhenAll(tasks);
+                //var resultList = result1.ToList();
+
+                //return resultList;
+
+
+            }
+
+
+        }
+        private NaturalsContext NaturalDbContext
+        {
+            get { return Context as NaturalsContext; }
         }
 
-        
-        public async Task<Executive> GetWithExectiveByIdAsync(string execid)
+
+
+
+        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
+
         {
             {
                 var exec = await NaturalDbContext.Executives
-                           .Include(c => c.AreaNavigation)
-                            .ThenInclude(a => a.City)
-                           .ThenInclude(ct => ct.State)
-                            .FirstOrDefaultAsync(c => c.Id == execid);
+                .Include(c => c.CityNavigation)
+                //.ThenInclude(a => a.City)
+                .ThenInclude(ct => ct.State)
+                .Where(d => d.IsDeleted != true)
+                 .Select(c => new Executive
+                 {
+                     Id = c.Id,
+                     FirstName = c.FirstName,
+                     LastName = c.LastName,
+                     MobileNumber = c.MobileNumber,
+                     Address = c.Address,
+                     //Area = c.AreaNavigation.AreaName,
+                     Email = c.Email,
+                     UserName = c.UserName,
+                     Password = c.Password,
+                     City = c.CityNavigation.CityName,
+                     State = c.CityNavigation.State.StateName,
+                     Longitude = c.Longitude,
+                     Latitude = c.Latitude,
+                     Image = c.Image,
+                     //         Area = NaturalDbContext.ExecutiveAreas
+                     //.Where(execArea => execArea.Executive == c.Id)
+                     //.Select(ea => ea.AreaNavigation.AreaName)
+                     //.ToList()
+                 })
+                 .ToListAsync();
+
+
+
+                return exec;
+            }
+        }
+
+
+        public async Task<List<InsertUpdateModel>> GetxecutiveAsync()
+        {
+            {
+                //var exec = await NaturalDbContext.Executives
+                //.Include(c => c.CityNavigation)
+                ////.ThenInclude(a => a.City)
+                //.ThenInclude(ct => ct.State)
+                //.Where(d => d.IsDeleted != true)
+                // .Select(c => new Executive
+                // {
+                //     Id = c.Id,
+                //     FirstName = c.FirstName,
+                //     LastName = c.LastName,
+                //     MobileNumber = c.MobileNumber,
+                //     Address = c.Address,
+                //     //Area = c.AreaNavigation.AreaName,
+                //     Email = c.Email,
+                //     UserName = c.UserName,
+                //     Password = c.Password,
+                //     City = c.CityNavigation.CityName,
+                //     State = c.CityNavigation.State.StateName
+                // })
+                // .ToListAsync();
+
+                //var query =  (from exec in NaturalDbContext.Executives
+                //            join execArea in NaturalDbContext.ExecutiveAreas on exec.Id equals execArea.Executive into areas
+                //            select new InsertUpdateModel
+                //            {
+                //               Id  = exec.Id,
+                //                FirstName = exec.FirstName,
+                //                LastName= exec.LastName,
+                //                Address  = exec.Address,
+                //                MobileNumber = exec.MobileNumber,
+                //                Area = areas.Select(ea => ea.AreaNavigation.AreaName).ToList()
+                //            }).ToList();
+
+                var query = NaturalDbContext.Executives
+                    .Where(d => d.IsDeleted != true)
+    //.AsEnumerable() // Execute query on client side
+    .Select(exec => new InsertUpdateModel
+    {
+        Id = exec.Id,
+        FirstName = exec.FirstName,
+        LastName = exec.LastName,
+        Address = exec.Address,
+        MobileNumber = exec.MobileNumber,
+        Longitude = exec.Longitude,
+        Latitude = exec.Latitude,
+        Email = exec.Email,
+        Image = exec.Image,
+        City = exec.CityNavigation.CityName,
+        State = exec.StateNavigation.StateName,
+        Area = NaturalDbContext.ExecutiveAreas
+            .Where(execArea => execArea.Executive == exec.Id)
+            .Select(ea => ea.AreaNavigation.AreaName)
+            .ToList()
+    })
+    .ToList(); // Convert to list after executing the query
+
+                return query;
+            }
+        }
+
+        public async Task<Executive> GetWithExectiveByIdAsync(string id)
+        {
+            {
+                var exec = await NaturalDbContext.Executives
+
+                           .Include(c => c.CityNavigation)
+                            .ThenInclude(ct => ct.State)
+                           .Where(d => d.IsDeleted != true)
+                            .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (exec != null)
                 {
@@ -141,15 +383,22 @@ namespace Natural_Data.Repositories
                         LastName = exec.LastName,
                         MobileNumber = exec.MobileNumber,
                         Address = exec.Address,
-                        Area = exec.AreaNavigation.AreaName,
+                        //Area = exec.AreaNavigation.AreaName,
                         Email = exec.Email,
-                        UserName= exec.UserName,
-                        Password= exec.Password,
+
+                        UserName = exec.UserName,
+                        Password = exec.Password,
                         Image = exec.Image,
-                        City = exec.AreaNavigation.City.CityName,
-                        State = exec.AreaNavigation.City.State.StateName,
+                        //City = exec.AreaNavigation.City.CityName,
+                        //State = exec.AreaNavigation.City.State.StateName,
                         Latitude = exec.Latitude,
-                        Longitude = exec.Longitude
+                        Longitude = exec.Longitude,
+
+                        //UserName = exec.UserName,
+                        //Password = exec.Password,
+                        City = exec.CityNavigation.CityName,
+                        State = exec.CityNavigation.State.StateName
+
                     };
 
                     return result;
@@ -163,43 +412,64 @@ namespace Natural_Data.Repositories
         }
 
 
-        public async Task<IEnumerable<Executive>> SearchExecutiveAsync(SearchModel search)
+        // get table data as it is
+        public async Task<Executive> GetExectiveTableByIdAsync(string id)
         {
+
             var exec = await NaturalDbContext.Executives
-                   .Include(c => c.AreaNavigation)
-                    .ThenInclude(a => a.City)
-                   .ThenInclude(ct => ct.State)
-                   .Where(c =>
-                   (c.IsDeleted != true)&&
-    (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-    (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-    (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-    (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-    c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName)||
-    (c.FirstName + " "+ c.LastName).StartsWith(search.FullName)))
-   .ToListAsync();
-            var result = exec.Select(c => new Executive
-            {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                MobileNumber = c.MobileNumber,
-                Address = c.Address,
-                Area = c.AreaNavigation.AreaName,
-                Email = c.Email,
-                UserName = c.UserName,
-                Password = c.Password,
-                City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName,
-                 Latitude = c.Latitude,
-                Longitude = c.Longitude
-            }).ToList();
-            return result;
+
+                             .Where(d => d.Id == id)
+                             .Where(d => d.IsDeleted != true)
+                             .FirstOrDefaultAsync();
+            return exec;
         }
 
-        private NaturalsContext NaturalDbContext
+        Task<IEnumerable<Executive>> IExecutiveRepository.GetAllExecutiveAsync()
         {
-            get { return Context as NaturalsContext; }
+            throw new NotImplementedException();
         }
+
+        public async Task<InsertUpdateModel> GetxecutiveAsyncbyId(string id)
+        {
+
+            var result = await NaturalDbContext.Executives
+                        .Include(c => c.CityNavigation)
+                        .ThenInclude(ct => ct.State)
+
+                        .Where(d => d.Id == id)
+                        .Where(d => d.IsDeleted != true)
+                        .Select(c => new InsertUpdateModel
+                        {
+                            Id = c.Id,
+                            FirstName = c.FirstName,
+                            LastName = c.LastName,
+                            MobileNumber = c.MobileNumber,
+                            Address = c.Address,
+                            Email = c.Email,
+                            UserName = c.UserName,
+                            Password = c.Password,
+                            Longitude = c.Longitude,
+                            Latitude = c.Latitude,
+                            Image = c.Image,
+                            City = c.CityNavigation.CityName,
+                            State = c.CityNavigation.State.StateName,
+                            Area = NaturalDbContext.ExecutiveAreas
+                                .Where(execArea => execArea.Executive == c.Id)
+                                .Select(ea => ea.AreaNavigation.AreaName)
+                                .ToList()
+                        }).FirstOrDefaultAsync();
+
+            return result;
+
+
+
+
+
+        }
+
+        //public Task<IEnumerable<Executive>> SearchExecutiveAsync(SearchModel search)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

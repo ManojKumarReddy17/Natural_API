@@ -31,6 +31,7 @@ namespace Natural_Core.Models
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
         public virtual DbSet<Executive> Executives { get; set; }
+        public virtual DbSet<ExecutiveArea> ExecutiveAreas { get; set; }
         public virtual DbSet<ExecutiveGp> ExecutiveGps { get; set; }
 
         public virtual DbSet<Login> Logins { get; set; }
@@ -380,7 +381,7 @@ namespace Natural_Core.Models
             {
                 entity.ToTable("Executive");
 
-                entity.HasIndex(e => e.Area, "Area");
+                //entity.HasIndex(e => e.Area, "Area");
 
                 entity.HasIndex(e => e.City, "City");
 
@@ -392,9 +393,9 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Area)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                //entity.Property(e => e.Area)
+                //    .IsRequired()
+                //    .HasMaxLength(20);
 
                 entity.Property(e => e.City)
                     .IsRequired()
@@ -441,11 +442,11 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.HasOne(d => d.AreaNavigation)
-                    .WithMany(p => p.Executives)
-                    .HasForeignKey(d => d.Area)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Executive_ibfk_1");
+                //entity.HasOne(d => d.AreaNavigation)
+                //    .WithMany(p => p.Executives)
+                //    .HasForeignKey(d => d.Area)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("Executive_ibfk_1");
 
                 entity.HasOne(d => d.CityNavigation)
                     .WithMany(p => p.Executives)
@@ -459,6 +460,37 @@ namespace Natural_Core.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Executive_ibfk_3");
             });
+
+
+            modelBuilder.Entity<ExecutiveArea>(entity =>
+            {
+                entity.ToTable("Executive_Area");
+
+                entity.HasIndex(e => e.Area, "Area");
+
+                entity.HasIndex(e => e.Executive, "Executive");
+
+                entity.Property(e => e.Area)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Executive)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.AreaNavigation)
+                    .WithMany(p => p.ExecutiveAreas)
+                    .HasForeignKey(d => d.Area)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_Area_ibfk_2");
+
+                entity.HasOne(d => d.ExecutiveNavigation)
+                    .WithMany(p => p.ExecutiveAreas)
+                    .HasForeignKey(d => d.Executive)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_Area_ibfk_1");
+            });
+
             modelBuilder.Entity<ExecutiveGp>(entity =>
             {
                 entity.ToTable("Executive_GPS");

@@ -2,6 +2,7 @@
 using Natural_Core.IRepositories;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,13 +59,45 @@ namespace Natural_Services
         {
             var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
             //var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+
             return result;
         }
 
-        public async Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix)
+        //public async Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix)
+        //{
+
+        //    var executives = await GetAllExecutives();
+
+        //    string bucketName = _s3Config.BucketName;
+        //    var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
+
+        //    var leftJoinQuery = from executive in executives
+        //                        join presigned in presignedUrls
+        //                        on executive.Image equals presigned.Image into newUrl
+        //                        from sub in newUrl.DefaultIfEmpty()
+        //                        select new GetExecutive
+        //                        {
+        //                            Id = executive.Id,
+        //                            FirstName = executive.FirstName,
+        //                            LastName = executive.LastName,
+        //                            MobileNumber = executive.MobileNumber,
+        //                            Address = executive.Address,
+        //                            Area = executive.Area,
+        //                            Email = executive.Email,
+        //                            UserName = executive.UserName,
+        //                            Password = executive.Password,
+        //                            City = executive.City,
+        //                            State = executive.State,
+        //                            PresignedUrl = sub?.PresignedUrl
+        //                        };
+
+        //    return leftJoinQuery;
+        //}
+
+        public async Task<IEnumerable<InsertUpdateModel>> GetAllExecutiveDetailsAsync(string? prefix)
         {
 
-            var executives = await GetAllExecutives();
+            var executives = await GetxecutiveAsync();
 
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
@@ -73,7 +106,7 @@ namespace Natural_Services
                                 join presigned in presignedUrls
                                 on executive.Image equals presigned.Image into newUrl
                                 from sub in newUrl.DefaultIfEmpty()
-                                select new GetExecutive
+                                select new InsertUpdateModel
                                 {
                                     Id = executive.Id,
                                     FirstName = executive.FirstName,
@@ -86,56 +119,80 @@ namespace Natural_Services
                                     Password = executive.Password,
                                     City = executive.City,
                                     State = executive.State,
-                                    PresignedUrl = sub?.PresignedUrl
+                                    PresignedUrl = sub?.PresignedUrl,
+                                    Latitude = executive.Latitude,
+                                    Longitude = executive.Longitude
                                 };
 
             return leftJoinQuery;
         }
 
 
+        //    return result;
+        //}
 
         public async Task<Executive> GetExecutiveDetailsById(string DetailsId)
         {
+
             return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
         }
-        public async Task<GetExecutive> GetExecutiveDetailsPresignedUrlById(string DetailsId)
+        public async Task<InsertUpdateModel> GetExecutiveDetailsPresignedUrlById(string DetailsId)
         {
             var executiveResults = await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
             string bucketName = _s3Config.BucketName;
             string prefix = executiveResults.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
+
             if (PresignedUrl.Any())
             {
                 var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<Executive, GetExecutive>(executiveResults);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResults);
                 execuresoursze1.PresignedUrl = exe.PresignedUrl;
+
+
+
 
                 return execuresoursze1;
             }
             else
             {
-                var execuresoursze1 = _Mapper.Map<Executive, GetExecutive>(executiveResults);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResults);
 
                 return execuresoursze1;
 
             }
         }
 
+        public async Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id)
+        {
+            return await _unitOfWork.ExecutiveAreaRepository.GetExectiveAreaByIdAsync(id);
+
+        }
+
+        public async Task<List<InsertUpdateModel>> GetxecutiveAsync()
+        {
+            var result = await _unitOfWork.ExecutiveRepo.GetxecutiveAsync();
+
+            return result;
+
+        }
+
+
+
 
         public async Task<Executive> GetExecutiveByIdAsync(string ExecutiveId)
         {
-            var result = await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
-            if (result.IsDeleted == false)
-            {
-                return result;
-            }
-            return null;
+            var result = await _unitOfWork.ExecutiveRepo.GetExectiveTableByIdAsync(ExecutiveId);
+
+            return result;
         }
 
-        public async Task<GetExecutive> GetExecutivePresignedUrlbyId(string ExecutiveId)
+
+        public async Task<InsertUpdateModel> GetExecutivePresignedUrlbyId(string ExecutiveId)
         {
-            var executiveResult = await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+            //var executiveResult = await _unitOfWork.ExecutiveRepo.GetByIdAsync(ExecutiveId);
+            var executiveResult = await GetExecutiveByIdAsync(ExecutiveId);
 
             string bucketName = _s3Config.BucketName;
             string prefix = executiveResult.Image;
@@ -144,80 +201,269 @@ namespace Natural_Services
             if (PresignedUrl.Any())
             {
                 var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<Executive, GetExecutive>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
                 execuresoursze1.PresignedUrl = exe.PresignedUrl;
 
                 return execuresoursze1;
             }
             else
             {
-                var execuresoursze1 = _Mapper.Map<Executive, GetExecutive>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
 
                 return execuresoursze1;
 
             }
 
         }
-        
-        public async Task<ResultResponse> UpadateExecutive(Executive executive)
+
+        //public async Task<ResultResponse> UpadateExecutive(Executive executive)
+        //{
+        //    var response = new ResultResponse();
+        //    try
+        //    {
+        //        _unitOfWork.ExecutiveRepo.Update(executive);
+        //        var updated = await _unitOfWork.CommitAsync();
+        //        if (updated != 0)
+        //        {
+
+        //            response.Message = "updatesuceesfull";
+        //            response.StatusCode = 200;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        response.Message = "Failed";
+        //        response.StatusCode = 500;
+        //    }
+        //}
+        public async Task<List<ExecutiveArea>> GetExecutiveAreaById(string ExecutiveId)
         {
-            var response = new ResultResponse();
-            try
-            {
-                _unitOfWork.ExecutiveRepo.Update(executive);
-                var updated = await _unitOfWork.CommitAsync();
-                if (updated != 0)
-                {
-
-                    response.Message = "updatesuceesfull";
-                    response.StatusCode = 200;
-                }
-            }
-            catch (Exception)
-            {
-                response.Message = "Failed";
-                response.StatusCode = 500;
-            }
-
-            return (response);
+            var result = await _unitOfWork.ExecutiveAreaRepository.GetExAreaByIdAsync(ExecutiveId);
+            //if (result.IsDeleted == false)
+            //{
+            //    return result;
+            //}
+            //return null;
+            return result;
         }
 
 
 
-        public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+
+
+
+        //public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+        //{
+        //    var response = new ResultResponse();
+
+        //    try
+        //    {
+        //        executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
+
+
+        //        //if (executive.IsDeleted == null)
+        //        //{
+        //        //    executive.IsDeleted = false; 
+        //        //}
+
+
+
+        //        await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+        //        var created = await _unitOfWork.CommitAsync();
+
+        //        if (created != 0)
+        //        {
+        //            response.Message = "Insertion Successful";
+        //            response.StatusCode = 200;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        response.Message = "Insertion Failed";
+        //        response.StatusCode = 401;
+        //    }
+
+        //    return response;
+        //}
+
+        //public async Task<ResultResponse> UpadateExecutive(Executive executive)
+        //{
+        //    var response = new ResultResponse();
+        //    try
+        //    {
+        //        _unitOfWork.ExecutiveRepo.Update(executive);                             
+        //       var updated = await _unitOfWork.CommitAsync();
+        //        if (updated != 0)
+        //        {
+
+        //            response.Message = "updatesuceesfull";
+        //            response.StatusCode = 200;
+        //        }
+        //    }
+        //    catch  (Exception)
+        //    {
+        //        response.Message = "Failed";
+        //        response.StatusCode = 500;
+        //}
+
+        //    return (response);
+        //}
+
+        public async Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id)
+
         {
-            var response = new ResultResponse();
 
-            try
+            using (var transaction = _unitOfWork.BeginTransaction())
             {
-                executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
-
-                
-                //if (executive.IsDeleted == null)
-                //{
-                //    executive.IsDeleted = false; 
-                //}
-
-              
-
-                await _unitOfWork.ExecutiveRepo.AddAsync(executive);
-
-                var created = await _unitOfWork.CommitAsync();
-
-                if (created != 0)
+                var response = new ProductResponse();
+                try
                 {
-                    response.Message = "Insertion Successful";
+
+                    var existingnotification = await GetExecutiveByIdAsync(Id);
+
+                    existingnotification.FirstName = executive.FirstName;
+                    existingnotification.LastName = executive.LastName;
+                    existingnotification.Email = executive.Email;
+                    existingnotification.MobileNumber = executive.MobileNumber;
+                    existingnotification.Address = executive.Address;
+                    existingnotification.City = executive.City;
+                    existingnotification.State = executive.State;
+                    existingnotification.UserName = executive.UserName;
+                    existingnotification.Password = executive.Password;
+                    existingnotification.Image = executive.Image;
+                    existingnotification.Latitude = executive.Latitude;
+                    existingnotification.Longitude = executive.Longitude;
+
+                    _unitOfWork.ExecutiveRepo.Update(existingnotification);
+
+
+                    var commit = await _unitOfWork.CommitAsync();
+
+
+
+                    //var existingdist = await GetExecutiveAreaById(Id);
+                    //var result = _mapper.Map<List<NotificationDistributor>>(existingdist);
+                    var result = await GetExecutiveAreaById(Id);
+
+                    var differentRecords = executiveArea.Except(result, new ExecutiveComparer()).ToList();
+
+                    await _unitOfWork.ExecutiveAreaRepository.AddRangeAsync(differentRecords);
+
+                    var created = await _unitOfWork.CommitAsync();
+
+                    var deletingRecords = result.Except(executiveArea, new ExecutiveComparer()).ToList();
+
+
+                    _unitOfWork.ExecutiveAreaRepository.RemoveRange(deletingRecords);
+                    var deted = await _unitOfWork.CommitAsync();
+
+
+
+
+                    transaction.Commit();
+
+                    response.Message = " Executive and ExectuiveArea Successful";
                     response.StatusCode = 200;
+                    response.Id = Id;
+
                 }
-            }
-            catch (Exception)
-            {
-                response.Message = "Insertion Failed";
-                response.StatusCode = 401;
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+
+                }
+
+                return response;
             }
 
-            return response;
+
         }
+        //public async Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive)
+        //{
+        //    {
+        //        var response = new ResultResponse();
+
+        //        try
+        //        {
+
+        //            executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
+
+
+        //            await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+
+        //            var created = await _unitOfWork.CommitAsync();
+
+        //            if (created != 0)
+        //            {
+        //                response.Message = "Insertion Successful";
+        //                response.StatusCode = 200;
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+
+        //            response.Message = "Insertion Failed";
+        //            response.StatusCode = 401;
+        //        }
+
+        //        return response;
+        //    }
+        //}
+
+        public async Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea)
+        {
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                var response = new ProductResponse();
+                try
+                {
+                    executive.Id = "NEXE" + new Random().Next(10000, 99999).ToString();
+
+
+                    await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+                    var commit = await _unitOfWork.CommitAsync();
+
+                    var create = executiveArea.Select(c => new ExecutiveArea
+                    {
+
+                        Executive = executive.Id,
+                        Area = c.Area
+
+                    }).ToList();
+
+                    await _unitOfWork.ExecutiveAreaRepository.AddRangeAsync(create);
+                    var commit1 = await _unitOfWork.CommitAsync();
+
+                    transaction.Commit();
+
+                    response.Message = " Executive and ExectiveArearea Insertion Successful";
+                    response.StatusCode = 200;
+                    response.Id = executive.Id;
+
+
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+
+                }
+
+                return response;
+            }
+
+
+
+
+        }
+
+
+        //>>>>>>> Stashed changes
 
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {
@@ -249,7 +495,13 @@ namespace Natural_Services
             return response;
         }
 
-        public async Task<IEnumerable<Executive>> SearchExecutives(SearchModel search)
+        //public async Task<IEnumerable<Executive>> SearchExecutives(SearchModel search)
+        //{
+
+        //    var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
+        //    return exec;
+        //}
+        public async Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search)
         {
 
             var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
@@ -301,6 +553,26 @@ namespace Natural_Services
 
 
         }
+    }
+
+
+    class ExecutiveComparer : IEqualityComparer<ExecutiveArea>
+    //class ExecutiveComparer : IEqualityComparer<ExecutiveArea>
+    {
+        public bool Equals(ExecutiveArea x, ExecutiveArea y)
+        {
+            if (x.Area == y.Area)
+                return true;
+
+            return false;
+        }
+
+        public int GetHashCode(ExecutiveArea obj)
+        {
+            return obj.Area.GetHashCode();
+        }
+
+
     }
 }
 

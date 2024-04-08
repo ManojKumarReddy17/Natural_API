@@ -36,6 +36,7 @@ namespace Natural_Core
 
         IDbContextTransaction BeginTransaction(); // added for transaction
         IDistributorSalesRepository DistributorSalesRepositoryRepo { get; }
+        IExecutiveAreaRepository ExecutiveAreaRepository { get; }
         IExecutiveGpsRepository executiveGpsRepo { get; }
     }
 }

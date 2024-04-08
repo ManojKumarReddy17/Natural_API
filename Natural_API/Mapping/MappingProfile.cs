@@ -74,7 +74,9 @@ namespace Natural_API.Mapping
              CreateMap< Notification, NotificationResource>();
              CreateMap<NotificationDistributor, NotificationDistributorResource>();
             CreateMap<DSRretailorDetails, DSRretailorDetailsResources>();
-
+            CreateMap<Executive, InsertUpdateResource>();
+            CreateMap<ExecutiveArea, ExecutiveAreaResource>();
+            CreateMap<InsertUpdateModel, ExecutiveGetResource>();
             CreateMap<ExecutiveGp, ExecutiveGpsResource>();
 
             //// RESOURCE TO DOMAIN
@@ -129,6 +131,7 @@ namespace Natural_API.Mapping
              CreateMap<DistributorSalesReportResuorce, DistributorSalesReport>();
             CreateMap< DSRretailorDetailsResources, DSRretailorDetails>();
             CreateMap<ExecutiveGpsResource, ExecutiveGp>();
+            CreateMap<ExecutiveAreaResource, ExecutiveArea>();
         }
     }
 }

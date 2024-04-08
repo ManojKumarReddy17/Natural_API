@@ -11,27 +11,49 @@ namespace Natural_Core.IServices
 {
     public interface IExecutiveService
     {
+
         //Task<IEnumerable<Executive>> GetAllExecutives();
-        Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix);
+        //Task<IEnumerable<GetExecutive>> GetAllExecutiveDetailsAsync(string? prefix);
+        Task<IEnumerable<InsertUpdateModel>> GetAllExecutiveDetailsAsync(string? prefix);
+
+        //Task<Executive> GetExecutiveDetailsById(string DetailsId);
+        Task<InsertUpdateModel> GetExecutiveDetailsPresignedUrlById(string DetailsId);
+
+        Task<Executive> GetExecutiveByIdAsync(string ExecutiveId); //get table data of executive
+        Task<InsertUpdateModel> GetExecutivePresignedUrlbyId(string ExecutiveId);
+
+        Task<IEnumerable<Executive>> GetAllExecutives();
+
+        Task<Executive> GetExecutiveDetailsById(string DetailsId); //get detail table data of executive
+
+        //Task<Executive> GetExecutiveById(string ExecutiveId); //get table data of executive
 
 
-        Task<Executive> GetExecutiveDetailsById(string DetailsId);
-        Task<GetExecutive> GetExecutiveDetailsPresignedUrlById(string DetailsId);
+        Task<List<ExecutiveArea>> GetExecutiveAreaById(string ExecutiveId); //get table data of executivearea
 
-        Task<Executive> GetExecutiveByIdAsync(string ExecutiveId);
-        Task<GetExecutive> GetExecutivePresignedUrlbyId(string ExecutiveId);
+        //Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
 
-        Task<ResultResponse> CreateExecutiveWithAssociationsAsync(Executive executive);
+        Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea);
 
         Task<ResultResponse> DeleteExecutive(string executiveId);
 
-        Task<ResultResponse> UpadateExecutive(Executive executive);
+        //Task<ResultResponse> UpadateExecutive(Executive executive);
 
-        Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
+        Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id);
 
-        public Task<AngularLoginResponse> LoginAsync(Executive credentials);
+        //Task<IEnumerable<Executive>> SearchExecutives(SearchModel search);
+
 
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         //Task UpadateExecutive(GetExecutive mappedexecutive);
+
+        Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search);
+
+        Task<AngularLoginResponse> LoginAsync(Executive credentials);
+
+        Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);  //get detail table data of executiveArea
+
+        Task<List<InsertUpdateModel>> GetxecutiveAsync();
+
     }
 }

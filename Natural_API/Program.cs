@@ -71,6 +71,7 @@ builder.Services.AddTransient<IRetailorService, RetailorService>();
 
 builder.Services.AddTransient<IExecutiveRepository,ExecutiveRepository>();
 builder.Services.AddTransient<IExecutiveService,ExecutiveService>();
+builder.Services.AddTransient<IExecutiveAreaRepository, ExecutiveAreaRepository>();
 
 builder.Services.AddTransient<ICityRepository, CityRepository>();
 builder.Services.AddTransient<ICityService, CityService>();
@@ -116,6 +117,7 @@ builder.Services.AddTransient<INotificationDistributorService, NotificationDistr
 
 builder.Services.AddTransient<IExecutiveGpsRepository, ExecutiveGpsRepository>();
 builder.Services.AddTransient<IExecutiveGpsService, ExecutiveGpsService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 

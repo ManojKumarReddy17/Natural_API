@@ -119,8 +119,7 @@ namespace Natural_Data.Repositories
                     UserName = c.UserName,
                     Password = c.Password,
 
-                    //City = c.AreaNavigation.City.CityName,
-                    //State = c.AreaNavigation.City.State.StateName,
+                  
                     Latitude = c.Latitude,
                     Longitude = c.Longitude,
                     Image = c.Image,
@@ -144,15 +143,7 @@ namespace Natural_Data.Repositories
 
                 List<InsertUpdateModel> resultList = new List<InsertUpdateModel>();
 
-                //foreach (var executiveName in executiveNames)
-                //{
-                //    // Call the GetMethodById method and store the result in a variable
-                //    var result = await GetxecutiveAsyncbyId(executiveName); // Assuming GetMethodById returns an instance of YourModel
-                //    if (result != null)
-                //    // Add the result to the resultList
-                //    { resultList.Add(result); }
-                //}
-                //return resultList;
+             
 
                 foreach (var executiveName in executiveNames)
                 {
@@ -169,11 +160,7 @@ namespace Natural_Data.Repositories
                 else
                 {
                     var exec = resultList
-                    //.Where(c =>
-                    // string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-                    // c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-                    // (c.FirstName + " " + c.LastName).StartsWith(search.FullName))
-                    // .ToList();
+                   
                     .Where(c =>
                                string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
                                c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) || (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
@@ -182,72 +169,11 @@ namespace Natural_Data.Repositories
                     return exec;
 
                 }
-                // Assuming executiveNames is a List<string> containing the names of executives
-                //List<YourModel> resultList = executiveNames
-                //    .Select(executiveName => GetMethodById(executiveName)) // Call GetMethodById for each string and project the result to YourModel
-                //    .ToList();
+               
 
-                //var result1 = executiveNames
-                //      .Select(async x =>await  NaturalDbContext.Executives
+           
 
-                //                 .Include(c => c.CityNavigation)
-                //                  .ThenInclude(ct => ct.State)
-                //                 .Where(d => d.IsDeleted != true)
-                //                  .Where(d => d.Id == x)
-                //                  .Select(c => new InsertUpdateModel
-                //                  {
-                //                      Id = c.Id,
-                //                      FirstName = c.FirstName,
-                //                      LastName = c.LastName,
-                //                      MobileNumber = c.MobileNumber,
-                //                      Address = c.Address,
-                //                      //Area = c.AreaNavigation.AreaName,
-                //                      Email = c.Email,
-                //                      UserName = c.UserName,
-                //                      Password = c.Password,
-                //                      City = c.CityNavigation.CityName,
-                //                      State = c.CityNavigation.State.StateName,
-                //                      Area = NaturalDbContext.ExecutiveAreas
-                //      .Where(execArea => execArea.Executive == c.Id)
-                //      .Select(ea => ea.AreaNavigation.AreaName)
-                //      .ToList()
-                //                  }).FirstOrDefaultAsync()).ToList();
-
-                //return result1;
-
-                // Execute all asynchronous operations concurrently and await their completion
-                //var tasks = executiveNames.Select(async x =>
-                //{
-                //    var result = await NaturalDbContext.Executives
-                //        .Include(c => c.CityNavigation)
-                //        .ThenInclude(ct => ct.State)
-                //        .Where(d => d.IsDeleted != true)
-                //        .Where(d => d.Id == x)
-                //        .Select(c => new InsertUpdateModel
-                //        {
-                //            Id = c.Id,
-                //            FirstName = c.FirstName,
-                //            LastName = c.LastName,
-                //            MobileNumber = c.MobileNumber,
-                //            Address = c.Address,
-                //            Email = c.Email,
-                //            UserName = c.UserName,
-                //            Password = c.Password,
-                //            City = c.CityNavigation.CityName,
-                //            State = c.CityNavigation.State.StateName,
-                //            Area =  NaturalDbContext.ExecutiveAreas
-                //                .Where(execArea => execArea.Executive == c.Id)
-                //                .Select(ea => ea.AreaNavigation.AreaName)
-                //                .ToList()
-                //        }).FirstOrDefaultAsync();
-
-                //    return result;
-                //}).ToList();
-
-                //var result1 = await Task.WhenAll(tasks);
-                //var resultList = result1.ToList();
-
-                //return resultList;
+              
 
 
             }
@@ -278,7 +204,7 @@ namespace Natural_Data.Repositories
                      LastName = c.LastName,
                      MobileNumber = c.MobileNumber,
                      Address = c.Address,
-                     //Area = c.AreaNavigation.AreaName,
+                     
                      Email = c.Email,
                      UserName = c.UserName,
                      Password = c.Password,
@@ -287,10 +213,7 @@ namespace Natural_Data.Repositories
                      Longitude = c.Longitude,
                      Latitude = c.Latitude,
                      Image = c.Image,
-                     //         Area = NaturalDbContext.ExecutiveAreas
-                     //.Where(execArea => execArea.Executive == c.Id)
-                     //.Select(ea => ea.AreaNavigation.AreaName)
-                     //.ToList()
+                   
                  })
                  .ToListAsync();
 
@@ -304,38 +227,7 @@ namespace Natural_Data.Repositories
         public async Task<List<InsertUpdateModel>> GetxecutiveAsync()
         {
             {
-                //var exec = await NaturalDbContext.Executives
-                //.Include(c => c.CityNavigation)
-                ////.ThenInclude(a => a.City)
-                //.ThenInclude(ct => ct.State)
-                //.Where(d => d.IsDeleted != true)
-                // .Select(c => new Executive
-                // {
-                //     Id = c.Id,
-                //     FirstName = c.FirstName,
-                //     LastName = c.LastName,
-                //     MobileNumber = c.MobileNumber,
-                //     Address = c.Address,
-                //     //Area = c.AreaNavigation.AreaName,
-                //     Email = c.Email,
-                //     UserName = c.UserName,
-                //     Password = c.Password,
-                //     City = c.CityNavigation.CityName,
-                //     State = c.CityNavigation.State.StateName
-                // })
-                // .ToListAsync();
-
-                //var query =  (from exec in NaturalDbContext.Executives
-                //            join execArea in NaturalDbContext.ExecutiveAreas on exec.Id equals execArea.Executive into areas
-                //            select new InsertUpdateModel
-                //            {
-                //               Id  = exec.Id,
-                //                FirstName = exec.FirstName,
-                //                LastName= exec.LastName,
-                //                Address  = exec.Address,
-                //                MobileNumber = exec.MobileNumber,
-                //                Area = areas.Select(ea => ea.AreaNavigation.AreaName).ToList()
-                //            }).ToList();
+              
 
                 var query = NaturalDbContext.Executives
                     .Where(d => d.IsDeleted != true)
@@ -383,19 +275,17 @@ namespace Natural_Data.Repositories
                         LastName = exec.LastName,
                         MobileNumber = exec.MobileNumber,
                         Address = exec.Address,
-                        //Area = exec.AreaNavigation.AreaName,
+                        
                         Email = exec.Email,
 
                         UserName = exec.UserName,
                         Password = exec.Password,
                         Image = exec.Image,
-                        //City = exec.AreaNavigation.City.CityName,
-                        //State = exec.AreaNavigation.City.State.StateName,
+                       
                         Latitude = exec.Latitude,
                         Longitude = exec.Longitude,
 
-                        //UserName = exec.UserName,
-                        //Password = exec.Password,
+                        
                         City = exec.CityNavigation.CityName,
                         State = exec.CityNavigation.State.StateName
 
@@ -467,9 +357,6 @@ namespace Natural_Data.Repositories
 
         }
 
-        //public Task<IEnumerable<Executive>> SearchExecutiveAsync(SearchModel search)
-        //{
-        //    throw new NotImplementedException();
-        //}
+       
     }
 }

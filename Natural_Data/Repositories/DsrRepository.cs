@@ -66,8 +66,8 @@ namespace Natural_Data.Repositories
                     (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
                     &&
 
-                      (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date)
-                      && c.IsDeleted != true)
+                      (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
+                     .Where (c=> c.IsDeleted != true)
 
                 .Select(c => new Dsr
                 {

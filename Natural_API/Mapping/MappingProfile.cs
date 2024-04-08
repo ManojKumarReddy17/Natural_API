@@ -132,6 +132,7 @@ namespace Natural_API.Mapping
             CreateMap< DSRretailorDetailsResources, DSRretailorDetails>();
             CreateMap<ExecutiveGpsResource, ExecutiveGp>();
             CreateMap<ExecutiveAreaResource, ExecutiveArea>();
+            CreateMap<DsrDetailsByIdResource, EdittDSR>();
         }
     }
 }

@@ -84,17 +84,35 @@ namespace Natural_API.Controllers
 
         {
             var file = executiveResource.UploadImage;
-            var result = await _executiveService.UploadFileAsync(file, prefix);
-            var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+            if (file != null && file.Length > 0)
+            {
 
-            createexecu.Image = result.Message;
+                var result = await _executiveService.UploadFileAsync(file, prefix);
+                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
 
-            var executivearea = executiveResource.Area;
-            var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
-            var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
+                createexecu.Image = result.Message;
+
+                var executivearea = executiveResource.Area;
+                var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
+                var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
 
 
-            return StatusCode(exe.StatusCode, exe);
+                return StatusCode(exe.StatusCode, exe);
+
+            }
+            else
+
+            {
+                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+                var executivearea = executiveResource.Area;
+                var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
+                var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
+
+
+                return StatusCode(exe.StatusCode, exe);
+
+
+            }
         }
 
         /// <summary>

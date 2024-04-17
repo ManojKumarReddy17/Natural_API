@@ -34,6 +34,13 @@ namespace Natural_Data.Repositories
             return await NaturalDbContext.Cities.Where(m => m.StateId == StateId && m.IsDeleted == false).ToListAsync();
         }
 
+        public async Task<City> GetCityWithId(string CityId)
+        {
+            return await NaturalDbContext.Cities.Where(m => m.Id == CityId && m.IsDeleted == false).FirstOrDefaultAsync();
+        }
+
+        
+
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }

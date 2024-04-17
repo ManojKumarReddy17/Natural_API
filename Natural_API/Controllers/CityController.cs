@@ -24,7 +24,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// GETTING LIST OF CITIES
         /// </summary>
-       
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesList()
         {
@@ -36,7 +36,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// GETTING CITIES BY STATE ID
         /// </summary>
-      
+
         [HttpGet("{StateId}")]
 
         public async Task<ActionResult<IEnumerable<City>>> GetCitieswithStateId(string StateId)
@@ -44,6 +44,15 @@ namespace Natural_API.Controllers
             var city = await _cityService.GetCitywithStateId(StateId);
             var CitiesList = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(city);
             return Ok(CitiesList);
+        }
+
+
+        [HttpGet("getbyid/{CityId}")]
+        public async Task<ActionResult<CityResource>>GetCityId(String CityId)
+        {
+            var City =await _cityService.GetCityWithId(CityId);
+            var CityList = _mapper.Map<City,CityResource>(City);    
+            return Ok(CityList);    
         }
 
     }

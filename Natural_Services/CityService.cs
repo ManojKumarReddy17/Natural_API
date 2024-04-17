@@ -1,4 +1,4 @@
-﻿using Natural_Core.IServices;
+﻿  using Natural_Core.IServices;
 using Natural_Core.Models;
 using Natural_Core;
 using System;
@@ -31,6 +31,18 @@ namespace Natural_Services
             var presentcity = result.Where(c => c.IsDeleted == false).ToList();
             return presentcity;
 
+        }
+
+        //public async Task<City> GetCityWithId(string CityId)
+        //{
+        //    return await _unitOfWork.CityRepo.GetCityWithStateId(CityId);  
+        //}
+
+       
+
+        public async Task<City> GetCityWithId(string CityId)
+        {
+            return await _unitOfWork.CityRepo.GetCityWithId(CityId);
         }
 
         public async Task<IEnumerable<City>> GetCitywithStateId(string StateId)

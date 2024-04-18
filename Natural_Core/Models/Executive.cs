@@ -12,6 +12,8 @@ namespace Natural_Core.Models
             DistributorToExecutives = new HashSet<DistributorToExecutive>();
             Dsrs = new HashSet<Dsr>();
             ExecutiveAreas = new HashSet<ExecutiveArea>();
+            ExecutiveGps = new HashSet<ExecutiveGp>();
+            NotificationExecutives = new HashSet<NotificationExecutive>();
         }
 
         public string Id { get; set; }
@@ -37,7 +39,5 @@ namespace Natural_Core.Models
         public virtual State StateNavigation { get; set; }
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }
-        public virtual ICollection<ExecutiveGp> ExecutiveGps { get; set; }
-        public virtual ICollection<ExecutiveArea> ExecutiveAreas { get; set; }
     }
 }

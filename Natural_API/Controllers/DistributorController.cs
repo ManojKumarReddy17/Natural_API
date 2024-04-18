@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3_Models;
 using Natural_Services;
 using System.Net.WebSockets;
 
@@ -29,11 +30,10 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails()
+        public async Task<IEnumerable<GetDistributor>> GetAllDistributorDetails(string? prefix)
         {
-            var distributors = await _DistributorService.GetAllDistributors();
-            var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);
-            return Ok(distributorResources);
+            var executive = await _DistributorService.GetAllDistributorDetailsAsync(prefix);
+            return executive;
         }
 
         /// <summary>
@@ -54,11 +54,10 @@ namespace Natural_API.Controllers
 
 
         [HttpGet("{DisId}")]
-        public async Task<ActionResult<DistributorGetResource>> GetDistributorById(string DisId)
+        public async Task<ActionResult<Distributor>> GetDistributorById(string DisId)
         {
-            var distributor = await _DistributorService.GetDistributorById(DisId);
-            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
-            return Ok(distributorResource);
+            var distributor = await _DistributorService.GetDistributorPresignedUrlbyId(DisId);
+            return Ok(distributor);
         }
 
         /// <summary>
@@ -78,13 +77,13 @@ namespace Natural_API.Controllers
         /// CREATING NEW DISTRIBUTOR
         /// </summary>
 
-
         [HttpPost]
-        public async Task<ActionResult<ResultResponse>> InsertDistributorWithAssociations([FromBody] InsertUpdateResource distributorResource)
+        public async Task<ActionResult<ResultResponse>> InsertDistributorWithAssociations([FromForm] InsertUpdateResource distributorResource, string? prefix)
         {
-
+            var file = distributorResource.UploadImage;
+            var result = await _DistributorService.UploadFileAsync(file, prefix);
             var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
-
+            distributor.Image = result.Message;
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
@@ -93,16 +92,31 @@ namespace Natural_API.Controllers
         /// UPDATING DISTRIBUTOR BY ID
         /// </summary>
 
-        [HttpPut("{DistributorId}")]
-        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DistributorId, [FromBody] InsertUpdateResource updatedistributor)
+        [HttpPut]
+        public async Task<ActionResult<InsertUpdateResource>> UpdateDistributor(string DistributorId, [FromForm] InsertUpdateResource updatedistributor, string? prefix)
         {
 
             var ExistingDistributor = await _DistributorService.GetDistributorById(DistributorId);
+
+            var file = updatedistributor.UploadImage;
+            if (file != null && file.Length > 0)
+            {
+                var result = await _DistributorService.UploadFileAsync(file, prefix); //change uploadfile to image
+                var mappeddis = _mapper.Map(updatedistributor, ExistingDistributor);
+                mappeddis.Image = result.Message;
+                var Updateresponse = await _DistributorService.UpdateDistributor(mappeddis);
+                return StatusCode(Updateresponse.StatusCode, Updateresponse);
+            }
+
+
+
             var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
             var update = await _DistributorService.UpdateDistributor(distributorToUpdate);
+
             return StatusCode(update.StatusCode, update);
 
         }
+
 
         /// <summary>
         /// DELETING DISTRIBUTOR BY ID

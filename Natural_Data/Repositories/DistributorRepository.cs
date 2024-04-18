@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Amazon.S3;
+using Amazon.S3.Model;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
 using Natural_Data.Models;
 using System;
 using System.Collections.Generic;
@@ -16,10 +20,75 @@ namespace Natural_Data.Repositories
 {
     public class DistributorRepository : Repository<Distributor>, IDistributorRepository
     {
-        public DistributorRepository(NaturalsContext context) : base(context)
+        private readonly IAmazonS3 _S3Client;
+        public DistributorRepository(NaturalsContext context, IAmazonS3 S3Client) : base(context)
         {
+            _S3Client = S3Client;
         }
-        
+
+
+        //Getbucket name
+        public async Task<IEnumerable<string>> GetAllBucketAsync()
+        {
+            var data = await _S3Client.ListBucketsAsync();
+            var buckets = data.Buckets.Select(b => { return b.BucketName; });
+
+            return buckets;
+        }
+
+        //all images with presignedurl
+        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
+        {
+
+            var request = new ListObjectsV2Request()
+            {
+                BucketName = bucketName,
+                Prefix = prefix
+            };
+            var result = await _S3Client.ListObjectsV2Async(request);
+            var s3Objects = result.S3Objects.Select(s =>
+            {
+                var urlRequest = new GetPreSignedUrlRequest()
+                {
+                    BucketName = bucketName,
+                    Key = s.Key,
+                    Expires = DateTime.UtcNow.AddMinutes(10)
+                };
+                return new Natural_Core.S3Models.S3Config()
+                {
+                    Image = s.Key.ToString(),
+                    PresignedUrl = _S3Client.GetPreSignedURL(urlRequest),
+                };
+            });
+            return (s3Objects);
+        }
+
+
+        //upload images to s3bucket
+        public async Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix)
+        {
+            var bucketExists = await _S3Client.DoesS3BucketExistAsync(bucketName);
+            if (!bucketExists)
+            {
+                return new UploadResult { Success = false, Message = $"Bucket {bucketName} does not exist." };
+            }
+            var request = new PutObjectRequest()
+            {
+                BucketName = bucketName,
+                Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                InputStream = file.OpenReadStream()
+            };
+            request.Metadata.Add("Content-Type", file.ContentType);
+            try
+            {
+                await _S3Client.PutObjectAsync(request);
+                return new UploadResult { Success = true, Message = file.FileName };
+            }
+
+            catch (Exception ex)
+            { return new UploadResult { Success = false, Message = $"Error uploading file to S3:{ex.Message}" }; }
+
+        }
         public async Task<List<Distributor>> GetAllDistributorstAsync()
         {
 
@@ -44,7 +113,8 @@ namespace Natural_Data.Repositories
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
                 Latitude=c.Latitude,
-                Longitude=c.Longitude
+                Longitude=c.Longitude,
+                Image = c.Image
             }).ToList();
 
             return result;
@@ -74,7 +144,8 @@ namespace Natural_Data.Repositories
                     UserName = distributors.UserName,
                     Password = distributors.Password,
                     Latitude = distributors.Latitude,
-                        Longitude= distributors.Longitude
+                    Longitude= distributors.Longitude,
+                    Image = distributors.Image,
                 };
 
                 return result;

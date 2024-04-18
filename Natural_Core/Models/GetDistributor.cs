@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Natural_Core.S3_Models
+namespace Natural_Core.Models
 {
-    public class GetExecutive
+    public class GetDistributor
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -18,9 +18,7 @@ namespace Natural_Core.S3_Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string PresignedUrl { get; set; }
-
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-
     }
 }

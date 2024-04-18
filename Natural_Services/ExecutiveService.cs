@@ -33,7 +33,7 @@ namespace Natural_Services
         //get bucket names//
         public async Task<IEnumerable<string>> GetAllBucketAsync()
         {
-            var bucketlist = await _unitOfWork.ProductRepository.GetAllBucketAsync();
+            var bucketlist = await _unitOfWork.ExecutiveRepo.GetAllBucketAsync();
             return bucketlist;
         }
 
@@ -41,7 +41,7 @@ namespace Natural_Services
         //get all files //all images with presignedurl
         public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
         {
-            var Allfilename = await _unitOfWork.ProductRepository.GetAllFilesAsync(bucketName, prefix);
+            var Allfilename = await _unitOfWork.ExecutiveRepo.GetAllFilesAsync(bucketName, prefix);
             return Allfilename;
         }
 
@@ -90,9 +90,9 @@ namespace Natural_Services
                                     Password = executive.Password,
                                     City = executive.City,
                                     State = executive.State,
-                                    PresignedUrl = sub?.PresignedUrl,
                                     Latitude = executive.Latitude,
-                                    Longitude = executive.Longitude
+                                    Longitude = executive.Longitude,
+                                    PresignedUrl = sub?.PresignedUrl
                                 };
 
             return leftJoinQuery;

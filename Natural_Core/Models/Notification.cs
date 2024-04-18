@@ -10,6 +10,7 @@ namespace Natural_Core.Models
         public Notification()
         {
             NotificationDistributors = new HashSet<NotificationDistributor>();
+            NotificationExecutives = new HashSet<NotificationExecutive>();
         }
 
         public string Id { get; set; }
@@ -20,5 +21,6 @@ namespace Natural_Core.Models
         public bool? IsDeleted { get; set; }
 
         public virtual ICollection<NotificationDistributor> NotificationDistributors { get; set; }
+        public virtual ICollection<NotificationExecutive> NotificationExecutives { get; set; }
     }
 }

@@ -43,12 +43,14 @@ namespace Natural_API.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<NotificationResource>> GetNotificationById(string Id)
         {
-          var notification =  await _NotificationDistributorService.GetNotificationByIdAsync(Id);
-          var distributorlist = await _NotificationDistributorService.GetDistributorsByNotificationIdAsync(Id);
-            
-            var drsdetaildata = _mapper.Map< List<NotificationDistributor>, List<NotificationDistributorResource>>((List<NotificationDistributor>)distributorlist);
+            var notification = await _NotificationDistributorService.GetNotificationByIdAsync(Id);
+            var distributorlist = await _NotificationDistributorService.GetDistributorsByNotificationIdAsync(Id);
+            var executivelist = await _NotificationDistributorService.GetExecutivesByNotificationIdAsync(Id);
+            var exedata = _mapper.Map<List<NotificationExecutive>, List<NotificationExecutiveResource>>((List<NotificationExecutive>)executivelist);
+            var drsdetaildata = _mapper.Map<List<NotificationDistributor>, List<NotificationDistributorResource>>((List<NotificationDistributor>)distributorlist);
             var notificationdata = _mapper.Map<Notification, NotificationResource>(notification);
             notificationdata.distributorlist = drsdetaildata;
+            notificationdata.executiveList = exedata;
             return Ok(notificationdata);
         }
 
@@ -75,15 +77,26 @@ namespace Natural_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductResponse>> CreateNotificationc([FromBody] NotificationResource notification)
         {
-            var notifydata = _mapper.Map<NotificationResource, Notification>(notification);
-            var Distributorlist = notification.distributorlist;
-            var drsdetaildata = _mapper.Map<List<NotificationDistributorResource>, List<NotificationDistributor>>(Distributorlist);
+            try
+            {
+                var notifydata = _mapper.Map<NotificationResource, Notification>(notification);
+                var Distributorlist = notification.distributorlist;
+                var drsdetaildata = _mapper.Map<List<NotificationDistributorResource>, List<NotificationDistributor>>(Distributorlist);
 
-            var creadted = await _NotificationDistributorService.CreateNotificationc(notifydata, drsdetaildata);
+                var ExecutiveList = notification.executiveList; 
 
-            return StatusCode(creadted.StatusCode, creadted);
-            
+                var executiveData = _mapper.Map<List<NotificationExecutiveResource>, List<NotificationExecutive>>(ExecutiveList);
+
+                var creadted = await _NotificationDistributorService.CreateNotificationc(notifydata, drsdetaildata, executiveData);
+
+                return StatusCode(creadted.StatusCode, creadted);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
+
 
 
 

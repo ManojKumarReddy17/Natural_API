@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Natural_Core.S3Models;
+using AutoMapper;
+using Microsoft.Extensions.Options;
+using Natural_Core.S3_Models;
 
 
 #nullable disable
@@ -15,16 +20,80 @@ namespace Natural_Services
     public class DistributorService : IDistributorService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly S3Config _s3Config;
+        private readonly IMapper _Mapper;
 
-        public DistributorService(IUnitOfWork unitOfWork)
+        public DistributorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _s3Config = s3Config.Value;
+            _Mapper = mapper;
         }
+
+        //get bucket names//
+        public async Task<IEnumerable<string>> GetAllBucketAsync()
+        {
+            var bucketlist = await _unitOfWork.DistributorRepo.GetAllBucketAsync();
+            return bucketlist;
+        }
+
+
+        //get all files //all images with presignedurl
+        public async Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix)
+        {
+            var Allfilename = await _unitOfWork.DistributorRepo.GetAllFilesAsync(bucketName, prefix);
+            return Allfilename;
+        }
+
+        //upload images to s3 bucket
+        public async Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix)
+        {
+
+            string bucketName = _s3Config.BucketName;
+            var metadata = await _unitOfWork.DistributorRepo.UploadFileAsync(file, bucketName, prefix);
+            return metadata;
+
+        }
+
+
         public async Task<IEnumerable<Distributor>> GetAllDistributors()
         {
             var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
             var presentDistributors = result.Where(d => d.IsDeleted != true ).ToList();
             return presentDistributors;
+        }
+
+        public async Task<IEnumerable<GetDistributor>> GetAllDistributorDetailsAsync(string? prefix)
+        {
+
+            var executives = await GetAllDistributors();
+
+            string bucketName = _s3Config.BucketName;
+            var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
+
+            var leftJoinQuery = from executive in executives
+                                join presigned in presignedUrls
+                                on executive.Image equals presigned.Image into newUrl
+                                from sub in newUrl.DefaultIfEmpty()
+                                select new GetDistributor
+                                {
+                                    Id = executive.Id,
+                                    FirstName = executive.FirstName,
+                                    LastName = executive.LastName,
+                                    MobileNumber = executive.MobileNumber,
+                                    Address = executive.Address,
+                                    Area = executive.Area,
+                                    Email = executive.Email,
+                                    UserName = executive.UserName,
+                                    Password = executive.Password,
+                                    City = executive.City,
+                                    State = executive.State,
+                                    PresignedUrl = sub?.PresignedUrl,
+                                    Latitude = executive.Latitude,
+                                    Longitude = executive.Longitude
+                                };
+
+            return leftJoinQuery;
         }
 
 
@@ -46,6 +115,33 @@ namespace Natural_Services
             }
             return null;
         }
+
+        public async Task<GetDistributor> GetDistributorPresignedUrlbyId(string distributorId)
+        {
+            var executiveResult = await _unitOfWork.DistributorRepo.GetByIdAsync(distributorId);
+
+            string bucketName = _s3Config.BucketName;
+            string prefix = executiveResult.Image;
+            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+
+            if (PresignedUrl.Any())
+            {
+                var exe = PresignedUrl.FirstOrDefault();
+                var execuresoursze1 = _Mapper.Map<Distributor, GetDistributor>(executiveResult);
+                execuresoursze1.PresignedUrl = exe.PresignedUrl;
+
+                return execuresoursze1;
+            }
+            else
+            {
+                var execuresoursze1 = _Mapper.Map<Distributor, GetDistributor>(executiveResult);
+
+                return execuresoursze1;
+
+            }
+
+        }
+
 
         public async Task<Distributor> GetDistributorDetailsById(string distributorId)
         {

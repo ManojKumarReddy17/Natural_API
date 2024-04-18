@@ -11,7 +11,7 @@ using Natural_Data.Repositories;
 using Natural_Services;
 
 namespace Natural_API.Controllers
-{
+{   
     [Route("api/[controller]")]
     [ApiController]
     public class ExecutiveController : ControllerBase

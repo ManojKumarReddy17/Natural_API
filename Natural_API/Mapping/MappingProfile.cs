@@ -73,6 +73,7 @@ namespace Natural_API.Mapping
              CreateMap<Dsr, DSRRetailorsListResource>();
              CreateMap< Notification, NotificationResource>();
              CreateMap<NotificationDistributor, NotificationDistributorResource>();
+            CreateMap<NotificationExecutive, NotificationExecutiveResource>();
             CreateMap<DSRretailorDetails, DSRretailorDetailsResources>();
             CreateMap<Executive, InsertUpdateResource>();
             CreateMap<ExecutiveArea, ExecutiveAreaResource>();
@@ -112,6 +113,10 @@ namespace Natural_API.Mapping
             CreateMap<Executive, GetExecutive>();
             CreateMap<Executive, ExecutiveGetResource>();
 
+            CreateMap<Distributor, GetDistributor>();
+            CreateMap<Retailor, GetRetailor>();
+
+            
             CreateMap<DsrdetailProduct, Dsrdetail>();
             CreateMap<DsrInsertResource, Dsr>();
             CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c=>c.CreatedDate,(obj)=>obj.MapFrom(s=>s.StartDate))
@@ -133,6 +138,10 @@ namespace Natural_API.Mapping
             CreateMap<ExecutiveGpsResource, ExecutiveGp>();
             CreateMap<ExecutiveAreaResource, ExecutiveArea>();
             CreateMap<DsrDetailsByIdResource, EdittDSR>();
+             CreateMap<DSRretailorDetailsResources, DSRretailorDetails>();
+
+            CreateMap<NotificationExecutiveResource, NotificationExecutive>();
+
         }
     }
 }

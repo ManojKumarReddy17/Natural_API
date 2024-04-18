@@ -112,6 +112,7 @@ builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>
 
 
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
+builder.Services.AddTransient<INotificationExecutiveRepository, NotificationExecutiveRepository>();
 builder.Services.AddTransient<INotificationDistributorRepository, NotificationDistributorRepository>();
 builder.Services.AddTransient<INotificationDistributorService, NotificationDistributorService>();
 

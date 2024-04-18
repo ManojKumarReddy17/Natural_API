@@ -31,6 +31,7 @@ namespace Natural_Core
         IDsrdetailRepository DsrdetailRepository { get; }
         INotificationRepository NotificationRepository { get; }
         INotificationDistributorRepository NotificationDistributorRepository { get; }
+        INotificationExecutiveRepository NotificationExecutiveRepository { get; }
 
         Task<int> CommitAsync();
 

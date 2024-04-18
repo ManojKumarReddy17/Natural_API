@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Data.Repositories;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Natural_Core.S3Models;
+using Microsoft.Extensions.Options;
+using AutoMapper;
 
 #nullable disable
 
@@ -17,20 +21,64 @@ namespace Natural_Services
     public class RetailorService : IRetailorService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly S3Config _s3Config;
+        private readonly IDistributorService _DistributorService;
+        private readonly IMapper _Mapper;
 
 
-        public RetailorService(IUnitOfWork unitOfWork)
+        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _s3Config = s3Config.Value;
+            _DistributorService = distributorService;
+            _Mapper = mapper;
         }
 
-       
+        //get bucket names//
+        public async Task<IEnumerable<string>> GetAllBucketAsync()
+        {
+            var bucketlist = await _unitOfWork.ExecutiveRepo.GetAllBucketAsync();
+            return bucketlist;
+        }
+
+
         public async Task<IEnumerable<Retailor>> GetAllRetailors()
         {
             var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
             var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
             
             return presentRetailor;
+        }
+
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(string? prefix)
+        {
+
+            var Retailors = await GetAllRetailors();
+
+            string bucketName = _s3Config.BucketName;
+            var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+
+            var leftJoinQuery = from retailor in Retailors
+                                join presigned in presignedUrls
+                                on retailor.Image equals presigned.Image into newUrl
+                                from sub in newUrl.DefaultIfEmpty()
+                                select new GetRetailor
+                                {
+                                    Id = retailor.Id,
+                                    FirstName = retailor.FirstName,
+                                    LastName = retailor.LastName,
+                                    MobileNumber = retailor.MobileNumber,
+                                    Address = retailor.Address,
+                                    Area = retailor.Area,
+                                    Email = retailor.Email,
+                                    City = retailor.City,
+                                    State = retailor.State,
+                                    PresignedUrl = sub?.PresignedUrl,
+                                    Latitude = retailor.Latitude,
+                                    Longitude = retailor.Longitude
+                                };
+
+            return leftJoinQuery;
         }
 
 
@@ -62,8 +110,35 @@ namespace Natural_Services
             return null;
         }
 
+        public async Task<GetRetailor> GetRetailorPresignedUrlbyId(string retailorId)
+        {
+            var Retailorresult = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
 
-        
+            string bucketName = _s3Config.BucketName;
+            string prefix = Retailorresult.Image;
+            //var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+            var PresignedUrl = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+
+            if (PresignedUrl.Any())
+            {
+                var exe = PresignedUrl.FirstOrDefault();
+                var execuresoursze1 = _Mapper.Map<Retailor, GetRetailor>(Retailorresult);
+                execuresoursze1.PresignedUrl = exe.PresignedUrl;
+
+                return execuresoursze1;
+            }
+            else
+            {
+                var execuresoursze1 = _Mapper.Map<Retailor, GetRetailor>(Retailorresult);
+
+                return execuresoursze1;
+
+            }
+
+        }
+
+
+
 
         public async Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {

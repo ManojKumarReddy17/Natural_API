@@ -37,6 +37,7 @@ namespace Natural_Core.Models
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationDistributor> NotificationDistributors { get; set; }
+        public virtual DbSet<NotificationExecutive> NotificationExecutives { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
@@ -575,7 +576,30 @@ namespace Natural_Core.Models
                     .HasConstraintName("Notification_Distributor_ibfk_2");
             });
 
+            modelBuilder.Entity<NotificationExecutive>(entity =>
+            {
+                entity.ToTable("Notification_Executive");
 
+                entity.HasIndex(e => e.Notification, "Notification_Executive_ibfk_2_idx");
+
+                entity.HasIndex(e => e.Executive, "Notification_Executive_idk");
+
+                entity.Property(e => e.Executive).HasMaxLength(50);
+
+                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Notification).HasMaxLength(50);
+
+                entity.HasOne(d => d.ExecutiveNavigation)
+                    .WithMany(p => p.NotificationExecutives)
+                    .HasForeignKey(d => d.Executive)
+                    .HasConstraintName("NT_Ex");
+
+                entity.HasOne(d => d.NotificationNavigation)
+                    .WithMany(p => p.NotificationExecutives)
+                    .HasForeignKey(d => d.Notification)
+                    .HasConstraintName("NT_Ex_2");
+            });
 
 
 

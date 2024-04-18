@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 #nullable disable
 namespace Natural_Data.Repositories
@@ -19,7 +20,7 @@ namespace Natural_Data.Repositories
         {
 
         }
-      
+
 
         public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync()
         {
@@ -37,20 +38,21 @@ namespace Natural_Data.Repositories
                                    }).ToListAsync();
             var result = retailors.
                 Select(c => new Retailor
-            {
+                {
 
-                Id = c.retailor.Id,
-                FirstName = c.retailor.FirstName,
-                LastName = c.retailor.LastName,
-                MobileNumber = c.retailor.MobileNumber,
-                Address = c.retailor.Address,
-                Area = c.Area.AreaName,
-                Email = c.retailor.Email,
-                City = c.City.CityName,
-                State = c.State.StateName,
-                Latitude=c.retailor.Latitude,
-                Longitude=c.retailor.Longitude
-            });
+                    Id = c.retailor.Id,
+                    FirstName = c.retailor.FirstName,
+                    LastName = c.retailor.LastName,
+                    MobileNumber = c.retailor.MobileNumber,
+                    Address = c.retailor.Address,
+                    Area = c.Area.AreaName,
+                    Email = c.retailor.Email,
+                    City = c.City.CityName,
+                    State = c.State.StateName,
+                    Latitude = c.retailor.Latitude,
+                    Longitude = c.retailor.Longitude,
+                    Image = c.retailor.Image
+                });
 
             return result;
         }
@@ -84,9 +86,10 @@ namespace Natural_Data.Repositories
                     Area = retailorDetails.Area.AreaName,
                     City = retailorDetails.City.CityName,
                     State = retailorDetails.State.StateName,
-                    Latitude=retailorDetails.Retailor.Latitude,
-                    Longitude=retailorDetails.Retailor.Longitude
-                    
+                    Latitude = retailorDetails.Retailor.Latitude,
+                    Longitude = retailorDetails.Retailor.Longitude,
+                    Image = retailorDetails.Retailor.Image
+
                 };
 
                 return result;
@@ -110,7 +113,7 @@ namespace Natural_Data.Repositories
                 existingRetailor.Area = retailor.Area;
                 existingRetailor.Latitude = retailor.Latitude;
                 existingRetailor.Longitude = retailor.Longitude;
-
+                existingRetailor.Image = retailor.Image;
                 await NaturalDbContext.SaveChangesAsync();
 
 
@@ -144,8 +147,8 @@ namespace Natural_Data.Repositories
                     Email = c.Email,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
-                    Latitude=c.Latitude,
-                    Longitude=c.Longitude
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude
                 }).ToList();
                 return result;
             }
@@ -153,37 +156,37 @@ namespace Natural_Data.Repositories
         }
 
         public async Task<IEnumerable<Retailor>> GetNonAssignedRetailorsAsync()
-        {         
+        {
 
-                var retailors = await NaturalDbContext.Retailors
-                    .Include(c => c.AreaNavigation)
-                    .ThenInclude(a => a.City)
-                    .ThenInclude(ct => ct.State)
-                    .ToListAsync();
+            var retailors = await NaturalDbContext.Retailors
+                .Include(c => c.AreaNavigation)
+                .ThenInclude(a => a.City)
+                .ThenInclude(ct => ct.State)
+                .ToListAsync();
 
-                var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
-                    .Select(de => de.RetailorId)
-                    .ToListAsync();
+            var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
+                .Select(de => de.RetailorId)
+                .ToListAsync();
 
-                   var nonAssignedRetailors = retailors
-                    .Where(c => !assignedRetailorIds.Contains(c.Id))
-                    .Select(c => new Retailor
-                    {
-                        Id = c.Id,
-                        FirstName = c.FirstName,
-                        LastName = c.LastName,
-                        MobileNumber = c.MobileNumber,
-                        Address = c.Address,
-                        Email = c.Email,
-                        Area = c.AreaNavigation.AreaName,
-                        City = c.AreaNavigation.City.CityName,
-                        State = c.AreaNavigation.City.State.StateName,
-                        Latitude=c.Latitude,
-                        Longitude = c.Longitude
-                    })
-                    .ToList();
+            var nonAssignedRetailors = retailors
+             .Where(c => !assignedRetailorIds.Contains(c.Id))
+             .Select(c => new Retailor
+             {
+                 Id = c.Id,
+                 FirstName = c.FirstName,
+                 LastName = c.LastName,
+                 MobileNumber = c.MobileNumber,
+                 Address = c.Address,
+                 Email = c.Email,
+                 Area = c.AreaNavigation.AreaName,
+                 City = c.AreaNavigation.City.CityName,
+                 State = c.AreaNavigation.City.State.StateName,
+                 Latitude = c.Latitude,
+                 Longitude = c.Longitude
+             })
+             .ToList();
 
-                return nonAssignedRetailors;
+            return nonAssignedRetailors;
         }
 
         public async Task<IEnumerable<Retailor>> SearchNonAssignedRetailorsAsync(SearchModel search)
@@ -218,8 +221,8 @@ namespace Natural_Data.Repositories
                     Area = c.AreaNavigation.AreaName,
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
-                    Latitude=c.Latitude,
-                    Longitude=c.Longitude
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude
                 })
                 .ToList();
 
@@ -230,6 +233,6 @@ namespace Natural_Data.Repositories
         {
             get { return Context as NaturalsContext; }
         }
-        
+
     }
 }

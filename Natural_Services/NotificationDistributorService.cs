@@ -56,6 +56,12 @@ namespace Natural_Services
 
         }
 
+        public async Task<IEnumerable<NotificationExecutive>> GetExecutivesByNotificationIdAsync(string notiId)
+        {
+            var executiveslist = await _unitOfWork.NotificationExecutiveRepository.GetExecutiveByNotificationIdAsync(notiId);
+            return executiveslist;
+        }
+
        public async Task<IEnumerable<NotificationDistributor>> GetDistableByNotificationIdAsync(string notificationId)
         {
            var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDisTableByNotificationIdAsync(notificationId);
@@ -64,89 +70,51 @@ namespace Natural_Services
 
         }
 
-        public async Task<ProductResponse> CreateNotificationc(Notification notification, List<NotificationDistributor> distributors)
+        
+        public async Task<ProductResponse> CreateNotificationc(Notification notification, List<NotificationDistributor> distributors, List<NotificationExecutive> executives)
         {
-
             using (var transaction = _unitOfWork.BeginTransaction())
             {
                 var response = new ProductResponse();
                 try
                 {
                     notification.Id = "Noti" + new Random().Next(10000, 99999).ToString();
-
-
                     await _unitOfWork.NotificationRepository.AddAsync(notification);
-                    var commit = await _unitOfWork.CommitAsync();
+                    var commitNotification = await _unitOfWork.CommitAsync();
 
-                    var create = distributors.Select(c => new NotificationDistributor
+                    var createDistributors = distributors.Select(c => new NotificationDistributor
                     {
-                        
-                        Distributor  = c.Distributor,
+                        Distributor = c.Distributor,
                         Notification = notification.Id
-
                     }).ToList();
+                    await _unitOfWork.NotificationDistributorRepository.AddRangeAsync(createDistributors);
+                    var commitDistributors = await _unitOfWork.CommitAsync();
 
-                    await _unitOfWork.NotificationDistributorRepository.AddRangeAsync(create);
-                    var commit1 = await _unitOfWork.CommitAsync();
+                    var createExecutives = executives.Select(e => new NotificationExecutive
+                    {
+                        Executive = e.Executive,
+                        Notification = notification.Id
+                    }).ToList();
+                    await _unitOfWork.NotificationExecutiveRepository.AddRangeAsync(createExecutives);
+                    var commitExecutives = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
 
-                    response.Message = " Notification and Distributordetail Insertion Successful";
+                    response.Message = "Notification, Distributor, and Executive Insertion Successful";
                     response.StatusCode = 200;
                     response.Id = notification.Id;
-
-
                 }
                 catch (Exception ex)
                 {
+                    // Handle exceptions
                     transaction.Rollback();
-                    response.Message = "Insertion Failed";
-                    response.StatusCode = 401;
-
+                    response.Message = "Insertion Failed: " + ex.Message;
+                    response.StatusCode = 401; // Or any appropriate error code
                 }
 
                 return response;
             }
-
         }
-
-        //public async Task<DsrResponse> DeleteNotification(string id)
-        //{
-
-        //  var notification= await GetNotificationByIdAsync(id);
-        //    var distributionlist = await GetDistableByNotificationIdAsync(id);
-
-        //    using (var transaction = _unitOfWork.BeginTransaction())
-        //    {
-        //        var response = new DsrResponse();
-
-        //        try
-        //        {
-        //           // notification.IsDeleted = true;
-        //            _unitOfWork.NotificationDistributorRepository.RemoveRange(distributionlist);
-        //            var commit = await _unitOfWork.CommitAsync();
-
-        //            _unitOfWork.NotificationRepository.Remove(notification);
-        //            var commit1 = await _unitOfWork.CommitAsync();
-
-        //            transaction.Commit();
-        //            response.Message = "SUCCESSFULLY DELETED";
-        //            response.StatusCode = 200;
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            transaction.Rollback();
-        //            response.Message = "delete Failed";
-        //            response.StatusCode = 401;
-        //        }
-
-        //        return response;
-        //    }
-
-
-        //}
-
 
         public async Task<DsrResponse> DeleteNotification(string id)
         {
@@ -160,13 +128,6 @@ namespace Natural_Services
 
                 try
                 {
-                    //foreach (var distribution in distributionlist)
-                    //{
-                    //    distribution.IsDeleted = true;
-                    //}
-
-                    //_unitOfWork.NotificationDistributorRepository.UpdateRange(distributionlist);
-                    //var commit = await _unitOfWork.CommitAsync();
                     foreach (var distribution in distributionlist)
                     {
                         distribution.IsDeleted = true;

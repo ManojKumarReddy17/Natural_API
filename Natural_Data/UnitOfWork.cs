@@ -40,6 +40,7 @@ namespace Natural_Data.Models
         private INotificationDistributorRepository _NotificationDistributorRepository;
         private IExecutiveGpsRepository _executiveGpsRepository;
         private IExecutiveAreaRepository _ExecutiveAreaRepository;
+        private INotificationExecutiveRepository _NotificationExecutiveRepository;
 
 
         public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
@@ -49,7 +50,7 @@ namespace Natural_Data.Models
         }
 
         public ILoginRepository Login => _loginRepository = _loginRepository ?? new LoginRepository(_context);
-        public IDistributorRepository DistributorRepo => _distributorRepository = _distributorRepository ?? new DistributorRepository(_context);
+        public IDistributorRepository DistributorRepo => _distributorRepository = _distributorRepository ?? new DistributorRepository(_context, _S3Client);
         public IExecutiveRepository ExecutiveRepo => _executiveRepository = _executiveRepository ?? new ExecutiveRepository(_context, _S3Client);
         public ICityRepository CityRepo => _cityRepository = _cityRepository ?? new CityRepository(_context);
         public IStateRepository StateRepo => _stateRepository = _stateRepository ?? new StateRepository(_context);
@@ -79,8 +80,7 @@ namespace Natural_Data.Models
         public INotificationRepository NotificationRepository => _NotificationRepository = _NotificationRepository ?? new NotificationRepository(_context);
 
         public INotificationDistributorRepository NotificationDistributorRepository => _NotificationDistributorRepository = _NotificationDistributorRepository ?? new NotificationDistributorRepository(_context);
-        public IExecutiveGpsRepository executiveGpsRepo => _executiveGpsRepository = _executiveGpsRepository ?? new ExecutiveGpsRepository(_context);
-        public IExecutiveAreaRepository ExecutiveAreaRepository => _ExecutiveAreaRepository = _ExecutiveAreaRepository ?? new ExecutiveAreaRepository(_context);
+
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

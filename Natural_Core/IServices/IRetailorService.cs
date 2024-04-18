@@ -22,6 +22,9 @@ namespace Natural_Core.IServices
 
         Task<ResultResponse> SoftDelete(string retailorId);
 
+        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(string? prefix);
+        Task<GetRetailor> GetRetailorPresignedUrlbyId(string retailorId);
+
 
     }
 }

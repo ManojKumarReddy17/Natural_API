@@ -49,5 +49,36 @@ namespace Natural_Services
         {
             return await _unitOfWork.CityRepo.GetCitywithStateId(StateId);
         }
+
+        public async Task<ResultResponse> DeleteCity(string CityId)
+        {
+            var response = new ResultResponse();
+
+            try
+            {
+                var existingCity = await _unitOfWork.CityRepo.GetByIdAsync(CityId);
+                existingCity.IsDeleted = true;
+                _unitOfWork.CityRepo.Update(existingCity);
+                await _unitOfWork.CommitAsync();
+
+                if (existingCity == null)
+                {
+                    response.Message = "City not found";
+                    response.StatusCode = 404;
+                }
+                else
+                {
+                    response.Message = "Delete Successful";
+                    response.StatusCode = 200;
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Delete Failed";
+                response.StatusCode = 500;
+            }
+
+            return response;
+        }
     }
 }

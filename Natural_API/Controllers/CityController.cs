@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Services;
 
 #nullable disable
 
@@ -48,13 +49,28 @@ namespace Natural_API.Controllers
 
 
         [HttpGet("getbyid/{CityId}")]
-        public async Task<ActionResult<CityResource>>GetCityId(String CityId)
+        public async Task<ActionResult<CityResource>> GetCityId(String CityId)
         {
-            var City =await _cityService.GetCityWithId(CityId);
-            var CityList = _mapper.Map<City,CityResource>(City);    
-            return Ok(CityList);    
+            var City = await _cityService.GetCityWithId(CityId);
+            var CityList = _mapper.Map<City, CityResource>(City);
+            return Ok(CityList);
         }
+        [HttpDelete]
 
+        public async Task<ActionResult> DeleteCity(string CityId)
+        {
+            var response = await _cityService.DeleteCity(CityId);
+
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+
+        }
     }
 }
 

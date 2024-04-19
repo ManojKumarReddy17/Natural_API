@@ -13,6 +13,7 @@ namespace Natural_Core.IServices
         Task<IEnumerable<City>> GetCitiesAsync();
 
         Task<IEnumerable<City>> GetCitywithStateId(string StateId);
-        Task <City>GetCityWithId(string CityId);      
+        Task <City>GetCityWithId(string CityId);
+        Task<ResultResponse> DeleteCity(string CityId);
     }
 }

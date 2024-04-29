@@ -443,11 +443,11 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                //entity.HasOne(d => d.AreaNavigation)
-                //    .WithMany(p => p.Executives)
-                //    .HasForeignKey(d => d.Area)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("Executive_ibfk_1");
+                entity.HasOne(d => d.AreaNavigation)
+                    .WithMany(p => p.Executives)
+                    .HasForeignKey(d => d.Area)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Executive_ibfk_1");
 
                 entity.HasOne(d => d.CityNavigation)
                     .WithMany(p => p.Executives)

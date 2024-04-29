@@ -7,6 +7,8 @@ namespace Natural_API.Resources
         public int Id { get; set; }
         public string Executive { get; set; }
         public string Area { get; set; }
+
+
     }
 }
 

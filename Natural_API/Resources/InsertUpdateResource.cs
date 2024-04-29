@@ -18,6 +18,6 @@ namespace Natural_API.Resources
         public string Longitude { get; set; }
         public IFormFile UploadImage { get; set; }
 
-        public List<ExecutiveAreaResource> Area { get; set; }
+        public List<ExecutiveAreaResource> Areas { get; set; }
     }
 }

@@ -48,9 +48,9 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> GetExecutiveById(string ExecutiveId)
         {
             var executive = await _executiveService.GetExecutiveByIdAsync(ExecutiveId);
-            var exec = _mapper.Map<Executive, InsertUpdateResource>(executive);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
             var executivearea = await _executiveService.GetExecutiveAreaById(ExecutiveId);
-            var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea);
+            var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea).Select(a => a.Area).ToList();
             exec.Area = exectivearealist;
             return Ok(exec);
         }
@@ -65,9 +65,9 @@ namespace Natural_API.Controllers
         {
 
             var executive = await _executiveService.GetExecutiveDetailsById(ExecutiveId);
-            var exec = _mapper.Map<Executive, InsertUpdateResource>(executive);
+            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
             var executivearea = await _executiveService.GetExectiveAreaDetailsByIdAsync(ExecutiveId);
-            var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea);
+            var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea).Select(a => a.Area).ToList();
             exec.Area = exectivearealist;
             return Ok(exec);
 
@@ -92,7 +92,7 @@ namespace Natural_API.Controllers
 
                 createexecu.Image = result.Message;
 
-                var executivearea = executiveResource.Area;
+                var executivearea = executiveResource.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
 
@@ -104,7 +104,7 @@ namespace Natural_API.Controllers
 
             {
                 var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
-                var executivearea = executiveResource.Area;
+                var executivearea = executiveResource.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
 
@@ -134,7 +134,7 @@ namespace Natural_API.Controllers
                 var result = await _executiveService.UploadFileAsync(file, prefix);
                 var updaeexecu = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
                 updaeexecu.Image = result.Message;
-                var executivearea = updatedexecutive.Area;
+                var executivearea = updatedexecutive.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
 
                 var exe = await _executiveService.UpadateExecutive(updaeexecu, exectivearealist, updaeexecu.Id);
@@ -144,7 +144,7 @@ namespace Natural_API.Controllers
             else
             {
                 var updaeexecu1 = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
-                var executivearea = updatedexecutive.Area;
+                var executivearea = updatedexecutive.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.UpadateExecutive(updaeexecu1, exectivearealist, updaeexecu1.Id);
                 return StatusCode(exe.StatusCode, exe);

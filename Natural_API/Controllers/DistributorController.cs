@@ -142,16 +142,16 @@ namespace Natural_API.Controllers
             var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
             return execget;
         }
+
         [HttpPost("Login")]
-        public async Task<ActionResult<AngularLoginResponse>> Login([FromBody] AngularLoginResourse loginModel)
+        public async Task<ActionResult<AngularDistributor>> Login([FromBody] AngularLoginResourse loginModel)
         {
             var credentials = _mapper.Map<AngularLoginResourse, Distributor>(loginModel);
             var user = await _DistributorService.LoginAsync(credentials);
 
             return StatusCode(user.Statuscode, user);
         }
-
-            [HttpPost("SearchNonAssign")]
+        [HttpPost("SearchNonAssign")]
             public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
             {
                 var exe = await _DistributorService.SearchNonAssignedDistributors(SearchNonAssign);

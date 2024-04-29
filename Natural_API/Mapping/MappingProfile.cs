@@ -79,7 +79,7 @@ namespace Natural_API.Mapping
             CreateMap<ExecutiveArea, ExecutiveAreaResource>();
             CreateMap<InsertUpdateModel, ExecutiveGetResource>();
             CreateMap<ExecutiveGp, ExecutiveGpsResource>();
-
+            CreateMap<AngularDistributor, AngularLoginResourse>();
             //// RESOURCE TO DOMAIN
 
             CreateMap<LoginResource, Login>();
@@ -141,6 +141,7 @@ namespace Natural_API.Mapping
              CreateMap<DSRretailorDetailsResources, DSRretailorDetails>();
 
             CreateMap<NotificationExecutiveResource, NotificationExecutive>();
+            CreateMap<AngularLoginResourse, AngularDistributor>();
 
         }
     }

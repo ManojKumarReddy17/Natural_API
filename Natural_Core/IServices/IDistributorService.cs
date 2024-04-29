@@ -27,11 +27,11 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<Distributor>> GetNonAssignedDistributors();
         Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
-        public Task<AngularLoginResponse> LoginAsync(Distributor credentials);
+        //public Task<AngularLoginResponse> LoginAsync(Distributor credentials);
         Task<ResultResponse> SoftDelete(string distributorId);
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
-
+        Task<AngularDistributor> LoginAsync(Distributor credentials);
 
     }
 }

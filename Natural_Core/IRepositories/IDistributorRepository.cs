@@ -23,7 +23,7 @@ namespace Natural_Core.IRepositories
         Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix);
         Task<IEnumerable<Natural_Core.S3Models.S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
 
-
+        Task<AngularDistributor> GetAngularAsync(string DistributorId);
 
 
 

@@ -273,7 +273,32 @@ namespace Natural_Data.Repositories
             return nonAssignedDistributors;
         }
 
+        public async Task<AngularDistributor> GetAngularAsync(string DistributorId)
+        {
 
+
+            var angularDistributors = await NaturalDbContext.DistributorToExecutives
+    .Include(e => e.Executive)
+    .Include(a => a.Distributor)
+   .Where(x => x.DistributorId == DistributorId)
+    .Select(distributor => new AngularDistributor
+    {
+        Id = distributor.Id,
+        FirstName = distributor.Distributor.FirstName,
+        LastName = distributor.Distributor.LastName,
+        MobileNumber = distributor.Distributor.MobileNumber,
+        Address = distributor.Distributor.Address,
+        Email = distributor.Distributor.Email,
+
+        ExeId = distributor.Executive.Id,
+        Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"
+    }).FirstOrDefaultAsync();
+
+            return angularDistributors;
+
+
+
+        }
 
 
         //public async Task<IEnumerable<AngularLoginResponse>> GetExe(string Id)

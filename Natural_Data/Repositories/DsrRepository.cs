@@ -162,6 +162,7 @@ namespace Natural_Data.Repositories
 
             return dsr;
         }
+
         public async Task<IEnumerable<Dsr>> GetRetailorDetailsByDistributorId(string distributorId)
         {
             var dsr = await NaturalDbContext.Dsrs
@@ -180,7 +181,7 @@ namespace Natural_Data.Repositories
                     CreatedDate = c.CreatedDate,
                     ModifiedDate = c.ModifiedDate,
                     TotalAmount = c.TotalAmount,
-                   
+
                 }).ToListAsync();
 
             return dsr;
@@ -269,7 +270,7 @@ namespace Natural_Data.Repositories
             return dsrs;
         }
 
-        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetails(string ExecutiveId)
+        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyExecutiveId(string ExecutiveId)
         {
 
             var dsr = await NaturalDbContext.Dsrs
@@ -298,6 +299,41 @@ namespace Natural_Data.Repositories
                        Image = c.RetailorNavigation.Image
 
                       
+
+                   }).ToListAsync();
+
+            return dsr;
+
+        }
+        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyDistributorId(string distributorId)
+        {
+
+            var dsr = await NaturalDbContext.Dsrs
+                   .Include(c => c.ExecutiveNavigation)
+                   .Include(c => c.DistributorNavigation)
+                   .Include(c => c.RetailorNavigation)
+                   .ThenInclude(a => a.AreaNavigation)
+
+                   .Where(d => d.Distributor == distributorId && d.IsDeleted != true)
+
+                   .Select(c => new DSRretailorDetails
+                   {
+                       Id = c.Id,
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                       Phonenumber = c.RetailorNavigation.MobileNumber,
+                       Address = c.RetailorNavigation.Address,
+                       City = c.RetailorNavigation.CityNavigation.CityName,
+                       State = c.RetailorNavigation.StateNavigation.StateName,
+                       OrderBy = c.OrderBy,
+                       TotalAmount = c.TotalAmount,
+                       CreatedDate = c.RetailorNavigation.CreatedDate,
+                       ModifiedDate = c.RetailorNavigation.ModifiedDate,
+                       Area = c.RetailorNavigation.AreaNavigation.AreaName,
+                       Image = c.RetailorNavigation.Image
+
+
 
                    }).ToListAsync();
 

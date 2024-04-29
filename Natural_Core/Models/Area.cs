@@ -26,5 +26,6 @@ namespace Natural_Core.Models
         public virtual ICollection<Distributor> Distributors { get; set; }
         public virtual ICollection<Executive> Executives { get; set; }
         public virtual ICollection<Retailor> Retailors { get; set; }
+        public virtual ICollection<ExecutiveArea> ExecutiveAreas { get; set; }
     }
 }

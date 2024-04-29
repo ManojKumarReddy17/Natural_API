@@ -58,17 +58,6 @@ namespace Natural_API.Controllers
 
             return Ok(mapped);
         }
-
-        [HttpGet("{DistributorId}")]
-        public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
-        {
-
-            var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
-            var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
-
-            return Ok(mapped);
-        }
-
         [HttpGet("ById/{DsrId}")]
 
         public async Task<ActionResult<DsrRetailorResource>> GetDsrByDsrId(string DsrId)
@@ -168,7 +157,18 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
             var response = await _dsrservice.DeleteDsr(dsr, drsdetaildata, dsrId);
             return Ok(response);
         }
-        
+
+
+        [HttpGet("{DistributorId}")]
+        public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        {
+
+            var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
+            var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
+
+            return Ok(mapped);
+        }
+
         [HttpGet("RetailorDetails/{distributorId}")]
         public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetRetailorListByDistributorId(string distributorId)
         {
@@ -182,8 +182,11 @@ var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
                 {
                     if (retdetail.Retailor == fullname)
                     {
+                        retdetail.Area = retailor.Area;
+                        retdetail.Image = retailor.Image;
                         retdetail.Address = retailor.Address;
                         retdetail.Phonenumber = retailor.MobileNumber;
+
                     }
                 }
             }

@@ -13,8 +13,10 @@ namespace Natural_Data.Repositories
 {
     public class DsrRepository : Repository<Dsr>, IDsrRepository
     {
+
         public DsrRepository(NaturalsContext context) : base(context)
         {
+
 
         }
 
@@ -38,7 +40,8 @@ namespace Natural_Data.Repositories
                        OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
                        CreatedDate = c.CreatedDate,
                        ModifiedDate = c.ModifiedDate,
-                       TotalAmount = c.TotalAmount
+                       TotalAmount = c.TotalAmount,
+                      
 
                    }).ToListAsync();
             return dsr;
@@ -129,7 +132,6 @@ namespace Natural_Data.Repositories
             var result = AssignedList.Select(c => new DsrRetailor
             {
                 Id = c.Retailor.Id,
-
                 Retailor = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName)
             }).ToList();
 
@@ -162,32 +164,28 @@ namespace Natural_Data.Repositories
         }
         public async Task<IEnumerable<Dsr>> GetRetailorDetailsByDistributorId(string distributorId)
         {
-            //DateTime threeDaysAgo = DateTime.Today.AddDays(-3);
-
             var dsr = await NaturalDbContext.Dsrs
-                   .Include(c => c.ExecutiveNavigation)
-                   .Include(c => c.DistributorNavigation)
-                   .Include(c => c.RetailorNavigation)
-                   .Include(c => c.OrderByNavigation)
-                                      //.Where(c => c.DistributorNavigation.Id == distributorId  && c.CreatedDate >= threeDaysAgo && c.CreatedDate <= DateTime.Today)
-                   .Where(c => c.DistributorNavigation.Id == distributorId && c.IsDeleted != true)
+                .Include(c => c.ExecutiveNavigation)
+                .Include(c => c.DistributorNavigation)
+                .Include(c => c.RetailorNavigation)
+                .Include(c => c.OrderByNavigation)
+                .Where(c => c.DistributorNavigation.Id == distributorId && c.IsDeleted != true)
+                .Select(c => new Dsr
+                {
+                    Id = c.Id,
+                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                    Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+                    Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                    CreatedDate = c.CreatedDate,
+                    ModifiedDate = c.ModifiedDate,
+                    TotalAmount = c.TotalAmount,
+                   
+                }).ToListAsync();
 
-                   .Select(c => new Dsr
-                   {
-                       Id = c.Id,
-                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                       OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
-                       CreatedDate = c.CreatedDate,
-                       ModifiedDate = c.ModifiedDate,
-                       TotalAmount = c.TotalAmount
-
-                   }).ToListAsync();
             return dsr;
-
-
         }
+
 
 
 
@@ -296,7 +294,8 @@ namespace Natural_Data.Repositories
                        TotalAmount = c.TotalAmount,
                        CreatedDate = c.RetailorNavigation.CreatedDate,
                        ModifiedDate = c.RetailorNavigation.ModifiedDate,
-                       Area = c.RetailorNavigation.AreaNavigation.AreaName
+                       Area = c.RetailorNavigation.AreaNavigation.AreaName,
+                       Image = c.RetailorNavigation.Image
 
                       
 

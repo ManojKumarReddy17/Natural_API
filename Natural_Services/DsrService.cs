@@ -68,7 +68,7 @@ namespace Natural_Services
 
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     response.Message = "Insertion Failed";
@@ -180,12 +180,7 @@ namespace Natural_Services
             return await _unitOfWork.ProductRepository.GetProducttAsync();
         }
 
-        //public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
-        //{
-        //    var searchedDsr = await _unitOfWork.dSRRepo.SearchDsr(search);
-
-        //    return searchedDsr;
-        //}
+     
 
         public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
         {

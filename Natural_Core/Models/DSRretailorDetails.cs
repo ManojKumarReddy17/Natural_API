@@ -18,6 +18,7 @@ namespace Natural_Core.Models
         public Decimal TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+    public string Image { get;set; }
         public string Id { get; set; }
     }
 }

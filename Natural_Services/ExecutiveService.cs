@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Natural_Core.S3Models;
 using Microsoft.Extensions.Options;
 using Natural_Core.S3_Models;
 using AutoMapper;
@@ -54,9 +53,7 @@ namespace Natural_Services
 
         public async Task<IEnumerable<Executive>> GetAllExecutives()
         {
-            var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();
-            
-
+            var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();         
             return result;
         }
 

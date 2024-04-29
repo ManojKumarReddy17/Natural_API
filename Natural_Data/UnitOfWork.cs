@@ -98,7 +98,6 @@ namespace Natural_Data.Models
         }
 
 
-        // For Transactions 
 
         public IDbContextTransaction BeginTransaction()
         {

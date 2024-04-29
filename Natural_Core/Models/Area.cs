@@ -11,9 +11,9 @@ namespace Natural_Core.Models
         {
             DistributorbyAreas = new HashSet<DistributorbyArea>();
             Distributors = new HashSet<Distributor>();
-            ExecutiveAreas = new HashSet<ExecutiveArea>();
             Executives = new HashSet<Executive>();
             Retailors = new HashSet<Retailor>();
+            ExecutiveAreas = new HashSet<ExecutiveArea>();
         }
 
         public string Id { get; set; }

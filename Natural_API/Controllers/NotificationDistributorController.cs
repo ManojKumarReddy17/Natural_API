@@ -115,9 +115,10 @@ namespace Natural_API.Controllers
 
             var notifydata = _mapper.Map<NotificationResource, Notification>(notification);
             var Distributorlist = notification.distributorlist;
+            var Executivelist = notification.executiveList;
             var drsdetaildata = _mapper.Map<List<NotificationDistributorResource>, List<NotificationDistributor>>(Distributorlist);
-
-            var result = await _NotificationDistributorService.updateNotificationc(notifydata, drsdetaildata);
+            var exedetaildata = _mapper.Map<List<NotificationExecutiveResource>, List<NotificationExecutive>>(Executivelist);
+            var result = await _NotificationDistributorService.updateNotificationc(notifydata, drsdetaildata, exedetaildata);
             return Ok(result);
 
         }

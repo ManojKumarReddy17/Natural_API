@@ -69,8 +69,14 @@ namespace Natural_Services
             return distributorslist;
 
         }
+        public async Task<IEnumerable<NotificationExecutive>> GetExetableByNotificationIdAsync(string notiId)
+        {
+            var exelist = await _unitOfWork.NotificationExecutiveRepository.GetexeTableByNotificationIdAsync(notiId);
+            return exelist;
 
-        
+        }
+
+
         public async Task<ProductResponse> CreateNotificationc(Notification notification, List<NotificationDistributor> distributors, List<NotificationExecutive> executives)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
@@ -168,79 +174,75 @@ namespace Natural_Services
             return searchresult;
         }
 
-        public async Task<ProductResponse> updateNotificationc(Notification notification, List<NotificationDistributor> distributors)
+        public async Task<ProductResponse> updateNotificationc(Notification notification, List<NotificationDistributor> distributors, List<NotificationExecutive> executives)
         {
-
-
-
             using (var transaction = _unitOfWork.BeginTransaction())
             {
                 var response = new ProductResponse();
                 try
                 {
+                    var existingNotification = await GetNotificationByIdAsync(notification.Id);
+                    existingNotification.Subject = notification.Subject;
+                    existingNotification.Body = notification.Body;
+                    _unitOfWork.NotificationRepository.Update(existingNotification);
+                    await _unitOfWork.CommitAsync();
 
-                    var existingnotification = await GetNotificationByIdAsync(notification.Id);
+                    var existingDistributors = await GetDistributorsByNotificationIdAsync(notification.Id);
+                    var existingExecutives = await GetExecutivesByNotificationIdAsync(notification.Id);
 
-                    existingnotification.Subject = notification.Subject;
-                    existingnotification.Body = notification.Body;
+                    var mappedDistributors = _mapper.Map<List<NotificationDistributor>>(existingDistributors);
+                    var mappedExecutives = _mapper.Map<List<NotificationExecutive>>(existingExecutives);
 
-                    _unitOfWork.NotificationRepository.Update(existingnotification);
+                    var differentDistributors = distributors.Except(mappedDistributors, new notificationComparer()).ToList();
+                    await _unitOfWork.NotificationDistributorRepository.AddRangeAsync(differentDistributors);
 
-
-                    var commit = await _unitOfWork.CommitAsync();
-
-                 
-
-                    var existingdist = await GetDistableByNotificationIdAsync(notification.Id);
-                    var result = _mapper.Map<List<NotificationDistributor>>(existingdist);
-
-
-                    var differentRecords = distributors.Except(result, new notificationComparer()).ToList();
-
-                    await _unitOfWork.NotificationDistributorRepository.AddRangeAsync(differentRecords);
+                    var differentExecutives = executives.Except(mappedExecutives, new notificationComparer()).ToList(); // Assuming executive is a single entity
+                    await _unitOfWork.NotificationExecutiveRepository.AddRangeAsync(differentExecutives);
 
                     var created = await _unitOfWork.CommitAsync();
 
-                    var deletingRecords =  result.Except(distributors ,new notificationComparer()).ToList();
+                    var deletingDistributors = mappedDistributors.Except(distributors, new notificationComparer()).ToList();
+                    _unitOfWork.NotificationDistributorRepository.RemoveRange(deletingDistributors);
 
-
-                    _unitOfWork.NotificationDistributorRepository.RemoveRange(deletingRecords);
+                    var deletingExecutives = mappedExecutives.Except(executives, new notificationComparer()).ToList();
+                    _unitOfWork.NotificationExecutiveRepository.RemoveRange(deletingExecutives);
                     var deted = await _unitOfWork.CommitAsync();
-
-                    
-
+                    //await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
 
-                    response.Message = " Dsr and DsrdetailInsertion Successful";
+                    response.Message = "Distributor, Executive, and Notification updated successfully";
                     response.StatusCode = 200;
                     response.Id = notification.Id;
-
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    response.Message = "Insertion Failed";
+                    response.Message = "Update failed";
                     response.StatusCode = 401;
-
                 }
-
                 return response;
             }
-
-
         }
+
 
     }
 
 
 
 
-    class notificationComparer : IEqualityComparer<NotificationDistributor>
+    class notificationComparer : IEqualityComparer<NotificationDistributor>, IEqualityComparer<NotificationExecutive>
     {
         public bool Equals(NotificationDistributor x, NotificationDistributor y)
         {
             if (x.Distributor== y.Distributor)
+                return true;
+
+            return false;
+        }
+        public bool Equals(NotificationExecutive x, NotificationExecutive y)
+        {
+            if (x.Executive == y.Executive)
                 return true;
 
             return false;
@@ -250,8 +252,13 @@ namespace Natural_Services
         {
             return obj.Distributor.GetHashCode();
         }
+        public int GetHashCode(NotificationExecutive obj)
+        {
+            return obj.Executive.GetHashCode();
+        }
 
-       
+
     }
+
 }
 

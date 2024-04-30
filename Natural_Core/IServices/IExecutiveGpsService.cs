@@ -10,6 +10,7 @@ namespace Natural_Core.IServices
     {
         // Task<IEnumerable<ExecutiveGp>> InsertOrUpdateExecutive(string executiveId, string latitude, string longitude);
         Task<ResultResponse> CreateOrUpdate(ExecutiveGp executive);
+        Task<ExecutiveGp> GetExeId(string executiveId);
 
     }
 }

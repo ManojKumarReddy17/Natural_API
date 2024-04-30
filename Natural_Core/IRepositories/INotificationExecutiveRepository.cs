@@ -9,5 +9,6 @@ namespace Natural_Core.IRepositories
     public interface INotificationExecutiveRepository : IRepository<NotificationExecutive>
     {
         Task<IEnumerable<NotificationExecutive>> GetExecutiveByNotificationIdAsync(string notiId);
+        Task<IEnumerable<NotificationExecutive>> GetexeTableByNotificationIdAsync(string notiId);
     }
 }

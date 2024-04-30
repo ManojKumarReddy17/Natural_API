@@ -30,6 +30,13 @@ namespace Natural_Data.Repositories
 
         }
 
+        public async Task<IEnumerable<NotificationExecutive>> GetexeTableByNotificationIdAsync(string notiId)
+        {
+            var executiveslist = await NaturalDbContext.NotificationExecutives.Where(x => x.Notification == notiId && x.IsDeleted == false).ToListAsync();
+            return executiveslist;
+
+        }
+
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }

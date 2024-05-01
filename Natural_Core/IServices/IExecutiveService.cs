@@ -51,7 +51,7 @@ namespace Natural_Core.IServices
 
         Task<AngularLoginResponse> LoginAsync(Executive credentials);
 
-        Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);  //get detail table data of executiveArea
+        Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);  
 
         Task<List<InsertUpdateModel>> GetxecutiveAsync();
 

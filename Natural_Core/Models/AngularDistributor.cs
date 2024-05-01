@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
+#nullable disable
 
 namespace Natural_Core.Models
 {
@@ -19,8 +21,6 @@ namespace Natural_Core.Models
         public int Statuscode { get; set; }
         public string Message { get; set; }
 
-        // public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
-        //public virtual DistributorToExecutive DistributorToExecutives { get; set; }
 
 
 
@@ -29,5 +29,20 @@ namespace Natural_Core.Models
 
 
         public string ExeId { get; set; }
+
+
+        public string PresignedUrl { get; set; }
+      
+
+
+
+
+
+
+
+
+
+
     }
+
 }

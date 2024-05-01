@@ -38,6 +38,7 @@ namespace Natural_Core.IServices
         Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId);
         Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsyncdis(string DistributorId);
 
+
     }
 
 }

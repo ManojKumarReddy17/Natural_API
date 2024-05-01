@@ -291,6 +291,7 @@ namespace Natural_Data.Repositories
         MobileNumber = distributor.Distributor.MobileNumber,
         Address = distributor.Distributor.Address,
         Email = distributor.Distributor.Email,
+        PresignedUrl = distributor.Distributor.Image,
 
         ExeId = distributor.Executive.Id,
         Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"
@@ -302,22 +303,6 @@ namespace Natural_Data.Repositories
 
         }
 
-
-        //public async Task<IEnumerable<AngularLoginResponse>> GetExe(string Id)
-        //{
-        //    var distirbutors = await NaturalDbContext.Distributors
-        //        .Include(c => c.ExecutiveNavigation)
-        //        .Where(c => c.Id == Id)
-        //         .Select(c => new AngularLoginResponse
-        //         {
-        //             Id = c.Id,
-
-        //             //Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
-        //             Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
-        //         }).ToListAsync();
-        //    return distirbutors;
-
-        //}
 
 
         private NaturalsContext NaturalDbContext

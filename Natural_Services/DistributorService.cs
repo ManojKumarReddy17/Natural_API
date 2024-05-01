@@ -244,7 +244,7 @@ namespace Natural_Services
             var presignedUrls = await GetAllFilesAsync(bucketName, "");
             return presignedUrls.FirstOrDefault(p => p.Image == imageName)?.PresignedUrl;
         }
-        public async Task<AngularLoginResponse> LoginAsync(Distributor credentials)
+        public async Task<AngularDistributor> LoginAsync(Distributor credentials)
         {
             AngularDistributor response = new AngularDistributor();
             try
@@ -257,13 +257,15 @@ namespace Natural_Services
 
                 if (authenticatedUser != null)
                 {
-                    response.Id = authenticatedUser.Id;
-                    response.FirstName = authenticatedUser.FirstName;
-                    response.LastName = authenticatedUser.LastName;
-                    response.Email = authenticatedUser.Email;
-                    response.Address = authenticatedUser.Address;
-                    response.MobileNumber = authenticatedUser.MobileNumber;
-                    response.PresignedUrl = await GetPresignedUrlForImage(authenticatedUser.Image);
+                    response.Id = user1.Id;
+                    response.FirstName = user1.FirstName;
+                    response.LastName = user1.LastName;
+                    response.Email = user1.Email;
+                    response.Address = user1.Address;
+                    response.MobileNumber = user1.MobileNumber;
+                    response.Executives = user1.Executives;
+                    response.ExeId = user1.ExeId;
+                    response.PresignedUrl = await GetPresignedUrlForImage(user1.PresignedUrl);
 
                     response.Statuscode = 200;
                     response.Message = "LOGIN SUCCESSFUL";

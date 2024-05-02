@@ -44,6 +44,17 @@ namespace Natural_Services
             }
             return null;
         }
+        public async Task<IEnumerable<ExecutiveNotificationDetails>> GetNotificationsbyexecid(string ExecutiveId)
+        {
+            var executiveres = await _unitOfWork.NotificationExecutiveRepository.GetNotificationsbyexecid(ExecutiveId);
+            return executiveres;
+        }
+        public async Task<IEnumerable<DistributorNotificationDetails>> GetNotificationsbyDistrbId(string DistributorId)
+        {
+            var Distributors = await _unitOfWork.NotificationDistributorRepository.GetNotificationsbyDistrbId(DistributorId);
+            return Distributors;
+        }
+
 
 
         public async Task<IEnumerable<NotificationDistributor>> GetDistributorsByNotificationIdAsync(string notificationId)

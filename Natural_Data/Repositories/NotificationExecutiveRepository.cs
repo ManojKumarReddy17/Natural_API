@@ -29,6 +29,33 @@ namespace Natural_Data.Repositories
             return executives;
 
         }
+        public async Task<IEnumerable<ExecutiveNotificationDetails>> GetNotificationsbyexecid(string ExecutiveId)
+        {
+            //var executive = await NaturalDbContext.NotificationExecutives
+            //    .Notifications(c => c.ExecutiveNavigation)
+            //    .where(c => c.Id == ExecutiveId && c.IsDeleted == false).Select(c => new ExecutiveNotificationDetails
+            //{
+            //    Subject = c.Subject,
+            //    Body = c.Body,
+            //}).ToListAsync();
+            //return executive;
+
+
+
+
+
+            var executive = await NaturalDbContext.NotificationExecutives
+                .Include(c => c.NotificationNavigation)
+                .Where(c => c.Executive == ExecutiveId)
+                 .Select(c => new ExecutiveNotificationDetails
+                 {
+                     Id = c.NotificationNavigation.Id,
+                     Body = c.NotificationNavigation.Body,
+                     Subject = c.NotificationNavigation.Subject,
+                 }).ToListAsync();
+            return executive;
+        }
+
 
         public async Task<IEnumerable<NotificationExecutive>> GetexeTableByNotificationIdAsync(string notiId)
         {

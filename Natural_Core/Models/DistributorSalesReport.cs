@@ -6,6 +6,9 @@ namespace Natural_Core.Models
 {
     public class DistributorSalesReport
     {
+
+
+        public string Area { get; set; }
         public string Executive { get; set; }
 
         public string Distributor { get; set; }

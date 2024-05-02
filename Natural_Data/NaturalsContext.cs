@@ -754,12 +754,12 @@ namespace Natural_Core.Models
                     .HasMaxLength(50)
                     .HasColumnName("State_Name");
             });
-            
+
 
             //modelBuilder.Entity<DistributorSalesReport>(entity =>
             //{
 
-            //    entity.HasKey(e => new { e.Executive, e.Distributor, e.Retailor }); //e.StartDate, e.EndDate });
+            //    entity.HasKey(e => new { e.Area, e.Retailor }); //e.StartDate, e.EndDate });
             //});
             modelBuilder.Entity<DistributorSalesReport>(entity =>
             {

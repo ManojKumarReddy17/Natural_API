@@ -10,6 +10,7 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<NotificationDistributor>> GetDistributorByNotificationIdAsync(string notificationId);
         Task<IEnumerable<NotificationDistributor>> GetDisTableByNotificationIdAsync(string notificationId);
         Task<string> executiveid(string distributorId);
+        Task<IEnumerable<DistributorNotificationDetails>> GetNotificationsbyDistrbId(string DistributorId);
     }
 }
 

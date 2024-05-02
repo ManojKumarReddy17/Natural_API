@@ -21,6 +21,9 @@ namespace Natural_Core.IServices
         Task<string> executiveid(string distributorId);
         Task<ProductResponse> updateNotificationc(Notification notification, List<NotificationDistributor> distributors, List<NotificationExecutive> executives);
         Task<IEnumerable<Notification>> SearchNotification(EdittDSR search);
+        Task<IEnumerable<ExecutiveNotificationDetails>> GetNotificationsbyexecid(string ExecutiveId);
+        Task<IEnumerable<DistributorNotificationDetails>> GetNotificationsbyDistrbId(string DistributorId);
+
 
 
     }

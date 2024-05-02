@@ -138,6 +138,24 @@ namespace Natural_API.Controllers
             return Ok(notifydata);
         }
 
+
+
+        ///notification executive 
+        [HttpGet("Notifications/{Executiveid}")]
+        public async Task<ActionResult<ExecutiveNotificationDetails>> GetNotibyExeId(string Executiveid)
+        {
+            var result = await _NotificationDistributorService.GetNotificationsbyexecid(Executiveid);
+            return Ok(result);
+        }
+
+        //Distributor Notification 
+        [HttpGet("Notification/DistributorId")]
+        public async Task<ActionResult<DistributorNotificationDetails>> GetnotibyDisId(string DistributorId)
+        {
+            var vbn = await _NotificationDistributorService.GetNotificationsbyDistrbId(DistributorId);
+            return Ok(vbn);
+        }
+
     }
 }
 

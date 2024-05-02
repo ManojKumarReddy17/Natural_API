@@ -10,5 +10,6 @@ namespace Natural_Core.IRepositories
     {
         Task<IEnumerable<NotificationExecutive>> GetExecutiveByNotificationIdAsync(string notiId);
         Task<IEnumerable<NotificationExecutive>> GetexeTableByNotificationIdAsync(string notiId);
+        Task<IEnumerable<ExecutiveNotificationDetails>> GetNotificationsbyexecid(string ExecutiveId);
     }
 }

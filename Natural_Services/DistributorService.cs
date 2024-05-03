@@ -249,7 +249,7 @@ namespace Natural_Services
             AngularDistributor response = new AngularDistributor();
             try
             {
-                var user = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
+                var user = await _unitOfWork.DistributorRepo.GetAllAsync();
 
                 var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
 
@@ -261,8 +261,7 @@ namespace Natural_Services
                     response.FirstName = user1.FirstName;
                     response.LastName = user1.LastName;
                     response.Email = user1.Email;
-                    response.Address = user1.Address;
-                    response.MobileNumber = user1.MobileNumber;
+                    response.Address = user1.MobileNumber;
                     response.Executives = user1.Executives;
                     response.ExeId = user1.ExeId;
                     response.PresignedUrl = await GetPresignedUrlForImage(user1.PresignedUrl);

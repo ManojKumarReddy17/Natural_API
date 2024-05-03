@@ -112,13 +112,15 @@ namespace Natural_Data.Repositories
                 Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
-                Latitude=c.Latitude,
-                Longitude=c.Longitude,
+                Latitude = c.Latitude,
+                Longitude = c.Longitude,
                 Image = c.Image
             }).ToList();
 
             return result;
         }
+
+
 
         public async Task<Distributor> GetDistributorDetailsByIdAsync(string distributorid)
         {

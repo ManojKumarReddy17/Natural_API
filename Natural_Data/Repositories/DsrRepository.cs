@@ -16,12 +16,7 @@ namespace Natural_Data.Repositories
 
         public DsrRepository(NaturalsContext context) : base(context)
         {
-
-
         }
-
-
-        
 
         public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
         {
@@ -47,9 +42,6 @@ namespace Natural_Data.Repositories
             return dsr;
 
         }
-
-       
-
 
         public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
         {

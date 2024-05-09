@@ -1,4 +1,5 @@
 ﻿using Natural_Core.Models;
+using Natural_Core.S3Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,9 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<City>> GetCitywithStateId(string StateId);
         Task <City>GetCityWithId(string CityId);
+        Task<ProductResponse> InsertWithCity(City city);
+
+        Task<ProductResponse> UpdateWithCity(City UpdateWithCity);
         Task<ResultResponse> DeleteCity(string CityId);
     }
 }

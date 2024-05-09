@@ -46,20 +46,34 @@ namespace Natural_API.Controllers
             var CitiesList = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(city);
             return Ok(CitiesList);
         }
+        [HttpPost]
+        public async Task<ActionResult<ProductResource>> InsertWithCity(CityResource city)
+        {
+            var ar = _mapper.Map<CityResource, City>(city);
+            var exe = await _cityService.InsertWithCity(ar);
 
-
+            return StatusCode(exe.StatusCode, exe);
+        }
         [HttpGet("getbyid/{CityId}")]
         public async Task<ActionResult<CityResource>> GetCityId(String CityId)
         {
-            var City = await _cityService.GetCityWithId(CityId);
-            var CityList = _mapper.Map<City, CityResource>(City);
+            var cities = await _cityService.GetCityWithId(CityId);
+            var CityList = _mapper.Map<City, CityResource>(cities);
             return Ok(CityList);
         }
-        [HttpDelete]
-
-        public async Task<ActionResult> DeleteCity(string CityId)
+        [HttpPut("{CityId}")]
+        public async Task<ActionResult<CityResource>> UpdateWithCity(String CityId, [FromBody] CityResource citytoupdate)
         {
-            var response = await _cityService.DeleteCity(CityId);
+            var existingCity = await _cityService.GetCityWithId(CityId);
+            var city = _mapper.Map(citytoupdate, existingCity);
+            var result = await _cityService.UpdateWithCity(city);
+
+            return StatusCode(result.StatusCode, result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCity(string id)
+        {
+            var response = await _cityService.DeleteCity(id);
 
             if (response.StatusCode == 200)
             {
@@ -69,8 +83,8 @@ namespace Natural_API.Controllers
             {
                 return BadRequest(response);
             }
-
         }
+
     }
 }
 

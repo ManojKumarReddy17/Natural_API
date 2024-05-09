@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Natural_Core.S3Models;
 
 #nullable disable
 
@@ -49,6 +50,60 @@ namespace Natural_Services
         {
             return await _unitOfWork.CityRepo.GetCitywithStateId(StateId);
         }
+        public async Task<ProductResponse> InsertWithCity(City city)
+        {
+            var response = new ProductResponse();
+            try
+            {
+
+                city.Id = "ctn" + new Random().Next(10000, 99999).ToString();
+                await _unitOfWork.CityRepo.AddAsync(city);
+                var Created = await _unitOfWork.CommitAsync();
+                if (Created != 0)
+                {
+                    response.Message = "Insertion Successful";
+                    response.StatusCode = 200;
+
+                    response.Id = city.Id;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                response.Message = "Insertion Failed";
+                response.StatusCode = 401;
+            }
+            return response;
+
+        }
+        public async Task<ProductResponse> UpdateWithCity(City UpdateWithCity)
+        {
+            var response = new ProductResponse();
+            try
+            {
+                _unitOfWork.CityRepo.Update(UpdateWithCity);
+                var updated = await _unitOfWork.CommitAsync();
+                if (updated != 0)
+                {
+                    response.Message = "Update Successful";
+                    response.StatusCode = 200;
+
+
+                }
+            }
+            catch (Exception)
+            {
+                response.Message = "Update Failed";
+                response.StatusCode = 401;
+            }
+            return response;
+
+
+
+        }
+
 
         public async Task<ResultResponse> DeleteCity(string CityId)
         {

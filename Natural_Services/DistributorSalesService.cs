@@ -17,15 +17,19 @@ namespace Natural_Services
             _unitOfWork = unitOfWork;
         }
         public async Task<IEnumerable<DistributorSalesReport>> GetById(DistributorSalesReportInput DSReport)
-
         {
+            var salesReports = await _unitOfWork.DistributorSalesRepositoryRepo.GetById(DSReport);
 
-            var result = await _unitOfWork.DistributorSalesRepositoryRepo.GetById(DSReport);
+            foreach (var report in salesReports)
+            {
+                report.Retailor = await _unitOfWork.DistributorSalesRepositoryRepo.GetRetailorNameById(report.Retailor);
+                report.Executive = await _unitOfWork.DistributorSalesRepositoryRepo.GetExecutiveNameById(report.Executive);
+                report.Distributor = await _unitOfWork.DistributorSalesRepositoryRepo.GetDistributorNameById(report.Distributor);
+            }
 
-            return result;
-
-            
+            return salesReports;
         }
+
     }
 }
 

@@ -413,6 +413,7 @@ namespace Natural_Services
                     response.Email = authenticatedUser.Email;
                     response.Address = authenticatedUser.Address;
                     response.MobileNumber = authenticatedUser.MobileNumber;
+                    response.UserName = authenticatedUser.UserName;
 
                     response.PresignedUrl = await GetPresignedUrlForImage(authenticatedUser.Image);
                     response.Statuscode = 200;

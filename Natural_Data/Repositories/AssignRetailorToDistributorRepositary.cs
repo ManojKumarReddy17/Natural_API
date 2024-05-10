@@ -41,7 +41,7 @@ namespace Natural_Data.Repositories
                 Email = c.Retailor.Email,
                 Area = c.Retailor.AreaNavigation.AreaName,
                 City = c.Retailor.AreaNavigation.City.CityName,
-                State = c.Retailor.AreaNavigation.City.State.StateName,
+                State = c.Retailor.StateNavigation.StateName,
                 Image = c.Retailor.Image,
 
             }).ToList();

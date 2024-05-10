@@ -205,6 +205,7 @@ namespace Natural_Data.Repositories
                 .ToListAsync();
             var retailor = retailorList.Where(c => c.CreatedDate.Date == date.Date).ToList();
 
+
             return retailor;
         }
 

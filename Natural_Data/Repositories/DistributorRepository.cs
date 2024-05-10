@@ -294,6 +294,7 @@ namespace Natural_Data.Repositories
         Address = distributor.Distributor.Address,
         Email = distributor.Distributor.Email,
         PresignedUrl = distributor.Distributor.Image,
+        UserName = distributor.Distributor.UserName,
 
         ExeId = distributor.Executive.Id,
         Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"

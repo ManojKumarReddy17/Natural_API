@@ -20,6 +20,7 @@ namespace Natural_Core.Models
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public string Address { get; set; }
+        public string UserName { get;set; }
         public ICollection<DistributorToExecutive> Executive { get; set; }
 
         public int Statuscode { get; set; }

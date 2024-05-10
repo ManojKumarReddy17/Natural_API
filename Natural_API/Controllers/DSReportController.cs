@@ -23,7 +23,6 @@ namespace Natural_API.Controllers
         [HttpGet]
         public async Task<ActionResult<DistributorSalesReport>> GetSalesReport([FromQuery] DistributorSalesReportInput dsr)
         {
-
             var salesReport = await _DistributorSalesService.GetById(dsr);
             if (salesReport == null)
             {

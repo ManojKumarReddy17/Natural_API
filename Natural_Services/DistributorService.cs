@@ -257,12 +257,13 @@ namespace Natural_Services
 
                 if (authenticatedUser != null)
                 {
-                    response.Id = user1.Id;
-                    response.FirstName = user1.FirstName;
-                    response.LastName = user1.LastName;
-                    response.Email = user1.Email;
-                    response.Address = user1.MobileNumber;
+                    response.Id = authenticatedUser.Id;
+                    response.FirstName = authenticatedUser.FirstName;
+                    response.LastName = authenticatedUser.LastName;
+                    response.Email = authenticatedUser.Email;
+                    response.Address = authenticatedUser.MobileNumber;
                     response.Executives = user1.Executives;
+                    response.UserName = credentials.UserName;
                     response.ExeId = user1.ExeId;
                     response.PresignedUrl = await GetPresignedUrlForImage(user1.PresignedUrl);
 

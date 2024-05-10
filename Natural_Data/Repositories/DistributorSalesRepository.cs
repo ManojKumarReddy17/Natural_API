@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Natural_Data.Repositories
@@ -18,42 +13,39 @@ namespace Natural_Data.Repositories
         {
 
         }
-      
-
-
-
-
 
         public async Task<IEnumerable<DistributorSalesReport>> GetById(DistributorSalesReportInput DSReport)
         {
             var saleReport = await NaturalDbContext.DistributorSalesReports
-            .FromSqlInterpolated($"CALL Naturals.AreaSales({DSReport.Area}, {DSReport.Retailor}, {DSReport.StartDate.Date}, {DSReport.EndDate.Date})")
-          .ToListAsync();
-
-            // Apply filtering based on the provided parameters
-            //var filteredResults = saleReport
-            //    .Where(report =>
-                   
-            //        (string.IsNullOrEmpty(DSReport.Area) || report.Distributor == DSReport.Area) &&
-            //        (string.IsNullOrEmpty(DSReport.Retailor) || report.Retailor == DSReport.Retailor) &&
-            //        (report.CreatedDate.Date >= DSReport.StartDate.Date && report.CreatedDate.Date <= DSReport.EndDate.Date)).ToList();
+                .FromSqlInterpolated($"CALL Naturals.AreaSales({DSReport.Area}, {DSReport.Retailor}, {DSReport.StartDate.Date}, {DSReport.EndDate.Date})")
+                .ToListAsync();
 
             return saleReport;
         }
 
+        public async Task<string> GetRetailorNameById(string retailorId)
+        {
+            return await NaturalDbContext.Retailors
+                .Where(r => r.Id == retailorId)
+        .Select(r => r.FirstName + " " + r.LastName)
+                .FirstOrDefaultAsync();
+        }
 
+        public async Task<string> GetExecutiveNameById(string executiveId)
+        {
+            return await NaturalDbContext.Executives
+                .Where(e => e.Id == executiveId)
+        .Select(r => r.FirstName + " " + r.LastName)
+                .FirstOrDefaultAsync();
+        }
 
-
-
-
-
-
-
-
-
-
-
-     
+        public async Task<string> GetDistributorNameById(string distributorId)
+        {
+            return await NaturalDbContext.Distributors
+                .Where(d => d.Id == distributorId)
+        .Select(r => r.FirstName + " " + r.LastName)
+                .FirstOrDefaultAsync();
+        }
 
 
 
@@ -62,7 +54,5 @@ namespace Natural_Data.Repositories
         {
             get { return Context as NaturalsContext; }
         }
-
     }
 }
-

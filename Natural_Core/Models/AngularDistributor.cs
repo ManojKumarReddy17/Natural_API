@@ -9,11 +9,18 @@ namespace Natural_Core.Models
     public class AngularDistributor
     {
         public string Id { get; set; }
+        [JsonPropertyName("FirstName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string FirstName { get; set; }
+
+        [JsonPropertyName("LastName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string LastName { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public string Address { get; set; }
+
+        public string UserName { get;set; }
 
 
 

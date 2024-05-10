@@ -197,31 +197,39 @@ namespace Natural_API.Controllers
        
 
 
+        //[HttpGet("RetailorDetails/{distributorId}/{date}")]
+        //public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId,DateTime date)
+        //{
+        //    var retailorsList = await _dsrservice.GetRetailorListByDate(distributorId,date);
+        //    var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
+        //    var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
+        //    foreach (var retailor in retailorDetails)
+        //    {
+        //        string fullname = string.Concat(retailor.FirstName + retailor.LastName);
+        //        foreach (var retdetail in retailors)
+        //        {
+        //            if (retdetail.Retailor == fullname)
+        //            {
+        //                retdetail.Address = retailor.Address;
+        //                retdetail.Phonenumber = retailor.MobileNumber;
+        //            }
+        //        }
+        //    }
+        //    return Ok(retailors);
+
+        //}
         [HttpGet("RetailorDetails/{distributorId}/{date}")]
         public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId,DateTime date)
         {
-            var retailorsList = await _dsrservice.GetRetailorListByDate(distributorId,date);
-            var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
-            var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
-            foreach (var retailor in retailorDetails)
-            {
-                string fullname = string.Concat(retailor.FirstName + retailor.LastName);
-                foreach (var retdetail in retailors)
-                {
-                    if (retdetail.Retailor == fullname)
-                    {
-                        retdetail.Address = retailor.Address;
-                        retdetail.Phonenumber = retailor.MobileNumber;
-                    }
-                }
-            }
-            return Ok(retailors);
+
+            var dsrrestils = await _dsrservice.GetRetailorListByDate(distributorId,date);
+            return Ok(dsrrestils);
 
         }
 
 
 
-        [HttpGet("ExecId")]
+        [HttpGet("RetailorDetailsbyExe")]
         public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByExe(string ExecId)
         {
 

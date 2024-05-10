@@ -112,13 +112,15 @@ namespace Natural_Data.Repositories
                 Area = c.AreaNavigation.AreaName,
                 City = c.AreaNavigation.City.CityName,
                 State = c.AreaNavigation.City.State.StateName,
-                Latitude=c.Latitude,
-                Longitude=c.Longitude,
+                Latitude = c.Latitude,
+                Longitude = c.Longitude,
                 Image = c.Image
             }).ToList();
 
             return result;
         }
+
+
 
         public async Task<Distributor> GetDistributorDetailsByIdAsync(string distributorid)
         {
@@ -223,7 +225,8 @@ namespace Natural_Data.Repositories
                         Area = c.AreaNavigation.AreaName,
                         City = c.AreaNavigation.City.CityName,
                         State = c.AreaNavigation.City.State.StateName,
-                        Latitude=c.Latitude, Longitude=c.Longitude
+                        Latitude=c.Latitude, Longitude=c.Longitude,
+                        Image = c.Image
                     })
                     .ToList();
 
@@ -266,7 +269,8 @@ namespace Natural_Data.Repositories
                     City = c.AreaNavigation.City.CityName,
                     State = c.AreaNavigation.City.State.StateName,
                     Latitude = c.Latitude,
-                    Longitude=c.Longitude
+                    Longitude=c.Longitude,
+                    Image = c.Image
                 })
                 .ToList();
 
@@ -289,6 +293,8 @@ namespace Natural_Data.Repositories
         MobileNumber = distributor.Distributor.MobileNumber,
         Address = distributor.Distributor.Address,
         Email = distributor.Distributor.Email,
+        PresignedUrl = distributor.Distributor.Image,
+        UserName = distributor.Distributor.UserName,
 
         ExeId = distributor.Executive.Id,
         Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"
@@ -300,22 +306,6 @@ namespace Natural_Data.Repositories
 
         }
 
-
-        //public async Task<IEnumerable<AngularLoginResponse>> GetExe(string Id)
-        //{
-        //    var distirbutors = await NaturalDbContext.Distributors
-        //        .Include(c => c.ExecutiveNavigation)
-        //        .Where(c => c.Id == Id)
-        //         .Select(c => new AngularLoginResponse
-        //         {
-        //             Id = c.Id,
-
-        //             //Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
-        //             Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName)
-        //         }).ToListAsync();
-        //    return distirbutors;
-
-        //}
 
 
         private NaturalsContext NaturalDbContext

@@ -9,7 +9,7 @@ namespace Natural_Core.Models
         public string Executive { get; set; }
         public string Distributor { get; set; }
         public string Retailor { get; set; }
-        public string MobileNumber { get; set; }
+        public string Phonenumber { get; set; }
         public string Address { get; set; }
         public string Area { get; set; }
         public string City { get; set; }
@@ -18,5 +18,7 @@ namespace Natural_Core.Models
         public Decimal TotalAmount { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public string Image { get;set; }
+        public string Id { get; set; }
     }
 }

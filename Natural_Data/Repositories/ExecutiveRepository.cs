@@ -314,10 +314,7 @@ namespace Natural_Data.Repositories
             return exec;
         }
 
-        Task<IEnumerable<Executive>> IExecutiveRepository.GetAllExecutiveAsync()
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task<InsertUpdateModel> GetxecutiveAsyncbyId(string id)
         {

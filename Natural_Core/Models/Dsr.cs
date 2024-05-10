@@ -22,6 +22,7 @@ namespace Natural_Core.Models
         public decimal TotalAmount { get; set; }
         public bool? IsDeleted { get; set; }
 
+
         public virtual Distributor DistributorNavigation { get; set; }
         public virtual Executive ExecutiveNavigation { get; set; }
         public virtual Login OrderByNavigation { get; set; }

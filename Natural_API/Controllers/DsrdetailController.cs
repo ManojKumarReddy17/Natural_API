@@ -8,7 +8,6 @@ using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 
 

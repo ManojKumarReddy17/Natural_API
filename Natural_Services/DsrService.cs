@@ -68,7 +68,7 @@ namespace Natural_Services
 
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transaction.Rollback();
                     response.Message = "Insertion Failed";
@@ -180,12 +180,7 @@ namespace Natural_Services
             return await _unitOfWork.ProductRepository.GetProducttAsync();
         }
 
-        //public async Task<IEnumerable<Dsr>> SearchDsr(Dsr search)
-        //{
-        //    var searchedDsr = await _unitOfWork.dSRRepo.SearchDsr(search);
-
-        //    return searchedDsr;
-        //}
+     
 
         public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
         {
@@ -206,15 +201,16 @@ namespace Natural_Services
             var retailorList = await _unitOfWork.dSRRepo.GetRetailorDetailsByDistributorId(distributorId);
             return retailorList;
         }
-        public async Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date)
-        {
-            return await _unitOfWork.dSRRepo.GetRetailorDetailsByDate(distributorId, date);
-        }
+       
 
         public  async Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId)
         {
             var retailorList = await _unitOfWork.dSRRepo.GetRetailorDetailsByExecutiveId(executiveId);
             return retailorList;
+        }
+        public async Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date)
+        {
+            return await _unitOfWork.dSRRepo.GetRetailorDetailsByDate(distributorId, date);
         }
 
         public async Task<Dsr> GetbyId(string dsrid)
@@ -402,7 +398,16 @@ pd => pd.Id,
         public async Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId)
 
         {
-            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetails(ExecutiveId);
+            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetailsbyExecutiveId(ExecutiveId);
+
+
+            return dsrRetilordetails;
+
+        }
+        public async Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsyncdis(string DistributorId)
+
+        {
+            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetailsbyDistributorId(DistributorId);
 
 
             return dsrRetilordetails;

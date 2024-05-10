@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Natural_API.Resources;
 using Natural_Core.IServices;
 using Natural_Core.Models;
+using Natural_Core.S3Models;
+using Natural_Services;
 
 
 #nullable disable
@@ -39,7 +41,7 @@ namespace Natural_API.Controllers
         /// <summary>
         /// GETTING AREAS BY CITY ID
         /// </summary>
-       
+
         [HttpGet("{CityId}")]
 
         public async Task<ActionResult<IEnumerable<City>>> GetAreaswithCityId(string CityId)
@@ -48,6 +50,59 @@ namespace Natural_API.Controllers
             var AreaList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areas);
             return Ok(AreaList);
         }
+
+
+        [HttpGet("areaById/{AreaId}")]
+        public async Task<ActionResult<AreaResource>> GetAreasId(String AreaId)
+        {
+            var areas = await _areaService.GetAreasWithId(AreaId);
+            var AreaList = _mapper.Map<Area, AreaResource>(areas);
+            return Ok(AreaList);
+        }
+        [HttpPost]
+        public async Task<ActionResult<AreaResource>> Insert([FromBody] AreaResource area)
+        {
+           var maper=_mapper.Map<AreaResource,Area>(area);
+            var categories=await _areaService.Insert(maper);
+            
+
+            return StatusCode(categories.StatusCode, categories);
+        }
+        
+
+
+
+        [HttpPut("AreaId")]
+
+        public async Task<ActionResult<AreaUpdateResources>> UpdateArea(string Id, [FromBody] AreaUpdateResources areatoupdate)
+        {
+
+            var existingarea = await _areaService.GetAreasWithId(Id);
+            var Area = _mapper.Map(areatoupdate, existingarea);
+            var result = await _areaService.updateArea(Area);
+
+            return StatusCode(result.StatusCode, result);
+
+        }
+        [HttpDelete("{AreaId}")]
+        public async Task<ActionResult> DeleteArea(String AreaId)
+        {
+            var response = await _areaService.DeleteArea(AreaId);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
+
+
+
+
 
     }
 }

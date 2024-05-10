@@ -27,12 +27,19 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<Area>> GetAreasWithCityID(string CityId)
         {
-             return await NaturalDbContext.Areas.Where(m => m.CityId == CityId && m.IsDeleted != true).ToListAsync();
-            
+            return await NaturalDbContext.Areas.Where(m => m.CityId == CityId && m.IsDeleted != true).ToListAsync();
+
         }
+
+
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
+        }
+        public async Task<Area> GetAreasId(string AreaId)
+        {
+            var result = await NaturalDbContext.Areas.Where(m => m.Id == AreaId && m.IsDeleted != true).FirstOrDefaultAsync();
+            return result;
         }
     }
 }

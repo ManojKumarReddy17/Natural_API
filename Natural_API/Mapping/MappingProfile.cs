@@ -23,6 +23,7 @@ namespace Natural_API.Mapping
              CreateMap<Distributor, InsertUpdateResource>();
              CreateMap<State, StateResource>();
              CreateMap<Area, AreaResource>();
+             CreateMap<Area, AreaUpdateResources>();
              CreateMap<City, CityResource>();
              CreateMap<Category, CategoryResource>();
              CreateMap<Retailor , RetailorResource>();
@@ -143,6 +144,7 @@ namespace Natural_API.Mapping
             CreateMap<NotificationExecutiveResource, NotificationExecutive>();
             CreateMap<AngularLoginResourse, AngularDistributor>();
 
+            CreateMap<AreaUpdateResources, Area>();
         }
     }
 }

@@ -20,12 +20,17 @@ namespace Natural_API.Controllers
             _executiveGpsService = executiveGpsService;
             _mapper = mapper;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ExecutiveGp>>> GetAll()
+        {
+            var cat = await _executiveGpsService.GetAllLatLung();
+            return Ok(cat);
+        }
 
         [HttpGet("{ExecutiveId}")]
         public async Task<ActionResult<ResultResponse>> GetExecutiveById(string ExecutiveId)
         {
             var executive = await _executiveGpsService.GetExeId(ExecutiveId);
-            //var exec = _mapper.Map<ExecutiveGpsResource, ExecutiveGp>(executive);
             return Ok(executive);
         }
 

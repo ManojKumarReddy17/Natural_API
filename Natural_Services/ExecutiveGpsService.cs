@@ -18,8 +18,11 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-
-
+        public async Task<IEnumerable<ExecutiveGp>> GetAllLatLung()
+        {
+            var result = await _unitOfWork.executiveGpsRepo.GetAllAsync();
+            return result;
+        }
         public async Task<ExecutiveGp> GetExeId(string executiveId)
         {
 

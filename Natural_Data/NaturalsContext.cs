@@ -504,7 +504,7 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.Longitude).HasMaxLength(50);
 
-                entity.HasOne(d => d.Executive)
+                entity.HasOne(d => d.ExecutiveNavi)
                     .WithMany(p => p.ExecutiveGps)
                     .HasForeignKey(d => d.ExecutiveId)
                     .HasConstraintName("Executive_GPS_ibfk_1");

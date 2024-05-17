@@ -133,11 +133,51 @@ namespace Natural_Services
             }
         }
 
+        //public async Task<DsrResponse> DeleteNotification(string id)
+        //{
+
+        //    var notification = await GetNotificationByIdAsync(id);
+        //    var distributionlist = await GetDistableByNotificationIdAsync(id);
+
+        //    using (var transaction = _unitOfWork.BeginTransaction())
+        //    {
+        //        var response = new DsrResponse();
+
+        //        try
+        //        {
+        //            foreach (var distribution in distributionlist)
+        //            {
+        //                distribution.IsDeleted = true;
+        //                _unitOfWork.NotificationDistributorRepository.Update(distribution);
+        //            }
+        //            notification.IsDeleted = true;
+        //            _unitOfWork.NotificationRepository.Update(notification);
+        //            var commit1 = await _unitOfWork.CommitAsync();
+
+        //            transaction.Commit();
+        //            response.Message = "SUCCESSFULLY DELETED";
+        //            response.StatusCode = 200;
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            transaction.Rollback();
+        //            response.Message = "delete Failed";
+        //            response.StatusCode = 401;
+        //        }
+
+        //        return response;
+        //    }
+
+
+        //}
+
         public async Task<DsrResponse> DeleteNotification(string id)
         {
 
             var notification = await GetNotificationByIdAsync(id);
             var distributionlist = await GetDistableByNotificationIdAsync(id);
+            var Exelist = await GetExetableByNotificationIdAsync(id);
 
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -149,6 +189,11 @@ namespace Natural_Services
                     {
                         distribution.IsDeleted = true;
                         _unitOfWork.NotificationDistributorRepository.Update(distribution);
+                    }
+                    foreach (var execu in Exelist)
+                    {
+                        execu.IsDeleted = true;
+                        _unitOfWork.NotificationExecutiveRepository.Update(execu);
                     }
                     notification.IsDeleted = true;
                     _unitOfWork.NotificationRepository.Update(notification);

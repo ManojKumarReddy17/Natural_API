@@ -9,16 +9,11 @@ namespace Natural_Core.IRepositories
     public interface IRetailorRepository : IRepository<Retailor>
     {
 
-        Task<IEnumerable<Retailor>> GetAllRetailorsAsync();
-       
-        Task<Retailor> GetRetailorDetailsByIdAsync(string id);
+        Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, string? NonAssign);
+        Task<GetRetailor> GetRetailorDetailsByIdAsync(string id);
         Task UpdateRetailorAsync(Retailor retailor, Retailor existingRetailor);
-
         Task<IEnumerable<Retailor>> SearchRetailorAsync(SearchModel search);
         Task<IEnumerable<Retailor>> GetNonAssignedRetailorsAsync();
         Task<IEnumerable<Retailor>> SearchNonAssignedRetailorsAsync(SearchModel search);
-
-
-
     }
 }

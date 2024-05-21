@@ -115,7 +115,7 @@ namespace Natural_Data.Repositories
 
 
         //get products by id with category name
-        public async Task<Product> GetProductByIdAsync(string ProductId)
+        public async Task<GetProduct> GetProductByIdAsync(string ProductId)
         {
             {
                 var prod = await NaturalDbContext.Products
@@ -125,7 +125,7 @@ namespace Natural_Data.Repositories
 
                 if (prod != null)
                 {
-                    var result = new Product
+                    var result = new GetProduct
                     {
                         Id = prod.Id,
                         ProductName = prod.ProductName,
@@ -135,7 +135,8 @@ namespace Natural_Data.Repositories
                         Weight = prod.Weight,
                         CreatedDate = prod.CreatedDate,
                         ModifiedDate = prod.ModifiedDate,
-                        Category = prod.CategoryNavigation?.CategoryName
+                        Category = prod.CategoryNavigation?.CategoryName,
+                        CategoryId = prod.Category
 
                     };
 

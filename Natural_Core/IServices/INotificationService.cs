@@ -7,7 +7,7 @@ using Natural_Core.S3Models;
 
 namespace Natural_Core.IServices
 {
-	public interface INotificationDistributorService
+	public interface INotificationService
 	{
 
         Task<IEnumerable<Notification>> GetAll();

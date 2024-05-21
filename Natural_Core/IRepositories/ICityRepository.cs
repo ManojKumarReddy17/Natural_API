@@ -11,8 +11,6 @@ namespace Natural_Core.IRepositories
     public interface ICityRepository : IRepository<City>
     {
         Task<IEnumerable<City>> GetAllCitiesAsync();
-
-        Task<IEnumerable<City>> GetCitywithStateId(string StateId);
         Task<City> GetCityWithId(string CityId);  
     }
 }

@@ -42,18 +42,18 @@ namespace Natural_Services
         }
 
 
-        public async Task<IEnumerable<Retailor>> GetAllRetailors()
-        {
-            var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
-            var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
+        //public async Task<IEnumerable<Retailor>> GetAllRetailors()
+        //{
+        //    var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
+        //    var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
             
-            return presentRetailor;
-        }
+        //    return presentRetailor;
+        //}
 
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(string? prefix)
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, string? NonAssign, string? prefix)
         {
 
-            var Retailors = await GetAllRetailors();
+            var Retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
 
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
@@ -73,7 +73,7 @@ namespace Natural_Services
                                     Email = retailor.Email,
                                     City = retailor.City,
                                     State = retailor.State,
-                                    PresignedUrl = sub?.PresignedUrl,
+                                    Image = sub?.PresignedUrl,
                                     Latitude = retailor.Latitude,
                                     Longitude = retailor.Longitude
                                 };
@@ -90,9 +90,23 @@ namespace Natural_Services
 
 
 
-        public async Task<Retailor> GetRetailorDetailsById(string retailorId)
+        public async Task<GetRetailor> GetRetailorDetailsById(string retailorId)
         {
-            return await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
+            var retailorDetails = await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
+            string bucketName = _s3Config.BucketName;
+            string prefix = retailorDetails.Image;
+            var PresignedUrl = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+
+            if (PresignedUrl.Any())
+            {
+                var exe = PresignedUrl.FirstOrDefault();
+                retailorDetails.Image = exe.PresignedUrl;
+                return retailorDetails;
+            }
+            else
+            {
+                return retailorDetails;
+            }
         }
 
 
@@ -109,36 +123,6 @@ namespace Natural_Services
 
             return null;
         }
-
-        public async Task<GetRetailor> GetRetailorPresignedUrlbyId(string retailorId)
-        {
-            var Retailorresult = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
-
-            string bucketName = _s3Config.BucketName;
-            string prefix = Retailorresult.Image;
-            //var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-            var PresignedUrl = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
-
-            if (PresignedUrl.Any())
-            {
-                var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<Retailor, GetRetailor>(Retailorresult);
-                execuresoursze1.PresignedUrl = exe.PresignedUrl;
-
-                return execuresoursze1;
-            }
-            else
-            {
-                var execuresoursze1 = _Mapper.Map<Retailor, GetRetailor>(Retailorresult);
-
-                return execuresoursze1;
-
-            }
-
-        }
-
-
-
 
         public async Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {

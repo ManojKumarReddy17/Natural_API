@@ -5,7 +5,7 @@ using Natural_Core.Models;
 
 namespace Natural_Core.IRepositories
 {
-	public interface INotificationDistributorRepository: IRepository<NotificationDistributor>
+    public interface INotificationDistributorRepository : IRepository<NotificationDistributor>
     {
         Task<IEnumerable<NotificationDistributor>> GetDistributorByNotificationIdAsync(string notificationId);
         Task<IEnumerable<NotificationDistributor>> GetDisTableByNotificationIdAsync(string notificationId);

@@ -8,24 +8,24 @@ using Natural_Core.Models;
 
 namespace Natural_Data.Repositories
 {
-	public class NotificationDistributorRepository : Repository<NotificationDistributor>, INotificationDistributorRepository
+    public class NotificationDistributorRepository : Repository<NotificationDistributor>, INotificationDistributorRepository
     {
         public NotificationDistributorRepository(NaturalsContext context) : base(context)
         {
 
         }
 
-       public async Task<IEnumerable<NotificationDistributor>> GetDistributorByNotificationIdAsync(string notificationId)
+        public async Task<IEnumerable<NotificationDistributor>> GetDistributorByNotificationIdAsync(string notificationId)
         {
 
-         var distributors =    await NaturalDbContext.NotificationDistributors
-                .Include(c => c.DistributorNavigation)
-                .Where(c => c.Notification == notificationId && c.IsDeleted == false)
-                .Select(c => new NotificationDistributor
-                {
-                    Distributor = c.DistributorNavigation.FirstName + " " + c.DistributorNavigation.LastName,
-                    Id = c.Id
-                }).ToListAsync();
+            var distributors = await NaturalDbContext.NotificationDistributors
+                   .Include(c => c.DistributorNavigation)
+                   .Where(c => c.Notification == notificationId && c.IsDeleted == false)
+                   .Select(c => new NotificationDistributor
+                   {
+                       Distributor = c.DistributorNavigation.FirstName + " " + c.DistributorNavigation.LastName,
+                       Id = c.Id
+                   }).ToListAsync();
             return distributors;
 
         }
@@ -33,7 +33,7 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<NotificationDistributor>> GetDisTableByNotificationIdAsync(string notificationId)
         {
-           var distributorslist = await NaturalDbContext.NotificationDistributors.Where(x => x.Notification == notificationId && x.IsDeleted == false).ToListAsync();
+            var distributorslist = await NaturalDbContext.NotificationDistributors.Where(x => x.Notification == notificationId && x.IsDeleted == false).ToListAsync();
             return distributorslist;
 
         }
@@ -41,7 +41,7 @@ namespace Natural_Data.Repositories
 
         public async Task<string> executiveid(string notificationId)
         {
-            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId && x.IsDeleted != true).Select(x => x.ExecutiveId )
+            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId && x.IsDeleted != true).Select(x => x.ExecutiveId)
             .FirstOrDefaultAsync();
             return executiveId;
 

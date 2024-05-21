@@ -13,7 +13,7 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<string>> GetAllBucketAsync();
         Task<List<Product>> GetProducttAsync();
         
-        Task<Product> GetProductByIdAsync(string ProductId);
+        Task<GetProduct> GetProductByIdAsync(string ProductId);
         Task<IEnumerable<Natural_Core.S3Models.S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
 
         Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix);

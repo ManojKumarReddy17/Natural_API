@@ -27,25 +27,13 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCitiesList()
+        public async Task<ActionResult<IEnumerable<City>>> GetCitiesList(string? StateId)
         {
-            var cities = await _cityService.GetCitiesAsync();
+            var cities = await _cityService.GetCitiesAsync(StateId);
             var CitiesList = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(cities);
             return Ok(CitiesList);
         }
 
-        /// <summary>
-        /// GETTING CITIES BY STATE ID
-        /// </summary>
-
-        [HttpGet("{StateId}")]
-
-        public async Task<ActionResult<IEnumerable<City>>> GetCitieswithStateId(string StateId)
-        {
-            var city = await _cityService.GetCitywithStateId(StateId);
-            var CitiesList = _mapper.Map<IEnumerable<City>, IEnumerable<CityResource>>(city);
-            return Ok(CitiesList);
-        }
         [HttpPost]
         public async Task<ActionResult<ProductResource>> InsertWithCity(CityResource city)
         {

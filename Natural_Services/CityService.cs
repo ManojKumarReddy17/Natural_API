@@ -20,36 +20,24 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-        //public async Task<IEnumerable<City>> GetCitiesAsync()
-        //{
 
-        //    return await _unitOfWork.CityRepo.GetAllAsync();
-
-        //}
-        public async Task<IEnumerable<City>> GetCitiesAsync()
+        public async Task<IEnumerable<City>> GetCitiesAsync(string? StateId)
         {
             var result = await _unitOfWork.CityRepo.GetAllAsync();
             var presentcity = result.Where(c => c.IsDeleted == false).ToList();
+            if(StateId != null)
+            {
+                presentcity = presentcity.Where(c =>c.StateId == StateId).ToList();
+            }
             return presentcity;
 
         }
-
-        //public async Task<City> GetCityWithId(string CityId)
-        //{
-        //    return await _unitOfWork.CityRepo.GetCityWithStateId(CityId);  
-        //}
-
-       
 
         public async Task<City> GetCityWithId(string CityId)
         {
             return await _unitOfWork.CityRepo.GetCityWithId(CityId);
         }
 
-        public async Task<IEnumerable<City>> GetCitywithStateId(string StateId)
-        {
-            return await _unitOfWork.CityRepo.GetCitywithStateId(StateId);
-        }
         public async Task<ProductResponse> InsertWithCity(City city)
         {
             var response = new ProductResponse();

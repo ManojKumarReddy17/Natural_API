@@ -114,7 +114,7 @@ builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();
 builder.Services.AddTransient<INotificationExecutiveRepository, NotificationExecutiveRepository>();
 builder.Services.AddTransient<INotificationDistributorRepository, NotificationDistributorRepository>();
-builder.Services.AddTransient<INotificationDistributorService, NotificationDistributorService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
 
 builder.Services.AddTransient<IExecutiveGpsRepository, ExecutiveGpsRepository>();
 builder.Services.AddTransient<IExecutiveGpsService, ExecutiveGpsService>();

@@ -35,9 +35,9 @@ namespace Natural_API.Controllers
         /// </summary>
         
         [HttpGet]
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails(string? prefix)
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails([FromQuery] SearchModel? search, string? NonAssign, string? prefix)
         {
-            var retailor = await _retailorservice.GetAllRetailorDetailsAsync(prefix);
+            var retailor = await _retailorservice.GetAllRetailorDetailsAsync(search, NonAssign, prefix);
             return retailor;
         }
 
@@ -55,18 +55,6 @@ namespace Natural_API.Controllers
             return Ok(retailorResource);
         }
 
-
-        /// <summary>
-        /// GETTING RETAILOR BY ID
-        /// </summary>
-        /// 
-        [HttpGet("{RetailorId}")]
-        public async Task<ActionResult<ResultResponse>> GetByIdRetailor(string RetailorId)
-        {
-            var retailor = await _retailorservice.GetRetailorPresignedUrlbyId(RetailorId);
-            return Ok(retailor);
-        }
-
         /// <summary>
         /// GETTING RETAILOR DETAILS BY ID
         /// </summary>
@@ -76,8 +64,8 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> GetDetailsById(string RetailorId)
         {
             var retailor = await _retailorservice.GetRetailorDetailsById(RetailorId);
-            var ret = _mapper.Map<Retailor, RetailorResource>(retailor);
-            return Ok(ret);
+           
+            return Ok(retailor);
         }
 
         /// <summary>
@@ -88,9 +76,13 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> InsertDistributorWithAssociations([FromForm] RetailorPostResource retailorResource, string? prefix)
         {
             var file = retailorResource.UploadImage;
-            var result = await _DistributorService.UploadFileAsync(file, prefix);
             var retailor = _mapper.Map<RetailorPostResource, Retailor>(retailorResource);
-            retailor.Image = result.Message;
+            if (file != null)
+            {
+                var result = await _DistributorService.UploadFileAsync(file, prefix);
+                retailor.Image = result.Message;
+
+            }
             var createretailorResponse = await _retailorservice.CreateRetailorWithAssociationsAsync(retailor);
             return StatusCode(createretailorResponse.StatusCode, createretailorResponse);
         }
@@ -106,20 +98,13 @@ namespace Natural_API.Controllers
             var existingRetailor = await _retailorservice.GetRetailorsById(RetailorId);
 
             var file = updatedRetailorResource.UploadImage;
+            var retailorToUpdate = _mapper.Map(updatedRetailorResource, existingRetailor);
             if (file != null && file.Length > 0)
             {
-                var result = await _DistributorService.UploadFileAsync(file, prefix); 
-                var mappeddis = _mapper.Map(updatedRetailorResource, existingRetailor);
-                mappeddis.Image = result.Message;
-                var Updateresponse = await _retailorservice.UpdateRetailors(existingRetailor, mappeddis);
-                return StatusCode(Updateresponse.StatusCode, Updateresponse);
-            }
-
-
-
-            var distributorToUpdate = _mapper.Map(updatedRetailorResource, existingRetailor);
-            var update = await _retailorservice.UpdateRetailors(existingRetailor, distributorToUpdate);
-
+                var result = await _DistributorService.UploadFileAsync(file, prefix);
+                retailorToUpdate.Image = result.Message;
+            }  
+            var update = await _retailorservice.UpdateRetailors(existingRetailor, retailorToUpdate);
             return StatusCode(update.StatusCode, update);
 
         }
@@ -142,21 +127,21 @@ namespace Natural_API.Controllers
         /// SEARCH RETAILOR 
         /// </summary>
 
-        [HttpPost("Search")]
-        public async Task<IEnumerable<RetailorResource>> SearchRetailor([FromBody] SearchModel search)
-        {
-            var exe = await _retailorservice.SearcRetailors(search);
-            var execget = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(exe);
-            return execget;
-        }
+        //[HttpPost("Search")]
+        //public async Task<IEnumerable<RetailorResource>> SearchRetailor([FromBody] SearchModel search)
+        //{
+        //    var exe = await _retailorservice.SearcRetailors(search);
+        //    var execget = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(exe);
+        //    return execget;
+        //}
 
-        [HttpPost("SearchNonAssign")]
-        public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
-        {
-            var exe = await _retailorservice.SearchNonAssignedDistributors(SearchNonAssign);
-            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
-            return execget;
-        }
+        //[HttpPost("SearchNonAssign")]
+        //public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
+        //{
+        //    var exe = await _retailorservice.SearchNonAssignedDistributors(SearchNonAssign);
+        //    var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
+        //    return execget;
+        //}
 
 
     }

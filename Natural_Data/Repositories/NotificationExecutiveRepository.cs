@@ -31,19 +31,6 @@ namespace Natural_Data.Repositories
         }
         public async Task<IEnumerable<ExecutiveNotificationDetails>> GetNotificationsbyexecid(string ExecutiveId)
         {
-            //var executive = await NaturalDbContext.NotificationExecutives
-            //    .Notifications(c => c.ExecutiveNavigation)
-            //    .where(c => c.Id == ExecutiveId && c.IsDeleted == false).Select(c => new ExecutiveNotificationDetails
-            //{
-            //    Subject = c.Subject,
-            //    Body = c.Body,
-            //}).ToListAsync();
-            //return executive;
-
-
-
-
-
             var executive = await NaturalDbContext.NotificationExecutives
                 .Include(c => c.NotificationNavigation)
                 .Where(c => c.Executive == ExecutiveId)

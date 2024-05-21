@@ -12,15 +12,15 @@ using Natural_Core.S3Models;
 
 namespace Natural_Services
 {
-	public class NotificationDistributorService: INotificationDistributorService
+    public class NotificationService : INotificationService
     {
-		
+
 
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
-        public NotificationDistributorService(IUnitOfWork unitOfWork, IMapper mapper)
+        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -29,16 +29,16 @@ namespace Natural_Services
         public async Task<IEnumerable<Notification>> GetAll()
         {
 
-           var notification = await _unitOfWork.NotificationRepository.GetAllAsync();
-            var PresentNotif = notification.Where(c => c.IsDeleted ==  false).ToList();
+            var notification = await _unitOfWork.NotificationRepository.GetAllAsync();
+            var PresentNotif = notification.Where(c => c.IsDeleted == false).ToList();
             return PresentNotif;
         }
 
         public async Task<Notification> GetNotificationByIdAsync(string Id)
         {
-        var notification =  await   _unitOfWork.NotificationRepository.GetByIdAsync(Id);
+            var notification = await _unitOfWork.NotificationRepository.GetByIdAsync(Id);
             //   var PresentNotif = notification.Where(c => c.IsDeleted == false).ToList();
-            if ( notification.IsDeleted == false)
+            if (notification.IsDeleted == false)
             {
                 return notification;
             }
@@ -61,7 +61,7 @@ namespace Natural_Services
         {
 
 
-          var distributorslist =   await _unitOfWork.NotificationDistributorRepository.GetDistributorByNotificationIdAsync(notificationId);
+            var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDistributorByNotificationIdAsync(notificationId);
             //var PresentDist = distributorslist.Where(c => c.IsDeleted != true).ToList();
             return distributorslist;
 
@@ -73,10 +73,10 @@ namespace Natural_Services
             return executiveslist;
         }
 
-       public async Task<IEnumerable<NotificationDistributor>> GetDistableByNotificationIdAsync(string notificationId)
+        public async Task<IEnumerable<NotificationDistributor>> GetDistableByNotificationIdAsync(string notificationId)
         {
-           var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDisTableByNotificationIdAsync(notificationId);
-           // var PresentDist = distributorslist.Where(c => c.IsDeleted!= true).ToList();
+            var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDisTableByNotificationIdAsync(notificationId);
+            // var PresentDist = distributorslist.Where(c => c.IsDeleted!= true).ToList();
             return distributorslist;
 
         }
@@ -219,14 +219,14 @@ namespace Natural_Services
 
         public async Task<string> executiveid(string distributorId)
         {
-          var executiveId =   await _unitOfWork.NotificationDistributorRepository.executiveid(distributorId);
-           
+            var executiveId = await _unitOfWork.NotificationDistributorRepository.executiveid(distributorId);
+
             return executiveId;
         }
 
         public async Task<IEnumerable<Notification>> SearchNotification(EdittDSR search)
         {
-          var searchresult =  await _unitOfWork.NotificationRepository.SearchNotification(search);
+            var searchresult = await _unitOfWork.NotificationRepository.SearchNotification(search);
             return searchresult;
         }
 
@@ -291,7 +291,7 @@ namespace Natural_Services
     {
         public bool Equals(NotificationDistributor x, NotificationDistributor y)
         {
-            if (x.Distributor== y.Distributor)
+            if (x.Distributor == y.Distributor)
                 return true;
 
             return false;
@@ -313,8 +313,5 @@ namespace Natural_Services
             return obj.Executive.GetHashCode();
         }
 
-
     }
-
 }
-

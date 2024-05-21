@@ -81,9 +81,12 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> InsertDistributorWithAssociations([FromForm] InsertUpdateResource distributorResource, string? prefix)
         {
             var file = distributorResource.UploadImage;
-            var result = await _DistributorService.UploadFileAsync(file, prefix);
             var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
-            distributor.Image = result.Message;
+            if (file != null)
+            {
+                var result = await _DistributorService.UploadFileAsync(file, prefix);
+                distributor.Image = result.Message;
+            }
             var createDistributorResponse = await _DistributorService.CreateDistributorWithAssociationsAsync(distributor);
             return StatusCode(createDistributorResponse.StatusCode, createDistributorResponse);
         }
@@ -99,20 +102,13 @@ namespace Natural_API.Controllers
             var ExistingDistributor = await _DistributorService.GetDistributorById(DistributorId);
 
             var file = updatedistributor.UploadImage;
+            var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
             if (file != null && file.Length > 0)
             {
                 var result = await _DistributorService.UploadFileAsync(file, prefix); //change uploadfile to image
-                var mappeddis = _mapper.Map(updatedistributor, ExistingDistributor);
-                mappeddis.Image = result.Message;
-                var Updateresponse = await _DistributorService.UpdateDistributor(mappeddis);
-                return StatusCode(Updateresponse.StatusCode, Updateresponse);
+                distributorToUpdate.Image = result.Message;
             }
-
-
-
-            var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
             var update = await _DistributorService.UpdateDistributor(distributorToUpdate);
-
             return StatusCode(update.StatusCode, update);
 
         }

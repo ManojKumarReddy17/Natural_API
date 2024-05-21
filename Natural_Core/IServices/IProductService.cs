@@ -18,11 +18,11 @@ namespace Natural_Core.IServices
         Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         Task<IEnumerable<string>> GetAllBucketAsync();
-        Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix);
+        Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix, SearchProduct? search);
         Task<ProductResponse> UpadateProduct(Product product);
         Task<ProductResponse> DeleteImage(string Id);
-        Task<ProductResponse> DeleteProduct(string ProductId);
-        Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search);
+        Task<ProductResponse> DeleteProduct(string ProductId, bool? deleteEntireProduct);
+        //Task<IEnumerable<GetProduct>> SearchProduct(SearchProduct search);
     }
 }
 

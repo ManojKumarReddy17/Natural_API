@@ -14,14 +14,14 @@ namespace Natural_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationDistributorController : ControllerBase
+    public class NotificationController : ControllerBase
     {
-        private readonly INotificationDistributorService _NotificationDistributorService;
+        private readonly INotificationService _NotificationService;
         private readonly IMapper _mapper;
 
-        public NotificationDistributorController(INotificationDistributorService NotificationDistributorService, IMapper mapper)
+        public NotificationController(INotificationService notificationService, IMapper mapper)
         {
-            _NotificationDistributorService = NotificationDistributorService;
+            _NotificationService = notificationService;
             _mapper = mapper;
 
         }
@@ -33,7 +33,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<IEnumerable<NotificationResource>>> GetNotification()
 
         {
-            var notifiactions = await _NotificationDistributorService.GetAll();
+            var notifiactions = await _NotificationService.GetAll();
 
             var notifydata = _mapper.Map<IEnumerable<Notification>, IEnumerable<NotificationResource>>(notifiactions);
             return Ok(notifydata);
@@ -43,9 +43,9 @@ namespace Natural_API.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<NotificationResource>> GetNotificationById(string Id)
         {
-            var notification = await _NotificationDistributorService.GetNotificationByIdAsync(Id);
-            var distributorlist = await _NotificationDistributorService.GetDistributorsByNotificationIdAsync(Id);
-            var executivelist = await _NotificationDistributorService.GetExecutivesByNotificationIdAsync(Id);
+            var notification = await _NotificationService.GetNotificationByIdAsync(Id);
+            var distributorlist = await _NotificationService.GetDistributorsByNotificationIdAsync(Id);
+            var executivelist = await _NotificationService.GetExecutivesByNotificationIdAsync(Id);
             var exedata = _mapper.Map<List<NotificationExecutive>, List<NotificationExecutiveResource>>((List<NotificationExecutive>)executivelist);
             var drsdetaildata = _mapper.Map<List<NotificationDistributor>, List<NotificationDistributorResource>>((List<NotificationDistributor>)distributorlist);
             var notificationdata = _mapper.Map<Notification, NotificationResource>(notification);
@@ -57,8 +57,8 @@ namespace Natural_API.Controllers
         [HttpGet("details/{Id}")]
         public async Task<ActionResult<NotificationResource>> GetdistributorIdById(string Id)
         {
-            var notification = await _NotificationDistributorService.GetNotificationByIdAsync(Id);
-            var distributorlist = await _NotificationDistributorService.GetDistableByNotificationIdAsync(Id);
+            var notification = await _NotificationService.GetNotificationByIdAsync(Id);
+            var distributorlist = await _NotificationService.GetDistableByNotificationIdAsync(Id);
 
             var drsdetaildata = _mapper.Map<List<NotificationDistributor>, List<NotificationDistributorResource>>((List<NotificationDistributor>)distributorlist);
             var notificationdata = _mapper.Map<Notification, NotificationResource>(notification);
@@ -69,7 +69,7 @@ namespace Natural_API.Controllers
         [HttpGet("Executive/{Id}")]
         public async Task<ActionResult> GetexecutiveIdById(string Id)
         {
-          var executiveId = await _NotificationDistributorService.executiveid(Id);
+          var executiveId = await _NotificationService.executiveid(Id);
             return Ok(executiveId);
         }
 
@@ -87,7 +87,7 @@ namespace Natural_API.Controllers
 
                 var executiveData = _mapper.Map<List<NotificationExecutiveResource>, List<NotificationExecutive>>(ExecutiveList);
 
-                var creadted = await _NotificationDistributorService.CreateNotificationc(notifydata, drsdetaildata, executiveData);
+                var creadted = await _NotificationService.CreateNotificationc(notifydata, drsdetaildata, executiveData);
 
                 return StatusCode(creadted.StatusCode, creadted);
             }
@@ -104,7 +104,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<DsrResponse>> DeleteNotification(String Id)
         {
            
-            var result = await _NotificationDistributorService.DeleteNotification(Id);
+            var result = await _NotificationService.DeleteNotification(Id);
 
             return Ok(result);
         }
@@ -118,7 +118,7 @@ namespace Natural_API.Controllers
             var Executivelist = notification.executiveList;
             var drsdetaildata = _mapper.Map<List<NotificationDistributorResource>, List<NotificationDistributor>>(Distributorlist);
             var exedetaildata = _mapper.Map<List<NotificationExecutiveResource>, List<NotificationExecutive>>(Executivelist);
-            var result = await _NotificationDistributorService.updateNotificationc(notifydata, drsdetaildata, exedetaildata);
+            var result = await _NotificationService.updateNotificationc(notifydata, drsdetaildata, exedetaildata);
             return Ok(result);
 
         }
@@ -132,7 +132,7 @@ namespace Natural_API.Controllers
         {
           
             var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
-            var selut = await _NotificationDistributorService.SearchNotification(mapped);
+            var selut = await _NotificationService.SearchNotification(mapped);
 
             var notifydata = _mapper.Map<IEnumerable<Notification>, IEnumerable<NotificationResource>>(selut);
             return Ok(notifydata);
@@ -144,7 +144,7 @@ namespace Natural_API.Controllers
         [HttpGet("Notifications/{Executiveid}")]
         public async Task<ActionResult<ExecutiveNotificationDetails>> GetNotibyExeId(string Executiveid)
         {
-            var result = await _NotificationDistributorService.GetNotificationsbyexecid(Executiveid);
+            var result = await _NotificationService.GetNotificationsbyexecid(Executiveid);
             return Ok(result);
         }
 
@@ -152,7 +152,7 @@ namespace Natural_API.Controllers
         [HttpGet("Notification/DistributorId")]
         public async Task<ActionResult<DistributorNotificationDetails>> GetnotibyDisId(string DistributorId)
         {
-            var vbn = await _NotificationDistributorService.GetNotificationsbyDistrbId(DistributorId);
+            var vbn = await _NotificationService.GetNotificationsbyDistrbId(DistributorId);
             return Ok(vbn);
         }
 

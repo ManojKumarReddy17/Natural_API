@@ -10,6 +10,7 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<Notification>> SearchNotification(EdittDSR search);
 
+
     }
 }
 

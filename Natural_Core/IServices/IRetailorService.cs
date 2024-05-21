@@ -8,12 +8,11 @@ namespace Natural_Core.IServices
 {
     public interface IRetailorService
     {
-        Task<IEnumerable<Retailor>> GetAllRetailors();
-        Task<Retailor> GetRetailorDetailsById(string distributorId);
+        //Task<IEnumerable<Retailor>> GetAllRetailors();
+        Task<GetRetailor> GetRetailorDetailsById(string distributorId);
         Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor distributor);
         Task<ResultResponse> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
 
-        //Task<ResultResponse> DeleteRetailor(string retailorId);
         Task<Retailor> GetRetailorsById(string retailorId);
         Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
 
@@ -22,8 +21,7 @@ namespace Natural_Core.IServices
 
         Task<ResultResponse> SoftDelete(string retailorId);
 
-        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(string? prefix);
-        Task<GetRetailor> GetRetailorPresignedUrlbyId(string retailorId);
+        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, string? NonAssign, string? prefix);
 
 
     }

@@ -22,7 +22,7 @@ namespace Natural_Data.Repositories
         }
 
 
-        public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync()
+        public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, string? NonAssign)
         {
             var retailors = await (from Retailor in NaturalDbContext.Retailors
                                    join area in NaturalDbContext.Areas on Retailor.Area equals area.Id
@@ -36,6 +36,26 @@ namespace Natural_Data.Repositories
                                        City = city,
                                        State = state
                                    }).ToListAsync();
+            if(search != null)
+            {
+                
+                retailors = retailors.Where(c =>
+                       (c.retailor.IsDeleted != true) &&
+        (string.IsNullOrEmpty(search.State) || c.retailor.State == search.State) &&
+        (string.IsNullOrEmpty(search.City) || c.retailor.City == search.City) &&
+        (string.IsNullOrEmpty(search.Area) || c.retailor.Area == search.Area) &&
+        (string.IsNullOrEmpty(search.FullName) || c.retailor.FirstName.StartsWith(search.FullName) ||
+        c.retailor.LastName.StartsWith(search.FullName) || (c.retailor.FirstName + c.retailor.LastName).StartsWith(search.FullName) ||
+        (c.retailor.FirstName + " " + c.retailor.LastName).StartsWith(search.FullName))).ToList();
+                if(NonAssign == "y")
+                {
+                    var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
+                                                .Select(de => de.RetailorId)
+                                                    .ToListAsync();
+                     retailors = retailors
+                        .Where(c => !assignedRetailorIds.Contains(c.retailor.Id)).ToList();
+                }
+            }
             var result = retailors.
                 Select(c => new Retailor
                 {
@@ -57,8 +77,7 @@ namespace Natural_Data.Repositories
             return result;
         }
 
-
-        public async Task<Retailor> GetRetailorDetailsByIdAsync(string id)
+        public async Task<GetRetailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
                                          join area in NaturalDbContext.Areas on retailor.Area equals area.Id
@@ -75,7 +94,7 @@ namespace Natural_Data.Repositories
 
             if (retailorDetails != null)
             {
-                var result = new Retailor
+                var result = new GetRetailor
                 {
                     Id = retailorDetails.Retailor.Id,
                     FirstName = retailorDetails.Retailor.FirstName,
@@ -84,12 +103,14 @@ namespace Natural_Data.Repositories
                     Address = retailorDetails.Retailor.Address,
                     Email = retailorDetails.Retailor.Email,
                     Area = retailorDetails.Area.AreaName,
+                    AreaId = retailorDetails.Area.Id,
                     City = retailorDetails.City.CityName,
+                    CityId = retailorDetails.City.Id,
                     State = retailorDetails.State.StateName,
+                    StateId = retailorDetails.State.Id,
                     Latitude = retailorDetails.Retailor.Latitude,
                     Longitude = retailorDetails.Retailor.Longitude,
-                    Image = retailorDetails.Retailor.Image
-
+                    Image = retailorDetails.Retailor.Image,
                 };
 
                 return result;
@@ -228,6 +249,7 @@ namespace Natural_Data.Repositories
 
             return nonAssignedRetailors;
         }
+
 
         private NaturalsContext NaturalDbContext
         {

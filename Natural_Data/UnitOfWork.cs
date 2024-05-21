@@ -86,12 +86,6 @@ namespace Natural_Data.Models
         public IExecutiveAreaRepository ExecutiveAreaRepository => _ExecutiveAreaRepository = _ExecutiveAreaRepository ?? new ExecutiveAreaRepository(_context);
 
 
-
-
-
-
-
-
         public async Task<int> CommitAsync()
         {
             return await _context.SaveChangesAsync();

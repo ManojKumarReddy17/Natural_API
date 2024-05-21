@@ -14,9 +14,6 @@ namespace Natural_Core.IRepositories
     {
 
         Task<IEnumerable<Area>> GetAllAreasAsync();
-
-
-        Task<IEnumerable<Area>> GetAreasWithCityID(string CityId);
         Task<Area> GetAreasId(string AreaId);
 
 

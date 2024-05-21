@@ -28,9 +28,10 @@ namespace Natural_API.Controllers
 
         [HttpGet]  //get products with category name and presignred url//
 
-        public async Task<ActionResult<IEnumerable<GetProduct>>> GetAllPrtoductDetails(string? prefix)
+        public async Task<ActionResult<IEnumerable<GetProduct>>> GetAllPrtoductDetails(string? prefix, [FromQuery] SearchProduct? search)
         {
-            var productresoursze = await _ProductService.GetAllPrtoductDetails(prefix);
+           
+            var productresoursze = await _ProductService.GetAllPrtoductDetails(prefix, search);
 
             return Ok(productresoursze);
 
@@ -47,14 +48,6 @@ namespace Natural_API.Controllers
             return Ok(productresult);
         }
 
-        [HttpGet("{ProductId}")] //get product by id as in tabel and presigned url
-        public async Task<ActionResult<GetProduct>> GetProductById(string ProductId)
-        {
-            var productresult = await _ProductService.GetProductpresignedurlByIdAsync(ProductId);
-
-            return Ok(productresult);
-
-        }
 
         // POST: ProductController/Create
         [HttpPost]
@@ -109,44 +102,44 @@ namespace Natural_API.Controllers
         [HttpDelete("Delete/{ProductById}")]
         //delete complete product data
         //deleting image from s3 buckect and  productdata from db 
-        public async Task<IActionResult> DeleteProduct(string ProductById)
+        public async Task<IActionResult> DeleteProduct(string ProductById, bool? deleteEntireProduct)
         {
-            var produ = await _ProductService.DeleteProduct(ProductById);
+            var produ = await _ProductService.DeleteProduct(ProductById, deleteEntireProduct);
             return Ok(produ);
         }
 
 
-        [HttpDelete("{ProductId}")]
-        //if while updating i want to delete image
-        public async Task<IActionResult> DeleteImage(string ProductId)
-        {
-            var produ = await _ProductService.DeleteImage(ProductId);
-            return Ok(produ);
-        }
+        //[HttpDelete("{ProductId}")]
+        ////if while updating i want to delete image
+        //public async Task<IActionResult> DeleteImage(string ProductId)
+        //{
+        //    var produ = await _ProductService.DeleteImage(ProductId);
+        //    return Ok(produ);
+        //}
 
 
-        [HttpPost("Search")]
-        //search based on category or product or both
-        public async Task<IEnumerable<GetProduct>> search([FromBody] SearchProduct search)
-        {
+        //[HttpPost("Search")]
+        ////search based on category or product or both
+        //public async Task<IEnumerable<GetProduct>> search([FromBody] SearchProduct search)
+        //{
 
-            if (string.IsNullOrEmpty(search.Category))
-            {
-                var result = await _ProductService.SearchProduct(search);
-                return result;
-            }
-            else
-            {
-                SearchProduct vae = new SearchProduct();
-                vae.ProductName = search.ProductName;
-                var Category = await _categoryService.GetCategoryById(search.Category);
-                vae.Category = Category.CategoryName;
-                var result = await _ProductService.SearchProduct(vae);
-                return result;
-            }
+        //    if (string.IsNullOrEmpty(search.Category))
+        //    {
+        //        var result = await _ProductService.SearchProduct(search);
+        //        return result;
+        //    }
+        //    else
+        //    {
+        //        SearchProduct vae = new SearchProduct();
+        //        vae.ProductName = search.ProductName;
+        //        var Category = await _categoryService.GetCategoryById(search.Category);
+        //        vae.Category = Category.CategoryName;
+        //        var result = await _ProductService.SearchProduct(vae);
+        //        return result;
+        //    }
 
 
-        }
+        //}
 
     }
 }

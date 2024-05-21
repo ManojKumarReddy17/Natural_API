@@ -11,9 +11,7 @@ namespace Natural_Core.IServices
 {
     public interface ICityService
     {
-        Task<IEnumerable<City>> GetCitiesAsync();
-
-        Task<IEnumerable<City>> GetCitywithStateId(string StateId);
+        Task<IEnumerable<City>> GetCitiesAsync(string? StateId);
         Task <City>GetCityWithId(string CityId);
         Task<ProductResponse> InsertWithCity(City city);
 

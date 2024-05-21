@@ -20,15 +20,14 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-        //public async Task<IEnumerable<Area>> GetAreasAsync()
-        //{
-        //    return await _unitOfWork.AreaRepo.GetAllAsync();
-
-        //}
-        public async Task<IEnumerable<Area>> GetAreasAsync()
+        public async Task<IEnumerable<Area>> GetAreasAsync(string? CityId)
         {
             var result = await _unitOfWork.AreaRepo.GetAllAsync();
             var presentArea = result.Where(c => c.IsDeleted == false).ToList();
+            if(CityId != null)
+            {
+                presentArea = presentArea.Where(c => c.CityId == CityId).ToList();
+            }
             return presentArea;
 
 
@@ -113,12 +112,6 @@ namespace Natural_Services
             return response;
         }
 
-
-
-        public async Task<IEnumerable<Area>> GetAreasWithCityID(string CityId)
-        {
-            return await _unitOfWork.AreaRepo.GetAreasWithCityID(CityId);
-        }
         public async Task<Area> GetAreasWithId(string AreaId)
         {
             return await _unitOfWork.AreaRepo.GetAreasId(AreaId);

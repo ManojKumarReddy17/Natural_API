@@ -31,26 +31,12 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList()
+        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList(string? CityId)
         {
-            var areas = await _areaService.GetAreasAsync();
+            var areas = await _areaService.GetAreasAsync(CityId);
             var AreasList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areas);
             return Ok(AreasList);
         }
-
-        /// <summary>
-        /// GETTING AREAS BY CITY ID
-        /// </summary>
-
-        [HttpGet("{CityId}")]
-
-        public async Task<ActionResult<IEnumerable<City>>> GetAreaswithCityId(string CityId)
-        {
-            var areas = await _areaService.GetAreasWithCityID(CityId);
-            var AreaList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areas);
-            return Ok(AreaList);
-        }
-
 
         [HttpGet("areaById/{AreaId}")]
         public async Task<ActionResult<AreaResource>> GetAreasId(String AreaId)

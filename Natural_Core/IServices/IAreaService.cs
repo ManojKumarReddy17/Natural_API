@@ -12,9 +12,7 @@ namespace Natural_Core.IServices
     public interface IAreaService
     {
 
-        Task<IEnumerable<Area>> GetAreasAsync();
-
-        Task<IEnumerable<Area>> GetAreasWithCityID(string CityId);
+        Task<IEnumerable<Area>> GetAreasAsync(String? CityId);
         Task<Area> GetAreasWithId(string AreaId);
          Task<ProductResponse> Insert(Area area);
         Task<ProductResponse> updateArea(Area updateArea);

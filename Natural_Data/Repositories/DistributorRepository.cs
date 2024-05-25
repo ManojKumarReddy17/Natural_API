@@ -89,7 +89,7 @@ namespace Natural_Data.Repositories
             { return new UploadResult { Success = false, Message = $"Error uploading file to S3:{ex.Message}" }; }
 
         }
-        public async Task<List<Distributor>> GetAllDistributorstAsync()
+        public async Task<List<Distributor>> GetAllDistributorstAsync(SearchModel? search, bool? nonAssign)
         {
 
             var distributors = await NaturalDbContext.Distributors
@@ -98,6 +98,19 @@ namespace Natural_Data.Repositories
             .ThenInclude(ct => ct.State)
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
+
+            if (search != null)
+            {
+                distributors = await searchDistributors(distributors, search);
+                if (nonAssign == true)
+                {
+                    distributors = await searchNonAssignedDistributors(distributors);
+                }
+            }
+            if (nonAssign == true)
+            {
+                distributors = await searchNonAssignedDistributors(distributors);
+            }
 
             var result = distributors.Select(c => new Distributor
             {
@@ -117,12 +130,39 @@ namespace Natural_Data.Repositories
                 Image = c.Image
             }).ToList();
 
+            
+
             return result;
         }
 
+        private async Task<List<Distributor>> searchNonAssignedDistributors(List<Distributor> distributorList)
+        {
+            var assignedDistributorIds = await NaturalDbContext.DistributorToExecutives
+               .Select(de => de.DistributorId)
+               .ToListAsync();
 
+            var nonAssignedDistributors = distributorList
+                .Where(c => !assignedDistributorIds.Contains(c.Id)).ToList();
 
-        public async Task<Distributor> GetDistributorDetailsByIdAsync(string distributorid)
+            return nonAssignedDistributors;
+        }
+
+        private async Task<List<Distributor>> searchDistributors(List<Distributor> distributorsList, SearchModel search)
+        {
+            var exec = distributorsList
+                    .Where(c =>
+                    (c.IsDeleted != true) &&
+                        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+                        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+                         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
+                         (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+                         c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+                          (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
+                           .ToList();
+            return exec;
+        }
+
+        public async Task<GetDistributor> GetDistributorDetailsByIdAsync(string distributorid)
         {
             var distributors = await NaturalDbContext.Distributors
                        .Include(c => c.AreaNavigation)
@@ -132,7 +172,7 @@ namespace Natural_Data.Repositories
 
             if (distributors != null)
             {
-                var result = new Distributor
+                var result = new GetDistributor
                 {
                     Id = distributors.Id,
                     FirstName = distributors.FirstName,
@@ -140,9 +180,12 @@ namespace Natural_Data.Repositories
                     MobileNumber = distributors.MobileNumber,
                     Address = distributors.Address,
                     Email = distributors.Email,
-                    Area = distributors.AreaNavigation.AreaName,      
+                    Area = distributors.AreaNavigation.AreaName,
+                    AreaId = distributors.Area,
                     City = distributors.AreaNavigation.City.CityName,
+                    CityId = distributors.City,
                     State = distributors.AreaNavigation.City.State.StateName,
+                    StateId = distributors.State,
                     UserName = distributors.UserName,
                     Password = distributors.Password,
                     Latitude = distributors.Latitude,
@@ -158,123 +201,6 @@ namespace Natural_Data.Repositories
                     return null;
             }
             
-        }
-
-        public async Task<IEnumerable<Distributor>> SearchDistributorAsync(SearchModel search)
-        {
-            
-                var exec = await NaturalDbContext.Distributors
-                       .Include(c => c.AreaNavigation)
-                       .ThenInclude(a => a.City)
-                       .ThenInclude(ct => ct.State)
-                       .Where(c =>
-                       (c.IsDeleted != true) &&
-        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-        (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-        (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-        c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-        (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-       .ToListAsync();
-            var result = exec.Select(c => new Distributor
-            {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                MobileNumber = c.MobileNumber,
-                Address = c.Address,
-                Area = c.AreaNavigation.AreaName,
-                Email = c.Email,
-                UserName = c.UserName,
-                Password = c.Password,
-                City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName,
-                Latitude = c.Latitude,
-                Longitude = c.Longitude
-            }).ToList();
-                return result;
-            }
-
-        public async Task<IEnumerable<Distributor>> GetNonAssignedDistributorsAsync()
-        {
-           
-                var distributors = await NaturalDbContext.Distributors
-                    .Include(c => c.AreaNavigation)
-                    .ThenInclude(a => a.City)
-                    .ThenInclude(ct => ct.State)
-                    .ToListAsync();
-
-                var assignedDistributorIds = await NaturalDbContext.DistributorToExecutives
-                    .Select(de => de.DistributorId)
-                    .ToListAsync();
-
-                var nonAssignedDistributors = distributors
-                    .Where(c => !assignedDistributorIds.Contains(c.Id)) 
-                    .Where(c => c.IsDeleted != true) // this is added for soft delete
-
-                    .Select(c => new Distributor
-                    {
-                        Id = c.Id,
-                        FirstName = c.FirstName,
-                        LastName = c.LastName,
-                        MobileNumber = c.MobileNumber,
-                        Address = c.Address,
-                        Email = c.Email,
-                        UserName = c.UserName,
-                        Password = c.Password,
-                        Area = c.AreaNavigation.AreaName,
-                        City = c.AreaNavigation.City.CityName,
-                        State = c.AreaNavigation.City.State.StateName,
-                        Latitude=c.Latitude, Longitude=c.Longitude,
-                        Image = c.Image
-                    })
-                    .ToList();
-
-                return nonAssignedDistributors;
-            }
-
-        public async Task<IEnumerable<Distributor>> SearchNonAssignedDistributorsAsync(SearchModel search)
-        {
-            var distirbutors = await NaturalDbContext.Distributors
-                      .Include(c => c.AreaNavigation)
-                       .ThenInclude(a => a.City)
-                      .ThenInclude(ct => ct.State)
-                      .Where(c =>
-                       (c.IsDeleted != true) &&
-       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-       (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-       (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-       (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-       (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-      .ToListAsync();
-
-            var assignedDistributorIds = await NaturalDbContext.DistributorToExecutives
-                 .Select(de => de.DistributorId)
-                 .ToListAsync();
-
-            var nonAssignedDistributors = distirbutors
-                .Where(c => !assignedDistributorIds.Contains(c.Id))
-                .Select(c => new Distributor
-                {
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    MobileNumber = c.MobileNumber,
-                    Address = c.Address,
-                    Email = c.Email,
-                    UserName = c.UserName,
-                    Password = c.Password,
-                    Area = c.AreaNavigation.AreaName,
-                    City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName,
-                    Latitude = c.Latitude,
-                    Longitude=c.Longitude,
-                    Image = c.Image
-                })
-                .ToList();
-
-            return nonAssignedDistributors;
         }
 
         public async Task<AngularDistributor> GetAngularAsync(string DistributorId)

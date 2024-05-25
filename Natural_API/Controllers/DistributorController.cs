@@ -30,34 +30,11 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<IEnumerable<GetDistributor>> GetAllDistributorDetails(string? prefix)
+        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails(string? prefix, [FromQuery] SearchModel? search, bool? nonAssign)
         {
-            var executive = await _DistributorService.GetAllDistributorDetailsAsync(prefix);
-            return executive;
-        }
-
-        /// <summary>
-        ///GETTING LIST OF NON-ASSIGNED DISTRIBUTORS DETAILS
-        /// </summary>
-
-        [HttpGet("Assign")]
-        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetNonAssignedDistributorDetails()
-        {
-            var distributors = await _DistributorService.GetNonAssignedDistributors();
-            var distributorResources = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(distributors);
-            return Ok(distributorResources);
-        }
-
-        /// <summary>
-        /// GETTING DISTRIBUTOR BY ID
-        /// </summary>
-
-
-        [HttpGet("{DisId}")]
-        public async Task<ActionResult<Distributor>> GetDistributorById(string DisId)
-        {
-            var distributor = await _DistributorService.GetDistributorPresignedUrlbyId(DisId);
-            return Ok(distributor);
+            var getAllDistributors = await _DistributorService.GetAllDistributorDetailsAsync(prefix, search, nonAssign);
+            var distributors = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(getAllDistributors);
+            return Ok(distributors);
         }
 
         /// <summary>
@@ -69,8 +46,8 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<DistributorGetResource>> GetDistributorDetailsById(string DistributorId)
         {
             var distributor = await _DistributorService.GetDistributorDetailsById(DistributorId);
-            var distributorResource = _mapper.Map<Distributor, DistributorGetResource>(distributor);
-            return Ok(distributorResource);
+            
+            return Ok(distributor);
         }
 
         /// <summary>
@@ -126,19 +103,6 @@ namespace Natural_API.Controllers
             return response;
         }
 
-
-        /// <summary>
-        /// SEARCH DISTRIBUTOR 
-        /// </summary>
-
-        [HttpPost("Search")]
-        public async Task<IEnumerable<DistributorGetResource>> SearchDistributor([FromBody] SearchModel search)
-        {
-            var exe = await _DistributorService.SearchDistributors(search);
-            var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
-            return execget;
-        }
-
         [HttpPost("Login")]
         public async Task<ActionResult<AngularDistributor>> Login([FromBody] AngularLoginResourse loginModel)
         {
@@ -147,13 +111,6 @@ namespace Natural_API.Controllers
 
             return StatusCode(user.Statuscode, user);
         }
-        [HttpPost("SearchNonAssign")]
-            public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
-            {
-                var exe = await _DistributorService.SearchNonAssignedDistributors(SearchNonAssign);
-                var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
-                return execget;
-            }
 
         }
 

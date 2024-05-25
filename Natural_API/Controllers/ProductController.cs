@@ -108,39 +108,6 @@ namespace Natural_API.Controllers
             return Ok(produ);
         }
 
-
-        //[HttpDelete("{ProductId}")]
-        ////if while updating i want to delete image
-        //public async Task<IActionResult> DeleteImage(string ProductId)
-        //{
-        //    var produ = await _ProductService.DeleteImage(ProductId);
-        //    return Ok(produ);
-        //}
-
-
-        //[HttpPost("Search")]
-        ////search based on category or product or both
-        //public async Task<IEnumerable<GetProduct>> search([FromBody] SearchProduct search)
-        //{
-
-        //    if (string.IsNullOrEmpty(search.Category))
-        //    {
-        //        var result = await _ProductService.SearchProduct(search);
-        //        return result;
-        //    }
-        //    else
-        //    {
-        //        SearchProduct vae = new SearchProduct();
-        //        vae.ProductName = search.ProductName;
-        //        var Category = await _categoryService.GetCategoryById(search.Category);
-        //        vae.Category = Category.CategoryName;
-        //        var result = await _ProductService.SearchProduct(vae);
-        //        return result;
-        //    }
-
-
-        //}
-
     }
 }
 

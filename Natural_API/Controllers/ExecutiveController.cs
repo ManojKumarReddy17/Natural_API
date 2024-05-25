@@ -29,31 +29,16 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<IEnumerable<ExecutiveGetResource>> GetAllExecutives(string? prefix)
+        public async Task<IEnumerable<ExecutiveGetResource>> GetAllExecutives(string? prefix, [FromQuery] SearchModel? search)
 
 
         {
-            var executive = await _executiveService.GetAllExecutiveDetailsAsync(prefix);
+            var executive = await _executiveService.GetAllExecutiveDetailsAsync(prefix, search);
             var execget = _mapper.Map<IEnumerable<InsertUpdateModel>, IEnumerable<ExecutiveGetResource>>(executive);
             return execget;
 
         }
 
-        /// <summary>
-        /// GETTING EXECUTIVE BY ID
-        /// </summary>
-
-        [HttpGet("{ExecutiveId}")]
-
-        public async Task<ActionResult<ResultResponse>> GetExecutiveById(string ExecutiveId)
-        {
-            var executive = await _executiveService.GetExecutiveByIdAsync(ExecutiveId);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
-            var executivearea = await _executiveService.GetExecutiveAreaById(ExecutiveId);
-            var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea).Select(a => a.Area).ToList();
-            exec.Area = exectivearealist;
-            return Ok(exec);
-        }
 
         /// <summary>
         /// GETTING EXECUTIVE DETAILS BY ID
@@ -65,11 +50,13 @@ namespace Natural_API.Controllers
         {
 
             var executive = await _executiveService.GetExecutiveDetailsById(ExecutiveId);
-            var exec = _mapper.Map<Executive, ExecutiveGetResource>(executive);
             var executivearea = await _executiveService.GetExectiveAreaDetailsByIdAsync(ExecutiveId);
             var exectivearealist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executivearea).Select(a => a.Area).ToList();
-            exec.Area = exectivearealist;
-            return Ok(exec);
+            executive.Area = exectivearealist;
+            var executiveareaId = await _executiveService.GetExecutiveAreaById(ExecutiveId);
+            var exectiveareaIdlist = _mapper.Map<List<ExecutiveArea>, List<ExecutiveAreaResource>>(executiveareaId).Select(a => a.Area).ToList();
+            executive.AreaId = exectiveareaIdlist;
+            return Ok(executive);
 
         }
 
@@ -88,7 +75,7 @@ namespace Natural_API.Controllers
             {
 
                 var result = await _executiveService.UploadFileAsync(file, prefix);
-                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+                var createexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(executiveResource);
 
                 createexecu.Image = result.Message;
 
@@ -103,7 +90,7 @@ namespace Natural_API.Controllers
             else
 
             {
-                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
+                var createexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(executiveResource);
                 var executivearea = executiveResource.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
@@ -132,7 +119,7 @@ namespace Natural_API.Controllers
             if (file != null && file.Length > 0)
             {
                 var result = await _executiveService.UploadFileAsync(file, prefix);
-                var updaeexecu = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
+                var updaeexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
                 updaeexecu.Image = result.Message;
                 var executivearea = updatedexecutive.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
@@ -143,7 +130,7 @@ namespace Natural_API.Controllers
             }
             else
             {
-                var updaeexecu1 = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
+                var updaeexecu1 = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
                 var executivearea = updatedexecutive.Areas;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.UpadateExecutive(updaeexecu1, exectivearealist, updaeexecu1.Id);
@@ -164,23 +151,11 @@ namespace Natural_API.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// SEARCH EXECUTIVE 
-        /// </summary>
-        /// 
-        [HttpPost("Search")]
-
-        public async Task<IEnumerable<ExecutiveGetResource>> SearchExecutive([FromBody] SearchModel search)
-        {
-            var exe = await _executiveService.SearchExecutives(search);
-            var execget = _mapper.Map<IEnumerable<InsertUpdateModel>, IEnumerable<ExecutiveGetResource>>(exe);
-            return execget;
-        }
 
         [HttpPost("Login")]
         public async Task<ActionResult<AngularLoginResponse>> Login([FromBody] AngularLoginResourse loginModel)
         {
-            var credentials = _mapper.Map<AngularLoginResourse, Executive>(loginModel);
+            var credentials = _mapper.Map<AngularLoginResourse, ExecutiveGetResourcecs>(loginModel);
             var user = await _executiveService.LoginAsync(credentials);
 
             return StatusCode(user.Statuscode, user);

@@ -14,14 +14,10 @@ namespace Natural_Core.IServices
         Task<ResultResponse> UpdateRetailors(Retailor existingRetailor, Retailor retailor);
 
         Task<Retailor> GetRetailorsById(string retailorId);
-        Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search);
-
-        Task<IEnumerable<Retailor>> GetNonAssignedRetailors();
-        Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
 
         Task<ResultResponse> SoftDelete(string retailorId);
 
-        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, string? NonAssign, string? prefix);
+        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix);
 
 
     }

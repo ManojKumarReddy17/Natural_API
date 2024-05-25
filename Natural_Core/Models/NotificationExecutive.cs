@@ -12,7 +12,7 @@ namespace Natural_Core.Models
         public string Notification { get; set; }
         public bool? IsDeleted { get; set; }
 
-        public virtual Executive ExecutiveNavigation { get; set; }
+        public virtual ExecutiveGetResourcecs ExecutiveNavigation { get; set; }
         public virtual Notification NotificationNavigation { get; set; }
     }
 }

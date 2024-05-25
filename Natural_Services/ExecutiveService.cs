@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Natural_Core.S3_Models;
 using AutoMapper;
+using Natural_Core.Models.CustomModels;
 
 
 namespace Natural_Services
@@ -50,24 +51,17 @@ namespace Natural_Services
             return metadata;
 
         }
-
-        public async Task<IEnumerable<Executive>> GetAllExecutives()
-        {
-            var result = await _unitOfWork.ExecutiveRepo.GetAllExecutiveAsync();         
-            return result;
-        }
-
        
 
-        public async Task<IEnumerable<InsertUpdateModel>> GetAllExecutiveDetailsAsync(string? prefix)
+        public async Task<IEnumerable<InsertUpdateModel>> GetAllExecutiveDetailsAsync(string? prefix, SearchModel? search)
         {
 
-            var executives = await GetxecutiveAsync();
+            var executives = await _unitOfWork.ExecutiveRepo.GetxecutiveAsync(search);
 
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
 
-            var leftJoinQuery = from executive in executives
+            var executivesList = from executive in executives
                                 join presigned in presignedUrls
                                 on executive.Image equals presigned.Image into newUrl
                                 from sub in newUrl.DefaultIfEmpty()
@@ -86,19 +80,29 @@ namespace Natural_Services
                                     State = executive.State,
                                     Latitude = executive.Latitude,
                                     Longitude = executive.Longitude,
-                                    PresignedUrl = sub?.PresignedUrl
+                                    Image = sub?.PresignedUrl
                                 };
 
-            return leftJoinQuery;
+            return executivesList;
         }
 
 
-        
-
-        public async Task<Executive> GetExecutiveDetailsById(string DetailsId)
+        public async Task<ExecutiveGetResource> GetExecutiveDetailsById(string DetailsId)
         {
 
-            return await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
+            var executiveDetailById =  await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
+            string bucketName = _s3Config.BucketName;
+            string prefix = executiveDetailById.Image;
+            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+
+
+            if (PresignedUrl.Any())
+            {
+                var exe = PresignedUrl.FirstOrDefault();
+                executiveDetailById.Image = exe.PresignedUrl;
+                
+            }
+            return executiveDetailById;
         }
         public async Task<InsertUpdateModel> GetExecutiveDetailsPresignedUrlById(string DetailsId)
         {
@@ -111,7 +115,7 @@ namespace Natural_Services
             if (PresignedUrl.Any())
             {
                 var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResults);
+                var execuresoursze1 = _Mapper.Map<ExecutiveGetResource, InsertUpdateModel>(executiveResults);
                 execuresoursze1.PresignedUrl = exe.PresignedUrl;
 
 
@@ -121,7 +125,7 @@ namespace Natural_Services
             }
             else
             {
-                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResults);
+                var execuresoursze1 = _Mapper.Map<ExecutiveGetResource, InsertUpdateModel>(executiveResults);
 
                 return execuresoursze1;
 
@@ -133,19 +137,7 @@ namespace Natural_Services
             return await _unitOfWork.ExecutiveAreaRepository.GetExectiveAreaByIdAsync(id);
 
         }
-
-        public async Task<List<InsertUpdateModel>> GetxecutiveAsync()
-        {
-            var result = await _unitOfWork.ExecutiveRepo.GetxecutiveAsync();
-
-            return result;
-
-        }
-
-
-
-
-        public async Task<Executive> GetExecutiveByIdAsync(string ExecutiveId)
+        public async Task<ExecutiveGetResourcecs> GetExecutiveByIdAsync(string ExecutiveId)
         {
             var result = await _unitOfWork.ExecutiveRepo.GetExectiveTableByIdAsync(ExecutiveId);
 
@@ -165,14 +157,14 @@ namespace Natural_Services
             if (PresignedUrl.Any())
             {
                 var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<ExecutiveGetResourcecs, InsertUpdateModel>(executiveResult);
                 execuresoursze1.PresignedUrl = exe.PresignedUrl;
 
                 return execuresoursze1;
             }
             else
             {
-                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<ExecutiveGetResourcecs, InsertUpdateModel>(executiveResult);
 
                 return execuresoursze1;
 
@@ -188,14 +180,7 @@ namespace Natural_Services
             return result;
         }
 
-
-
-
-
-
-      
-
-        public async Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id)
+        public async Task<ProductResponse> UpadateExecutive(ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea, string Id)
 
         {
 
@@ -267,7 +252,7 @@ namespace Natural_Services
         }
    
 
-        public async Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea)
+        public async Task<ProductResponse> CreateExecutiveAsync(ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -348,47 +333,6 @@ namespace Natural_Services
             return response;
         }
 
-       
-        //public async Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search)
-        //{
-
-        //    var exec = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
-        //    return exec;
-        //}
-
-
-        public async Task<IEnumerable<InsertUpdateModel>> SearchExecutives(SearchModel search)
-        {
-
-            var executives = await _unitOfWork.ExecutiveRepo.SearchExecutiveAsync(search);
-            string bucketName = _s3Config.BucketName;
-            string prefix = null;
-            var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
-
-            var leftJoinQuery = from executive in executives
-                                join presigned in presignedUrls
-                                on executive.Image equals presigned.Image into newUrl
-                                from sub in newUrl.DefaultIfEmpty()
-                                select new InsertUpdateModel
-                                {
-                                    Id = executive.Id,
-                                    FirstName = executive.FirstName,
-                                    LastName = executive.LastName,
-                                    MobileNumber = executive.MobileNumber,
-                                    Address = executive.Address,
-                                    Area = executive.Area,
-                                    Email = executive.Email,
-                                    UserName = executive.UserName,
-                                    Password = executive.Password,
-                                    City = executive.City,
-                                    State = executive.State,
-                                    PresignedUrl = sub?.PresignedUrl,
-                                    Latitude = executive.Latitude,
-                                    Longitude = executive.Longitude
-                                };
-
-            return leftJoinQuery;
-        }
         private async Task<string?> GetPresignedUrlForImage(string imageName)
         {
             string bucketName = _s3Config.BucketName;
@@ -396,7 +340,7 @@ namespace Natural_Services
             return presignedUrls.FirstOrDefault(p => p.Image == imageName)?.PresignedUrl;
         }
 
-        public async Task<AngularLoginResponse> LoginAsync(Executive credentials)
+        public async Task<AngularLoginResponse> LoginAsync(ExecutiveGetResourcecs credentials)
         {
             AngularLoginResponse response = new AngularLoginResponse();
             try
@@ -436,6 +380,7 @@ namespace Natural_Services
 
 
         }
+
     }
 
 

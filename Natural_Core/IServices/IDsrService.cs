@@ -16,7 +16,7 @@ namespace Natural_Core.IServices
 
         Task<IEnumerable<DsrDistributor>> AssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
-        Task<IEnumerable<Product>> GetProductAsync();
+        //Task<IEnumerable<Product>> GetProductAsync();
         Task<IEnumerable<Dsr>> GetAllDsr();
         //Task<IEnumerable<Dsr>> SearchDsr(Dsr search);
         Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search);

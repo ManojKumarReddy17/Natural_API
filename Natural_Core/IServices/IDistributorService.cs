@@ -14,20 +14,14 @@ namespace Natural_Core.IServices
 {
     public interface IDistributorService
     {
-        //Task<IEnumerable<Distributor>> GetAllDistributors();
-        Task<IEnumerable<GetDistributor>> GetAllDistributorDetailsAsync(string? prefix);
+        Task<IEnumerable<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? NonAssign);
         Task<Distributor> GetDistributorById(string distributorId);
         Task<GetDistributor> GetDistributorPresignedUrlbyId(string distributorId);
-        Task<Distributor> GetDistributorDetailsById(string distributorId);
+        Task<GetDistributor> GetDistributorDetailsById(string distributorId);
         Task<ResultResponse> CreateDistributorWithAssociationsAsync(Distributor distributor);
 
         Task<ResultResponse> DeleteDistributor(string distributorId);
         Task<ResultResponse> UpdateDistributor(Distributor distributor);
-        Task<IEnumerable<Distributor>> SearchDistributors(SearchModel search);
-
-        Task<IEnumerable<Distributor>> GetNonAssignedDistributors();
-        Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search);
-        //public Task<AngularLoginResponse> LoginAsync(Distributor credentials);
         Task<ResultResponse> SoftDelete(string distributorId);
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix);

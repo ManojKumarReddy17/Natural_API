@@ -22,59 +22,70 @@ namespace Natural_Data.Repositories
         }
 
 
-        public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, string? NonAssign)
+        public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, bool? NonAssign)
         {
-            var retailors = await (from Retailor in NaturalDbContext.Retailors
-                                   join area in NaturalDbContext.Areas on Retailor.Area equals area.Id
-                                   join city in NaturalDbContext.Cities on area.CityId equals city.Id
-                                   join state in NaturalDbContext.States on city.StateId equals state.Id
-                                   where Retailor.IsDeleted != true
-                                   select new
-                                   {
-                                       retailor = Retailor,
-                                       Area = area,
-                                       City = city,
-                                       State = state
-                                   }).ToListAsync();
-            if(search != null)
+            var retailors = await NaturalDbContext.Retailors
+            .Include(c => c.AreaNavigation)
+             .ThenInclude(a => a.City)
+            .ThenInclude(ct => ct.State)
+            .Where(d => d.IsDeleted != true)
+             .ToListAsync();
+
+            if (search != null)
             {
-                
-                retailors = retailors.Where(c =>
-                       (c.retailor.IsDeleted != true) &&
-        (string.IsNullOrEmpty(search.State) || c.retailor.State == search.State) &&
-        (string.IsNullOrEmpty(search.City) || c.retailor.City == search.City) &&
-        (string.IsNullOrEmpty(search.Area) || c.retailor.Area == search.Area) &&
-        (string.IsNullOrEmpty(search.FullName) || c.retailor.FirstName.StartsWith(search.FullName) ||
-        c.retailor.LastName.StartsWith(search.FullName) || (c.retailor.FirstName + c.retailor.LastName).StartsWith(search.FullName) ||
-        (c.retailor.FirstName + " " + c.retailor.LastName).StartsWith(search.FullName))).ToList();
-                if(NonAssign == "y")
+                retailors = await SearchRetailors(retailors, search);
+
+                if(NonAssign == true)
                 {
-                    var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
-                                                .Select(de => de.RetailorId)
-                                                    .ToListAsync();
-                     retailors = retailors
-                        .Where(c => !assignedRetailorIds.Contains(c.retailor.Id)).ToList();
+                    retailors = await SearchNonAssignedRetailors(retailors);
                 }
+            }
+            if (NonAssign == true)
+            {
+                retailors = await SearchNonAssignedRetailors(retailors);
             }
             var result = retailors.
                 Select(c => new Retailor
                 {
 
-                    Id = c.retailor.Id,
-                    FirstName = c.retailor.FirstName,
-                    LastName = c.retailor.LastName,
-                    MobileNumber = c.retailor.MobileNumber,
-                    Address = c.retailor.Address,
-                    Area = c.Area.AreaName,
-                    Email = c.retailor.Email,
-                    City = c.City.CityName,
-                    State = c.State.StateName,
-                    Latitude = c.retailor.Latitude,
-                    Longitude = c.retailor.Longitude,
-                    Image = c.retailor.Image
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    MobileNumber = c.MobileNumber,
+                    Address = c.Address,
+                    Email = c.Email,
+                    Area = c.AreaNavigation.AreaName,
+                    City = c.AreaNavigation.City.CityName,
+                    State = c.AreaNavigation.City.State.StateName,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude,
+                    Image = c.Image
                 });
 
             return result;
+        }
+
+        private async Task<List<Retailor>> SearchNonAssignedRetailors(List<Retailor> retailors)
+        {
+            var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
+                            .Select(de => de.RetailorId)
+                                .ToListAsync();
+            var nonAssignedRetailors = retailors
+               .Where(c => !assignedRetailorIds.Contains(c.Id)).ToList();
+            return nonAssignedRetailors;
+        }
+
+        private async Task<List<Retailor>> SearchRetailors(List<Retailor> retailors, SearchModel search)
+        {
+            var searchedRetailors = retailors.Where(c =>
+       (c.IsDeleted != true) &&
+(string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+(string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
+(string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+(c.FirstName + " " + c.LastName).StartsWith(search.FullName))).ToList();
+            return searchedRetailors;
         }
 
         public async Task<GetRetailor> GetRetailorDetailsByIdAsync(string id)
@@ -140,116 +151,6 @@ namespace Natural_Data.Repositories
 
             }
         }
-
-        public async Task<IEnumerable<Retailor>> SearchRetailorAsync(SearchModel search)
-        {
-            {
-
-                var exec = await NaturalDbContext.Retailors
-                       .Include(c => c.AreaNavigation)
-                       .ThenInclude(a => a.City)
-                       .ThenInclude(ct => ct.State)
-                       .Where(c =>
-                       (c.IsDeleted != true) &&
-        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-        (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-        (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-        c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-        (c.FirstName + " " + c.LastName).StartsWith(search.FullName))).ToListAsync();
-                var result = exec.Select(c => new Retailor
-                {
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    MobileNumber = c.MobileNumber,
-                    Address = c.Address,
-                    Area = c.AreaNavigation.AreaName,
-                    Email = c.Email,
-                    City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName,
-                    Latitude = c.Latitude,
-                    Longitude = c.Longitude
-                }).ToList();
-                return result;
-            }
-
-        }
-
-        public async Task<IEnumerable<Retailor>> GetNonAssignedRetailorsAsync()
-        {
-
-            var retailors = await NaturalDbContext.Retailors
-                .Include(c => c.AreaNavigation)
-                .ThenInclude(a => a.City)
-                .ThenInclude(ct => ct.State)
-                .ToListAsync();
-
-            var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
-                .Select(de => de.RetailorId)
-                .ToListAsync();
-
-            var nonAssignedRetailors = retailors
-             .Where(c => !assignedRetailorIds.Contains(c.Id))
-             .Select(c => new Retailor
-             {
-                 Id = c.Id,
-                 FirstName = c.FirstName,
-                 LastName = c.LastName,
-                 MobileNumber = c.MobileNumber,
-                 Address = c.Address,
-                 Email = c.Email,
-                 Area = c.AreaNavigation.AreaName,
-                 City = c.AreaNavigation.City.CityName,
-                 State = c.AreaNavigation.City.State.StateName,
-                 Latitude = c.Latitude,
-                 Longitude = c.Longitude
-             })
-             .ToList();
-
-            return nonAssignedRetailors;
-        }
-
-        public async Task<IEnumerable<Retailor>> SearchNonAssignedRetailorsAsync(SearchModel search)
-        {
-            var retailors = await NaturalDbContext.Retailors
-                      .Include(c => c.AreaNavigation)
-                       .ThenInclude(a => a.City)
-                      .ThenInclude(ct => ct.State)
-                      .Where(c =>
-       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-       (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-       (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-       (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-       (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-      .ToListAsync();
-
-            var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors
-                 .Select(de => de.RetailorId)
-                 .ToListAsync();
-
-            var nonAssignedRetailors = retailors
-                .Where(c => !assignedRetailorIds.Contains(c.Id))
-                .Select(c => new Retailor
-                {
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    MobileNumber = c.MobileNumber,
-                    Address = c.Address,
-                    Email = c.Email,
-                    Area = c.AreaNavigation.AreaName,
-                    City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName,
-                    Latitude = c.Latitude,
-                    Longitude = c.Longitude
-                })
-                .ToList();
-
-            return nonAssignedRetailors;
-        }
-
 
         private NaturalsContext NaturalDbContext
         {

@@ -11,6 +11,7 @@ using Natural_Core.S3Models;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 using Natural_Core.S3_Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 
 #nullable disable
@@ -55,18 +56,10 @@ namespace Natural_Services
 
         }
 
-
-        public async Task<IEnumerable<Distributor>> GetAllDistributors()
-        {
-            var result = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync();
-            var presentDistributors = result.Where(d => d.IsDeleted != true ).ToList();
-            return presentDistributors;
-        }
-
-        public async Task<IEnumerable<GetDistributor>> GetAllDistributorDetailsAsync(string? prefix)
+        public async Task<IEnumerable<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? nonAssign)
         {
 
-            var executives = await GetAllDistributors();
+            var executives = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync(search, nonAssign);
 
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
@@ -75,7 +68,7 @@ namespace Natural_Services
                                 join presigned in presignedUrls
                                 on executive.Image equals presigned.Image into newUrl
                                 from sub in newUrl.DefaultIfEmpty()
-                                select new GetDistributor
+                                select new Distributor
                                 {
                                     Id = executive.Id,
                                     FirstName = executive.FirstName,
@@ -88,7 +81,7 @@ namespace Natural_Services
                                     Password = executive.Password,
                                     City = executive.City,
                                     State = executive.State,
-                                    PresignedUrl = sub?.PresignedUrl,
+                                    Image = sub?.PresignedUrl,
                                     Latitude = executive.Latitude,
                                     Longitude = executive.Longitude
                                 };
@@ -96,12 +89,6 @@ namespace Natural_Services
             return leftJoinQuery;
         }
 
-
-        public async Task<IEnumerable<Distributor>> GetNonAssignedDistributors()
-        {
-            var result = await _unitOfWork.DistributorRepo.GetNonAssignedDistributorsAsync();
-            return result;
-        }
 
 
 
@@ -143,9 +130,22 @@ namespace Natural_Services
         }
 
 
-        public async Task<Distributor> GetDistributorDetailsById(string distributorId)
+        public async Task<GetDistributor> GetDistributorDetailsById(string distributorId)
         {
-            return await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
+            var getDistributorById = await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
+            string bucketName = _s3Config.BucketName;
+            string prefix = getDistributorById.Image;
+            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+
+            if (PresignedUrl.Any())
+            {
+                var exe = PresignedUrl.FirstOrDefault();
+
+                getDistributorById.Image = exe.PresignedUrl;
+            }
+
+                return getDistributorById;
+
         }
 
         public async Task<ResultResponse> CreateDistributorWithAssociationsAsync(Distributor distributor)
@@ -227,17 +227,6 @@ namespace Natural_Services
             return response;
         }
 
-        public async Task<IEnumerable<Distributor>> SearchDistributors(SearchModel search)
-        {
-            var distributors = await _unitOfWork.DistributorRepo.SearchDistributorAsync(search);
-            return distributors;
-        }
-
-        public async Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search)
-        {
-            var searchdistributors = await _unitOfWork.DistributorRepo.SearchNonAssignedDistributorsAsync(search);
-            return searchdistributors;
-        }
         private async Task<string?> GetPresignedUrlForImage(string imageName)
         {
             string bucketName = _s3Config.BucketName;

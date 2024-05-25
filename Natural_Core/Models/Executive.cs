@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Natural_Core.Models
 {
-    public partial class Executive
+    public partial class ExecutiveGetResourcecs
     {
-        public Executive()
+        public ExecutiveGetResourcecs()
         {
             DistributorToExecutives = new HashSet<DistributorToExecutive>();
             Dsrs = new HashSet<Dsr>();

@@ -14,14 +14,16 @@ using Microsoft.AspNetCore.Http;
 using Natural_Core.S3Models;
 using Amazon.Util;
 using Natural_Core.S3_Models;
+using Natural_Core.Models.CustomModels;
 
 #nullable disable
 namespace Natural_Data.Repositories
 
 {
-    public class ExecutiveRepository : Repository<Executive>, IExecutiveRepository
+    public class ExecutiveRepository : Repository<ExecutiveGetResourcecs>, IExecutiveRepository
     {
         private readonly IAmazonS3 _S3Client;
+        
         public ExecutiveRepository(NaturalsContext context, IAmazonS3 S3Client) : base(context)
         {
             _S3Client = S3Client;
@@ -89,97 +91,7 @@ namespace Natural_Data.Repositories
             { return new UploadResult { Success = false, Message = $"Error uploading file to S3:{ex.Message}" }; }
 
         }
-
-
-
-        public async Task<IEnumerable<InsertUpdateModel>> SearchExecutiveAsync(SearchModel search)
-
-        {
-            if (string.IsNullOrEmpty(search.Area))
-            {
-                var exec = await NaturalDbContext.Executives
-                     .Include(c => c.CityNavigation)
-                     .ThenInclude(ct => ct.State)
-                     .Where(c =>
-                      (c.IsDeleted != true) &&
-                      (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-                      (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-                      (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-                       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-                      (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-                     .ToListAsync();
-                var result = exec.Select(c => new InsertUpdateModel
-                {
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    MobileNumber = c.MobileNumber,
-                    Address = c.Address,
-                    Email = c.Email,
-                    UserName = c.UserName,
-                    Password = c.Password,
-
-                  
-                    Latitude = c.Latitude,
-                    Longitude = c.Longitude,
-                    Image = c.Image,
-
-                    City = c.CityNavigation.CityName,
-                    State = c.CityNavigation.State.StateName,
-                    Area = NaturalDbContext.ExecutiveAreas
-                          .Where(execArea => execArea.Executive == c.Id)
-                          .Select(ea => ea.AreaNavigation.AreaName)
-                          .ToList()
-
-                }).ToList();
-                return result;
-            }
-            else
-            {
-                var executiveNames = await NaturalDbContext.ExecutiveAreas
-                 .Where(x => x.Area == search.Area)
-                 .Select(x => x.Executive)
-                 .ToListAsync();
-
-                List<InsertUpdateModel> resultList = new List<InsertUpdateModel>();
-
-             
-
-                foreach (var executiveName in executiveNames)
-                {
-                    // Call the GetMethodById method and store the result in a variable
-                    var result = await GetxecutiveAsyncbyId(executiveName); // Assuming GetMethodById returns an instance of YourModel
-                    if (result != null)
-                    // Add the result to the resultList
-                    { resultList.Add(result); }
-                }
-
-                if (string.IsNullOrEmpty(search.FullName) && string.IsNullOrEmpty(search.FirstName) && string.IsNullOrEmpty(search.LastName))
-
-                { return resultList; }
-                else
-                {
-                    var exec = resultList
-                   
-                    .Where(c =>
-                               string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-                               c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) || (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-                               (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
-                               .ToList();
-                    return exec;
-
-                }
                
-
-           
-
-              
-
-
-            }
-
-
-        }
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }
@@ -188,7 +100,7 @@ namespace Natural_Data.Repositories
 
 
 
-        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
+        public async Task<IEnumerable<ExecutiveGetResourcecs>> GetAllExecutiveAsync()
 
         {
             {
@@ -197,7 +109,7 @@ namespace Natural_Data.Repositories
                 //.ThenInclude(a => a.City)
                 .ThenInclude(ct => ct.State)
                 .Where(d => d.IsDeleted != true)
-                 .Select(c => new Executive
+                 .Select(c => new ExecutiveGetResourcecs
                  {
                      Id = c.Id,
                      FirstName = c.FirstName,
@@ -224,39 +136,101 @@ namespace Natural_Data.Repositories
         }
 
 
-        public async Task<List<InsertUpdateModel>> GetxecutiveAsync()
+        public async Task<List<InsertUpdateModel>> GetxecutiveAsync(SearchModel? search)
         {
             {
-              
+                var executiveList = await NaturalDbContext.Executives
+                     .Include(c => c.CityNavigation)
+                     .ThenInclude(ct => ct.State)
+                     .Where(c => c.IsDeleted != true).ToListAsync();
+                var allExecutiveList = new List<InsertUpdateModel>();
+                if (search != null)
+                {
+                    if (string.IsNullOrEmpty(search.Area))
+                    {
+                        executiveList = await SearchExecutiveAsync(executiveList, search);
+                    }
+                    else
+                    {
+                        allExecutiveList = await searchExecutiveAsyncWithArea(search);
+                        return allExecutiveList;
+                    }
 
-                var query = NaturalDbContext.Executives
-                    .Where(d => d.IsDeleted != true)
-    //.AsEnumerable() // Execute query on client side
-    .Select(exec => new InsertUpdateModel
-    {
-        Id = exec.Id,
-        FirstName = exec.FirstName,
-        LastName = exec.LastName,
-        Address = exec.Address,
-        MobileNumber = exec.MobileNumber,
-        Longitude = exec.Longitude,
-        Latitude = exec.Latitude,
-        Email = exec.Email,
-        Image = exec.Image,
-        City = exec.CityNavigation.CityName,
-        State = exec.StateNavigation.StateName,
-        Area = NaturalDbContext.ExecutiveAreas
-            .Where(execArea => execArea.Executive == exec.Id)
-            .Select(ea => ea.AreaNavigation.AreaName)
-            .ToList()
-    })
-    .ToList(); // Convert to list after executing the query
+                }
 
-                return query;
+                allExecutiveList = executiveList.Select(exec => new InsertUpdateModel
+                {
+                    Id = exec.Id,
+                    FirstName = exec.FirstName,
+                    LastName = exec.LastName,
+                   MobileNumber = exec.MobileNumber,
+                   Address = exec.Address,
+                   Email = exec.Email,
+                   UserName = exec.UserName,
+                   Password = exec.Password,
+                   City = exec.CityNavigation.CityName,
+                   State = exec.CityNavigation.State.StateName,
+                   Longitude = exec.Longitude,
+                   Latitude = exec.Latitude,
+                   Image = exec.Image,
+                    Area = NaturalDbContext.ExecutiveAreas
+                            .Where(execArea => execArea.Executive == exec.Id)
+                            .Select(ea => ea.AreaNavigation.AreaName)
+                            .ToList()
+                }).ToList();
+
+                return allExecutiveList;
             }
         }
 
-        public async Task<Executive> GetWithExectiveByIdAsync(string id)
+        private async Task<List<InsertUpdateModel>> searchExecutiveAsyncWithArea(SearchModel search)
+        {
+            var executiveNames = await NaturalDbContext.ExecutiveAreas
+                .Where(x => x.Area == search.Area)
+                .Select(x => x.Executive)
+                .ToListAsync();
+            List<InsertUpdateModel> resultList = new List<InsertUpdateModel>();
+            foreach (var executiveName in executiveNames)
+            {
+                // Call the GetMethodById method and store the result in a variable
+                var result = await GetxecutiveAsyncbyId(executiveName); // Assuming GetMethodById returns an instance of YourModel
+                if (result != null)
+                // Add the result to the resultList
+                { resultList.Add(result); }
+            }
+
+            if (string.IsNullOrEmpty(search.FullName) && string.IsNullOrEmpty(search.FirstName) && string.IsNullOrEmpty(search.LastName))
+
+            { return resultList; }
+            else
+            {
+                var exec = resultList
+
+                .Where(c =>
+                           string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                           c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) || (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                           (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+                           .ToList();
+                return exec;
+
+            }
+        }
+
+        private async Task<List<ExecutiveGetResourcecs>> SearchExecutiveAsync(List<ExecutiveGetResourcecs> executiveList, SearchModel search)
+        {
+                var exec = executiveList.Where(c =>
+                      (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+                      (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+                      (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
+                       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
+                      (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
+                     .ToList();
+
+                return exec;
+
+        }
+
+        public async Task<ExecutiveGetResource> GetWithExectiveByIdAsync(string id)
         {
             {
                 var exec = await NaturalDbContext.Executives
@@ -268,26 +242,23 @@ namespace Natural_Data.Repositories
 
                 if (exec != null)
                 {
-                    var result = new Executive
+                    var result = new ExecutiveGetResource
                     {
                         Id = exec.Id,
                         FirstName = exec.FirstName,
                         LastName = exec.LastName,
                         MobileNumber = exec.MobileNumber,
                         Address = exec.Address,
-                        
                         Email = exec.Email,
-
                         UserName = exec.UserName,
                         Password = exec.Password,
                         Image = exec.Image,
-                       
                         Latitude = exec.Latitude,
                         Longitude = exec.Longitude,
-
-                        
                         City = exec.CityNavigation.CityName,
-                        State = exec.CityNavigation.State.StateName
+                        CityId = exec.City,
+                        State = exec.CityNavigation.State.StateName,
+                        StateId = exec.State,
 
                     };
 
@@ -303,7 +274,7 @@ namespace Natural_Data.Repositories
 
 
         // get table data as it is
-        public async Task<Executive> GetExectiveTableByIdAsync(string id)
+        public async Task<ExecutiveGetResourcecs> GetExectiveTableByIdAsync(string id)
         {
 
             var exec = await NaturalDbContext.Executives
@@ -354,6 +325,5 @@ namespace Natural_Data.Repositories
 
         }
 
-       
     }
 }

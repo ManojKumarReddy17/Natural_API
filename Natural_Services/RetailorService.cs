@@ -41,16 +41,7 @@ namespace Natural_Services
             return bucketlist;
         }
 
-
-        //public async Task<IEnumerable<Retailor>> GetAllRetailors()
-        //{
-        //    var result = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync();
-        //    var presentRetailor = result.Where(d => d.IsDeleted != true).ToList();
-            
-        //    return presentRetailor;
-        //}
-
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, string? NonAssign, string? prefix)
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix)
         {
 
             var Retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
@@ -81,15 +72,6 @@ namespace Natural_Services
             return leftJoinQuery;
         }
 
-
-        public async Task<IEnumerable<Retailor>> GetNonAssignedRetailors()
-        {
-            var result = await _unitOfWork.RetailorRepo.GetNonAssignedRetailorsAsync();
-            return result;
-        }
-
-
-
         public async Task<GetRetailor> GetRetailorDetailsById(string retailorId)
         {
             var retailorDetails = await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
@@ -108,9 +90,6 @@ namespace Natural_Services
                 return retailorDetails;
             }
         }
-
-
-
 
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {
@@ -207,19 +186,6 @@ namespace Natural_Services
             }
 
             return response;
-        }
-
-        public async Task<IEnumerable<Retailor>> SearcRetailors(SearchModel search)
-        {
-            var exec = await _unitOfWork.RetailorRepo.SearchRetailorAsync(search);
-            return exec;
-        }
-
-
-        public async Task<IEnumerable<Distributor>> SearchNonAssignedDistributors(SearchModel search)
-        {
-            var searchdistributors = await _unitOfWork.DistributorRepo.SearchNonAssignedDistributorsAsync(search);
-            return searchdistributors;
         }
     }
 }

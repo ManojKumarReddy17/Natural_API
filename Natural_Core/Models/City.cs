@@ -11,7 +11,7 @@ namespace Natural_Core.Models
         {
             Areas = new HashSet<Area>();
             Distributors = new HashSet<Distributor>();
-            Executives = new HashSet<Executive>();
+            Executives = new HashSet<ExecutiveGetResourcecs>();
             Retailors = new HashSet<Retailor>();
         }
 
@@ -23,7 +23,7 @@ namespace Natural_Core.Models
         public virtual State State { get; set; }
         public virtual ICollection<Area> Areas { get; set; }
         public virtual ICollection<Distributor> Distributors { get; set; }
-        public virtual ICollection<Executive> Executives { get; set; }
+        public virtual ICollection<ExecutiveGetResourcecs> Executives { get; set; }
         public virtual ICollection<Retailor> Retailors { get; set; }
     }
 }

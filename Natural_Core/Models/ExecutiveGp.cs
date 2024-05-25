@@ -12,7 +12,7 @@ namespace Natural_Core.Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
 
-        public virtual Executive ExecutiveNavi { get; set; }
+        public virtual ExecutiveGetResourcecs ExecutiveNavi { get; set; }
         
     }
 }

@@ -35,25 +35,13 @@ namespace Natural_API.Controllers
         /// </summary>
         
         [HttpGet]
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails([FromQuery] SearchModel? search, string? NonAssign, string? prefix)
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails([FromQuery] SearchModel? search, bool? NonAssign, string? prefix)
         {
             var retailor = await _retailorservice.GetAllRetailorDetailsAsync(search, NonAssign, prefix);
             return retailor;
         }
 
 
-
-        /// <summary>
-        /// GETTING LIST OF NON-ASSIGNED RETAILORS
-        /// </summary>
-
-        [HttpGet("Assign")]
-        public async Task<ActionResult<IEnumerable<RetailorResource>>> GetNonAssignedRetailors()
-        {
-            var retailor = await _retailorservice.GetNonAssignedRetailors();
-            var retailorResource = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(retailor);
-            return Ok(retailorResource);
-        }
 
         /// <summary>
         /// GETTING RETAILOR DETAILS BY ID
@@ -123,26 +111,6 @@ namespace Natural_API.Controllers
 
             return response;
         }
-        /// <summary>
-        /// SEARCH RETAILOR 
-        /// </summary>
-
-        //[HttpPost("Search")]
-        //public async Task<IEnumerable<RetailorResource>> SearchRetailor([FromBody] SearchModel search)
-        //{
-        //    var exe = await _retailorservice.SearcRetailors(search);
-        //    var execget = _mapper.Map<IEnumerable<Retailor>, IEnumerable<RetailorResource>>(exe);
-        //    return execget;
-        //}
-
-        //[HttpPost("SearchNonAssign")]
-        //public async Task<IEnumerable<DistributorGetResource>> SearchNonAssignDistributor([FromBody] SearchModel SearchNonAssign)
-        //{
-        //    var exe = await _retailorservice.SearchNonAssignedDistributors(SearchNonAssign);
-        //    var execget = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(exe);
-        //    return execget;
-        //}
-
 
     }
 }

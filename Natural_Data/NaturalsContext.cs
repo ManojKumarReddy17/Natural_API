@@ -30,7 +30,7 @@ namespace Natural_Core.Models
 
         public virtual DbSet<Dsr> Dsrs { get; set; }
         public virtual DbSet<Dsrdetail> Dsrdetails { get; set; }
-        public virtual DbSet<Executive> Executives { get; set; }
+        public virtual DbSet<ExecutiveGetResourcecs> Executives { get; set; }
         public virtual DbSet<ExecutiveArea> ExecutiveAreas { get; set; }
         public virtual DbSet<ExecutiveGp> ExecutiveGps { get; set; }
 
@@ -50,7 +50,7 @@ namespace Natural_Core.Models
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetTimestamps<Distributor>();
-            SetTimestamps<Executive>();
+            SetTimestamps<ExecutiveGetResourcecs>();
             SetTimestamps<Retailor>();
             SetTimestamps<Product>();
             //SetTimestamps<Dsr>();
@@ -378,7 +378,7 @@ namespace Natural_Core.Models
                     .HasConstraintName("DSRDetails_ibfk_1");
             });
 
-            modelBuilder.Entity<Executive>(entity =>
+            modelBuilder.Entity<ExecutiveGetResourcecs>(entity =>
             {
                 entity.ToTable("Executive");
 

@@ -39,14 +39,14 @@ namespace Natural_API.Controllers
 
 
 
-        [HttpGet("Product")]
-        public async Task<ActionResult<DsrProductResource>> GetProductAsync()
-        {
-            var product = await _dsrservice.GetProductAsync();
-            var mapped = _mapper.Map<IEnumerable<Product>, IEnumerable<DsrProductResource>>(product);
+        //[HttpGet("Product")]
+        //public async Task<ActionResult<DsrProductResource>> GetProductAsync()
+        //{
+        //    var product = await _dsrservice.GetProductAsync();
+        //    var mapped = _mapper.Map<IEnumerable<Product>, IEnumerable<DsrProductResource>>(product);
 
-            return Ok(mapped);
-        }
+        //    return Ok(mapped);
+        //}
 
 
         [HttpGet("Details/{ExecutiveId}")]

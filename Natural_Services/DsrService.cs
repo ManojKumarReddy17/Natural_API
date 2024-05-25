@@ -175,10 +175,10 @@ namespace Natural_Services
         }
 
 
-        public async Task<IEnumerable<Product>> GetProductAsync()
-        {
-            return await _unitOfWork.ProductRepository.GetProducttAsync();
-        }
+        //public async Task<IEnumerable<Product>> GetProductAsync()
+        //{
+        //    return await _unitOfWork.ProductRepository.GetProducttAsync();
+        //}
 
      
 

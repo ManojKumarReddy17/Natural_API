@@ -14,6 +14,7 @@ namespace Natural_API.Resources
             public string Area { get; set; }
             public string City { get; set; }
             public string State { get; set; }
+             public string Image {  get; set; }
             public string UserName { get; set; }
             public string Password { get; set; }
         public bool? IsDeleted { get; set; }

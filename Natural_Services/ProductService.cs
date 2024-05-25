@@ -187,10 +187,6 @@ namespace Natural_Services
         public async Task<Product> GetProductByIdAsync(string ProductId)
         {
 
-            //var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
-
-            //return productResult;
-
             var productResult = await _unitOfWork.ProductRepository.GetByIdAsync(ProductId);
             if (productResult != null && productResult.IsDeleted != true)
             {

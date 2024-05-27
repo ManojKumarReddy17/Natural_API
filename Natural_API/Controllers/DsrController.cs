@@ -28,25 +28,13 @@ namespace Natural_API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList()
+        public async Task<ActionResult<IEnumerable<DsrResource>>> GetDsrList([FromQuery] DsrDetailsByIdResource? search)
         {
-            var dsrs = await _dsrservice.GetAllDsr();
+            var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
+            var dsrs = await _dsrservice.GetAllDsr(mapped);
             var DsrList = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(dsrs);
             return Ok(DsrList);
-            
-           
         }
-
-
-
-        //[HttpGet("Product")]
-        //public async Task<ActionResult<DsrProductResource>> GetProductAsync()
-        //{
-        //    var product = await _dsrservice.GetProductAsync();
-        //    var mapped = _mapper.Map<IEnumerable<Product>, IEnumerable<DsrProductResource>>(product);
-
-        //    return Ok(mapped);
-        //}
 
 
         [HttpGet("Details/{ExecutiveId}")]
@@ -90,18 +78,18 @@ namespace Natural_API.Controllers
 
         }
 
-        [HttpPost("Search")]
+        //[HttpPost("Search")]
       
-        public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
+        //public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
 
-        {
+        //{
             
-            var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
-            var selut = await _dsrservice.SearchDsr(mapped);
-            var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
+        //    var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
+        //    var selut = await _dsrservice.SearchDsr(mapped);
+        //    var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
             
-            return Ok(RESULT);
-        }
+        //    return Ok(RESULT);
+        //}
 
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> Insertdsr([FromBody] DsrInsertResource dsrResource)
@@ -229,22 +217,22 @@ namespace Natural_API.Controllers
 
 
 
-        [HttpGet("RetailorDetailsbyExe")]
-        public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByExe(string ExecId)
+        [HttpGet("RetailorDetailsbyExeOrDisId")]
+        public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByExe(string Id)
         {
 
-            var dsrrestils = await _dsrservice.GetDetailsByIdAsync(ExecId);
+            var dsrrestils = await _dsrservice.GetDetailsByIdAsync(Id);
             return Ok(dsrrestils);
 
         }
-        [HttpGet("DistributorId")]
-        public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByDistributor(string DistributorId)
-        {
+        //[HttpGet("DistributorId")]
+        //public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByDistributor(string DistributorId)
+        //{
 
-            var dsrrestils = await _dsrservice.GetDetailsByIdAsyncdis(DistributorId);
-            return Ok(dsrrestils);
+        //    var dsrrestils = await _dsrservice.GetDetailsByIdAsyncdis(DistributorId);
+        //    return Ok(dsrrestils);
 
-        }
+        //}
 
 
 

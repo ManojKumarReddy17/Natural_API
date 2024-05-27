@@ -18,15 +18,25 @@ namespace Natural_Data.Repositories
         {
         }
 
-        public async Task<IEnumerable<Dsr>> GetAllDsrAsync()
+        public async Task<IEnumerable<Dsr>> GetAllDsrAsync(EdittDSR? search)
         {
             var dsr = await NaturalDbContext.Dsrs
                    .Include(c => c.ExecutiveNavigation)
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .Include(c => c.OrderByNavigation)
-                   .Where(c => c.IsDeleted != true)
-                   .Select(c => new Dsr
+                   .Where(c => c.IsDeleted != true).ToListAsync();
+            if(search != null)
+            {
+                var startDate = search.StartDate.Date.ToString();
+                var endDate = search.EndDate.Date.ToString();
+                if(!startDate.Contains( "1/1/0001 12:00:00") && !endDate.Contains("1/1/0001 12:00:00"))
+                {
+                    dsr = await searchDsr(dsr, search);
+                }
+                
+            }
+               dsr = dsr.Select(c => new Dsr
                    {
                        Id = c.Id,
                        Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
@@ -38,9 +48,23 @@ namespace Natural_Data.Repositories
                        TotalAmount = c.TotalAmount,
                       
 
-                   }).ToListAsync();
+                   }).ToList();
             return dsr;
 
+        }
+
+        private async Task<List<Dsr>> searchDsr(List<Dsr> dsr, EdittDSR search)
+        {
+            var searchDsrList = dsr.Where(c =>
+                    (string.IsNullOrEmpty(search.Executive) || c.Executive == search.Executive) &&
+                    (string.IsNullOrEmpty(search.Distributor) || c.Distributor == search.Distributor) &&
+                    (string.IsNullOrEmpty(search.Retailor) || c.Retailor == search.Retailor) &&
+                    (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
+                    &&
+
+                      (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
+                     .Where(c => c.IsDeleted != true).ToList();
+            return searchDsrList;
         }
 
         public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
@@ -58,7 +82,7 @@ namespace Natural_Data.Repositories
                     &&
 
                       (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
-                     .Where (c=> c.IsDeleted != true)
+                     .Where(c => c.IsDeleted != true)
 
                 .Select(c => new Dsr
                 {
@@ -263,17 +287,14 @@ namespace Natural_Data.Repositories
             return dsrs;
         }
 
-        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyExecutiveId(string ExecutiveId)
+        public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyId(string Id)
         {
-
-            var dsr = await NaturalDbContext.Dsrs
+                var dsr = NaturalDbContext.Dsrs
                    .Include(c => c.ExecutiveNavigation)
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .ThenInclude(a => a.AreaNavigation)
-                  
-                   .Where(d => d.Executive == ExecutiveId && d.IsDeleted != true)
-
+                   .Where(d => (d.Executive == Id|| d.Distributor == Id) && d.IsDeleted != true)
                    .Select(c => new DSRretailorDetails
                    {
                        Id = c.Id,
@@ -290,12 +311,8 @@ namespace Natural_Data.Repositories
                        ModifiedDate = c.RetailorNavigation.ModifiedDate,
                        Area = c.RetailorNavigation.AreaNavigation.AreaName,
                        Image = c.RetailorNavigation.Image
-
-                      
-
-                   }).ToListAsync();
-
-            return dsr;
+                   }).ToList();
+                return dsr;
 
         }
         public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyDistributorId(string distributorId)

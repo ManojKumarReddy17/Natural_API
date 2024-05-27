@@ -212,24 +212,23 @@ namespace Natural_Services
 
 
 
-             
-                    var result = await GetExecutiveAreaById(Id);
+                    if(executiveArea.Count != 0)
+                    {
+                        var result = await GetExecutiveAreaById(Id);
 
-                    var differentRecords = executiveArea.Except(result, new ExecutiveComparer()).ToList();
+                        var differentRecords = executiveArea.Except(result, new ExecutiveComparer()).ToList();
 
-                    await _unitOfWork.ExecutiveAreaRepository.AddRangeAsync(differentRecords);
+                        await _unitOfWork.ExecutiveAreaRepository.AddRangeAsync(differentRecords);
 
-                    var created = await _unitOfWork.CommitAsync();
+                        var created = await _unitOfWork.CommitAsync();
 
-                    var deletingRecords = result.Except(executiveArea, new ExecutiveComparer()).ToList();
-
-
-                    _unitOfWork.ExecutiveAreaRepository.RemoveRange(deletingRecords);
-                    var deted = await _unitOfWork.CommitAsync();
+                        var deletingRecords = result.Except(executiveArea, new ExecutiveComparer()).ToList();
 
 
-
-
+                        _unitOfWork.ExecutiveAreaRepository.RemoveRange(deletingRecords);
+                        var deted = await _unitOfWork.CommitAsync();
+                    }
+                   
                     transaction.Commit();
 
                     response.Message = " Executive and ExectuiveArea Successful";

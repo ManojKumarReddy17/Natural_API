@@ -31,7 +31,8 @@ namespace Natural_Data.Repositories
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
 
-            if (search != null)
+            if (search.Area != null || search.City != null || search.State != null || search.FullName != null ||
+                search.FirstName != null || search.LastName != null)
             {
                 retailors = await SearchRetailors(retailors, search);
 
@@ -40,7 +41,7 @@ namespace Natural_Data.Repositories
                     retailors = await SearchNonAssignedRetailors(retailors);
                 }
             }
-            if (NonAssign == true)
+            if (NonAssign == true && search == null)
             {
                 retailors = await SearchNonAssignedRetailors(retailors);
             }

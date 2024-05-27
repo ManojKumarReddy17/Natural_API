@@ -79,7 +79,7 @@ namespace Natural_API.Controllers
 
                 createexecu.Image = result.Message;
 
-                var executivearea = executiveResource.Areas;
+                var executivearea = executiveResource.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
 
@@ -91,7 +91,7 @@ namespace Natural_API.Controllers
 
             {
                 var createexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(executiveResource);
-                var executivearea = executiveResource.Areas;
+                var executivearea = executiveResource.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
 
@@ -121,7 +121,7 @@ namespace Natural_API.Controllers
                 var result = await _executiveService.UploadFileAsync(file, prefix);
                 var updaeexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
                 updaeexecu.Image = result.Message;
-                var executivearea = updatedexecutive.Areas;
+                var executivearea = updatedexecutive.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
 
                 var exe = await _executiveService.UpadateExecutive(updaeexecu, exectivearealist, updaeexecu.Id);
@@ -131,7 +131,7 @@ namespace Natural_API.Controllers
             else
             {
                 var updaeexecu1 = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
-                var executivearea = updatedexecutive.Areas;
+                var executivearea = updatedexecutive.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.UpadateExecutive(updaeexecu1, exectivearealist, updaeexecu1.Id);
                 return StatusCode(exe.StatusCode, exe);

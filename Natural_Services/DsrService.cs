@@ -81,9 +81,9 @@ namespace Natural_Services
 
         }
 
-        public async Task<IEnumerable<Dsr>> GetAllDsr()
+        public async Task<IEnumerable<Dsr>> GetAllDsr(EdittDSR? search)
         {
-            var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
+            var result = await _unitOfWork.dSRRepo.GetAllDsrAsync(search);
             return result;
         }
 
@@ -395,10 +395,10 @@ pd => pd.Id,
         }
 
 
-        public async Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string ExecutiveId)
+        public async Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string Id)
 
         {
-            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetailsbyExecutiveId(ExecutiveId);
+            var dsrRetilordetails = await _unitOfWork.dSRRepo.GetRetailorDetailsbyId(Id);
 
 
             return dsrRetilordetails;

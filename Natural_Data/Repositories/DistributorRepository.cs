@@ -99,7 +99,8 @@ namespace Natural_Data.Repositories
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
 
-            if (search != null)
+            if (search.Area != null || search.City != null || search.State != null || search.FullName != null ||
+                search.FirstName != null || search.LastName != null)
             {
                 distributors = await searchDistributors(distributors, search);
                 if (nonAssign == true)

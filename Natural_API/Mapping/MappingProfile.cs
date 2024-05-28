@@ -17,7 +17,7 @@ namespace Natural_API.Mapping
 
              CreateMap<Login, LoginResource>();
              CreateMap<Distributor, DistributorGetResource>();
-             CreateMap<ExecutiveGetResourcecs, AngularLoginResourse>();
+             CreateMap<Executive, AngularLoginResourse>();
              CreateMap<Distributor, AngularLoginResourse>();
              CreateMap<Distributor, DistributorGetResource>();
              CreateMap<Distributor, InsertUpdateResource>();
@@ -28,8 +28,8 @@ namespace Natural_API.Mapping
              CreateMap<Category, CategoryResource>();
              CreateMap<Retailor , RetailorResource>();
              CreateMap<Retailor, RetailorPostResource>();
-             CreateMap <ExecutiveGetResourcecs, ExecutiveGetResource>();
-             CreateMap<ExecutiveGetResourcecs, InsertUpdateResource>();
+             CreateMap <Executive, ExecutiveGetResource>();
+             CreateMap<Executive, InsertUpdateResource>();
              CreateMap<Category , CategoryInsertResource>();
              CreateMap<Dsr,DsrResource>();
              CreateMap<Dsr, DsrPostResource>();
@@ -76,7 +76,7 @@ namespace Natural_API.Mapping
              CreateMap<NotificationDistributor, NotificationDistributorResource>();
             CreateMap<NotificationExecutive, NotificationExecutiveResource>();
             CreateMap<DSRretailorDetails, DSRretailorDetailsResources>();
-            CreateMap<ExecutiveGetResourcecs, InsertUpdateResource>();
+            CreateMap<Executive, InsertUpdateResource>();
             CreateMap<ExecutiveArea, ExecutiveAreaResource>();
             CreateMap<InsertUpdateModel, ExecutiveGetResource>();
             CreateMap<ExecutiveGp, ExecutiveGpsResource>();
@@ -91,9 +91,9 @@ namespace Natural_API.Mapping
                 CreateMap<CityResource, City>();
                 CreateMap<CategoryResource,Category>();
                 CreateMap<RetailorPostResource, Retailor>();
-                CreateMap<ExecutiveGetResource, ExecutiveGetResourcecs>();   
-                CreateMap<InsertUpdateResource, ExecutiveGetResourcecs>();
-                CreateMap<ExecutiveGetResource, ExecutiveGetResourcecs>();
+                CreateMap<ExecutiveGetResource, Executive>();   
+                CreateMap<InsertUpdateResource, Executive>();
+                CreateMap<ExecutiveGetResource, Executive>();
 
                 CreateMap<CategoryInsertResource, Category>();
                 CreateMap<DsrResource, Dsr>();
@@ -111,8 +111,8 @@ namespace Natural_API.Mapping
             CreateMap<ProductResource, Product>();
             CreateMap<Product, GetProduct>();
 
-            CreateMap<ExecutiveGetResourcecs, GetExecutive>();
-            CreateMap<ExecutiveGetResourcecs, ExecutiveGetResource>();
+            CreateMap<Executive, GetExecutive>();
+            CreateMap<Executive, ExecutiveGetResource>();
 
             CreateMap<Distributor, GetDistributor>();
             CreateMap<Retailor, GetRetailor>();
@@ -127,7 +127,7 @@ namespace Natural_API.Mapping
              //CreateMap<DsrDetailsByIdResource, Dsr>().ForMember(c => c.CreatedDate, (obj) => obj.MapFrom(s => s.createdDate));
              //.ForMember(c=>c.ModifiedDate,(obj)=>obj.MapFrom(s=>s.EndDate));
 
-             CreateMap<AngularLoginResourse,ExecutiveGetResourcecs>();
+             CreateMap<AngularLoginResourse,    Executive>();
              CreateMap<AngularLoginResourse,Distributor>();
              CreateMap<DSRRetailorsListResource, Dsr>();
              CreateMap<NotificationResource, Notification>();

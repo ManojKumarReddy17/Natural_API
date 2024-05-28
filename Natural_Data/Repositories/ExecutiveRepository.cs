@@ -20,7 +20,7 @@ using Natural_Core.Models.CustomModels;
 namespace Natural_Data.Repositories
 
 {
-    public class ExecutiveRepository : Repository<ExecutiveGetResourcecs>, IExecutiveRepository
+    public class ExecutiveRepository : Repository<Executive>, IExecutiveRepository
     {
         private readonly IAmazonS3 _S3Client;
         
@@ -100,7 +100,7 @@ namespace Natural_Data.Repositories
 
 
 
-        public async Task<IEnumerable<ExecutiveGetResourcecs>> GetAllExecutiveAsync()
+        public async Task<IEnumerable<Executive>> GetAllExecutiveAsync()
 
         {
             {
@@ -109,7 +109,7 @@ namespace Natural_Data.Repositories
                 //.ThenInclude(a => a.City)
                 .ThenInclude(ct => ct.State)
                 .Where(d => d.IsDeleted != true)
-                 .Select(c => new ExecutiveGetResourcecs
+                 .Select(c => new Executive
                  {
                      Id = c.Id,
                      FirstName = c.FirstName,
@@ -216,7 +216,7 @@ namespace Natural_Data.Repositories
             }
         }
 
-        private async Task<List<ExecutiveGetResourcecs>> SearchExecutiveAsync(List<ExecutiveGetResourcecs> executiveList, SearchModel search)
+        private async Task<List<Executive>> SearchExecutiveAsync(List<Executive> executiveList, SearchModel search)
         {
                 var exec = executiveList.Where(c =>
                       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
@@ -274,7 +274,7 @@ namespace Natural_Data.Repositories
 
 
         // get table data as it is
-        public async Task<ExecutiveGetResourcecs> GetExectiveTableByIdAsync(string id)
+        public async Task<Executive> GetExectiveTableByIdAsync(string id)
         {
 
             var exec = await NaturalDbContext.Executives

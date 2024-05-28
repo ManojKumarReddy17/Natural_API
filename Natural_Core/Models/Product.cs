@@ -15,9 +15,9 @@ namespace Natural_Core.Models
         public string Id { get; set; }
         public string Category { get; set; }
         public string ProductName { get; set; }
-        public decimal? Price { get; set; }
-        public int? Quantity { get; set; }
-        public decimal? Weight { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public decimal Weight { get; set; }
         public string Image { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }

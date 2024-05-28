@@ -11,9 +11,8 @@ namespace Natural_Core.Models
         {
             DistributorbyAreas = new HashSet<DistributorbyArea>();
             Distributors = new HashSet<Distributor>();
-            Executives = new HashSet<ExecutiveGetResourcecs>();
-            Retailors = new HashSet<Retailor>();
             ExecutiveAreas = new HashSet<ExecutiveArea>();
+            Retailors = new HashSet<Retailor>();
         }
 
         public string Id { get; set; }
@@ -24,8 +23,7 @@ namespace Natural_Core.Models
         public virtual City City { get; set; }
         public virtual ICollection<DistributorbyArea> DistributorbyAreas { get; set; }
         public virtual ICollection<Distributor> Distributors { get; set; }
-        public virtual ICollection<ExecutiveGetResourcecs> Executives { get; set; }
-        public virtual ICollection<Retailor> Retailors { get; set; }
         public virtual ICollection<ExecutiveArea> ExecutiveAreas { get; set; }
+        public virtual ICollection<Retailor> Retailors { get; set; }
     }
 }

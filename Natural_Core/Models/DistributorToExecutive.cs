@@ -13,6 +13,6 @@ namespace Natural_Core.Models
         public bool? IsDeleted { get; set; }
 
         public virtual Distributor Distributor { get; set; }
-        public virtual ExecutiveGetResourcecs Executive { get; set; }
+        public virtual Executive Executive { get; set; }
     }
 }

@@ -75,7 +75,7 @@ namespace Natural_API.Controllers
             {
 
                 var result = await _executiveService.UploadFileAsync(file, prefix);
-                var createexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(executiveResource);
+                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
 
                 createexecu.Image = result.Message;
 
@@ -90,7 +90,7 @@ namespace Natural_API.Controllers
             else
 
             {
-                var createexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(executiveResource);
+                var createexecu = _mapper.Map<InsertUpdateResource, Executive>(executiveResource);
                 var executivearea = executiveResource.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.CreateExecutiveAsync(createexecu, exectivearealist);
@@ -119,7 +119,7 @@ namespace Natural_API.Controllers
             if (file != null && file.Length > 0)
             {
                 var result = await _executiveService.UploadFileAsync(file, prefix);
-                var updaeexecu = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
+                var updaeexecu = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
                 updaeexecu.Image = result.Message;
                 var executivearea = updatedexecutive.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
@@ -130,7 +130,7 @@ namespace Natural_API.Controllers
             }
             else
             {
-                var updaeexecu1 = _mapper.Map<InsertUpdateResource, ExecutiveGetResourcecs>(updatedexecutive);
+                var updaeexecu1 = _mapper.Map<InsertUpdateResource, Executive>(updatedexecutive);
                 var executivearea = updatedexecutive.Area;
                 var exectivearealist = _mapper.Map<List<ExecutiveAreaResource>, List<ExecutiveArea>>(executivearea);
                 var exe = await _executiveService.UpadateExecutive(updaeexecu1, exectivearealist, updaeexecu1.Id);
@@ -155,7 +155,7 @@ namespace Natural_API.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<AngularLoginResponse>> Login([FromBody] AngularLoginResourse loginModel)
         {
-            var credentials = _mapper.Map<AngularLoginResourse, ExecutiveGetResourcecs>(loginModel);
+            var credentials = _mapper.Map<AngularLoginResourse, Executive>(loginModel);
             var user = await _executiveService.LoginAsync(credentials);
 
             return StatusCode(user.Statuscode, user);

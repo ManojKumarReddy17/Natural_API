@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Natural_Core.IRepositories
 {
-    public interface IExecutiveRepository : IRepository<ExecutiveGetResourcecs>
+    public interface IExecutiveRepository : IRepository<Executive>
     {
-        Task<IEnumerable<ExecutiveGetResourcecs>> GetAllExecutiveAsync();
+        Task<IEnumerable<Executive>> GetAllExecutiveAsync();
         Task<ExecutiveGetResource> GetWithExectiveByIdAsync(string id);
         Task<IEnumerable<string>> GetAllBucketAsync();
         Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix);
         Task<IEnumerable<Natural_Core.S3Models.S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
-        Task<ExecutiveGetResourcecs> GetExectiveTableByIdAsync(string id);
+        Task<Executive> GetExectiveTableByIdAsync(string id);
         Task<List<InsertUpdateModel>> GetxecutiveAsync(SearchModel? search);
 
 

@@ -12,6 +12,6 @@ namespace Natural_Core.Models
         public string Area { get; set; }
 
         public virtual Area AreaNavigation { get; set; }
-        public virtual ExecutiveGetResourcecs ExecutiveNavigation { get; set; }
+        public virtual Executive ExecutiveNavigation { get; set; }
     }
 }

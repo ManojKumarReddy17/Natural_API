@@ -137,7 +137,7 @@ namespace Natural_Services
             return await _unitOfWork.ExecutiveAreaRepository.GetExectiveAreaByIdAsync(id);
 
         }
-        public async Task<ExecutiveGetResourcecs> GetExecutiveByIdAsync(string ExecutiveId)
+        public async Task<Executive> GetExecutiveByIdAsync(string ExecutiveId)
         {
             var result = await _unitOfWork.ExecutiveRepo.GetExectiveTableByIdAsync(ExecutiveId);
 
@@ -157,14 +157,14 @@ namespace Natural_Services
             if (PresignedUrl.Any())
             {
                 var exe = PresignedUrl.FirstOrDefault();
-                var execuresoursze1 = _Mapper.Map<ExecutiveGetResourcecs, InsertUpdateModel>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
                 execuresoursze1.PresignedUrl = exe.PresignedUrl;
 
                 return execuresoursze1;
             }
             else
             {
-                var execuresoursze1 = _Mapper.Map<ExecutiveGetResourcecs, InsertUpdateModel>(executiveResult);
+                var execuresoursze1 = _Mapper.Map<Executive, InsertUpdateModel>(executiveResult);
 
                 return execuresoursze1;
 
@@ -180,7 +180,7 @@ namespace Natural_Services
             return result;
         }
 
-        public async Task<ProductResponse> UpadateExecutive(ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea, string Id)
+        public async Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id)
 
         {
 
@@ -251,7 +251,7 @@ namespace Natural_Services
         }
    
 
-        public async Task<ProductResponse> CreateExecutiveAsync(ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea)
+        public async Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -339,7 +339,7 @@ namespace Natural_Services
             return presignedUrls.FirstOrDefault(p => p.Image == imageName)?.PresignedUrl;
         }
 
-        public async Task<AngularLoginResponse> LoginAsync(ExecutiveGetResourcecs credentials)
+        public async Task<AngularLoginResponse> LoginAsync(Executive credentials)
         {
             AngularLoginResponse response = new AngularLoginResponse();
             try

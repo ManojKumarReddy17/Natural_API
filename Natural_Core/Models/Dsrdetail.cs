@@ -16,6 +16,5 @@ namespace Natural_Core.Models
 
         public virtual Dsr DsrNavigation { get; set; }
         public virtual Product ProductNavigation { get; set; }
-        
     }
 }

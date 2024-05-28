@@ -9,7 +9,6 @@ namespace Natural_Core.Models
     {
         public Distributor()
         {
-            DistributorChangePasswords = new HashSet<DistributorChangePassword>();
             DistributorToExecutives = new HashSet<DistributorToExecutive>();
             DistributorbyAreas = new HashSet<DistributorbyArea>();
             Dsrs = new HashSet<Dsr>();
@@ -38,7 +37,6 @@ namespace Natural_Core.Models
         public virtual Area AreaNavigation { get; set; }
         public virtual City CityNavigation { get; set; }
         public virtual State StateNavigation { get; set; }
-        public virtual ICollection<DistributorChangePassword> DistributorChangePasswords { get; set; }
         public virtual ICollection<DistributorToExecutive> DistributorToExecutives { get; set; }
         public virtual ICollection<DistributorbyArea> DistributorbyAreas { get; set; }
         public virtual ICollection<Dsr> Dsrs { get; set; }

@@ -16,23 +16,23 @@ namespace Natural_Core.IServices
 
         Task<InsertUpdateModel> GetExecutiveDetailsPresignedUrlById(string DetailsId);
 
-        Task<Models.ExecutiveGetResourcecs> GetExecutiveByIdAsync(string ExecutiveId); //get table data of executive
+        Task<Executive> GetExecutiveByIdAsync(string ExecutiveId); //get table data of executive
         Task<InsertUpdateModel> GetExecutivePresignedUrlbyId(string ExecutiveId);
 
         Task<ExecutiveGetResource> GetExecutiveDetailsById(string DetailsId); //get detail table data of executive
 
         Task<List<ExecutiveArea>> GetExecutiveAreaById(string ExecutiveId); //get table data of executivearea
 
-        Task<ProductResponse> CreateExecutiveAsync(Models.ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea);
+        Task<ProductResponse> CreateExecutiveAsync(Executive executive, List<ExecutiveArea> executiveArea);
 
         Task<ResultResponse> DeleteExecutive(string executiveId);
 
-        Task<ProductResponse> UpadateExecutive(Models.ExecutiveGetResourcecs executive, List<ExecutiveArea> executiveArea, string Id);
+        Task<ProductResponse> UpadateExecutive(Executive executive, List<ExecutiveArea> executiveArea, string Id);
 
 
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
 
-        Task<AngularLoginResponse> LoginAsync(Models.ExecutiveGetResourcecs credentials);
+        Task<AngularLoginResponse> LoginAsync(Executive credentials);
 
         Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);  
 

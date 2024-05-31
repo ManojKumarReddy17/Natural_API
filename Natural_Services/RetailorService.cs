@@ -157,7 +157,11 @@ namespace Natural_Services
 
         }
 
-
+        public async Task<IEnumerable<RetailorDetailsByArea>> GetRetailordetailsByAreaId(string areaId)
+        {
+            var reatailorbyarea = await _unitOfWork.RetailorRepo.GetRetailorDetailsByAreaId(areaId);
+            return reatailorbyarea;
+        }
         public async Task<ResultResponse> SoftDelete(string retailorId)
         {
             var response = new ResultResponse();

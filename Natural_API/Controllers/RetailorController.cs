@@ -112,6 +112,13 @@ namespace Natural_API.Controllers
             return response;
         }
 
+        [HttpGet("areaId/{areaid}")]
+        public async Task<ActionResult<IEnumerable<RetailorDetailsByArea>>> GetRetailorDetailsByAreaId(string areaid)
+        {
+            var arearetailor = await _retailorservice.GetRetailordetailsByAreaId(areaid);
+            return Ok(arearetailor);
+
+        }
     }
 }
 

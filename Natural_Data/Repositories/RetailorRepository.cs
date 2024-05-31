@@ -66,7 +66,28 @@ namespace Natural_Data.Repositories
 
             return result;
         }
+        public async Task<IEnumerable<RetailorDetailsByArea>> GetRetailorDetailsByAreaId(string areaId)
+        {
+            var retailorDetail = await NaturalDbContext.Retailors
 
+
+
+                   .Where(d => d.Area == areaId && d.IsDeleted != true)
+
+                   .Select(c => new RetailorDetailsByArea
+                   {
+                       Id = c.Id,
+                       Retailor = string.Concat(c.FirstName, "", c.LastName),
+
+
+
+
+
+                   }).ToListAsync();
+            return retailorDetail;
+
+
+        }
         private async Task<List<Retailor>> SearchNonAssignedRetailors(List<Retailor> retailors)
         {
             var assignedRetailorIds = await NaturalDbContext.RetailorToDistributors

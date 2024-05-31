@@ -37,7 +37,6 @@ namespace Natural_Services
         public async Task<Notification> GetNotificationByIdAsync(string Id)
         {
             var notification = await _unitOfWork.NotificationRepository.GetByIdAsync(Id);
-            //   var PresentNotif = notification.Where(c => c.IsDeleted == false).ToList();
             if (notification.IsDeleted == false)
             {
                 return notification;
@@ -62,7 +61,6 @@ namespace Natural_Services
 
 
             var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDistributorByNotificationIdAsync(notificationId);
-            //var PresentDist = distributorslist.Where(c => c.IsDeleted != true).ToList();
             return distributorslist;
 
         }
@@ -76,7 +74,6 @@ namespace Natural_Services
         public async Task<IEnumerable<NotificationDistributor>> GetDistableByNotificationIdAsync(string notificationId)
         {
             var distributorslist = await _unitOfWork.NotificationDistributorRepository.GetDisTableByNotificationIdAsync(notificationId);
-            // var PresentDist = distributorslist.Where(c => c.IsDeleted!= true).ToList();
             return distributorslist;
 
         }
@@ -132,45 +129,6 @@ namespace Natural_Services
                 return response;
             }
         }
-
-        //public async Task<DsrResponse> DeleteNotification(string id)
-        //{
-
-        //    var notification = await GetNotificationByIdAsync(id);
-        //    var distributionlist = await GetDistableByNotificationIdAsync(id);
-
-        //    using (var transaction = _unitOfWork.BeginTransaction())
-        //    {
-        //        var response = new DsrResponse();
-
-        //        try
-        //        {
-        //            foreach (var distribution in distributionlist)
-        //            {
-        //                distribution.IsDeleted = true;
-        //                _unitOfWork.NotificationDistributorRepository.Update(distribution);
-        //            }
-        //            notification.IsDeleted = true;
-        //            _unitOfWork.NotificationRepository.Update(notification);
-        //            var commit1 = await _unitOfWork.CommitAsync();
-
-        //            transaction.Commit();
-        //            response.Message = "SUCCESSFULLY DELETED";
-        //            response.StatusCode = 200;
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            transaction.Rollback();
-        //            response.Message = "delete Failed";
-        //            response.StatusCode = 401;
-        //        }
-
-        //        return response;
-        //    }
-
-
-        //}
 
         public async Task<DsrResponse> DeleteNotification(string id)
         {
@@ -243,6 +201,7 @@ namespace Natural_Services
                     _unitOfWork.NotificationRepository.Update(existingNotification);
                     await _unitOfWork.CommitAsync();
 
+
                     var existingDistributors = await GetDistributorsByNotificationIdAsync(notification.Id);
                     var existingExecutives = await GetExecutivesByNotificationIdAsync(notification.Id);
 
@@ -257,13 +216,12 @@ namespace Natural_Services
 
                     var created = await _unitOfWork.CommitAsync();
 
-                    var deletingDistributors = mappedDistributors.Except(distributors, new notificationComparer()).ToList();
-                    _unitOfWork.NotificationDistributorRepository.RemoveRange(deletingDistributors);
+                    //var deletingDistributors = mappedDistributors.Except(distributors, new notificationComparer()).ToList();
+                    //_unitOfWork.NotificationDistributorRepository.RemoveRange(deletingDistributors);
 
-                    var deletingExecutives = mappedExecutives.Except(executives, new notificationComparer()).ToList();
-                    _unitOfWork.NotificationExecutiveRepository.RemoveRange(deletingExecutives);
-                    var deted = await _unitOfWork.CommitAsync();
-                    //await _unitOfWork.CommitAsync();
+                    //var deletingExecutives = mappedExecutives.Except(executives, new notificationComparer()).ToList();
+                    //_unitOfWork.NotificationExecutiveRepository.RemoveRange(deletingExecutives);
+                    //var deted = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
 

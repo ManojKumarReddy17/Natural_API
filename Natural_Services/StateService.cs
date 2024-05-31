@@ -19,11 +19,6 @@ namespace Natural_Services
         {
             _unitOfWork = unitOfWork;
         }
-        //public async Task<IEnumerable<State>> GetStatesAsync()
-        //{
-        //    return await _unitOfWork.StateRepo.GetAllAsync();
-
-        //}
         public async Task<IEnumerable<State>> GetStatesAsync()
         {
 

@@ -106,7 +106,6 @@ namespace Natural_Data.Repositories
             {
                 var exec = await NaturalDbContext.Executives
                 .Include(c => c.CityNavigation)
-                //.ThenInclude(a => a.City)
                 .ThenInclude(ct => ct.State)
                 .Where(d => d.IsDeleted != true)
                  .Select(c => new Executive
@@ -207,10 +206,12 @@ namespace Natural_Data.Repositories
                 var exec = resultList
 
                 .Where(c =>
-                           string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-                           c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) || (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-                           (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
-                           .ToList();
+                          (string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+).ToList();
                 return exec;
 
             }
@@ -220,13 +221,14 @@ namespace Natural_Data.Repositories
         {
                 var exec = executiveList.Where(c =>
                       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-                      (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-                      (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-                       c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-                      (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-                     .ToList();
+                      (string.IsNullOrEmpty(search.City) || c.City == search.City) && (string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+).ToList();
 
-                return exec;
+            return exec;
 
         }
 

@@ -89,7 +89,6 @@ namespace Natural_Services
                 if (distributor != null)
                 {
                      distributor.IsDeleted = true;
-                    //_unitOfWork.distributorToExecutiveRepo.Remove(distributor);
                     _unitOfWork.distributorToExecutiveRepo.Update(distributor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
@@ -108,36 +107,6 @@ namespace Natural_Services
 
             return response;
         }
-
-        //public async Task<ResultResponse> DeleteAssignedDistributorByid(string distributorId, string ExecutiveId)
-        //{
-        //    var response = new ResultResponse();
-        //    try
-        //    {
-        //        var distributor = await _unitOfWork.distributorToExecutiveRepo.DeleteDistributorAsync(distributorId, ExecutiveId);
-
-        //        if (distributor != null)
-        //        {
-
-        //            _unitOfWork.distributorToExecutiveRepo.Remove(distributor);
-        //            await _unitOfWork.CommitAsync();
-        //            response.Message = "SUCCESSFULLY DELETED";
-        //            response.StatusCode = 200;
-        //        }
-        //        else
-        //        {
-        //            response.Message = "DISTRIBUTOR NOT FOUND";
-        //            response.StatusCode = 404;
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response.Message = "Internal Server Error";
-        //    }
-
-        //    return response;
-        //}
-
 
     }
 }

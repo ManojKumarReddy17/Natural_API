@@ -58,7 +58,7 @@ namespace Natural_API.Controllers
 
 
 
-        [HttpPut("AreaId")]
+        [HttpPut("AreaId/{Id}")]
 
         public async Task<ActionResult<AreaUpdateResources>> UpdateArea(string Id, [FromBody] AreaUpdateResources areatoupdate)
         {
@@ -84,11 +84,6 @@ namespace Natural_API.Controllers
                 return BadRequest(response);
             }
         }
-
-
-
-
-
 
     }
 }

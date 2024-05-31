@@ -67,42 +67,6 @@ namespace Natural_Data.Repositories
             return searchDsrList;
         }
 
-        public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
-        {
-            var dsr = NaturalDbContext.Dsrs
-                 .Include(c => c.ExecutiveNavigation)
-                 .Include(c => c.DistributorNavigation)
-                 .Include(c => c.RetailorNavigation)
-                  .Include(c => c.OrderByNavigation)
-                      .Where(c =>
-                    (string.IsNullOrEmpty(search.Executive) || c.Executive == search.Executive) &&
-                    (string.IsNullOrEmpty(search.Distributor) || c.Distributor == search.Distributor) &&
-                    (string.IsNullOrEmpty(search.Retailor) || c.Retailor == search.Retailor) &&
-                    (string.IsNullOrEmpty(search.OrderBy) || c.OrderBy == search.OrderBy)
-                    &&
-
-                      (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
-                     .Where(c => c.IsDeleted != true)
-
-                .Select(c => new Dsr
-                {
-                    Id = c.Id,
-                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, c.ExecutiveNavigation.LastName),
-                    Distributor = string.Concat(c.DistributorNavigation.FirstName, c.DistributorNavigation.LastName),
-                    Retailor = string.Concat(c.RetailorNavigation.FirstName, c.RetailorNavigation.LastName),
-                    TotalAmount = c.TotalAmount,
-                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, c.OrderByNavigation.LastName),
-                    CreatedDate = c.CreatedDate
-
-                })
-                .ToList();
-            return dsr;
-
-        }
-
-
-
-
         public async Task<IEnumerable<Product>> GetProductDetailsByDsrIdAsync(string dsrId)
         {
             var productDetails = await NaturalDbContext.Dsrdetails

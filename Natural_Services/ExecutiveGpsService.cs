@@ -58,11 +58,6 @@ namespace Natural_Services
                     response.Message = " Successful";
                     response.StatusCode = 200;
                 }
-                //else
-                //{
-                //    response.Message = "No changes were made";
-                //    response.StatusCode = 204; 
-                //}
             }
             catch (Exception ex)
             {

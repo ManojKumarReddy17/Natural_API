@@ -23,8 +23,8 @@ namespace Natural_Data.Repositories
 
            var searchresult = await NaturalDbContext.Notifications
                 .Where(x => search.StartDate == null
-            || x.CreatedDate >= search.StartDate.Date
-            && x.CreatedDate <= search.EndDate.Date && x.IsDeleted ==false).Select(x => new Notification
+            || x.CreatedDate.Value.Date>= search.StartDate.Date
+            && x.CreatedDate.Value.Date <= search.EndDate.Date && x.IsDeleted ==false).Select(x => new Notification
 
             {
                 Id =x.Id,

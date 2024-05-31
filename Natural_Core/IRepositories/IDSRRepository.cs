@@ -13,7 +13,6 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<Dsr>> GetAllDsrAsync(EdittDSR? search);
         Task<IEnumerable<DsrDistributor>> GetAssignedDistributorDetailsByExecutiveId(string ExecutiveId);
         Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId);
-        Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search);
         Task<Dsr> GetDsrbyId(string dsrid);
        Task<IEnumerable<Dsr>> GetRetailorDetailsByDistributorId(string distributorId);
         Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string distributorId, DateTime date);
@@ -21,12 +20,5 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyId(string Id);
         Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyDistributorId(string distributorId);
-
-
-
-
-
-
-
     }
 }

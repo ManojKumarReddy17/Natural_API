@@ -57,7 +57,6 @@ namespace Natural_Data.Repositories
                .Where(d => d.Dsr == dsrId && d.IsDeleted == false)
                .Select(d => new GetProduct
                {
-                   //Dsr = d.Dsr,
                    ProductName = d.ProductNavigation.ProductName,
                    Quantity = d.Quantity,
                    Price = d.Price,

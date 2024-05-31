@@ -150,16 +150,16 @@ namespace Natural_Data.Repositories
 
         private async Task<List<Distributor>> searchDistributors(List<Distributor> distributorsList, SearchModel search)
         {
-            var exec = distributorsList
-                    .Where(c =>
-                    (c.IsDeleted != true) &&
-                        (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-                        (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-                         (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-                         (string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-                         c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-                          (c.FirstName + " " + c.LastName).StartsWith(search.FullName)))
-                           .ToList();
+            var exec = distributorsList.Where(c =>
+       (c.IsDeleted != true) &&
+(string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+(string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && (string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+).ToList();
             return exec;
         }
 

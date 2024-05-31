@@ -34,7 +34,6 @@ namespace Natural_Data.Repositories
         {
             var exec = await NaturalDbContext.ExecutiveAreas
                             .Where(g => g.Executive == id)
-                            //.Where(d => d. != true)
                             .ToListAsync();
 
 

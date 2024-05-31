@@ -78,19 +78,6 @@ namespace Natural_API.Controllers
 
         }
 
-        //[HttpPost("Search")]
-      
-        //public async Task<ActionResult<IEnumerable<DsrResource>>> SearchDsr([FromBody] DsrDetailsByIdResource search)
-
-        //{
-            
-        //    var mapped = _mapper.Map<DsrDetailsByIdResource, EdittDSR>(search);
-        //    var selut = await _dsrservice.SearchDsr(mapped);
-        //    var  RESULT = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DsrResource>>(selut);
-            
-        //    return Ok(RESULT);
-        //}
-
         [HttpPost]
         public async Task<ActionResult<ResultResponse>> Insertdsr([FromBody] DsrInsertResource dsrResource)
         {
@@ -121,11 +108,6 @@ namespace Natural_API.Controllers
 
         }
 
-
-
-
-
-
         [HttpDelete("{dsrId}")]
         public async Task<ActionResult<DsrResponse>> DeleteDsr(String dsrId)
         {
@@ -139,8 +121,6 @@ namespace Natural_API.Controllers
             }
 
             var drsdetaildata = (List<Dsrdetail>)dsrdetails;
-
-            //var drsdetaildata = _mapper.Map<List<DsrProduct>, List<Dsrdetail>>((List<DsrProduct>)dsrdetails);
 
             var response = await _dsrservice.DeleteDsr(dsr, drsdetaildata, dsrId);
             return Ok(response);
@@ -157,55 +137,6 @@ namespace Natural_API.Controllers
             return Ok(mapped);
         }
 
-        //[HttpGet("RetailorDetails/{distributorId}")]
-        //public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetRetailorListByDistributorId(string distributorId)
-        //{
-        //    var retailorsList = await _dsrservice.getRetailorListByDistributorId(distributorId);
-        //    var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
-        //    var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
-        //    foreach (var retailor in retailorDetails)
-        //    {
-        //        string fullname = string.Concat(retailor.FirstName + retailor.LastName);
-        //        foreach (var retdetail in retailors)
-        //        {
-        //            if (retdetail.Retailor == fullname)
-        //            {
-        //                retdetail.Area = retailor.Area;
-        //                retdetail.Image = retailor.Image;
-        //                retdetail.Address = retailor.Address;
-        //                retdetail.Phonenumber = retailor.MobileNumber;
-
-        //            }
-        //        }
-        //    }
-        //    return Ok(retailors);
-
-        //}
-
-       
-
-
-        //[HttpGet("RetailorDetails/{distributorId}/{date}")]
-        //public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId,DateTime date)
-        //{
-        //    var retailorsList = await _dsrservice.GetRetailorListByDate(distributorId,date);
-        //    var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
-        //    var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
-        //    foreach (var retailor in retailorDetails)
-        //    {
-        //        string fullname = string.Concat(retailor.FirstName + retailor.LastName);
-        //        foreach (var retdetail in retailors)
-        //        {
-        //            if (retdetail.Retailor == fullname)
-        //            {
-        //                retdetail.Address = retailor.Address;
-        //                retdetail.Phonenumber = retailor.MobileNumber;
-        //            }
-        //        }
-        //    }
-        //    return Ok(retailors);
-
-        //}
         [HttpGet("RetailorDetails/{distributorId}/{date}")]
         public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId,DateTime date)
         {
@@ -225,18 +156,6 @@ namespace Natural_API.Controllers
             return Ok(dsrrestils);
 
         }
-        //[HttpGet("DistributorId")]
-        //public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsByDistributor(string DistributorId)
-        //{
-
-        //    var dsrrestils = await _dsrservice.GetDetailsByIdAsyncdis(DistributorId);
-        //    return Ok(dsrrestils);
-
-        //}
-
-
-
-
 
     }
 }

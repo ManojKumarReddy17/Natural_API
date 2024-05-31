@@ -35,9 +35,9 @@ namespace Natural_API.Controllers
         /// </summary>
         
         [HttpGet]
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails([FromQuery] SearchModel? search, bool? NonAssign, string? prefix)
+        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetails([FromQuery] SearchModel? search, bool? nonAssign, string? prefix)
         {
-            var retailor = await _retailorservice.GetAllRetailorDetailsAsync(search, NonAssign, prefix);
+            var retailor = await _retailorservice.GetAllRetailorDetailsAsync(search, nonAssign, prefix);
             return retailor;
         }
 

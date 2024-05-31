@@ -84,8 +84,8 @@ namespace Natural_Services
         public async Task<IEnumerable<Product>> GetAllProduct()
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
-            //var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
-            return result;
+            var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
+            return PresentinCategory;
         }
 
 
@@ -134,7 +134,6 @@ namespace Natural_Services
                 if (PresignedUrl.Any())
                 {
                     var isd = PresignedUrl.FirstOrDefault();
-                    //var productresoursze1 = _Mapper.Map<Product, GetProduct>(productResult);
                     productResult.Image = isd.PresignedUrl;
                 }
 

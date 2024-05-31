@@ -59,6 +59,7 @@ namespace Natural_API.Controllers
         {
             var file = distributorResource.UploadImage;
             var distributor = _mapper.Map<InsertUpdateResource, Distributor>(distributorResource);
+            distributor.Area = distributorResource.Area[0].Area;
             if (file != null)
             {
                 var result = await _DistributorService.UploadFileAsync(file, prefix);
@@ -80,6 +81,8 @@ namespace Natural_API.Controllers
 
             var file = updatedistributor.UploadImage;
             var distributorToUpdate = _mapper.Map(updatedistributor, ExistingDistributor);
+            distributorToUpdate.Area = updatedistributor.Area[0].Area;
+            distributorToUpdate.Id = DistributorId;
             if (file != null && file.Length > 0)
             {
                 var result = await _DistributorService.UploadFileAsync(file, prefix); //change uploadfile to image

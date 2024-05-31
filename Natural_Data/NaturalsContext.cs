@@ -746,12 +746,6 @@ namespace Natural_Core.Models
                     .HasColumnName("State_Name");
             });
 
-
-            //modelBuilder.Entity<DistributorSalesReport>(entity =>
-            //{
-
-            //    entity.HasKey(e => new { e.Area, e.Retailor }); //e.StartDate, e.EndDate });
-            //});
             modelBuilder.Entity<DistributorSalesReport>(entity =>
             {
                 entity.HasNoKey();

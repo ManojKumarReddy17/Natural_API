@@ -87,29 +87,11 @@ namespace Natural_Services
             return result;
         }
 
-        //public async Task<IEnumerable<Dsr>> GetAllDsr()
-        //{
-        //    var result = await _unitOfWork.dSRRepo.GetAllDsrAsync();
-        //    var getdsr = result.Where(c => c.IsDeleted == false);
-        //    return getdsr;
-        //}
-
-
-        //public async Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId)
-
-        //{
-
-        //    var dsrdetails = await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
-
-        //    return dsrdetails;
-
-        //}
         public async Task<IEnumerable<DsrProduct>> GetDsrDetailsByDsrIdAsync(string dsrId)
 
         {
 
             var dsrdetails = await _unitOfWork.DsrdetailRepository.GetDsrDetailsByDsrIdAsync(dsrId);
-            //var dsrbyid = dsrdetails.Where(d => d.IsDeleted == false);
             return dsrdetails;
 
         }
@@ -131,10 +113,6 @@ namespace Natural_Services
                     //_unitOfWork.DsrdetailRepository.RemoveRange(dsrdetails);
                     _unitOfWork.DsrdetailRepository.UpdateRange(dsrdetails);
                     var commit = await _unitOfWork.CommitAsync();
-                   
-                    ////_unitOfWork.dSRRepo.Remove(dsr);
-                    //_unitOfWork.dSRRepo.Update(dsr);
-                    //var commit1 = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
                     response.Message = "SUCCESSFULLY DELETED";
@@ -172,21 +150,6 @@ namespace Natural_Services
             return result;
 
 
-        }
-
-
-        //public async Task<IEnumerable<Product>> GetProductAsync()
-        //{
-        //    return await _unitOfWork.ProductRepository.GetProducttAsync();
-        //}
-
-     
-
-        public async Task<IEnumerable<Dsr>> SearchDsr(EdittDSR search)
-        {
-            var searchedDsr = await _unitOfWork.dSRRepo.SearchDsr(search);
-
-            return searchedDsr;
         }
 
 

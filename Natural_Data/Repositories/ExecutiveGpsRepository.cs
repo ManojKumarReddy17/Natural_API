@@ -20,21 +20,6 @@ namespace Natural_Data.Repositories
             var result = await NaturalDbContext.ExecutiveGps.FirstOrDefaultAsync(c => c.ExecutiveId == executiveId);
             return result;
         }
-        //public async Task<IEnumerable<ExecutiveGp>> GetExecutiveByGpsIdAsync(string GpsId)
-        //{
-
-        //    var executives = await NaturalDbContext.ExecutiveGps
-        //           .Include(c => c.ExecutiveNavi)
-        //           .Where(c => c.ExecutiveId == GpsId)
-        //           .Select(c => new ExecutiveGp
-        //           {
-        //               Executive = c.ExecutiveNavi.FirstName + " " + c.ExecutiveNavi.LastName,
-        //               Id = c.Id
-        //           }).ToListAsync();
-        //    return executives;
-
-        //}
-
         private NaturalsContext NaturalDbContext
         {
             get { return Context as NaturalsContext; }

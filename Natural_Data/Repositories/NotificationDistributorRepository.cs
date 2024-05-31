@@ -50,7 +50,7 @@ namespace Natural_Data.Repositories
         {
             var Distributor = await NaturalDbContext.NotificationDistributors
                 .Include(c => c.NotificationNavigation)
-                /*Include(c => c.NotificationNavigation)*/.Where(c => c.Distributor == DistributorId).Select(c =>
+                .Where(c => c.Distributor == DistributorId).Select(c =>
                 new DistributorNotificationDetails
                 {
                     Id = c.NotificationNavigation.Id,

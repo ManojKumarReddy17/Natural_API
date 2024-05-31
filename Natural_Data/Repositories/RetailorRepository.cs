@@ -41,7 +41,8 @@ namespace Natural_Data.Repositories
                     retailors = await SearchNonAssignedRetailors(retailors);
                 }
             }
-            if (NonAssign == true && search == null)
+            if (NonAssign == true && (search.Area == null || search.City == null || search.State == null || search.FullName == null ||
+                search.FirstName == null || search.LastName == null))
             {
                 retailors = await SearchNonAssignedRetailors(retailors);
             }
@@ -82,10 +83,12 @@ namespace Natural_Data.Repositories
        (c.IsDeleted != true) &&
 (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
 (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
-(string.IsNullOrEmpty(search.FullName) || c.FirstName.StartsWith(search.FullName) ||
-c.LastName.StartsWith(search.FullName) || (c.FirstName + c.LastName).StartsWith(search.FullName) ||
-(c.FirstName + " " + c.LastName).StartsWith(search.FullName))).ToList();
+(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && (string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+).ToList();
             return searchedRetailors;
         }
 

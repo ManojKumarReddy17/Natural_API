@@ -8,7 +8,6 @@ namespace Natural_Core.IServices
 {
     public interface IExecutiveGpsService
     {
-        // Task<IEnumerable<ExecutiveGp>> InsertOrUpdateExecutive(string executiveId, string latitude, string longitude);
         Task<ResultResponse> CreateOrUpdate(ExecutiveGp executive);
         Task<ExecutiveGp> GetExeId(string executiveId);
         Task<IEnumerable<ExecutiveGp>> GetAllLatLung();

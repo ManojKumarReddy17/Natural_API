@@ -65,7 +65,7 @@ namespace Natural_Data.Repositories
         public async Task<RetailorToDistributor> DeleteRetailorAsync(string RetailorID, string DistributorId)
         {
             var result = await NaturalDbContext.RetailorToDistributors
-                .Where(d => d.DistributorId == RetailorID && d.DistributorId == DistributorId )
+                .Where(d => d.RetailorId == RetailorID && d.DistributorId == DistributorId )
                 .FirstOrDefaultAsync();
 
             return result;

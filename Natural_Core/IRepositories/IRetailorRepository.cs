@@ -12,5 +12,6 @@ namespace Natural_Core.IRepositories
         Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, bool? NonAssign);
         Task<GetRetailor> GetRetailorDetailsByIdAsync(string id);
         Task UpdateRetailorAsync(Retailor retailor, Retailor existingRetailor);
+        Task<IEnumerable<RetailorDetailsByArea>> GetRetailorDetailsByAreaId(string areaId);
     }
 }

@@ -20,7 +20,7 @@ namespace Natural_Core.Models
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public bool? IsDeleted { get; set; }
+      //  public bool? IsDeleted { get; set; }
 
         public virtual Distributor DistributorNavigation { get; set; }
         public virtual Executive ExecutiveNavigation { get; set; }

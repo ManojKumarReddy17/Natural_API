@@ -21,7 +21,7 @@ namespace Natural_Data.Repositories
                  .Include(c => c.ProductNavigation)
                  
                  .ThenInclude(a => a.CategoryNavigation)
-                .Where(d => d.Dsr == dsrId && d.IsDeleted == false)
+                .Where(d => d.Dsr == dsrId )
                 .Select(d => new DsrProduct
                 {
                     Dsr = d.Dsr,
@@ -40,7 +40,7 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<Dsrdetail>> GetDetailTableByDsrIdAsync(string dsrId)
         {
-            var result = NaturalDbContext.Dsrdetails.Where(v => v.Dsr == dsrId && v.IsDeleted == false).ToList();
+            var result = NaturalDbContext.Dsrdetails.Where(v => v.Dsr == dsrId ).ToList();
 
             return result;
         }
@@ -54,7 +54,7 @@ namespace Natural_Data.Repositories
             var productDetails = await NaturalDbContext.Dsrdetails
                 .Include(c => c.ProductNavigation)
                 .ThenInclude(a => a.CategoryNavigation)
-               .Where(d => d.Dsr == dsrId && d.IsDeleted == false)
+               .Where(d => d.Dsr == dsrId )
                .Select(d => new GetProduct
                {
                    ProductName = d.ProductNavigation.ProductName,

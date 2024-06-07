@@ -107,12 +107,11 @@ namespace Natural_Services
 
                 try
                 {
-                    _unitOfWork.dSRRepo.Update(dsr);
-                    var commit1 = await _unitOfWork.CommitAsync();
 
-                    //_unitOfWork.DsrdetailRepository.RemoveRange(dsrdetails);
-                    _unitOfWork.DsrdetailRepository.UpdateRange(dsrdetails);
+                    _unitOfWork.DsrdetailRepository.RemoveRange(dsrdetails);
                     var commit = await _unitOfWork.CommitAsync();
+                    _unitOfWork.dSRRepo.Remove(dsr);
+                    var commit1 = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
                     response.Message = "SUCCESSFULLY DELETED";

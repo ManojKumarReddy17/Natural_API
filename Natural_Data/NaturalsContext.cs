@@ -301,7 +301,7 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+                //entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
@@ -352,7 +352,7 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
+                //entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Price).HasPrecision(20, 3);
 

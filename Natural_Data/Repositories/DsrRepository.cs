@@ -25,7 +25,8 @@ namespace Natural_Data.Repositories
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .Include(c => c.OrderByNavigation)
-                   .Where(c => c.IsDeleted != true).ToListAsync();
+                  // .Where(c => c.IsDeleted != true)
+                   .ToListAsync();
             if(search != null)
             {
                 var startDate = search.StartDate.Date.ToString();
@@ -63,7 +64,8 @@ namespace Natural_Data.Repositories
                     &&
 
                       (search.StartDate == null || c.CreatedDate.Date >= search.StartDate.Date && c.CreatedDate.Date <= search.EndDate.Date))
-                     .Where(c => c.IsDeleted != true).ToList();
+                    // .Where(c => c.IsDeleted != true)
+                     .ToList();
             return searchDsrList;
         }
 
@@ -91,7 +93,7 @@ namespace Natural_Data.Repositories
 
             var AssignedList = await NaturalDbContext.DistributorToExecutives.
                 Include(D => D.Distributor).
-                Include(D => D.Executive).Where(c => c.ExecutiveId == ExecutiveId && c.IsDeleted != true).ToListAsync();
+                Include(D => D.Executive).Where(c => c.ExecutiveId == ExecutiveId ).ToListAsync();
             var result = AssignedList.Select(c => new DsrDistributor
             {
                 Id = c.Distributor.Id,
@@ -108,7 +110,7 @@ namespace Natural_Data.Repositories
 
             var AssignedList = await NaturalDbContext.RetailorToDistributors.
                 Include(D => D.Retailor).
-                Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId && c.IsDeleted != true).ToListAsync();
+                Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId).ToListAsync();
             var result = AssignedList.Select(c => new DsrRetailor
             {
                 Id = c.Retailor.Id,
@@ -126,7 +128,7 @@ namespace Natural_Data.Repositories
                      .Include(c => c.DistributorNavigation)
                      .Include(c => c.RetailorNavigation)
                      .Include(c => c.OrderByNavigation)
-                     .Where(c => c.Id == dsrid && c.IsDeleted != true)
+                     .Where(c => c.Id == dsrid )
                      .Select(c => new Dsr
                      {
                          Id = c.Id,
@@ -150,7 +152,7 @@ namespace Natural_Data.Repositories
                 .Include(c => c.DistributorNavigation)
                 .Include(c => c.RetailorNavigation)
                 .Include(c => c.OrderByNavigation)
-                .Where(c => c.DistributorNavigation.Id == distributorId && c.IsDeleted != true)
+                .Where(c => c.DistributorNavigation.Id == distributorId )
                 .Select(c => new Dsr
                 {
                     Id = c.Id,
@@ -178,7 +180,7 @@ namespace Natural_Data.Repositories
                 .Include(c => c.DistributorNavigation)
                 .Include(c => c.RetailorNavigation)
                 .Include(c => c.OrderByNavigation)
-                .Where(c => c.Distributor == distributorId && c.IsDeleted != true)
+                .Where(c => c.Distributor == distributorId )
                 .Select(c => new Dsr
                 {
                     Id = c.Id,
@@ -204,7 +206,7 @@ namespace Natural_Data.Repositories
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .Include(c => c.OrderByNavigation)
-                   .Where(c => c.ExecutiveNavigation.Id == executiveId && c.IsDeleted != true)
+                   .Where(c => c.ExecutiveNavigation.Id == executiveId)
                    .Select(c => new Dsr
                    {
                        Id = c.Id,
@@ -258,7 +260,7 @@ namespace Natural_Data.Repositories
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
                    .ThenInclude(a => a.AreaNavigation)
-                   .Where(d => (d.Executive == Id|| d.Distributor == Id) && d.IsDeleted != true)
+                   .Where(d => (d.Executive == Id|| d.Distributor == Id) )
                    .Select(c => new DSRretailorDetails
                    {
                        Id = c.Id,
@@ -288,7 +290,7 @@ namespace Natural_Data.Repositories
                    .Include(c => c.RetailorNavigation)
                    .ThenInclude(a => a.AreaNavigation)
 
-                   .Where(d => d.Distributor == distributorId && d.IsDeleted != true)
+                   .Where(d => d.Distributor == distributorId )
 
                    .Select(c => new DSRretailorDetails
                    {

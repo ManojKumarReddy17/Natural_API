@@ -166,7 +166,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("AllowOrigin");
 app.UseCors(CorsPolicy);
-
+app.Urls.Add("http://10.0.0.4:5024");
+app.Urls.Add("http://localhost:5024");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

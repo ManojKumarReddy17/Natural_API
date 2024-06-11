@@ -8,7 +8,6 @@ using Natural_Core.Models;
 using System.Net.Http.Headers;
 using System;
 using System.Security.Claims;
-using Microsoft.Extensions.Logging;
 
 
 #nullable disable
@@ -19,13 +18,11 @@ namespace Natural_Services
     {
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<LoginService> _logger;
 
-        public LoginService(IUnitOfWork unitOfWork, ILogger<LoginService> logger)
+        public LoginService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _logger = logger;
-
+            
         }
       
         public async Task<LoginResponse> LoginAsync(Login credentials)
@@ -33,50 +30,41 @@ namespace Natural_Services
             LoginResponse response = new LoginResponse();
             try
             {
-                try
+                var user = await _unitOfWork.Login.GetAllAsync();
+
+                var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
+
+
+                if (authenticatedUser != null)
                 {
-                    var user = await _unitOfWork.Login.GetAllAsync();
-
-                    var authenticatedUser = user.FirstOrDefault(u => u.UserName == credentials.UserName && u.Password == credentials.Password);
-
-
-                    if (authenticatedUser != null)
-                    {
-
-                        response.FirstName = authenticatedUser.FirstName;
-                        response.LastName = authenticatedUser.LastName;
-                        response.StatusCode = 200;
-                        response.Message = "LOGIN SUCCESSFUL";
-                        return response;
-
-                    }
-
-                    else
-                    {
-                        response.StatusCode = 401;
-                        response.Message = "INVALID CREDENTIALS";
-                        return response;
-
-                    }
-
-
-                }
-
-                catch (Exception)
-                {
-                    response.Message = "INTERNAL SERVER ERROR";
-                    response.StatusCode = 500;
+                    
+                    response.FirstName = authenticatedUser.FirstName;
+                    response.LastName = authenticatedUser.LastName;
+                    response.StatusCode = 200;
+                    response.Message = "LOGIN SUCCESSFUL";
                     return response;
+
                 }
+
+                else
+                {
+                    response.StatusCode = 401;
+                    response.Message = "INVALID CREDENTIALS";
+                    return response;
+
+                }
+                
+              
             }
-            catch (Exception ex)
+
+            catch (Exception)
             {
-                _logger.LogError(" LoginService-LoginAsync", ex.Message);
-                return null;
-
+                response.Message = "INTERNAL SERVER ERROR";
+                response.StatusCode = 500;
+                return response;
             }
 
-
+            
         }
     }
 

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Natural_Core.S3Models;
 using Microsoft.Extensions.Options;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 #nullable disable
 
@@ -24,60 +25,111 @@ namespace Natural_Services
         private readonly S3Config _s3Config;
         private readonly IDistributorService _DistributorService;
         private readonly IMapper _Mapper;
+        private readonly IRetailorRepository _RetailorRepository;
+        private readonly ILogger<RetailorService> _logger;
+
+      
 
 
-        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper)
+        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper, ILogger<RetailorService> logger)
         {
             _unitOfWork = unitOfWork;
             _s3Config = s3Config.Value;
             _DistributorService = distributorService;
             _Mapper = mapper;
+            _logger = logger;
+
         }
 
         //get bucket names//
         public async Task<IEnumerable<string>> GetAllBucketAsync()
         {
-            var bucketlist = await _unitOfWork.ExecutiveRepo.GetAllBucketAsync();
-            return bucketlist;
+            try
+            {
+                var bucketlist = await _unitOfWork.ExecutiveRepo.GetAllBucketAsync();
+                return bucketlist;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("RetailorService-GetAllBucketAsync", ex.Message);
+                return null;
+
+            }
+
         }
 
         public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix)
         {
+            try
+            {
+                var Retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
+                _logger.LogInformation("GetRetailers Successful {Retailors}", Retailors);
+                string bucketName = _s3Config.BucketName;
+                var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+                _logger.LogInformation("GetAllFiles Successful {presignedUrls}", presignedUrls);
 
-            var Retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
+                var leftJoinQuery = from retailor in Retailors
+                                    join presigned in presignedUrls
+                                    on retailor.Image equals presigned.Image into newUrl
+                                    from sub in newUrl.DefaultIfEmpty()
+                                    select new GetRetailor
+                                    {
+                                        Id = retailor.Id,
+                                        FullName = retailor.FirstName,
+                                      // LastName = retailor.LastName,
+                                        MobileNumber = retailor.MobileNumber,
+                                        Address = retailor.Address,
+                                        Area = retailor.Area,
+                                        Email = retailor.Email,
+                                        City = retailor.City,
+                                        State = retailor.State,
+                                        Image = sub?.PresignedUrl,
+                                        Latitude = retailor.Latitude,
+                                        Longitude = retailor.Longitude
+                                    };
 
-            string bucketName = _s3Config.BucketName;
-            var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
 
-            var leftJoinQuery = from retailor in Retailors
-                                join presigned in presignedUrls
-                                on retailor.Image equals presigned.Image into newUrl
-                                from sub in newUrl.DefaultIfEmpty()
-                                select new GetRetailor
-                                {
-                                    Id = retailor.Id,
-                                    FirstName = retailor.FirstName,
-                                    LastName = retailor.LastName,
-                                    MobileNumber = retailor.MobileNumber,
-                                    Address = retailor.Address,
-                                    Area = retailor.Area,
-                                    Email = retailor.Email,
-                                    City = retailor.City,
-                                    State = retailor.State,
-                                    Image = sub?.PresignedUrl,
-                                    Latitude = retailor.Latitude,
-                                    Longitude = retailor.Longitude
-                                };
+                return leftJoinQuery;
 
-            return leftJoinQuery;
+            }
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, "An error occurred while deleting product with ID {ProductId}", id);
+            //    throw;
+            //}
+            catch (Exception ex)
+            {
+                _logger.LogError("RetailorService-GetAllRetailorDetailsAsync", ex.Message);
+                return null;
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         public async Task<GetRetailor> GetRetailorDetailsById(string retailorId)
         {
+            try
+            {
+
+            
             var retailorDetails = await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
+            _logger.LogInformation("GetRetailerDetails Successful {retailorId}", retailorId);
             string bucketName = _s3Config.BucketName;
             string prefix = retailorDetails.Image;
             var PresignedUrl = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+            _logger.LogInformation("GetAllFilesAsync Successful {PresignedUrl}", PresignedUrl);
 
             if (PresignedUrl.Any())
             {
@@ -89,71 +141,112 @@ namespace Natural_Services
             {
                 return retailorDetails;
             }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("RetailorService-GetRetailorDetailsById", ex.Message);
+                return null;
+
+            }
         }
 
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {
-            var result = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
-
-            if (result.IsDeleted == false)
+            try
             {
-                return result;
+                var result = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+
+                if (result.IsDeleted == false)
+                {
+                    return result;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("RetailorService-GetRetailorsById", ex.Message);
+                return null;
+
             }
 
-            return null;
         }
 
         public async Task<ResultResponse> CreateRetailorWithAssociationsAsync(Retailor retailor)
         {
             var response = new ResultResponse();
-
             try
             {
-                retailor.Id = "NRET" + new Random().Next(10000, 99999).ToString();
+               
 
-                await _unitOfWork.RetailorRepo.AddAsync(retailor);
-
-                var created = await _unitOfWork.CommitAsync();
-
-                if (created != 0)
+                try
                 {
-                    response.Message = "Insertion Successful";
-                    response.StatusCode = 200;
+                    retailor.Id = "NRET" + new Random().Next(10000, 99999).ToString();
+
+                    await _unitOfWork.RetailorRepo.AddAsync(retailor);
+
+                    var created = await _unitOfWork.CommitAsync();
+
+                    if (created != 0)
+                    {
+                        response.Message = "Insertion Successful";
+                        response.StatusCode = 200;
+                    }
                 }
+                catch (Exception)
+                {
+
+                    response.Message = "Insertion Failed";
+                    response.StatusCode = 401;
+                }
+
+                return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError("RetailorService-CreateRetailorWithAssociationsAsync", ex.Message);
+                return null;
 
-                response.Message = "Insertion Failed";
-                response.StatusCode = 401;
             }
 
-            return response;
         }
         public async Task<ResultResponse> UpdateRetailors(Retailor existingRetailor, Retailor retailor)
         {
-
             var response = new ResultResponse();
-
             try
             {
-                await _unitOfWork.RetailorRepo.UpdateRetailorAsync(existingRetailor, retailor);
 
-                await _unitOfWork.CommitAsync();
+              
+
+                try
+                {
+                    await _unitOfWork.RetailorRepo.UpdateRetailorAsync(existingRetailor, retailor);
+
+                    await _unitOfWork.CommitAsync();
 
 
-                response.Message = "Update Successfull";
-                response.StatusCode = 200;
+                    response.Message = "Update Successfull";
+                    response.StatusCode = 200;
+                }
+
+                catch (Exception)
+                {
+
+                    response.Message = "Update Failed";
+                    response.StatusCode = 400;
+
+                }
+                return response;
+
             }
-
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                response.Message = "Update Failed";
-                response.StatusCode = 400;
+                _logger.LogError("RetailorService-UpdateRetailors", ex.Message);
+                return null;
 
             }
-            return response;
+
+
 
         }
 
@@ -165,31 +258,43 @@ namespace Natural_Services
         public async Task<ResultResponse> SoftDelete(string retailorId)
         {
             var response = new ResultResponse();
-
             try
             {
-                var retailor = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+               
 
-                if (retailor != null)
+                try
                 {
-                    retailor.IsDeleted = true;
-                    _unitOfWork.RetailorRepo.Update(retailor);
-                    await _unitOfWork.CommitAsync();
-                    response.Message = "SUCCESSFULLY DELETED";
-                    response.StatusCode = 200;
+                    var retailor = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);
+
+                    if (retailor != null)
+                    {
+                        retailor.IsDeleted = true;
+                        _unitOfWork.RetailorRepo.Update(retailor);
+                        await _unitOfWork.CommitAsync();
+                        response.Message = "SUCCESSFULLY DELETED";
+                        response.StatusCode = 200;
+                    }
+                    else
+                    {
+                        response.Message = "RETAILER NOT FOUND";
+                        response.StatusCode = 404;
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    response.Message = "RETAILER NOT FOUND";
-                    response.StatusCode = 404;
+                    response.Message = "Internal Server Error";
                 }
+
+                return response;
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                response.Message = "Internal Server Error";
+                _logger.LogError("RetailorService-SoftDelete", ex.Message);
+                return null;
+
             }
 
-            return response;
         }
     }
 }

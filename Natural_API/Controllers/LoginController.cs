@@ -16,12 +16,14 @@ namespace Natural_API.Controllers
     {
         private readonly ILoginService _loginService;
         private readonly IMapper _mapper;
-         
+        private readonly ILogger<RetailorController> _logger;
 
-        public LoginController(ILoginService loginService, IMapper mapper)
+
+        public LoginController(ILoginService loginService, IMapper mapper, ILogger<RetailorController> logger)
         {
             _mapper = mapper;
             _loginService = loginService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -31,10 +33,20 @@ namespace Natural_API.Controllers
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginResource loginModel)
         {
-            var credentials = _mapper.Map<LoginResource, Login>(loginModel);
-            var user = await _loginService.LoginAsync(credentials);
-            
-                return StatusCode(user.StatusCode,user);
+            try
+            {
+
+
+                var credentials = _mapper.Map<LoginResource, Login>(loginModel);
+                var user = await _loginService.LoginAsync(credentials);
+
+                return StatusCode(user.StatusCode, user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(" LoginControlle" + "Login" + ex.Message);
+                return StatusCode(500, "An error occured while processing your request");
+            }
 
         }
     }

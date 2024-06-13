@@ -41,7 +41,7 @@ namespace Natural_Data.Repositories
 
         public async Task<string> executiveid(string notificationId)
         {
-            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId && x.IsDeleted != true).Select(x => x.ExecutiveId)
+            var executiveId = await NaturalDbContext.DistributorToExecutives.Where(x => x.DistributorId == notificationId ).Select(x => x.ExecutiveId)
             .FirstOrDefaultAsync();
             return executiveId;
 

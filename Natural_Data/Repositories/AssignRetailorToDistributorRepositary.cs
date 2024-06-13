@@ -16,7 +16,7 @@ namespace Natural_Data.Repositories
         }
         public async Task<IEnumerable<RetailorToDistributor>> GetAssignedRetailorsIdByDistributorIdAsync(string distributorId)
         {
-            var AssignedList = await NaturalDbContext.RetailorToDistributors.Where(c=>c.DistributorId == distributorId && c.IsDeleted == false).ToListAsync();
+            var AssignedList = await NaturalDbContext.RetailorToDistributors.Where(c=>c.DistributorId == distributorId ).ToListAsync();
             return AssignedList;       
 
         }
@@ -28,7 +28,7 @@ namespace Natural_Data.Repositories
                 .ThenInclude(a => a.City)
                 .ThenInclude(c => c.State)
                 .Include(D => D.Distributor)
-                .Where(rt => rt.DistributorId == distributorId  && rt.IsDeleted == false)
+                .Where(rt => rt.DistributorId == distributorId )
                 .ToListAsync();
 
             var result = AssignedList.Select(c => new Retailor

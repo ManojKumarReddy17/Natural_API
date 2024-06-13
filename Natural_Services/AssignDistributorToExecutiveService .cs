@@ -88,8 +88,8 @@ namespace Natural_Services
 
                 if (distributor != null)
                 {
-                     distributor.IsDeleted = true;
-                    _unitOfWork.distributorToExecutiveRepo.Update(distributor);
+                    
+                    _unitOfWork.distributorToExecutiveRepo.Remove(distributor);
                     await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

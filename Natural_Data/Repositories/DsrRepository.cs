@@ -126,7 +126,7 @@ namespace Natural_Data.Repositories
             var assignedList = await (from rtd in NaturalDbContext.RetailorToDistributors
                                       join r in NaturalDbContext.Retailors on rtd.RetailorId equals r.Id
                                       join a in NaturalDbContext.Areas on r.Area equals a.Id
-                                      where rtd.DistributorId == distributorId && rtd.IsDeleted != true
+                                      where rtd.DistributorId == distributorId 
                                       select new
                                       {
                                           Retailor = r,

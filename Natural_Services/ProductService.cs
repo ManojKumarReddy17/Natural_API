@@ -123,24 +123,25 @@ namespace Natural_Services
 
         //get product by id -category name -presigned url
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
+         {
+        var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
+
+        if (!string.IsNullOrEmpty(productResult.Image))
         {
-            var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
-
-            if (!string.IsNullOrEmpty(productResult.Image))
+            string bucketName = _s3Config.BucketName;
+            string prefix = productResult.Image;
+            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+            if (PresignedUrl.Any())
             {
-                string bucketName = _s3Config.BucketName;
-                string prefix = productResult.Image;
-                var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-                if (PresignedUrl.Any())
-                {
-                    var isd = PresignedUrl.FirstOrDefault();
-                    productResult.Image = isd.PresignedUrl;
-                }
-
+                var isd = PresignedUrl.FirstOrDefault();
+                productResult.Image = isd.PresignedUrl;
             }
-                return productResult;
 
         }
+            return productResult;
+
+
+          }
 
 
         public async Task<GetProduct> GetProductpresignedurlByIdAsync(string ProductId)

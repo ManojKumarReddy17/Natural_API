@@ -17,7 +17,7 @@ namespace Natural_API.Resources
         public string State { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string PresignedUrl { get; set; }
+       // public string PresignedUrl { get; set; }
         public object Image { get; internal set; }
     }
 }

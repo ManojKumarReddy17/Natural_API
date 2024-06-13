@@ -108,6 +108,7 @@ namespace Natural_API.Controllers
 
         }
 
+
         [HttpDelete("{dsrId}")]
         public async Task<ActionResult<DsrResponse>> DeleteDsr(string dsrId)
         {
@@ -123,14 +124,45 @@ namespace Natural_API.Controllers
         }
 
 
-        [HttpGet("{DistributorId}")]
-        public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        //[HttpGet("{DistributorId}")]
+        //public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        //{
+
+        //    var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
+        //    var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
+
+        //    return Ok(mapped);
+        //}
+
+
+
+        [HttpGet("AssignedDetails/{id}")]
+
+        public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedDetails(string id)
         {
 
-            var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
-            var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
+            var distributorDetails = await _dsrservice.AssignedDistributorDetailsByExecutiveId(id);
 
-            return Ok(mapped);
+            var mappedRetailers = new List<DsrRetailorResource>();
+
+            foreach (var distributor in distributorDetails)
+            {
+                var distributorId = distributor.Id;
+
+                var assignedRetailer = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(distributorId);
+                if (assignedRetailer != null)
+                {
+                    mappedRetailers = (List<DsrRetailorResource>)_mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
+
+
+                }
+            }
+
+
+
+            return Ok(mappedRetailers);
+
+
         }
 
         [HttpGet("RetailorDetails/{distributorId}/{date}")]

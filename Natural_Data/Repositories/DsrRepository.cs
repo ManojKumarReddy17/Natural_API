@@ -105,21 +105,51 @@ namespace Natural_Data.Repositories
 
         }
 
-        public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
-        {
+        //public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
+        //{
 
-            var AssignedList = await NaturalDbContext.RetailorToDistributors.
-                Include(D => D.Retailor).
-                Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId).ToListAsync();
-            var result = AssignedList.Select(c => new DsrRetailor
+        //    var AssignedList = await NaturalDbContext.RetailorToDistributors.
+        //        Include(D => D.Retailor).
+        //        Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId).ToListAsync();
+        //    var result = AssignedList.Select(c => new DsrRetailor
+        //    {
+        //        Id = c.Retailor.Id,
+        //        Retailor = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName)
+        //    }).ToList();
+
+        //    return result;
+
+        //}
+
+        public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string distributorId)
+        {
+            var assignedList = await (from rtd in NaturalDbContext.RetailorToDistributors
+                                      join r in NaturalDbContext.Retailors on rtd.RetailorId equals r.Id
+                                      join a in NaturalDbContext.Areas on r.Area equals a.Id
+                                      where rtd.DistributorId == distributorId && rtd.IsDeleted != true
+                                      select new
+                                      {
+                                          Retailor = r,
+                                          Area = a.AreaName
+                                      }).ToListAsync();
+
+            var result = assignedList.Select(c => new DsrRetailor
             {
                 Id = c.Retailor.Id,
-                Retailor = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName)
+                Retailor = c.Retailor.FirstName + "" + c.Retailor.LastName,
+                Area = c.Area
             }).ToList();
 
             return result;
-
         }
+
+
+
+
+
+
+
+
 
         public async Task<Dsr> GetDsrbyId(string dsrid)
         {

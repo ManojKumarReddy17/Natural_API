@@ -115,7 +115,7 @@ namespace Natural_Services
             {
                 var exe = PresignedUrl.FirstOrDefault();
                 var execuresoursze1 = _Mapper.Map<Distributor, GetDistributor>(executiveResult);
-                execuresoursze1.PresignedUrl = exe.PresignedUrl;
+                execuresoursze1.Image = exe.PresignedUrl;
 
                 return execuresoursze1;
             }
@@ -134,10 +134,10 @@ namespace Natural_Services
         {
             var getDistributorById = await _unitOfWork.DistributorRepo.GetDistributorDetailsByIdAsync(distributorId);
             string bucketName = _s3Config.BucketName;
-            string prefix = getDistributorById.Image;
+            string? prefix = getDistributorById.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
-            if (PresignedUrl.Any())
+            if (prefix != null)
             {
                 var exe = PresignedUrl.FirstOrDefault();
 

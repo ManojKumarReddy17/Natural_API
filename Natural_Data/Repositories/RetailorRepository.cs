@@ -51,8 +51,8 @@ namespace Natural_Data.Repositories
                 {
 
                     Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
+                    FirstName = c.FirstName +""+c.LastName,
+                   
                     MobileNumber = c.MobileNumber,
                     Address = c.Address,
                     Email = c.Email,
@@ -133,8 +133,8 @@ namespace Natural_Data.Repositories
                 var result = new GetRetailor
                 {
                     Id = retailorDetails.Retailor.Id,
-                    FirstName = retailorDetails.Retailor.FirstName,
-                    LastName = retailorDetails.Retailor.LastName,
+                    FullName = retailorDetails.Retailor.FirstName,
+                  //  LastName = retailorDetails.Retailor.LastName,
                     MobileNumber = retailorDetails.Retailor.MobileNumber,
                     Address = retailorDetails.Retailor.Address,
                     Email = retailorDetails.Retailor.Email,

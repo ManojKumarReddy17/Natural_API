@@ -22,7 +22,7 @@ namespace Natural_Core.Models.CustomModels
         public string StateId { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string PresignedUrl { get; set; }
+      
         public string Image { get; set; }
     }
 }

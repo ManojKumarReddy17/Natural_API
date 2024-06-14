@@ -92,11 +92,11 @@ namespace Natural_Services
 
             var executiveDetailById =  await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
             string bucketName = _s3Config.BucketName;
-            string prefix = executiveDetailById.Image;
+            string? prefix = executiveDetailById.Image;
             var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
 
-            if (PresignedUrl.Any())
+            if (prefix != null)
             {
                 var exe = PresignedUrl.FirstOrDefault();
                 executiveDetailById.Image = exe.PresignedUrl;

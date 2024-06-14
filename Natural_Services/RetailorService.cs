@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Natural_Core.S3Models;
 using Microsoft.Extensions.Options;
 using AutoMapper;
+using Natural_Core.Models.CustomModels;
 
 #nullable disable
 
@@ -56,8 +57,8 @@ namespace Natural_Services
                                 select new GetRetailor
                                 {
                                     Id = retailor.Id,
-                                    FirstName = retailor.FirstName,
-                                    LastName = retailor.LastName,
+                                    FullName = retailor.FirstName,
+                                   // LastName = retailor.LastName,
                                     MobileNumber = retailor.MobileNumber,
                                     Address = retailor.Address,
                                     Area = retailor.Area,
@@ -76,10 +77,10 @@ namespace Natural_Services
         {
             var retailorDetails = await _unitOfWork.RetailorRepo.GetRetailorDetailsByIdAsync(retailorId);
             string bucketName = _s3Config.BucketName;
-            string prefix = retailorDetails.Image;
+            string? prefix = retailorDetails.Image;
             var PresignedUrl = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
 
-            if (PresignedUrl.Any())
+            if (prefix != null)
             {
                 var exe = PresignedUrl.FirstOrDefault();
                 retailorDetails.Image = exe.PresignedUrl;
@@ -90,7 +91,23 @@ namespace Natural_Services
                 return retailorDetails;
             }
         }
+        //public async Task<ExecutiveGetResource> GetExecutiveDetailsById(string DetailsId)
+        //{
 
+        //    var executiveDetailById = await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
+        //    string bucketName = _s3Config.BucketName;
+        //    string? prefix = executiveDetailById.Image;
+        //    var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+
+
+        //    if (prefix != null)
+        //    {
+        //        var exe = PresignedUrl.FirstOrDefault();
+        //        executiveDetailById.Image = exe.PresignedUrl;
+
+        //    }
+        //    return executiveDetailById;
+        //}
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {
             var result = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);

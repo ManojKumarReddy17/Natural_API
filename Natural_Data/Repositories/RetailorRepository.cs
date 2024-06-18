@@ -106,7 +106,7 @@ namespace Natural_Data.Repositories
 (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
 (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && (string.IsNullOrEmpty(search.FullName) ||
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
         (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
 ).ToList();

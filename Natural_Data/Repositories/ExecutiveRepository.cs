@@ -210,8 +210,7 @@ namespace Natural_Data.Repositories
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
         c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
-).ToList();
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))).ToList();
                 return exec;
 
             }
@@ -223,10 +222,9 @@ namespace Natural_Data.Repositories
                       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
                       (string.IsNullOrEmpty(search.City) || c.City == search.City) && (string.IsNullOrEmpty(search.FullName) ||
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-        c.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
-).ToList();
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))).ToList();
 
             return exec;
 

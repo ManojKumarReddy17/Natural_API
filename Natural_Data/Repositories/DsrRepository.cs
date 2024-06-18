@@ -126,23 +126,26 @@ namespace Natural_Data.Repositories
             var assignedList = await (from rtd in NaturalDbContext.RetailorToDistributors
                                       join r in NaturalDbContext.Retailors on rtd.RetailorId equals r.Id
                                       join a in NaturalDbContext.Areas on r.Area equals a.Id
-                                      where rtd.DistributorId == distributorId 
+                                      join d in NaturalDbContext.Distributors on rtd.DistributorId equals d.Id
+                                      where rtd.DistributorId == distributorId
                                       select new
                                       {
                                           Retailor = r,
-                                          Area = a.AreaName
+                                          Area = a.AreaName,
+                                          Distributor = d
                                       }).ToListAsync();
 
             var result = assignedList.Select(c => new DsrRetailor
             {
                 Id = c.Retailor.Id,
-                Retailor = c.Retailor.FirstName + "" + c.Retailor.LastName,
-                Area = c.Area
+                FirstName = c.Retailor.FirstName,
+                LastName = c.Retailor.LastName,
+                Area = c.Area,
+                Distributor = c.Distributor.Id,
             }).ToList();
 
             return result;
         }
-
 
 
 

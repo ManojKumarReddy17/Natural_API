@@ -82,7 +82,7 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<ResultResponse>> Insertdsr([FromBody] DsrInsertResource dsrResource)
         {
             var dsrdata = _mapper.Map<DsrInsertResource, Dsr>(dsrResource);
-           var productlist=                dsrResource.product;
+           var productlist= dsrResource.product;
            var drsdetaildata = _mapper.Map<List<DsrdetailProduct>, List<Dsrdetail>>(productlist);
           
             var creadted = await _dsrservice.CreateDsrWithAssociationsAsync(dsrdata, drsdetaildata);

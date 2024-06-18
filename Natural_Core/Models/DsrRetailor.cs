@@ -5,8 +5,10 @@ namespace Natural_Core.Models
 	public class DsrRetailor
 	{
         public string Id { get; set; }
-        public string Retailor { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Area { get; set; }
+        public string Distributor { get; set; }
     }
 }
 

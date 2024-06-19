@@ -124,16 +124,7 @@ namespace Natural_API.Controllers
         }
 
 
-        //[HttpGet("{DistributorId}")]
-        //public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
-        //{
-
-        //    var result = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(DistributorId);
-        //    var mapped = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(result);
-
-        //    return Ok(mapped);
-        //}
-
+  
 
 
         [HttpGet("AssignedDetails/{id}")]
@@ -165,14 +156,54 @@ namespace Natural_API.Controllers
 
         }
 
-        [HttpGet("RetailorDetails/{distributorId}/{date}")]
-        public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId,DateTime date)
+        [HttpGet("RetailorDetails/{id}/{date}")]
+        public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string id, DateTime date)
         {
-
-            var dsrrestils = await _dsrservice.GetRetailorListByDate(distributorId,date);
-            return Ok(dsrrestils);
-
+            var retailorsList = await _dsrservice.GetRetailorListByDate(id, date); // Ensure this method filters by DSR created date
+            var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(id);
+            var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
+            foreach (var retailor in retailorDetails)
+            {
+                string fullname = string.Concat(retailor.FirstName + retailor.LastName);
+                foreach (var retdetail in retailors)
+                {
+                    if (retdetail.Retailor == fullname)
+                    {
+                        retdetail.Address = retailor.Address;
+                        retdetail.Phonenumber = retailor.MobileNumber;
+                        retdetail.Image = retailor.Image;
+                        retdetail.Area = retailor.Area;
+                    }
+                }
+            }
+            return Ok(retailors);
         }
+
+
+
+
+
+        //[HttpGet("RetailorDetails/{distributorId}/{date}")]
+        //public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string distributorId, DateTime date)
+        //{
+        //    var retailorsList = await _dsrservice.GetRetailorListByDate(distributorId, date);
+        //    var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributorId);
+        //    var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
+        //    foreach (var retailor in retailorDetails)
+        //    {
+        //        string fullname = string.Concat(retailor.FirstName + retailor.LastName);
+        //        foreach (var retdetail in retailors)
+        //        {
+        //            if (retdetail.Retailor == fullname)
+        //            {
+        //                retdetail.Address = retailor.Address;
+        //                retdetail.Phonenumber = retailor.MobileNumber;
+        //            }
+        //        }
+        //    }
+        //    return Ok(retailors);
+        //}
+
 
 
 

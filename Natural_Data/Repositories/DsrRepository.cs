@@ -105,21 +105,7 @@ namespace Natural_Data.Repositories
 
         }
 
-        //public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string DistributorId)
-        //{
-
-        //    var AssignedList = await NaturalDbContext.RetailorToDistributors.
-        //        Include(D => D.Retailor).
-        //        Include(D => D.Distributor).Where(c => c.DistributorId == DistributorId).ToListAsync();
-        //    var result = AssignedList.Select(c => new DsrRetailor
-        //    {
-        //        Id = c.Retailor.Id,
-        //        Retailor = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName)
-        //    }).ToList();
-
-        //    return result;
-
-        //}
+      
 
         public async Task<IEnumerable<DsrRetailor>> GetAssignedRetailorDetailsByDistributorId(string distributorId)
         {
@@ -202,7 +188,29 @@ namespace Natural_Data.Repositories
             return dsr;
         }
 
-
+        //public async Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string distributorId, DateTime date)
+        //{
+        //    var retailorList = await NaturalDbContext.Dsrs
+        //        .Include(c => c.ExecutiveNavigation)
+        //        .Include(c => c.DistributorNavigation)
+        //        .Include(c => c.RetailorNavigation)
+        //        .Include(c => c.OrderByNavigation)
+        //        .Where(c => c.Distributor == distributorId)
+        //        .Select(c => new Dsr
+        //        {
+        //            Id = c.Id,
+        //            Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+        //            Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+        //            Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+        //            OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+        //            CreatedDate = c.CreatedDate,
+        //            ModifiedDate = c.ModifiedDate,
+        //            TotalAmount = c.TotalAmount
+        //        })
+        //        .ToListAsync();
+        //    var retailor = retailorList.Where(c => c.CreatedDate.Date == date.Date).ToList();
+        //    return retailor;
+        //}
 
 
 
@@ -213,23 +221,23 @@ namespace Natural_Data.Repositories
                 .Include(c => c.DistributorNavigation)
                 .Include(c => c.RetailorNavigation)
                 .Include(c => c.OrderByNavigation)
-                .Where(c => c.Distributor == distributorId )
+                .Where(c => c.Distributor == distributorId && c.CreatedDate.Date == date.Date)
                 .Select(c => new Dsr
                 {
                     Id = c.Id,
-                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                    Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                    Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                    Retailor = string.Concat(c.RetailorNavigation.FirstName, " ", c.RetailorNavigation.LastName),
+                   // Address = c.RetailorNavigation.Address, // Assuming there's an Address property in RetailorNavigation
+                    //PhoneNumber = c.RetailorNavigation.PhoneNumber, // Assuming there's a PhoneNumber property in RetailorNavigation
+                    //TotalAmount = c.TotalAmount.ToString(), // Assuming TotalAmount is a string in TypeScript
+                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, " ", c.ExecutiveNavigation.LastName),
+                    Distributor = string.Concat(c.DistributorNavigation.FirstName, " ", c.DistributorNavigation.LastName),
+                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, " ", c.OrderByNavigation.LastName),
                     CreatedDate = c.CreatedDate,
-                    ModifiedDate = c.ModifiedDate,
-                    TotalAmount = c.TotalAmount
+                   // Area = c.RetailorNavigation.Area // Assuming there's an Area property in RetailorNavigation
                 })
                 .ToListAsync();
-            var retailor = retailorList.Where(c => c.CreatedDate.Date == date.Date).ToList();
 
-
-            return retailor;
+            return retailorList;
         }
 
         public async Task<IEnumerable<Dsr>> GetRetailorDetailsByExecutiveId(string executiveId)

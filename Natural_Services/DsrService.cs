@@ -242,7 +242,7 @@ namespace Natural_Services
                               })
                                .ToList();
 
-                    var resultODelete = await GetDetailTableByDsrIdAsync(dsr.Id);
+                  var resultODelete = await GetDetailTableByDsrIdAsync(dsr.Id);
 
                   var  resulttodELETE = resultODelete
                             .Join(deleteproducts,

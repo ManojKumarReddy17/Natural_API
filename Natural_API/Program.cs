@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Core.IServices;
@@ -118,6 +119,7 @@ builder.Services.AddTransient<INotificationService, NotificationService>();
 
 builder.Services.AddTransient<IExecutiveGpsRepository, ExecutiveGpsRepository>();
 builder.Services.AddTransient<IExecutiveGpsService, ExecutiveGpsService>();
+builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection("Pagination"));
 
 builder.Services.AddEndpointsApiExplorer();
 

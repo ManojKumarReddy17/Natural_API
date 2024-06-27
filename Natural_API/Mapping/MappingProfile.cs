@@ -23,7 +23,9 @@ namespace Natural_API.Mapping
              CreateMap<Distributor, InsertUpdateResource>();
              CreateMap<State, StateResource>();
              CreateMap<Area, AreaResource>();
-             CreateMap<Area, AreaUpdateResources>();
+            CreateMap(typeof(Pagination<>), typeof(Pagination<>))
+            .ForMember("Items", opt => opt.MapFrom("Items"));
+            CreateMap<Area, AreaUpdateResources>();
              CreateMap<City, CityResource>();
              CreateMap<Category, CategoryResource>();
              CreateMap<Retailor , RetailorResource>();

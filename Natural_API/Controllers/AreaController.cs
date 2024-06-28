@@ -18,6 +18,7 @@ namespace Natural_API.Controllers
     {
         private readonly IAreaService _areaService;
         private readonly IMapper _mapper;
+        
 
         public AreaController(IAreaService areaService, IMapper mapper)
         {
@@ -31,10 +32,11 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList(string? CityId)
+        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList(string? CityId, int page=1)
         {
-            var areas = await _areaService.GetAreasAsync(CityId);
-            var AreasList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areas);
+            var areas = await _areaService.GetAreasAsync(CityId,page);
+            var AreasList = _mapper.Map<Pagination<Area>, Pagination<AreaResource>>(areas);
+            
             return Ok(AreasList);
         }
 

@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Natural_Core.S3Models;
+using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
 
 #nullable disable
 
@@ -15,24 +17,44 @@ namespace Natural_Services
     public class AreaService : IAreaService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly PaginationSettings _paginationSettings;
+        //const int PageSize = 10;
 
-        public AreaService(IUnitOfWork unitOfWork)
+        public AreaService(IUnitOfWork unitOfWork, IOptions<PaginationSettings> paginationSettings)
         {
             _unitOfWork = unitOfWork;
+            _paginationSettings = paginationSettings.Value;
+            
         }
-        public async Task<IEnumerable<Area>> GetAreasAsync(string? CityId)
+        public async Task<Pagination<Area>> GetAreasAsync(string? CityId, int page)
         {
             var result = await _unitOfWork.AreaRepo.GetAllAsync();
-            var presentArea = result.Where(c => c.IsDeleted == false).ToList();
-            if(CityId != null)
+            result = result.Where(c => c.IsDeleted == false).ToList();
+            var PageSize = _paginationSettings.PageSize;
+            if (CityId != null)
             {
-                presentArea = presentArea.Where(c => c.CityId == CityId).ToList();
+                result = result.Where(c => c.CityId == CityId).ToList();
             }
-            return presentArea;
+            var totalItems = result.Count();
+            var totalpagecount = (int)Math.Ceiling(totalItems / (double)PageSize);
+            var paginatedItems = result
+          .Skip((page - 1) * PageSize)
+          .Take(PageSize)
+          .ToList();
+
+             return new Pagination<Area>
+            {
+                TotalItems = totalItems,
+                TotalPageCount = totalpagecount,
+                Items = paginatedItems
+            };
 
 
 
+            
         }
+
+         
         public async Task<ProductResponse> Insert(Area area)
         {
             var response = new ProductResponse();

@@ -12,7 +12,7 @@ namespace Natural_Core.IServices
     public interface IAreaService
     {
 
-        Task <Pagination<Area>> GetAreasAsync(String? CityId,int page);
+        Task <Pagination<Area>> GetAreasAsync(String? CityId,int? page);
         Task<Area> GetAreasWithId(string AreaId);
          Task<ProductResponse> Insert(Area area);
         Task<ProductResponse> updateArea(Area updateArea);

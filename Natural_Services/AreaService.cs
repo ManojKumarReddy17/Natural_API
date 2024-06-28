@@ -26,28 +26,40 @@ namespace Natural_Services
             _paginationSettings = paginationSettings.Value;
             
         }
-        public async Task<Pagination<Area>> GetAreasAsync(string? CityId, int page)
+        public async Task<Pagination<Area>> GetAreasAsync(string? CityId, int? page)
         {
             var result = await _unitOfWork.AreaRepo.GetAllAsync();
             result = result.Where(c => c.IsDeleted == false).ToList();
-            var PageSize = _paginationSettings.PageSize;
-            if (CityId != null)
+            if (page > 0)
             {
-                result = result.Where(c => c.CityId == CityId).ToList();
-            }
-            var totalItems = result.Count();
-            var totalpagecount = (int)Math.Ceiling(totalItems / (double)PageSize);
-            var paginatedItems = result
-          .Skip((page - 1) * PageSize)
-          .Take(PageSize)
-          .ToList();
+                var PageSize = _paginationSettings.PageSize;
+                var totalItems = result.Count();
+                var totalpagecount = (int)Math.Ceiling(totalItems / (double)PageSize);
+                var paginatedItems = result
+              .Skip((int)((page - 1) * PageSize))
+              .Take(PageSize)
+              .ToList();
 
-             return new Pagination<Area>
+                return new Pagination<Area>
+                {
+                    TotalItems = totalItems,
+                    TotalPageCount = totalpagecount,
+                    Items = paginatedItems
+                };
+            }
+            else
             {
-                TotalItems = totalItems,
-                TotalPageCount = totalpagecount,
-                Items = paginatedItems
-            };
+                if (CityId != null)
+                {
+                    result = result.Where(c => c.CityId == CityId).ToList();
+                }
+                var paginatedItems = result;
+                return new Pagination<Area>
+                {
+
+                    Items = (List<Area>)paginatedItems
+                };
+            }
 
 
 

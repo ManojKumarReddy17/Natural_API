@@ -32,7 +32,7 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList(string? CityId, int page=1)
+        public async Task<ActionResult<IEnumerable<Area>>> GetAreasList(string? CityId, int? page)
         {
             var areas = await _areaService.GetAreasAsync(CityId,page);
             var AreasList = _mapper.Map<Pagination<Area>, Pagination<AreaResource>>(areas);

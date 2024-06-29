@@ -20,13 +20,16 @@ namespace Natural_Services
         private readonly IMapper _Mapper;
         private readonly S3Config _s3Config;
         private readonly ICategoryService _categoryService;
+        private readonly Paginationsettings _paginationSettings;
+      
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<S3Config> s3Config, ICategoryService categoryService)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<S3Config> s3Config, ICategoryService categoryService, IOptions<Paginationsettings> paginationSettings)
         {
             _unitOfWork = unitOfWork;
             _Mapper = mapper;
             _s3Config = s3Config.Value;
-            _categoryService = categoryService;
+            _categoryService = categoryService; 
+            _paginationSettings = paginationSettings.Value;
         }
 
         // insert product data to database//
@@ -92,18 +95,31 @@ namespace Natural_Services
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
             var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
-            return PresentinCategory;
+          
+            var TotalItems = PresentinCategory.Count;
+
+
+            return  PresentinCategory;
         }
 
 
         //get products with category name and presignred url//
         public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string prefix, SearchProduct? search)
         {
+            // Default page to 1 if not provided
+            Page ??= 1;
+
+            // Fetch all products
             var getAllProducts = await _unitOfWork.ProductRepository.GetProducttAsync();
 
-
+            // Fetch presigned URLs
             string bucketName = _s3Config.BucketName;
-            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
+            var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
+
+            // Calculate total items and pages
+            var totalItems = getAllProducts.Count();
+            var pageSize = _paginationSettings.PageSize;
+            var totalPageCount = (int)Math.Ceiling(totalItems / (double)pageSize);
 
             var productList = from Produc in getAllProducts
                                 join Presigned in PresignedUrl
@@ -124,7 +140,16 @@ namespace Natural_Services
             {
                 productList = await SearchProduct(productList, search);
             }
-            return productList;
+
+            // Apply pagination
+            var paginatedItems = productList.Skip((Page.Value - 1) * pageSize).Take(pageSize).ToList();
+
+            return new Pagination<GetProduct>
+            {
+                TotalPagecount = totalPageCount,
+                TotalItems = totalItems,
+                Items = paginatedItems,
+            };
         }
 
 
@@ -324,6 +349,9 @@ namespace Natural_Services
             return exec;
         }
 
+       
+
+      
     }
 }
 

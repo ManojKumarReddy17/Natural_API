@@ -48,6 +48,8 @@ namespace Natural_API.Mapping
              CreateMap<GetProduct, ProductResource>();
              CreateMap<DsrDistributor, DsrDistributorResource>();
              CreateMap<DsrRetailor, DsrRetailorResource>();
+            CreateMap(typeof(Pagination<>), typeof(Pagination<>))
+                .ForMember("Items", opt => opt.MapFrom("Items"));
              CreateMap<Dsr,DsrInsertResource>();
              CreateMap<DsrProduct, DsrdetailProduct>();
              CreateMap<DsrProduct, Dsrdetail>();

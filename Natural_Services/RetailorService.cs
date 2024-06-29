@@ -25,14 +25,16 @@ namespace Natural_Services
         private readonly S3Config _s3Config;
         private readonly IDistributorService _DistributorService;
         private readonly IMapper _Mapper;
+        private readonly Paginationsettings _paginationSettings;
 
 
-        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper)
+        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper, IOptions<Paginationsettings> paginationSettings)
         {
             _unitOfWork = unitOfWork;
             _s3Config = s3Config.Value;
             _DistributorService = distributorService;
             _Mapper = mapper;
+            _paginationSettings=paginationSettings.Value;
         }
 
         //get bucket names//
@@ -42,36 +44,106 @@ namespace Natural_Services
             return bucketlist;
         }
 
-        public async Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix)
+        public async Task<Pagination<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix, int? page)
         {
 
             var Retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
 
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+                var totalItems = Retailors.Count();
+                var PageSize = _paginationSettings.PageSize;
+                var totalpagecount = (int)Math.Ceiling(totalItems / (double)PageSize);
+                var leftJoinQuery = from retailor in Retailors
+                                    join presigned in presignedUrls
+                                    on retailor.Image equals presigned.Image into newUrl
+                                    from sub in newUrl.DefaultIfEmpty()
+                                    select new GetRetailor
+                                    {
+                                        Id = retailor.Id,
+                                        FullName = retailor.FirstName,
+                                        // LastName = retailor.LastName,
+                                        MobileNumber = retailor.MobileNumber,
+                                        Address = retailor.Address,
+                                        Area = retailor.Area,
+                                        Email = retailor.Email,
+                                        City = retailor.City,
+                                        State = retailor.State,
+                                        Image = sub?.PresignedUrl,
+                                        Latitude = retailor.Latitude,
+                                        Longitude = retailor.Longitude
+                                    };
+            if (page > 0)
+            {
+                var PaginatedItems = leftJoinQuery.Skip((int)((page - 1) * PageSize)).Take(PageSize).ToList();
+                return new Pagination<GetRetailor>
+                {
+                    TotalPagecount = totalpagecount,
+                    TotalItems = totalItems,
+                    Items = PaginatedItems,
 
-            var leftJoinQuery = from retailor in Retailors
-                                join presigned in presignedUrls
-                                on retailor.Image equals presigned.Image into newUrl
-                                from sub in newUrl.DefaultIfEmpty()
-                                select new GetRetailor
-                                {
-                                    Id = retailor.Id,
-                                    FullName = retailor.FirstName,
-                                   // LastName = retailor.LastName,
-                                    MobileNumber = retailor.MobileNumber,
-                                    Address = retailor.Address,
-                                    Area = retailor.Area,
-                                    Email = retailor.Email,
-                                    City = retailor.City,
-                                    State = retailor.State,
-                                    Image = sub?.PresignedUrl,
-                                    Latitude = retailor.Latitude,
-                                    Longitude = retailor.Longitude
-                                };
-
-            return leftJoinQuery;
+                };
+            }
+            else
+            {
+                var paginatedItems = leftJoinQuery;
+                return new Pagination<GetRetailor>
+                {
+                    Items = paginatedItems.ToList(),
+                };
+            }
         }
+        //public async Task<Pagination<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix, int? page)
+        //{
+        //    // Provide default values if nullable parameters are null
+        //    search ??= new SearchModel();
+        //    NonAssign ??= false;
+        //    page ??= 1;
+
+        //    // Fetch all retailors based on the search criteria
+        //    var retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
+
+        //    // Get presigned URLs for images
+        //    string bucketName = _s3Config.BucketName;
+        //    var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
+
+        //    var totalItems = retailors.Count();
+        //    var pageSize = _paginationSettings.PageSize;
+        //    var totalPageCount = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+        //    // Join retailors with presigned URLs and materialize to a list
+        //    var leftJoinQuery = (from retailor in retailors
+        //                         join presigned in presignedUrls
+        //                         on retailor.Image equals presigned.Image into newUrl
+        //                         from sub in newUrl.DefaultIfEmpty()
+        //                         select new GetRetailor
+        //                         {
+        //                             Id = retailor.Id,
+        //                             FullName = retailor.FirstName,
+        //                             MobileNumber = retailor.MobileNumber,
+        //                             Address = retailor.Address,
+        //                             Area = retailor.Area,
+        //                             Email = retailor.Email,
+        //                             City = retailor.City,
+        //                             State = retailor.State,
+        //                             Image = sub?.PresignedUrl,
+        //                             Latitude = retailor.Latitude,
+        //                             Longitude = retailor.Longitude
+        //                         }).ToList();
+
+        //    // Apply pagination if the page is greater than 0
+        //    var paginatedItems = page > 0
+        //                         ? leftJoinQuery.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToList()
+        //                         : leftJoinQuery;
+
+        //    // Return paginated result
+        //    return new Pagination<GetRetailor>
+        //    {
+        //        TotalPagecount = totalPageCount,
+        //        TotalItems = totalItems,
+        //        Items = paginatedItems
+        //    };
+        //}
 
         public async Task<GetRetailor> GetRetailorDetailsById(string retailorId)
         {

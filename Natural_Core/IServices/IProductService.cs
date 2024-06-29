@@ -18,7 +18,7 @@ namespace Natural_Core.IServices
         Task<IEnumerable<S3Config>> GetAllFilesAsync(string bucketName, string? prefix);
         Task<UploadResult> UploadFileAsync(IFormFile file, string? prefix);
         Task<IEnumerable<string>> GetAllBucketAsync();
-        Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string? prefix, SearchProduct? search);
+        Task<Pagination<GetProduct>> GetAllProductDetails(string prefix, SearchProduct? search, int? Page);
         Task<ProductResponse> UpadateProduct(Product product);
         Task<ProductResponse> DeleteImage(string Id);
         Task<ProductResponse> DeleteProduct(string ProductId, bool? deleteEntireProduct);

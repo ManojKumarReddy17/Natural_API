@@ -19,21 +19,21 @@ namespace Natural_Data.Repositories
         {
             var productDetails = await NaturalDbContext.Dsrdetails
                  .Include(c => c.ProductNavigation)
-                 
+
                  .ThenInclude(a => a.CategoryNavigation)
-                .Where(d => d.Dsr == dsrId )
+                .Where(d => d.Dsr == dsrId)
                 .Select(d => new DsrProduct
                 {
                     Dsr = d.Dsr,
-                    
+
                     Product = d.ProductNavigation.ProductName,
                     Quantity = d.Quantity,
                     Price = d.Price,
                     Id = d.Id,
+                    ProductId = d.ProductNavigation.Id,
                     Category = d.ProductNavigation.CategoryNavigation.CategoryName
 
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
             return productDetails;
         }

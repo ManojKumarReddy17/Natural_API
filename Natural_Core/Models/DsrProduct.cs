@@ -9,6 +9,7 @@ namespace Natural_Core.Models
         public int Id { get; set; }
         public string Category { get; set; }
         public string Dsr { get; set; }
+        public string ProductId { get; set; }
 
         public bool IsDeleted { get; set; }
 

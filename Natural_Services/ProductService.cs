@@ -70,6 +70,13 @@ namespace Natural_Services
             var bucketlist = await _unitOfWork.ProductRepository.GetAllBucketAsync();
             return bucketlist;
         }
+        public async Task<IEnumerable<ProductType>> GetAllProductType()
+        {
+            //var productType = await _unitOfWork.ProductRepository.GetProductType;
+            //return productType;
+            var ProductType = await _unitOfWork.ProductRepository.GetProductType();
+            return ProductType;
+        }
 
 
         //get all files //all images with presignedurl
@@ -111,7 +118,7 @@ namespace Natural_Services
                                     Quantity = Produc.Quantity,
                                     Weight = Produc.Weight,
                                     Image = sub?.PresignedUrl,
-
+                                    ProductType = Produc.ProductType,
                                 };
             if(search != null)
             {

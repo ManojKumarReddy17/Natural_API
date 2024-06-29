@@ -38,6 +38,8 @@ namespace Natural_Core.Models
         public virtual DbSet<NotificationDistributor> NotificationDistributors { get; set; }
         public virtual DbSet<NotificationExecutive> NotificationExecutives { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductType> ProductTypes { get; set; }
+
         public virtual DbSet<Retailor> Retailors { get; set; }
         public virtual DbSet<RetailorToDistributor> RetailorToDistributors { get; set; }
         public virtual DbSet<State> States { get; set; }
@@ -599,6 +601,9 @@ namespace Natural_Core.Models
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
+                entity.HasIndex(e => e.ProductType, "FK_ProductType");
+
+
 
                 entity.HasIndex(e => e.Category, "Product_ibfk_1");
 
@@ -622,6 +627,8 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("Product_Name");
+                entity.Property(e => e.ProductType).HasMaxLength(30);
+
 
                 entity.Property(e => e.Weight).HasPrecision(20, 3);
 
@@ -630,8 +637,20 @@ namespace Natural_Core.Models
                     .HasForeignKey(d => d.Category)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Product_ibfk_1");
+                entity.HasOne(d => d.ProductTypeNavigation)
+                   .WithMany(p => p.Products)
+                   .HasForeignKey(d => d.ProductType)
+                   .HasConstraintName("FK_ProductType");
             });
 
+            modelBuilder.Entity<ProductType>(entity =>
+            {
+                entity.ToTable("ProductType");
+
+                entity.Property(e => e.Id).HasMaxLength(20);
+
+                entity.Property(e => e.ProductTypeName).HasMaxLength(30);
+            });
             modelBuilder.Entity<Retailor>(entity =>
             {
                 entity.ToTable("Retailor");

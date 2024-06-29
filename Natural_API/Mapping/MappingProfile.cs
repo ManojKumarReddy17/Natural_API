@@ -84,6 +84,7 @@ namespace Natural_API.Mapping
             CreateMap<ExecutiveGp, ExecutiveGpsResource>();
             CreateMap<AngularDistributor, AngularLoginResourse>();
             CreateMap<DistributorInsertUpdate, Distributor>();
+            CreateMap<ProductType, ProductTypeResource>();
             //// RESOURCE TO DOMAIN
 
             CreateMap<LoginResource, Login>();
@@ -149,6 +150,7 @@ namespace Natural_API.Mapping
 
             CreateMap<AreaUpdateResources, Area>();
             CreateMap<Distributor, DistributorInsertUpdate>();
+            CreateMap< ProductTypeResource, ProductType>();
         }
     }
 }

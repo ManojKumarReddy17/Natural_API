@@ -22,8 +22,10 @@ namespace Natural_Core.Models
         public DateTime? ModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool? IsDeleted { get; set; }
+        public string ProductType { get; set; }
 
         public virtual Category CategoryNavigation { get; set; }
+        public virtual ProductType ProductTypeNavigation { get; set; }
         public virtual ICollection<Dsrdetail> Dsrdetails { get; set; }
     }
 }

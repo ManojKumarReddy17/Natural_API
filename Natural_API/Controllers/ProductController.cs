@@ -36,6 +36,17 @@ namespace Natural_API.Controllers
             return Ok(productresoursze);
 
         }
+        [HttpGet("GetAllPrtoductType")]  //get products with category name and presignred url//
+
+        public async Task<ActionResult<IEnumerable<ProductTypeResource>>> GetAllPrtoductType()
+        {
+
+            var productresoursze = await _ProductService.GetAllProductType();
+
+            return Ok(productresoursze);
+
+        }
+
 
 
         [HttpGet("Details/{ProductId}")]

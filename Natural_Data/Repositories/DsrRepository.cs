@@ -274,31 +274,30 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyId(string Id)
         {
-                var dsr = NaturalDbContext.Dsrs
-                   .Include(c => c.ExecutiveNavigation)
-                   .Include(c => c.DistributorNavigation)
-                   .Include(c => c.RetailorNavigation)
-                   .ThenInclude(a => a.AreaNavigation)
-                   .Where(d => (d.Executive == Id|| d.Distributor == Id) )
-                   .Select(c => new DSRretailorDetails
-                   {
-                       Id = c.Id,
-                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                       Phonenumber = c.RetailorNavigation.MobileNumber,
-                       RId = c.RetailorNavigation.Id,
-                       AId = c.RetailorNavigation.AreaNavigation.Id,
-                       Address = c.RetailorNavigation.Address,
-                       City = c.RetailorNavigation.CityNavigation.CityName,
-                       State = c.RetailorNavigation.StateNavigation.StateName,
-                       OrderBy = c.OrderBy,
-                       TotalAmount = c.TotalAmount,
-                       CreatedDate = c.RetailorNavigation.CreatedDate,
-                       ModifiedDate = c.RetailorNavigation.ModifiedDate,
-                       Area = c.RetailorNavigation.AreaNavigation.AreaName,
-                       Image = c.RetailorNavigation.Image
-                   }).ToList();
+            var dsr = NaturalDbContext.Dsrs
+               .Include(c => c.ExecutiveNavigation)
+               .Include(c => c.DistributorNavigation)
+               .Include(c => c.RetailorNavigation)
+               .ThenInclude(a => a.AreaNavigation)
+               .Where(d => (d.Executive == Id || d.Distributor == Id))
+            .Select(c => new DSRretailorDetails
+            {
+                Id = c.Id,
+                Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
+                Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                Phonenumber = c.RetailorNavigation.MobileNumber,
+                Address = c.RetailorNavigation.Address,
+                City = c.RetailorNavigation.CityNavigation.CityName,
+                State = c.RetailorNavigation.StateNavigation.StateName,
+                OrderBy = c.OrderBy,
+                TotalAmount = c.TotalAmount,
+                CreatedDate = c.CreatedDate,
+                ModifiedDate = c.ModifiedDate,
+                Area = c.RetailorNavigation.AreaNavigation.AreaName,
+                Image = c.RetailorNavigation.Image,
+                rId = c.Retailor
+            }).ToList();
                 return dsr;
 
         }

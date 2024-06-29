@@ -22,5 +22,6 @@ namespace Natural_Core.Models
         public DateTime ModifiedDate { get; set; }
         public string Image { get;set; }
         public string Id { get; set; }
+        public string rId { get; set; }
     }
 }

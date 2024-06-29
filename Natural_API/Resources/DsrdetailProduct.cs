@@ -11,6 +11,7 @@ namespace Natural_API.Resources
         public decimal Price { get; set; }
 
         public string Dsr { get; set; }
+        public string ProductId { get; set; }
     }
 }
 

@@ -19,6 +19,7 @@ namespace Natural_Core.IRepositories
         Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix);
 
         Task<bool> DeleteImageAsync(string bucketName, string key);
+        Task<List<ProductType>> GetProductType();
     }
 }
 

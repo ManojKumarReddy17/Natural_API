@@ -10,7 +10,8 @@ namespace Natural_API.Resources
         public decimal? Price { get; set; }
         public int? Quantity { get; set; }
         public decimal? Weight { get; set; }
-       
+        public string ProductType { get; set; }
+
 
         public IFormFile UploadImage { get; set; }
     }

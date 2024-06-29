@@ -16,7 +16,7 @@ namespace Natural_Core.Models
         public int? Quantity { get; set; }
         public decimal? Weight { get; set; }
         public bool IsDeleted { get; set; }
-
+        public string ProductType { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

@@ -22,6 +22,7 @@ namespace Natural_Core.IServices
         Task<ProductResponse> UpadateProduct(Product product);
         Task<ProductResponse> DeleteImage(string Id);
         Task<ProductResponse> DeleteProduct(string ProductId, bool? deleteEntireProduct);
+        Task<IEnumerable<ProductType>> GetAllProductType();
     }
 }
 

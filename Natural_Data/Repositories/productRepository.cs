@@ -40,6 +40,7 @@ namespace Natural_Data.Repositories
                 Price = p.Price,
                 Image = p.Image,
                 Weight = p.Weight,
+                ProductType = p.ProductType,
                 CreatedDate = p.CreatedDate,
                 ModifiedDate = p.ModifiedDate,
                 Category = p.CategoryNavigation?.CategoryName
@@ -47,6 +48,12 @@ namespace Natural_Data.Repositories
 
             return result;
         }
+        public async Task<List<ProductType>> GetProductType()
+        {
+
+            return await NaturalDbContext.ProductTypes.ToListAsync();
+           
+          }
 
         //Getbucket name
         public async Task<IEnumerable<string>> GetAllBucketAsync()
@@ -136,7 +143,8 @@ namespace Natural_Data.Repositories
                         CreatedDate = prod.CreatedDate,
                         ModifiedDate = prod.ModifiedDate,
                         Category = prod.CategoryNavigation?.CategoryName,
-                        CategoryId = prod.Category
+                        CategoryId = prod.Category,
+                        ProductType = prod.ProductType
 
                     };
 

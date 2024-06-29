@@ -16,7 +16,7 @@ namespace Natural_Core.IServices
 
         Task<ResultResponse> SoftDelete(string retailorId);
 
-        Task<IEnumerable<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix);
+        Task<Pagination<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix,int? page);
         Task<IEnumerable<RetailorDetailsByArea>> GetRetailordetailsByAreaId(string areaId);
 
     }

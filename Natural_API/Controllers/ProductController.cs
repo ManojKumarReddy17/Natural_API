@@ -28,13 +28,35 @@ namespace Natural_API.Controllers
 
         [HttpGet]  //get products with category name and presignred url//
 
-        public async Task<ActionResult<IEnumerable<GetProduct>>> GetAllPrtoductDetails(string? prefix, [FromQuery] SearchProduct? search)
+        //public async Task<ActionResult<Pagination<GetProduct>>> GetAllPrtoductDetails(string? prefix, [FromQuery] SearchProduct? search, int? page)
+        //{
+
+        //    var productresoursze = await _ProductService.GetAllPrtoductDetails(prefix, search, page);
+
+        //    return Ok(productresoursze);
+
+        //}
+        [HttpGet]
+        public async Task<ActionResult<Pagination<GetProduct>>> GetAllProductDetails(string? prefix, [FromQuery] SearchProduct? search, int? page)
         {
-           
-            var productresoursze = await _ProductService.GetAllPrtoductDetails(prefix, search);
+            try
+            {
+                var productResource = await _ProductService.GetAllProductDetails(prefix, search, page);
 
-            return Ok(productresoursze);
+                // Check if the service returned a valid result
+                if (productResource == null)
+                {
+                    return NotFound("No products found.");
+                }
 
+                return Ok(productResource);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (logging setup not shown)
+                // _logger.LogError(ex, "Error occurred while getting product details.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
         [HttpGet("GetAllPrtoductType")]  //get products with category name and presignred url//
 

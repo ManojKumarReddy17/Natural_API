@@ -29,6 +29,10 @@ namespace Natural_Services
         public async Task<Pagination<Area>> GetAreasAsync(string? CityId, int? page)
         {
             var result = await _unitOfWork.AreaRepo.GetAllAsync();
+            if (CityId != null)
+            {
+                result = result.Where(c => c.CityId == CityId).ToList();
+            }
             result = result.Where(c => c.IsDeleted == false).ToList();
             if (page > 0)
             {
@@ -49,10 +53,6 @@ namespace Natural_Services
             }
             else
             {
-                if (CityId != null)
-                {
-                    result = result.Where(c => c.CityId == CityId).ToList();
-                }
                 var paginatedItems = result;
                 return new Pagination<Area>
                 {

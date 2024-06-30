@@ -107,7 +107,7 @@ namespace Natural_Services
         public async Task<Pagination<GetProduct>> GetAllProductDetails(string prefix, SearchProduct? search, int? Page)
         {
             // Default page to 1 if not provided
-            Page ??= 1;
+          
 
             // Fetch all products
             var getAllProducts = await _unitOfWork.ProductRepository.GetProducttAsync();
@@ -136,20 +136,31 @@ namespace Natural_Services
                                     Image = sub?.PresignedUrl,
                                     ProductType = Produc.ProductType,
                                 };
-            if(search != null)
+            if(Page > 0)
             {
-                productList = await SearchProduct(productList, search);
+                if (search != null)
+                {
+                    productList = await SearchProduct(productList, search);
+                }
+
+                // Apply pagination
+                var paginatedItems = productList.Skip((Page.Value - 1) * pageSize).Take(pageSize).ToList();
+
+                return new Pagination<GetProduct>
+                {
+                    TotalPageCount = totalPageCount,
+                    TotalItems = totalItems,
+                    Items = paginatedItems,
+                };
             }
-
-            // Apply pagination
-            var paginatedItems = productList.Skip((Page.Value - 1) * pageSize).Take(pageSize).ToList();
-
-            return new Pagination<GetProduct>
+            else
             {
-                TotalPageCount = totalPageCount,
-                TotalItems = totalItems,
-                Items = paginatedItems,
-            };
+                return new Pagination<GetProduct>
+                {
+                    Items = productList.ToList(),
+                };
+            }
+            
         }
 
 
@@ -157,7 +168,7 @@ namespace Natural_Services
         public async Task<GetProduct> GetProductDetailsByIdAsync(string ProductId)
          {
         var productResult = await _unitOfWork.ProductRepository.GetProductByIdAsync(ProductId);
-
+    
         if (!string.IsNullOrEmpty(productResult.Image))
         {
             string bucketName = _s3Config.BucketName;

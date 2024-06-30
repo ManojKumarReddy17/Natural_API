@@ -69,7 +69,7 @@ builder.Services.AddTransient<IDistributorService, DistributorService>();
 
 builder.Services.AddTransient<IRetailorRepository, RetailorRepository>();
 builder.Services.AddTransient<IRetailorService, RetailorService>();
-builder.Services.Configure<Paginationsettings>(builder.Configuration.GetSection("Pagination"));
+builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection("Pagination"));
 
 
 builder.Services.AddTransient<IExecutiveRepository,ExecutiveRepository>();

@@ -20,10 +20,10 @@ namespace Natural_Services
         private readonly IMapper _Mapper;
         private readonly S3Config _s3Config;
         private readonly ICategoryService _categoryService;
-        private readonly Paginationsettings _paginationSettings;
+        private readonly PaginationSettings _paginationSettings;
       
 
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<S3Config> s3Config, ICategoryService categoryService, IOptions<Paginationsettings> paginationSettings)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<S3Config> s3Config, ICategoryService categoryService, IOptions<PaginationSettings> paginationSettings)
         {
             _unitOfWork = unitOfWork;
             _Mapper = mapper;
@@ -104,7 +104,7 @@ namespace Natural_Services
 
 
         //get products with category name and presignred url//
-        public async Task<IEnumerable<GetProduct>> GetAllPrtoductDetails(string prefix, SearchProduct? search)
+        public async Task<Pagination<GetProduct>> GetAllProductDetails(string prefix, SearchProduct? search, int? Page)
         {
             // Default page to 1 if not provided
             Page ??= 1;
@@ -114,7 +114,7 @@ namespace Natural_Services
 
             // Fetch presigned URLs
             string bucketName = _s3Config.BucketName;
-            var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
+            var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
 
             // Calculate total items and pages
             var totalItems = getAllProducts.Count();
@@ -146,7 +146,7 @@ namespace Natural_Services
 
             return new Pagination<GetProduct>
             {
-                TotalPagecount = totalPageCount,
+                TotalPageCount = totalPageCount,
                 TotalItems = totalItems,
                 Items = paginatedItems,
             };

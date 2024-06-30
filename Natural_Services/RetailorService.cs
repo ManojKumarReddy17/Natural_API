@@ -25,10 +25,10 @@ namespace Natural_Services
         private readonly S3Config _s3Config;
         private readonly IDistributorService _DistributorService;
         private readonly IMapper _Mapper;
-        private readonly Paginationsettings _paginationSettings;
+        private readonly PaginationSettings _paginationSettings;
 
 
-        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper, IOptions<Paginationsettings> paginationSettings)
+        public RetailorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IDistributorService distributorService, IMapper mapper, IOptions<PaginationSettings> paginationSettings)
         {
             _unitOfWork = unitOfWork;
             _s3Config = s3Config.Value;
@@ -78,7 +78,7 @@ namespace Natural_Services
                 var PaginatedItems = leftJoinQuery.Skip((int)((page - 1) * PageSize)).Take(PageSize).ToList();
                 return new Pagination<GetRetailor>
                 {
-                    TotalPagecount = totalpagecount,
+                    TotalPageCount = totalpagecount,
                     TotalItems = totalItems,
                     Items = PaginatedItems,
 
@@ -93,57 +93,6 @@ namespace Natural_Services
                 };
             }
         }
-        //public async Task<Pagination<GetRetailor>> GetAllRetailorDetailsAsync(SearchModel? search, bool? NonAssign, string? prefix, int? page)
-        //{
-        //    // Provide default values if nullable parameters are null
-        //    search ??= new SearchModel();
-        //    NonAssign ??= false;
-        //    page ??= 1;
-
-        //    // Fetch all retailors based on the search criteria
-        //    var retailors = await _unitOfWork.RetailorRepo.GetAllRetailorsAsync(search, NonAssign);
-
-        //    // Get presigned URLs for images
-        //    string bucketName = _s3Config.BucketName;
-        //    var presignedUrls = await _DistributorService.GetAllFilesAsync(bucketName, prefix);
-
-        //    var totalItems = retailors.Count();
-        //    var pageSize = _paginationSettings.PageSize;
-        //    var totalPageCount = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-        //    // Join retailors with presigned URLs and materialize to a list
-        //    var leftJoinQuery = (from retailor in retailors
-        //                         join presigned in presignedUrls
-        //                         on retailor.Image equals presigned.Image into newUrl
-        //                         from sub in newUrl.DefaultIfEmpty()
-        //                         select new GetRetailor
-        //                         {
-        //                             Id = retailor.Id,
-        //                             FullName = retailor.FirstName,
-        //                             MobileNumber = retailor.MobileNumber,
-        //                             Address = retailor.Address,
-        //                             Area = retailor.Area,
-        //                             Email = retailor.Email,
-        //                             City = retailor.City,
-        //                             State = retailor.State,
-        //                             Image = sub?.PresignedUrl,
-        //                             Latitude = retailor.Latitude,
-        //                             Longitude = retailor.Longitude
-        //                         }).ToList();
-
-        //    // Apply pagination if the page is greater than 0
-        //    var paginatedItems = page > 0
-        //                         ? leftJoinQuery.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToList()
-        //                         : leftJoinQuery;
-
-        //    // Return paginated result
-        //    return new Pagination<GetRetailor>
-        //    {
-        //        TotalPagecount = totalPageCount,
-        //        TotalItems = totalItems,
-        //        Items = paginatedItems
-        //    };
-        //}
 
         public async Task<GetRetailor> GetRetailorDetailsById(string retailorId)
         {
@@ -163,23 +112,7 @@ namespace Natural_Services
                 return retailorDetails;
             }
         }
-        //public async Task<ExecutiveGetResource> GetExecutiveDetailsById(string DetailsId)
-        //{
 
-        //    var executiveDetailById = await _unitOfWork.ExecutiveRepo.GetWithExectiveByIdAsync(DetailsId);
-        //    string bucketName = _s3Config.BucketName;
-        //    string? prefix = executiveDetailById.Image;
-        //    var PresignedUrl = await GetAllFilesAsync(bucketName, prefix);
-
-
-        //    if (prefix != null)
-        //    {
-        //        var exe = PresignedUrl.FirstOrDefault();
-        //        executiveDetailById.Image = exe.PresignedUrl;
-
-        //    }
-        //    return executiveDetailById;
-        //}
         public async Task<Retailor> GetRetailorsById(string retailorId)
         {
             var result = await _unitOfWork.RetailorRepo.GetByIdAsync(retailorId);

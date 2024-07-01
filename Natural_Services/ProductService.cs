@@ -136,12 +136,13 @@ namespace Natural_Services
                                     Image = sub?.PresignedUrl,
                                     ProductType = Produc.ProductType,
                                 };
-            if(Page > 0)
+            if (search != null)
             {
-                if (search != null)
-                {
-                    productList = await SearchProduct(productList, search);
-                }
+                productList = await SearchProduct(productList, search);
+            }
+            if (Page > 0)
+            {
+                
 
                 // Apply pagination
                 var paginatedItems = productList.Skip((Page.Value - 1) * pageSize).Take(pageSize).ToList();

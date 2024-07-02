@@ -22,7 +22,7 @@ namespace Natural_Core.IServices
         Task<IEnumerable<GetProduct>> GetDetTableByDsrIdAsync(string dsrId);
         Task<ProductResponse> UpdateDsrWithAssociationsAsync(Dsr dsr, List<Dsrdetail> dsrdetails);
         Task<IEnumerable<Dsr>> getRetailorListByDistributorId(string distributorId);
-        Task<IEnumerable<Dsr>> GetRetailorListByDate(string distributorId, DateTime date);
+        Task<IEnumerable<Dsr>> GetRetailorListByDate(string Id, DateTime date);
         Task<IEnumerable<Dsr>> getRetailorListByExecutiveId(string executiveId);
         Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsync(string Id);
         Task<IEnumerable<DSRretailorDetails>> GetDetailsByIdAsyncdis(string DistributorId);

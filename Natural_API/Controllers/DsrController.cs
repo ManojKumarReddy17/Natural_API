@@ -159,31 +159,76 @@ namespace Natural_API.Controllers
         [HttpGet("RetailorDetails/{id}/{date}")]
         public async Task<ActionResult<IEnumerable<DSRRetailorsListResource>>> GetDsrBydate(string id, DateTime date)
         {
-            var retailorsList = await _dsrservice.GetRetailorListByDate(id, date); // Ensure this method filters by DSR created date
-            var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(id);
-            var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
-            foreach (var retailor in retailorDetails)
+            if (id.StartsWith("NEXE"))
             {
-                string fullname = string.Concat(retailor.FirstName + retailor.LastName);
-                foreach (var retdetail in retailors)
+                var retailorsList = await _dsrservice.GetRetailorListByDate(id, date);
+                var distributordetails = await _distributorToExecutiveService.AssignedDistributorDetailsByExecutiveId(id);
+
+                var allRetailorDetails = new List<Retailor>();
+
+                foreach (var distributor in distributordetails)
                 {
-                    if (retdetail.Retailor == fullname)
+                    var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(distributor.Id);
+                    allRetailorDetails.AddRange(retailorDetails);
+                }
+
+                var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
+
+                foreach (var retailor in allRetailorDetails)
+                {
+                    string fullname = string.Concat(retailor.FirstName, retailor.LastName);
+                    foreach (var retdetail in retailors)
                     {
-                        retdetail.Address = retailor.Address;
-                        retdetail.Phonenumber = retailor.MobileNumber;
-                        retdetail.Image = retailor.Image;
-                        retdetail.Area = retailor.Area;
+                        if (retdetail.Retailor == fullname)
+                        {
+                            retdetail.Address = retailor.Address;
+                            retdetail.Phonenumber = retailor.MobileNumber;
+                            retdetail.Image = retailor.Image;
+                            retdetail.Area = retailor.Area;
+                        }
                     }
                 }
+
+                return Ok(retailors);
             }
-            return Ok(retailors);
+
+        
+            else if (id.StartsWith("NDIS"))
+            {
+                var retailorsList = await _dsrservice.GetRetailorListByDate(id, date);
+                var retailorDetails = await _retailortodistributorservice.GetRetailorsDetailsByDistributorId(id);
+
+                var retailors = _mapper.Map<IEnumerable<Dsr>, IEnumerable<DSRRetailorsListResource>>(retailorsList);
+
+                foreach (var retailor in retailorDetails)
+                {
+                    string fullname = string.Concat(retailor.FirstName + retailor.LastName);
+                    foreach (var retdetail in retailors)
+                    {
+                        if (retdetail.Retailor == fullname)
+                        {
+                            retdetail.Address = retailor.Address;
+                            retdetail.Phonenumber = retailor.MobileNumber;
+                            retdetail.Image = retailor.Image;
+                            retdetail.Area = retailor.Area;
+                        }
+                    }
+                }
+
+
+                return Ok(retailors);
+            }
+            else
+            {
+                return BadRequest("Invalid ID prefix.");
+            }
         }
 
 
 
 
 
-       
+
 
 
 

@@ -192,14 +192,14 @@ namespace Natural_Data.Repositories
 
 
 
-        public async Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string distributorId, DateTime date)
+        public async Task<IEnumerable<Dsr>> GetRetailorDetailsByDate(string Id, DateTime date)
         {
             var retailorList = await NaturalDbContext.Dsrs
                 .Include(c => c.ExecutiveNavigation)
                 .Include(c => c.DistributorNavigation)
                 .Include(c => c.RetailorNavigation)
                 .Include(c => c.OrderByNavigation)
-                .Where(c => c.Distributor == distributorId )
+                .Where(c => c.Distributor == Id || c.Executive == Id)
                 .Select(c => new Dsr
                 {
                     Id = c.Id,

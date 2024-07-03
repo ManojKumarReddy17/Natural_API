@@ -65,6 +65,7 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IDistributorRepository, DistributorRepository>();
 builder.Services.AddTransient<IDistributorService, DistributorService>();
+builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection("pagination"));  
 
 
 builder.Services.AddTransient<IRetailorRepository, RetailorRepository>();
@@ -75,6 +76,7 @@ builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection(
 builder.Services.AddTransient<IExecutiveRepository,ExecutiveRepository>();
 builder.Services.AddTransient<IExecutiveService,ExecutiveService>();
 builder.Services.AddTransient<IExecutiveAreaRepository, ExecutiveAreaRepository>();
+
 
 builder.Services.AddTransient<ICityRepository, CityRepository>();
 builder.Services.AddTransient<ICityService, CityService>();

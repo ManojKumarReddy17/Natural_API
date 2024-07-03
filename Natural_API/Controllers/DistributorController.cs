@@ -30,10 +30,10 @@ namespace Natural_API.Controllers
         /// </summary>
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DistributorGetResource>>> GetAllDistributorDetails(string? prefix, [FromQuery] SearchModel? search, bool? nonAssign)
+        public async Task<ActionResult<Pagination<DistributorGetResource>>> GetAllDistributorDetails(string? prefix, [FromQuery] SearchModel? search, bool? nonAssign,int? page)
         {
-            var getAllDistributors = await _DistributorService.GetAllDistributorDetailsAsync(prefix, search, nonAssign);
-            var distributors = _mapper.Map<IEnumerable<Distributor>, IEnumerable<DistributorGetResource>>(getAllDistributors);
+            var getAllDistributors = await _DistributorService.GetAllDistributorDetailsAsync(prefix, search, nonAssign,page);
+            var distributors = _mapper.Map<Pagination<Distributor>, Pagination<DistributorGetResource>>(getAllDistributors);
             return Ok(distributors);
         }
 

@@ -17,6 +17,8 @@ namespace Natural_API.Mapping
 
              CreateMap<Login, LoginResource>();
              CreateMap<Distributor, DistributorGetResource>();
+             CreateMap(typeof(Pagination<>), typeof(Pagination<>))
+                .ForMember("Items", opt => opt.MapFrom("Items"));
              CreateMap<Executive, AngularLoginResourse>();
              CreateMap<Distributor, AngularLoginResourse>();
              CreateMap<Distributor, DistributorGetResource>();

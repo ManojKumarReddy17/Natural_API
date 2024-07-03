@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -17,6 +18,8 @@ namespace Natural_Core.Models
         }
 
         public string Id { get; set; }
+
+        [Required(ErrorMessage = "Name is required")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

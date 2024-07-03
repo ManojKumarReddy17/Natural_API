@@ -12,6 +12,8 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Natural_Core.S3_Models;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
 
 
 #nullable disable
@@ -23,12 +25,14 @@ namespace Natural_Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly S3Config _s3Config;
         private readonly IMapper _Mapper;
-
-        public DistributorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IMapper mapper)
+        private readonly PaginationSettings _paginationSettings;
+         
+        public DistributorService(IUnitOfWork unitOfWork, IOptions<S3Config> s3Config, IMapper mapper,IOptions<PaginationSettings> paginationsetting)
         {
             _unitOfWork = unitOfWork;
             _s3Config = s3Config.Value;
             _Mapper = mapper;
+            _paginationSettings = paginationsetting.Value;
         }
 
         //get bucket names//
@@ -56,41 +60,71 @@ namespace Natural_Services
 
         }
 
-        public async Task<IEnumerable<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? nonAssign)
+        public async Task<Pagination<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? nonAssign, int? page)
         {
+            // Fetch all distributors based on the search criteria and nonAssign flag
+            var distributors = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync(search, nonAssign);
 
-            var executives = await _unitOfWork.DistributorRepo.GetAllDistributorstAsync(search, nonAssign);
-
+            // Fetch all presigned URLs from S3 bucket based on the prefix
             string bucketName = _s3Config.BucketName;
             var presignedUrls = await GetAllFilesAsync(bucketName, prefix);
 
-            var leftJoinQuery = from executive in executives
+           
+
+            // Join distributors with presigned URLs based on Image property
+            var leftJoinQuery = from distributor in distributors
                                 join presigned in presignedUrls
-                                on executive.Image equals presigned.Image into newUrl
+                                on distributor.Image equals presigned.Image into newUrl
                                 from sub in newUrl.DefaultIfEmpty()
                                 select new Distributor
                                 {
-                                    Id = executive.Id,
-                                    FirstName = executive.FirstName,
-                                    LastName = executive.LastName,
-                                    MobileNumber = executive.MobileNumber,
-                                    Address = executive.Address,
-                                    Area = executive.Area,
-                                    Email = executive.Email,
-                                    UserName = executive.UserName,
-                                    Password = executive.Password,
-                                    City = executive.City,
-                                    State = executive.State,
+                                    Id = distributor.Id,
+                                    FirstName = distributor.FirstName,
+                                    LastName = distributor.LastName,
+                                    MobileNumber = distributor.MobileNumber,
+                                    Address = distributor.Address,
+                                    Area = distributor.Area,
+                                    Email = distributor.Email,
+                                    UserName = distributor.UserName,
+                                    Password = distributor.Password,
+                                    City = distributor.City,
+                                    State = distributor.State,
                                     Image = sub?.PresignedUrl,
-                                    Latitude = executive.Latitude,
-                                    Longitude = executive.Longitude
+                                    Latitude = distributor.Latitude,
+                                    Longitude = distributor.Longitude
+                                    
                                 };
 
-            return leftJoinQuery;
+            // Apply pagination
+            if (page > 0)
+            {
+                // Define page size from the pagination settings
+                var pageSize = _paginationSettings.PageSize;
+                var totalItems = distributors.Count();
+                var totalPageCount = (int)Math.Ceiling(totalItems / (double)pageSize);
+                var paginatedItems = leftJoinQuery.Skip((int)((page - 1) * pageSize)).Take(pageSize).ToList();
+
+                // Return paginated result
+                return new Pagination<Distributor>
+                {
+                    TotalPageCount = totalPageCount,
+                    TotalItems = totalItems,
+                    Items = paginatedItems
+                };
+            }
+            else
+            {
+                var paginatedItems = leftJoinQuery;
+                return new Pagination<Distributor>
+                {
+                    Items = paginatedItems.ToList(),
+                };
+            }
         }
 
 
 
+          
 
 
         public async Task<Distributor> GetDistributorById(string distributorId)
@@ -314,4 +348,4 @@ namespace Natural_Services
             return response;
         }
     }
-}
+}    

@@ -14,6 +14,8 @@ namespace Natural_Core.IRepositories
     public interface IDistributorRepository : IRepository<Distributor>
     {
         Task<List<Distributor>> GetAllDistributorstAsync(SearchModel? search, bool? nonAssign);
+        
+
         Task<GetDistributor> GetDistributorDetailsByIdAsync(string id);
         Task<IEnumerable<string>> GetAllBucketAsync();
         Task<UploadResult> UploadFileAsync(IFormFile file, string bucketName, string? prefix);

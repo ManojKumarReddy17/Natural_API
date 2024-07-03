@@ -14,7 +14,7 @@ namespace Natural_Core.IServices
 {
     public interface IDistributorService
     {
-        Task<IEnumerable<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? NonAssign);
+        Task<Pagination<Distributor>> GetAllDistributorDetailsAsync(string? prefix, SearchModel? search, bool? NonAssign,int? page);
         Task<Distributor> GetDistributorById(string distributorId);
         Task<GetDistributor> GetDistributorPresignedUrlbyId(string distributorId);
         Task<GetDistributor> GetDistributorDetailsById(string distributorId);

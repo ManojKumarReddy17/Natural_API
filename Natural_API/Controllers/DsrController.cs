@@ -143,10 +143,10 @@ namespace Natural_API.Controllers
                 var assignedRetailer = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(distributorId);
                 if (assignedRetailer != null)
                 {
-                    mappedRetailers = (List<DsrRetailorResource>)_mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
-
-
+                    var mappedResource = (List<DsrRetailorResource>)_mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
+                    mappedRetailers.AddRange(mappedResource);
                 }
+                
             }
 
 

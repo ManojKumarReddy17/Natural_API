@@ -14,6 +14,7 @@ namespace Natural_Core.Models
 
         public string Id { get; set; }
         public string ProductTypeName { get; set; }
+        public string ProductTypeCode { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

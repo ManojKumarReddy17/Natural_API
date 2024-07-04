@@ -42,7 +42,7 @@ namespace Natural_Data.Models
         private IExecutiveAreaRepository _ExecutiveAreaRepository;
         private INotificationExecutiveRepository _NotificationExecutiveRepository;
 
-
+        private IDistributorLoginReportsRepository _distributorLoginReportsRepository;
         public UnitOfWork(NaturalsContext context, IAmazonS3 S3Client)
         {
             _context = context;
@@ -84,7 +84,7 @@ namespace Natural_Data.Models
         public INotificationExecutiveRepository NotificationExecutiveRepository => _NotificationExecutiveRepository = _NotificationExecutiveRepository ?? new NotificationExecutiveRepository(_context);
         public IExecutiveGpsRepository executiveGpsRepo => _executiveGpsRepository = _executiveGpsRepository ?? new ExecutiveGpsRepository(_context);
         public IExecutiveAreaRepository ExecutiveAreaRepository => _ExecutiveAreaRepository = _ExecutiveAreaRepository ?? new ExecutiveAreaRepository(_context);
-
+        public IDistributorLoginReportsRepository DistributorLoginReportsRepo => _distributorLoginReportsRepository ?? new DistributorLoginReportsRepository(_context);
 
         public async Task<int> CommitAsync()
         {

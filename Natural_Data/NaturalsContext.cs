@@ -47,6 +47,7 @@ namespace Natural_Core.Models
 
         // **this is StoreProcedure Model we have to include Mannually **
         public virtual DbSet<DistributorSalesReport> DistributorSalesReports { get; set; }
+        public virtual DbSet<DistributorReport> DistributorReports { get;set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -769,11 +770,20 @@ namespace Natural_Core.Models
                     .HasMaxLength(50)
                     .HasColumnName("State_Name");
             });
-
+            //include Manually sp model
             modelBuilder.Entity<DistributorSalesReport>(entity =>
             {
                 entity.HasNoKey();
             });
+            modelBuilder.Entity<DistributorReport>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            //modelBuilder.Entity<DistributorReport>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }

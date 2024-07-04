@@ -648,12 +648,17 @@ namespace Natural_Core.Models
                 entity.ToTable("ProductType");
 
                 entity.Property(e => e.Id).HasMaxLength(20);
+                entity.Property(e => e.ProductTypeCode)
+                   .HasMaxLength(1)
+                   .IsFixedLength(true);
+
 
                 entity.Property(e => e.ProductTypeName).HasMaxLength(30);
             });
             modelBuilder.Entity<Retailor>(entity =>
             {
                 entity.ToTable("Retailor");
+
 
                 entity.HasIndex(e => e.Area, "Area");
 

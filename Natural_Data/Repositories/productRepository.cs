@@ -29,6 +29,7 @@ namespace Natural_Data.Repositories
 
             var Products = await NaturalDbContext.Products
            .Include(p => p.CategoryNavigation)
+           .Include(p=>p.ProductTypeNavigation)
            .Where(c => c.IsDeleted != true)
            .ToListAsync();
          
@@ -40,7 +41,7 @@ namespace Natural_Data.Repositories
                 Price = p.Price,
                 Image = p.Image,
                 Weight = p.Weight,
-                ProductType = p.ProductType,
+                ProductType = p.ProductTypeNavigation?.ProductTypeName,
                 CreatedDate = p.CreatedDate,
                 ModifiedDate = p.ModifiedDate,
                 Category = p.CategoryNavigation?.CategoryName

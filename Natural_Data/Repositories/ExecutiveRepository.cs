@@ -272,7 +272,19 @@ namespace Natural_Data.Repositories
             }
         }
 
-
+        //get Executives by areaId
+        public async Task<IEnumerable<GetExecutivesByArea>> GetExecutiveDetailsByAreaId(string areaId)
+        {
+            var retailorDetail = await NaturalDbContext.ExecutiveAreas
+                .Include(d => d.ExecutiveNavigation)
+                   .Where(d => d.Area == areaId)
+                   .Select(c => new GetExecutivesByArea
+                   {
+                       Id = c.ExecutiveNavigation.Id,
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
+                   }).ToListAsync();
+            return retailorDetail;
+        }
         // get table data as it is
         public async Task<Executive> GetExectiveTableByIdAsync(string id)
         {

@@ -162,7 +162,12 @@ namespace Natural_API.Controllers
 
         }
 
-
+        [HttpGet("areaId/{areaid}")]
+        public async Task<ActionResult<IEnumerable<GetExecutivesByArea>>> GetExecutiveDetailsByAreaId(string areaid)
+        {
+            var arearetailor = await _executiveService.GetExecutiveAredId(areaid);
+            return Ok(arearetailor);
+        }
 
     }
 }

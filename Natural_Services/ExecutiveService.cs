@@ -299,8 +299,12 @@ namespace Natural_Services
 
         }
 
+        public async Task<IEnumerable<GetExecutivesByArea>> GetExecutiveAredId(string areaId)
+        {
+            var executiveArea = await _unitOfWork.ExecutiveRepo.GetExecutiveDetailsByAreaId(areaId);
+            return executiveArea;
+        }
 
-       
 
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {

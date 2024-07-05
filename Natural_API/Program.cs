@@ -114,6 +114,8 @@ builder.Services.AddTransient<IDsrdetailService, DsrdetailService>();
 builder.Services.AddTransient<IDistributorSalesRepository, DistributorSalesRepository>();
 builder.Services.AddTransient<IDistributorSalesService, DistributorSalesService>();
 
+builder.Services.AddTransient<IDistributorLoginReportsRepository, DistributorLoginReportsRepository>();
+builder.Services.AddTransient<IDistributorLoginReportsService,DistributorLoginReportsService>();
 
 
 builder.Services.AddTransient<INotificationRepository, NotificationRepository>();

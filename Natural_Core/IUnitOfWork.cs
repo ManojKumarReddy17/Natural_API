@@ -32,7 +32,7 @@ namespace Natural_Core
         INotificationRepository NotificationRepository { get; }
         INotificationDistributorRepository NotificationDistributorRepository { get; }
         INotificationExecutiveRepository NotificationExecutiveRepository { get; }
-
+        IDistributorLoginReportsRepository DistributorLoginReportsRepo { get; }
         Task<int> CommitAsync();
 
         IDbContextTransaction BeginTransaction(); // added for transaction

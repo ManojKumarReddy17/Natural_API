@@ -216,12 +216,12 @@ namespace Natural_Services
 
                     var created = await _unitOfWork.CommitAsync();
 
-                    //var deletingDistributors = mappedDistributors.Except(distributors, new notificationComparer()).ToList();
-                    //_unitOfWork.NotificationDistributorRepository.RemoveRange(deletingDistributors);
+                    var deletingDistributors = mappedDistributors.Except(distributors, new notificationComparer()).ToList();
+                    _unitOfWork.NotificationDistributorRepository.RemoveRange(deletingDistributors);
 
-                    //var deletingExecutives = mappedExecutives.Except(executives, new notificationComparer()).ToList();
-                    //_unitOfWork.NotificationExecutiveRepository.RemoveRange(deletingExecutives);
-                    //var deted = await _unitOfWork.CommitAsync();
+                    var deletingExecutives = mappedExecutives.Except(executives, new notificationComparer()).ToList();
+                    _unitOfWork.NotificationExecutiveRepository.RemoveRange(deletingExecutives);
+                    var deted = await _unitOfWork.CommitAsync();
 
                     transaction.Commit();
 

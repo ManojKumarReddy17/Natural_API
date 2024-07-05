@@ -59,7 +59,7 @@ namespace Natural_API.Controllers
         {
             var notification = await _NotificationService.GetNotificationByIdAsync(Id);
             var distributorlist = await _NotificationService.GetDistableByNotificationIdAsync(Id);
-            var executivelist = await _NotificationService.GetExecutivesByNotificationIdAsync(Id);
+            var executivelist = await _NotificationService.GetExetableByNotificationIdAsync(Id);
             var exedata = _mapper.Map<List<NotificationExecutive>, List<NotificationExecutiveResource>>((List<NotificationExecutive>)executivelist);
 
             var drsdetaildata = _mapper.Map<List<NotificationDistributor>, List<NotificationDistributorResource>>((List<NotificationDistributor>)distributorlist);

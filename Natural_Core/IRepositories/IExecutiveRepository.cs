@@ -20,6 +20,8 @@ namespace Natural_Core.IRepositories
         Task<Executive> GetExectiveTableByIdAsync(string id);
         Task<List<InsertUpdateModel>> GetxecutiveAsync(SearchModel? search);
 
+        Task<IEnumerable<GetExecutivesByArea>> GetExecutiveDetailsByAreaId(string areaId);
+
 
 
     }

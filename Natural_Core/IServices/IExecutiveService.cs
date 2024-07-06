@@ -34,7 +34,9 @@ namespace Natural_Core.IServices
 
         Task<AngularLoginResponse> LoginAsync(Executive credentials);
 
-        Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);  
+        Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);
+        Task<IEnumerable<GetExecutivesByArea>> GetExecutiveAredId(string areaId);
+
 
     }
 }

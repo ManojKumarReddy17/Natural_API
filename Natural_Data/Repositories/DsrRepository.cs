@@ -283,6 +283,7 @@ namespace Natural_Data.Repositories
             .Select(c => new DSRretailorDetails
             {
                 Id = c.Id,
+                RetailorId = string.Concat(c.Retailor),
                 Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
                 Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
                 Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),

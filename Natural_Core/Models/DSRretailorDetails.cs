@@ -9,6 +9,7 @@ namespace Natural_Core.Models
         public string Executive { get; set; }
         public string Distributor { get; set; }
         public string Retailor { get; set; }
+        public string RetailorId { get; set; }
         //public string RId {  get; set; }
         public string AId {  get; set; }
         public string Phonenumber { get; set; }

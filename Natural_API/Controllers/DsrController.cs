@@ -229,7 +229,14 @@ namespace Natural_API.Controllers
 
 
 
+        [HttpGet("RetailorDetails")]
+        public async Task<ActionResult<IEnumerable<DSRretailorDetails>>> GetRetailorDetailsbyDestributor(string Id)
+        {
 
+            var dsrrestils = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(Id);
+            return Ok(dsrrestils);
+
+        }
 
 
         [HttpGet("RetailorDetailsbyExeOrDisId")]

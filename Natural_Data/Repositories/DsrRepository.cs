@@ -124,8 +124,9 @@ namespace Natural_Data.Repositories
             var result = assignedList.Select(c => new DsrRetailor
             {
                 Id = c.Retailor.Id,
-                FirstName = c.Retailor.FirstName,
-                LastName = c.Retailor.LastName,
+                //FirstName = c.Retailor.FirstName,
+                //LastName = c.Retailor.LastName,
+                RetailorName = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName),
                 Area = c.Area,
                 Distributor = c.Distributor.Id,
             }).ToList();

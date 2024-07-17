@@ -285,6 +285,7 @@ namespace Natural_Services
                     response.LastName = authenticatedUser.LastName;
                     response.Email = authenticatedUser.Email;
                     response.Address = authenticatedUser.MobileNumber;
+                    response.Area = authenticatedUser.Area;
                     response.Executives = user1.Executives;
                     response.UserName = credentials.UserName;
                     response.ExeId = user1.ExeId;

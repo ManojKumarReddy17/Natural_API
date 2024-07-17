@@ -222,7 +222,7 @@ namespace Natural_Data.Repositories
         Email = distributor.Distributor.Email,
         PresignedUrl = distributor.Distributor.Image,
         UserName = distributor.Distributor.UserName,
-
+        Area = distributor.Distributor.Area,
         ExeId = distributor.Executive.Id,
         Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"
     }).FirstOrDefaultAsync();

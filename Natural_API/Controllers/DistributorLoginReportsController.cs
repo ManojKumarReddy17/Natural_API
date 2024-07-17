@@ -29,6 +29,15 @@ namespace Natural_API.Controllers
             }
             return Ok(salesReport);
         }
-       
+        [HttpPost("search")]
+        public async Task<ActionResult<DistributorReport>> DistributorLoginReportsSearch([FromBody] DistributorLoginReports search)
+        {
+            var salesReport = await _distributorLoginReportsService.getbyId(search);
+            if (salesReport == null)
+            {
+                return NotFound();
+            }
+            return Ok(salesReport);
+        }
     }
 }

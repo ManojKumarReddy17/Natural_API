@@ -20,9 +20,20 @@ namespace Natural_Data.Repositories
 
         public async Task<IEnumerable<DistributorReport>> GetById(DistributorLoginReports DSReport)
         {
+            //var saleReport = await NaturalsDbContext.DistributorReports
+            //    .FromSqlInterpolated($"CALL Naturals.DistributorLogin({DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate.Date}, {DSReport.EndDate.Date})")
+            //    .ToListAsync();
+
+            //return saleReport;
             var saleReport = await NaturalsDbContext.DistributorReports
-                .FromSqlInterpolated($"CALL Naturals.DistributorLogin({DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate.Date}, {DSReport.EndDate.Date})")
-                .ToListAsync();
+       .FromSqlInterpolated($@"
+            CALL Naturals.DistributorLogin(
+                {DSReport.Distributor}, 
+                {DSReport.Retailor ?? ""}, 
+                {DSReport.StartDate}, 
+                {DSReport.EndDate}
+            )")
+       .ToListAsync();
 
             return saleReport;
         }

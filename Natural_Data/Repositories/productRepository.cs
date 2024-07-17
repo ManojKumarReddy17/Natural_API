@@ -128,6 +128,7 @@ namespace Natural_Data.Repositories
             {
                 var prod = await NaturalDbContext.Products
                            .Include(p => p.CategoryNavigation)
+                           .Include(p => p.ProductTypeNavigation)
                            .Where(c => c.IsDeleted != true)
                             .FirstOrDefaultAsync(p => p.Id == ProductId);
 
@@ -145,7 +146,7 @@ namespace Natural_Data.Repositories
                         ModifiedDate = prod.ModifiedDate,
                         Category = prod.CategoryNavigation?.CategoryName,
                         CategoryId = prod.Category,
-                        ProductType = prod.ProductType
+                        ProductType = prod.ProductTypeNavigation.ProductTypeName
 
                     };
 

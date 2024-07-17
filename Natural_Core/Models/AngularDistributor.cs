@@ -22,7 +22,7 @@ namespace Natural_Core.Models
 
         public string UserName { get;set; }
 
-
+        public string Area { get; set; }
 
 
         public int Statuscode { get; set; }

@@ -8,7 +8,7 @@ namespace Natural_API.Resources
         public string Retailor { get; set; }
         public string? OrderBy { get; set; }
         public decimal TotalAmount { get; set; }
-
+        public DateTime CreatedDate { get; set; }
         public List<DsrProductResource> dsrdetail { get; set; }
     }
 }

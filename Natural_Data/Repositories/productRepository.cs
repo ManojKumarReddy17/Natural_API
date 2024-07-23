@@ -146,7 +146,7 @@ namespace Natural_Data.Repositories
                         ModifiedDate = prod.ModifiedDate,
                         Category = prod.CategoryNavigation?.CategoryName,
                         CategoryId = prod.Category,
-                        ProductType = prod.ProductTypeNavigation.ProductTypeName
+                        ProductType = prod.ProductTypeNavigation?.ProductTypeName
 
                     };
 

@@ -25,13 +25,14 @@ namespace Natural_Data.Repositories
         public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, bool? NonAssign)
         {
             var retailors = await NaturalDbContext.Retailors
-            .Include(c => c.AreaNavigation)
-             .ThenInclude(a => a.City)
+            //.Include(c => c.AreaNavigation)
+             .Include(a => a.CityNavigation)
             .ThenInclude(ct => ct.State)
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
+            
 
-            if (search.Area != null || search.City != null || search.State != null || search.FullName != null ||
+            if ( search.City != null || search.State != null || search.FullName != null ||
                 search.FirstName != null || search.LastName != null)
             {
                 retailors = await SearchRetailors(retailors, search);
@@ -41,7 +42,7 @@ namespace Natural_Data.Repositories
                     retailors = await SearchNonAssignedRetailors(retailors);
                 }
             }
-            if (NonAssign == true && (search.Area == null || search.City == null || search.State == null || search.FullName == null ||
+            if (NonAssign == true && (search.City == null || search.State == null || search.FullName == null ||
                 search.FirstName == null || search.LastName == null))
             {
                 retailors = await SearchNonAssignedRetailors(retailors);
@@ -57,9 +58,11 @@ namespace Natural_Data.Repositories
                     MobileNumber = c.MobileNumber,
                     Address = c.Address,
                     Email = c.Email,
-                    Area = c.AreaNavigation.AreaName,
-                    City = c.AreaNavigation.City.CityName,
-                    State = c.AreaNavigation.City.State.StateName,
+                    //Area = c.AreaNavigation.AreaName,
+                    //City = c.AreaNavigation.City.CityName,
+                    //State = c.AreaNavigation.City.State.StateName,
+                    City =c.CityNavigation?.CityName,
+                    State= c.StateNavigation?.StateName,
                     Latitude = c.Latitude,
                     Longitude = c.Longitude,
                     Image = c.Image
@@ -73,7 +76,7 @@ namespace Natural_Data.Repositories
 
 
 
-                   .Where(d => d.Area == areaId && d.IsDeleted != true)
+                   .Where(d => d.Id == areaId && d.IsDeleted != true)
 
                    .Select(c => new RetailorDetailsByArea
                    {
@@ -105,7 +108,8 @@ namespace Natural_Data.Repositories
        (c.IsDeleted != true) &&
 (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
 (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && (string.IsNullOrEmpty(search.FullName) ||
+//(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && 
+(string.IsNullOrEmpty(search.FullName) ||
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
         (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
@@ -117,14 +121,14 @@ namespace Natural_Data.Repositories
         public async Task<GetRetailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors
-                                         join area in NaturalDbContext.Areas on retailor.Area equals area.Id
-                                         join city in NaturalDbContext.Cities on area.CityId equals city.Id
+                                         //join area in NaturalDbContext.Areas on retailor.Area equals area.Id
+                                         join city in NaturalDbContext.Cities on retailor.City equals city.Id
                                          join state in NaturalDbContext.States on city.StateId equals state.Id
                                          where retailor.Id == id
                                          select new
                                          {
                                              Retailor = retailor,
-                                             Area = area,
+                                             //Area = area,
                                              City = city,
                                              State = state
                                          }).FirstOrDefaultAsync();
@@ -139,8 +143,8 @@ namespace Natural_Data.Repositories
                     MobileNumber = retailorDetails.Retailor.MobileNumber,
                     Address = retailorDetails.Retailor.Address,
                     Email = retailorDetails.Retailor.Email,
-                    Area = retailorDetails.Area.AreaName,
-                    AreaId = retailorDetails.Area.Id,
+                    //Area = retailorDetails.Area.AreaName,
+                    //AreaId = retailorDetails.Area.Id,
                     City = retailorDetails.City.CityName,
                     CityId = retailorDetails.City.Id,
                     State = retailorDetails.State.StateName,
@@ -168,7 +172,7 @@ namespace Natural_Data.Repositories
                 existingRetailor.Address = retailor.Address;
                 existingRetailor.City = retailor.City;
                 existingRetailor.State = retailor.State;
-                existingRetailor.Area = retailor.Area;
+                //existingRetailor.Area = retailor.Area;
                 existingRetailor.Latitude = retailor.Latitude;
                 existingRetailor.Longitude = retailor.Longitude;
                 existingRetailor.Image = retailor.Image;

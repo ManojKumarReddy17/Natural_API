@@ -29,8 +29,8 @@ namespace Natural_Data.Repositories
         {
             var AssignedList = await NaturalDbContext.DistributorToExecutives
                 .Include(D => D.Distributor)
-                .ThenInclude(d => d.AreaNavigation)  
-                .ThenInclude(a => a.City)    
+                //.ThenInclude(d => d.AreaNavigation)  
+                .ThenInclude(a => a.CityNavigation)    
                 .ThenInclude(c => c.State)           
                 .Include(D => D.Executive)
                 .Where(c => c.ExecutiveId == ExecutiveId )
@@ -44,9 +44,9 @@ namespace Natural_Data.Repositories
                 MobileNumber = c.Distributor.MobileNumber,
                 Address = c.Distributor.Address,
                 Email = c.Distributor.Email,
-                Area = c.Distributor.AreaNavigation.AreaName,
-                City = c.Distributor.AreaNavigation.City.CityName,
-                State = c.Distributor.AreaNavigation.City.State?.StateName
+                //Area = c.Distributor.AreaNavigation.AreaName,
+                City = c.Distributor.CityNavigation?.CityName,
+                State = c.Distributor.StateNavigation?.StateName
             }).ToList();
             return result;
         }

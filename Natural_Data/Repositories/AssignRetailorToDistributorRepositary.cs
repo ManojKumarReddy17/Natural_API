@@ -24,8 +24,8 @@ namespace Natural_Data.Repositories
         {
             var AssignedList = await NaturalDbContext.RetailorToDistributors
                 .Include(D => D.Retailor)
-                .ThenInclude(d => d.AreaNavigation)
-                .ThenInclude(a => a.City)
+                //.ThenInclude(d => d.AreaNavigation)
+                .ThenInclude(a => a.CityNavigation)
                 .ThenInclude(c => c.State)
                 .Include(D => D.Distributor)
                 .Where(rt => rt.DistributorId == distributorId )
@@ -39,8 +39,8 @@ namespace Natural_Data.Repositories
                 LastName = c.Retailor.LastName,
                 MobileNumber = c.Retailor.MobileNumber,
                 Email = c.Retailor.Email,
-                Area = c.Retailor.AreaNavigation.AreaName,
-                City = c.Retailor.AreaNavigation.City.CityName,
+                //Area = c.Retailor.AreaNavigation.AreaName,
+                City = c.Retailor.CityNavigation.CityName,
                 State = c.Retailor.StateNavigation.StateName,
                 Image = c.Retailor.Image,
 

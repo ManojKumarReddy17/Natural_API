@@ -111,13 +111,13 @@ namespace Natural_Data.Repositories
         {
             var assignedList = await (from rtd in NaturalDbContext.RetailorToDistributors
                                       join r in NaturalDbContext.Retailors on rtd.RetailorId equals r.Id
-                                      join a in NaturalDbContext.Areas on r.Area equals a.Id
+                                      //join a in NaturalDbContext.Areas on r.Area equals a.Id
                                       join d in NaturalDbContext.Distributors on rtd.DistributorId equals d.Id
                                       where rtd.DistributorId == distributorId
                                       select new
                                       {
                                           Retailor = r,
-                                          Area = a.AreaName,
+                                          //Area = a.AreaName,
                                           Distributor = d
                                       }).ToListAsync();
 
@@ -127,7 +127,7 @@ namespace Natural_Data.Repositories
                 //FirstName = c.Retailor.FirstName,
                 //LastName = c.Retailor.LastName,
                 RetailorName = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName),
-                Area = c.Area,
+                //Area = c.Area,
                 Distributor = c.Distributor.Id,
             }).ToList();
 
@@ -279,7 +279,7 @@ namespace Natural_Data.Repositories
                .Include(c => c.ExecutiveNavigation)
                .Include(c => c.DistributorNavigation)
                .Include(c => c.RetailorNavigation)
-               .ThenInclude(a => a.AreaNavigation)
+               //.ThenInclude(a => a.AreaNavigation)
                .Where(d => (d.Executive == Id || d.Distributor == Id))
             .Select(c => new DSRretailorDetails
             {
@@ -296,7 +296,7 @@ namespace Natural_Data.Repositories
                 TotalAmount = c.TotalAmount,
                 CreatedDate = c.CreatedDate,
                 ModifiedDate = c.ModifiedDate,
-                Area = c.RetailorNavigation.AreaNavigation.AreaName,
+                //Area = c.RetailorNavigation.AreaNavigation.AreaName,
                 Image = c.RetailorNavigation.Image,
                 rId = c.Retailor
             }).ToList();
@@ -310,7 +310,7 @@ namespace Natural_Data.Repositories
                    .Include(c => c.ExecutiveNavigation)
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
-                   .ThenInclude(a => a.AreaNavigation)
+                   //.ThenInclude(a => a.AreaNavigation)
 
                    .Where(d => d.Distributor == distributorId )
 
@@ -328,7 +328,7 @@ namespace Natural_Data.Repositories
                        TotalAmount = c.TotalAmount,
                        CreatedDate = c.RetailorNavigation.CreatedDate,
                        ModifiedDate = c.RetailorNavigation.ModifiedDate,
-                       Area = c.RetailorNavigation.AreaNavigation.AreaName,
+                       //Area = c.RetailorNavigation.AreaNavigation.AreaName,
                        Image = c.RetailorNavigation.Image
 
 

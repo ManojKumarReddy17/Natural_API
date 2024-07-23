@@ -149,7 +149,7 @@ namespace Natural_Core.Models
             {
                 entity.ToTable("Distributor");
 
-                entity.HasIndex(e => e.Area, "Area");
+                //entity.HasIndex(e => e.Area, "Area");
 
                 entity.HasIndex(e => e.City, "City");
 
@@ -159,9 +159,9 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.Address).HasMaxLength(50);
 
-                entity.Property(e => e.Area)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                //entity.Property(e => e.Area)
+                //    .IsRequired()
+                //    .HasMaxLength(20);
 
                 entity.Property(e => e.City)
                     .IsRequired()
@@ -199,11 +199,11 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.UserName).HasMaxLength(50);
 
-                entity.HasOne(d => d.AreaNavigation)
-                    .WithMany(p => p.Distributors)
-                    .HasForeignKey(d => d.Area)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Distributor_ibfk_1");
+                //entity.HasOne(d => d.AreaNavigation)
+                //    .WithMany(p => p.Distributors)
+                //    .HasForeignKey(d => d.Area)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("Distributor_ibfk_1");
 
                 entity.HasOne(d => d.CityNavigation)
                     .WithMany(p => p.Distributors)
@@ -253,31 +253,31 @@ namespace Natural_Core.Models
 
             modelBuilder.Entity<DistributorbyArea>(entity =>
             {
-                entity.ToTable("DistributorbyArea");
+                //entity.ToTable("DistributorbyArea");
 
                 entity.HasIndex(e => e.DistributorId, "DistributorbyArea_ibfk_1");
 
-                entity.HasIndex(e => e.AreaId, "DistributorbyArea_ibfk_2");
+                //entity.HasIndex(e => e.AreaId, "DistributorbyArea_ibfk_2");
 
-                entity.Property(e => e.AreaId)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                //entity.Property(e => e.AreaId)
+                //    .IsRequired()
+                //    .HasMaxLength(20);
 
                 entity.Property(e => e.DistributorId)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.Area)
-                    .WithMany(p => p.DistributorbyAreas)
-                    .HasForeignKey(d => d.AreaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DistributorbyArea_ibfk_2");
+                //entity.HasOne(d => d.Area)
+                //    .WithMany(p => p.DistributorbyAreas)
+                //    .HasForeignKey(d => d.AreaId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("DistributorbyArea_ibfk_2");
 
-                entity.HasOne(d => d.Distributor)
-                    .WithMany(p => p.DistributorbyAreas)
-                    .HasForeignKey(d => d.DistributorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DistributorbyArea_ibfk_1");
+                //entity.HasOne(d => d.Distributor)
+                //    .WithMany(p => p.DistributorbyAreas)
+                //    .HasForeignKey(d => d.DistributorId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("DistributorbyArea_ibfk_1");
             });
 
             modelBuilder.Entity<Dsr>(entity =>
@@ -661,7 +661,7 @@ namespace Natural_Core.Models
                 entity.ToTable("Retailor");
 
 
-                entity.HasIndex(e => e.Area, "Area");
+                //entity.HasIndex(e => e.Area, "Area");
 
                 entity.HasIndex(e => e.City, "City");
 
@@ -671,9 +671,9 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.Address).HasMaxLength(50);
 
-                entity.Property(e => e.Area)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                //entity.Property(e => e.Area)
+                //    .IsRequired()
+                //    .HasMaxLength(20);
 
                 entity.Property(e => e.City)
                     .IsRequired()
@@ -707,11 +707,11 @@ namespace Natural_Core.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.HasOne(d => d.AreaNavigation)
-                    .WithMany(p => p.Retailors)
-                    .HasForeignKey(d => d.Area)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Retailor_ibfk_1");
+                //entity.HasOne(d => d.AreaNavigation)
+                //    .WithMany(p => p.Retailors)
+                //    .HasForeignKey(d => d.Area)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("Retailor_ibfk_1");
 
                 entity.HasOne(d => d.CityNavigation)
                     .WithMany(p => p.Retailors)

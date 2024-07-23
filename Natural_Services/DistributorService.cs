@@ -83,7 +83,7 @@ namespace Natural_Services
                                     LastName = distributor.LastName,
                                     MobileNumber = distributor.MobileNumber,
                                     Address = distributor.Address,
-                                    Area = distributor.Area,
+                                    //Area = distributor.Area,
                                     Email = distributor.Email,
                                     UserName = distributor.UserName,
                                     Password = distributor.Password,
@@ -285,12 +285,12 @@ namespace Natural_Services
                     response.LastName = authenticatedUser.LastName;
                     response.Email = authenticatedUser.Email;
                     response.Address = authenticatedUser.MobileNumber;
-                    response.Area = authenticatedUser.Area;
+                    //response.Area = authenticatedUser.Area;
                     response.Executives = user1.Executives;
                     response.UserName = credentials.UserName;
                     response.ExeId = user1.ExeId;
                     response.PresignedUrl = await GetPresignedUrlForImage(user1.PresignedUrl);
-
+                   
                     response.Statuscode = 200;
                     response.Message = "LOGIN SUCCESSFUL";
                     return response;

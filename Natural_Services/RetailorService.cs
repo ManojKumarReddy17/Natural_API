@@ -65,7 +65,7 @@ namespace Natural_Services
                                         // LastName = retailor.LastName,
                                         MobileNumber = retailor.MobileNumber,
                                         Address = retailor.Address,
-                                        Area = retailor.Area,
+                                        //Area = retailor.Area,
                                         Email = retailor.Email,
                                         City = retailor.City,
                                         State = retailor.State,

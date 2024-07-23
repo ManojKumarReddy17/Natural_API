@@ -93,13 +93,13 @@ namespace Natural_Data.Repositories
         {
 
             var distributors = await NaturalDbContext.Distributors
-            .Include(c => c.AreaNavigation)
-             .ThenInclude(a => a.City)
+            //.Include(c => c.AreaNavigation)
+             .Include(a => a.CityNavigation)
             .ThenInclude(ct => ct.State)
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
 
-            if (search.Area != null || search.City != null || search.State != null || search.FullName != null ||
+            if (search.City != null || search.State != null || search.FullName != null ||
                 search.FirstName != null || search.LastName != null)
             {
                 distributors = await searchDistributors(distributors, search);
@@ -123,9 +123,9 @@ namespace Natural_Data.Repositories
                 Email = c.Email,
                 UserName = c.UserName,
                 Password = c.Password,
-                Area = c.AreaNavigation.AreaName,
-                City = c.AreaNavigation.City.CityName,
-                State = c.AreaNavigation.City.State.StateName,
+                //Area = c.AreaNavigation.AreaName,
+                City = c.CityNavigation?.CityName,
+                State = c.StateNavigation?.StateName,
                 Latitude = c.Latitude,
                 Longitude = c.Longitude,
                 Image = c.Image
@@ -154,7 +154,8 @@ namespace Natural_Data.Repositories
        (c.IsDeleted != true) &&
 (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
 (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && (string.IsNullOrEmpty(search.FullName) ||
+//(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
+(string.IsNullOrEmpty(search.FullName) ||
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
        (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
@@ -166,8 +167,8 @@ namespace Natural_Data.Repositories
         public async Task<GetDistributor> GetDistributorDetailsByIdAsync(string distributorid)
         {
             var distributors = await NaturalDbContext.Distributors
-                       .Include(c => c.AreaNavigation)
-                        .ThenInclude(a => a.City)
+                       //.Include(c => c.AreaNavigation)
+                        .Include(a => a.CityNavigation)
                        .ThenInclude(ct => ct.State)
                         .FirstOrDefaultAsync(c => c.Id == distributorid && c.IsDeleted != true);
 
@@ -181,11 +182,11 @@ namespace Natural_Data.Repositories
                     MobileNumber = distributors.MobileNumber,
                     Address = distributors.Address,
                     Email = distributors.Email,
-                    Area = distributors.AreaNavigation.AreaName,
-                    AreaId = distributors.Area,
-                    City = distributors.AreaNavigation.City.CityName,
+                    //Area = distributors.AreaNavigation.AreaName,
+                    //AreaId = distributors.Area,
+                    City = distributors.CityNavigation?.CityName,
                     CityId = distributors.City,
-                    State = distributors.AreaNavigation.City.State.StateName,
+                    State = distributors.StateNavigation?.StateName,
                     StateId = distributors.State,
                     UserName = distributors.UserName,
                     Password = distributors.Password,
@@ -222,7 +223,7 @@ namespace Natural_Data.Repositories
         Email = distributor.Distributor.Email,
         PresignedUrl = distributor.Distributor.Image,
         UserName = distributor.Distributor.UserName,
-        Area = distributor.Distributor.Area,
+        //Area = distributor.Distributor.Area,
         ExeId = distributor.Executive.Id,
         Executives = $"{distributor.Executive.FirstName} {distributor.Executive.LastName}"
     }).FirstOrDefaultAsync();

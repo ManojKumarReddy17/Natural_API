@@ -184,7 +184,7 @@ namespace Natural_API.Controllers
                             retdetail.Address = retailor.Address;
                             retdetail.Phonenumber = retailor.MobileNumber;
                             retdetail.Image = retailor.Image;
-                            retdetail.Area = retailor.Area;
+                            //retdetail.Area = retailor.Area;
                         }
                     }
                 }
@@ -210,7 +210,7 @@ namespace Natural_API.Controllers
                             retdetail.Address = retailor.Address;
                             retdetail.Phonenumber = retailor.MobileNumber;
                             retdetail.Image = retailor.Image;
-                            retdetail.Area = retailor.Area;
+                            //retdetail.Area = retailor.Area;
                         }
                     }
                 }

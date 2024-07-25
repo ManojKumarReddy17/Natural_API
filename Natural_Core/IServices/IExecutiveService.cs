@@ -36,7 +36,7 @@ namespace Natural_Core.IServices
 
         Task<List<ExecutiveArea>> GetExectiveAreaDetailsByIdAsync(string id);
         Task<IEnumerable<GetExecutivesByArea>> GetExecutiveAredId(string areaId);
-
+        Task<IEnumerable<Area>> GetAreaIdByExecutive(string exip);
 
     }
 }

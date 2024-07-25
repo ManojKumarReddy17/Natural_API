@@ -336,6 +336,19 @@ namespace Natural_Data.Repositories
 
 
         }
+        //get areaId by Executives  
+        public async Task<IEnumerable<Area>> GetAreaIdByExecutiveDetails(string exid)
+        {
+            var retailorDetail = await NaturalDbContext.ExecutiveAreas
+                .Include(d => d.AreaNavigation)
+                   .Where(d => d.Executive == exid)
+                   .Select(c => new Area
+                   {
+                       Id = c.AreaNavigation.Id,
+                       AreaName = c.AreaNavigation.AreaName,
+                   }).ToListAsync();
+            return retailorDetail;
+        }
 
     }
 }

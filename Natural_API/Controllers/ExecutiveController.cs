@@ -168,6 +168,14 @@ namespace Natural_API.Controllers
             var arearetailor = await _executiveService.GetExecutiveAredId(areaid);
             return Ok(arearetailor);
         }
+        [HttpGet("exid")]
+        public async Task<ActionResult<IEnumerable<Area>>> GetAreaIdByExecutiveId(string exip)
+        {
+
+            var areaid = await _executiveService.GetAreaIdByExecutive(exip);
+            var AreasList = _mapper.Map<IEnumerable<Area>, IEnumerable<AreaResource>>(areaid);
+            return Ok(AreasList);
+        }
 
     }
 }

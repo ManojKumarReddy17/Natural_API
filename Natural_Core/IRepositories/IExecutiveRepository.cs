@@ -22,7 +22,7 @@ namespace Natural_Core.IRepositories
 
         Task<IEnumerable<GetExecutivesByArea>> GetExecutiveDetailsByAreaId(string areaId);
 
-
+        Task<IEnumerable<Area>> GetAreaIdByExecutiveDetails(string exid);
 
     }
 }

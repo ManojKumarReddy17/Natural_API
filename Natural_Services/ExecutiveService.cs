@@ -305,6 +305,12 @@ namespace Natural_Services
             return executiveArea;
         }
 
+        public async Task<IEnumerable<Area>> GetAreaIdByExecutive(string exid)
+        {
+            var executiveArea = await _unitOfWork.ExecutiveRepo.GetAreaIdByExecutiveDetails(exid);
+            return executiveArea;
+        }
+
 
         public async Task<ResultResponse> DeleteExecutive(string executiveId)
         {

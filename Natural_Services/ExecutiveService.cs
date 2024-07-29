@@ -207,6 +207,19 @@ namespace Natural_Services
 
                     _unitOfWork.ExecutiveRepo.Update(existingnotification);
 
+                    IEnumerable<Login> loginDetails = await _unitOfWork.Login.GetAllAsync();
+                    Login loginExecutive = loginDetails.Where(x => x.Id == executive.Id).FirstOrDefault();
+                    if (loginExecutive != null)
+                    {
+                        loginExecutive.Id = executive.Id;
+                        loginExecutive.UserName = executive.UserName;
+                        loginExecutive.Password = executive.Password;
+                        loginExecutive.FirstName = executive.FirstName;
+                        loginExecutive.LastName = executive.LastName;
+                        loginExecutive.IsAdmin = false;
+                    }
+                    _unitOfWork.Login.Update(loginExecutive);
+
 
                     var commit = await _unitOfWork.CommitAsync();
 
@@ -262,6 +275,15 @@ namespace Natural_Services
 
 
                     await _unitOfWork.ExecutiveRepo.AddAsync(executive);
+
+                    Login loginExecutive = new Login();
+                    loginExecutive.Id = executive.Id;
+                    loginExecutive.UserName = executive.UserName;
+                    loginExecutive.Password = executive.Password;
+                    loginExecutive.FirstName = executive.FirstName;
+                    loginExecutive.LastName = executive.LastName;
+                    loginExecutive.IsAdmin = false;
+                    await _unitOfWork.Login.AddAsync(loginExecutive);
                     var commit = await _unitOfWork.CommitAsync();
 
                     var create = executiveArea.Select(c => new ExecutiveArea
@@ -324,6 +346,15 @@ namespace Natural_Services
                 {
                     exec.IsDeleted = true;
                     _unitOfWork.ExecutiveRepo.Update(exec);
+                    Login login = new Login();
+                    login.Id = executiveId;
+                    login.UserName = exec.UserName;
+                    login.Password = exec.Password;
+                    login.FirstName = exec.FirstName;
+                    login.LastName = exec.LastName;
+                    login.IsAdmin = false;
+                    login.IsDeleted = true;
+                    _unitOfWork.Login.Update(login);
                     await _unitOfWork.CommitAsync();
                     response.Message = "Successfully Deleted";
                     response.StatusCode = 200;

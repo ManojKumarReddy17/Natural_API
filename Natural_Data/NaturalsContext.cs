@@ -507,6 +507,8 @@ namespace Natural_Core.Models
 
                 entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
+                entity.Property(e => e.IsAdmin).HasDefaultValueSql("'1'");
+
                 entity.Property(e => e.LastName).HasMaxLength(50);
 
                 entity.Property(e => e.Password)

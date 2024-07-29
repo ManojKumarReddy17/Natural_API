@@ -192,6 +192,15 @@ namespace Natural_Services
 
                 await _unitOfWork.DistributorRepo.AddAsync(distributor);
 
+                Login loginDistributor = new Login();
+                loginDistributor.Id = distributor.Id;
+                loginDistributor.UserName = distributor.UserName;
+                loginDistributor.Password = distributor.Password;
+                loginDistributor.FirstName = distributor.FirstName;
+                loginDistributor.LastName = distributor.LastName;
+                loginDistributor.IsAdmin = false;
+                await _unitOfWork.Login.AddAsync(loginDistributor);
+
                 var created = await _unitOfWork.CommitAsync();
 
                 if (created != 0)
@@ -216,6 +225,18 @@ namespace Natural_Services
             try
             {
                 _unitOfWork.DistributorRepo.Update(distributor);
+                IEnumerable<Login> loginDetails = await _unitOfWork.Login.GetAllAsync();
+                Login loginDistributor =loginDetails.Where(x => x.Id == distributor.Id).FirstOrDefault();
+                if (loginDistributor != null)
+                {
+                    loginDistributor.Id = distributor.Id;
+                    loginDistributor.UserName = distributor.UserName;
+                    loginDistributor.Password = distributor.Password;
+                    loginDistributor.FirstName = distributor.FirstName;
+                    loginDistributor.LastName = distributor.LastName;
+                    loginDistributor.IsAdmin = false;
+                }
+                _unitOfWork.Login.Update(loginDistributor);
                 var created = await _unitOfWork.CommitAsync();
                 if (created != 0)
                 {
@@ -331,6 +352,15 @@ namespace Natural_Services
                     
                     distributor.IsDeleted = true;
                     _unitOfWork.DistributorRepo.Update(distributor);
+                    Login login = new Login();
+                    login.Id= distributorId;
+                    login.UserName = distributor.UserName;
+                    login.Password = distributor.Password;
+                    login.FirstName = distributor.FirstName;
+                    login.LastName = distributor.LastName;
+                    login.IsAdmin = false;
+                    login.IsDeleted = true;
+                    _unitOfWork.Login.Update(login);
                      await _unitOfWork.CommitAsync();
                     response.Message = "SUCCESSFULLY DELETED";
                     response.StatusCode = 200;

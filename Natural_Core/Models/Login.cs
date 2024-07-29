@@ -18,6 +18,7 @@ namespace Natural_Core.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool? IsDeleted { get; set; }
+        public bool? IsAdmin { get; set; }
 
         public virtual ICollection<Dsr> Dsrs { get; set; }
     }

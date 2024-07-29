@@ -305,7 +305,8 @@ namespace Natural_Services
                     response.FirstName = authenticatedUser.FirstName;
                     response.LastName = authenticatedUser.LastName;
                     response.Email = authenticatedUser.Email;
-                    response.Address = authenticatedUser.MobileNumber;
+                    response.Address = authenticatedUser.Address;
+                    response.MobileNumber = authenticatedUser.MobileNumber;
                     //response.Area = authenticatedUser.Area;
                     response.Executives = user1.Executives;
                     response.UserName = credentials.UserName;

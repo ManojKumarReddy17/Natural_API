@@ -16,10 +16,20 @@ using Amazon.Util;
 using Amazon;
 using Natural_Core.S3Models;
 using Natural_API.Resources;
+using Serilog;
 #nullable disable
 
 
 var builder = WebApplication.CreateBuilder(args);
+//serilogs
+//Log.Logger = new LoggerConfiguration().
+//    MinimumLevel.Information()
+//    .WriteTo.File("Log/log.txt",
+//    rollingInterval:RollingInterval.Minute)
+//    .CreateLogger();
+//builder.Host.UseSerilog();
+////user serilog along with built -in logger
+//builder.Logging.AddSerilog();
 
 var CorsPolicy = "CorsPolicy";
 builder.Services.AddCors(o =>

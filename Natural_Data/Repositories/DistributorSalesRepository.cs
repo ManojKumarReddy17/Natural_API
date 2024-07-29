@@ -17,7 +17,7 @@ namespace Natural_Data.Repositories
         public async Task<IEnumerable<DistributorSalesReport>> GetById(DistributorSalesReportInput DSReport)
         {
             var saleReport = await NaturalDbContext.DistributorSalesReports
-                .FromSqlInterpolated($"CALL Naturals.AreaSales3({DSReport.Area},{DSReport.Executive},{DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate}, {DSReport.EndDate})")
+                .FromSqlInterpolated($"CALL Naturals.AreaSales2({DSReport.Area},{DSReport.Executive},{DSReport.Distributor}, {DSReport.Retailor}, {DSReport.StartDate}, {DSReport.EndDate})")
                 .ToListAsync();
 
             return saleReport;

@@ -109,7 +109,7 @@ namespace Natural_API.Controllers
             }
         }
 
-
+        
         [HttpPut]
         public async Task<ActionResult<ProductResource>> UpdateProduct([FromForm] ProductResource productResource, string? prefix)
         {
@@ -125,8 +125,13 @@ namespace Natural_API.Controllers
                 var Updateresponse = await _ProductService.UpadateProduct(mappedexecutive);
                 return StatusCode(Updateresponse.StatusCode, Updateresponse);
             }
-
+            else if(Existingproduct.ProductType != null)
+            {
+                productResource.ProductType = Existingproduct.ProductType;
+            }
+            
             var mappedexecutive1 = _mapper.Map(productResource, Existingproduct);
+
             var Updateresponse1 = await _ProductService.UpadateProduct(mappedexecutive1);
             return StatusCode(Updateresponse1.StatusCode, Updateresponse1);
         }

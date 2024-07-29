@@ -201,7 +201,7 @@ namespace Natural_Services
                     existingnotification.State = executive.State;
                     existingnotification.UserName = executive.UserName;
                     existingnotification.Password = executive.Password;
-                    existingnotification.Image = executive.Image;
+                    executive.Image = existingnotification.Image;
                     existingnotification.Latitude = executive.Latitude;
                     existingnotification.Longitude = executive.Longitude;
 

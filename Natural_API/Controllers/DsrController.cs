@@ -131,27 +131,37 @@ namespace Natural_API.Controllers
 
         public async Task<ActionResult<IEnumerable<DsrRetailorResource>>> GetAssignedDetails(string id)
         {
-
-            var distributorDetails = await _dsrservice.AssignedDistributorDetailsByExecutiveId(id);
-
-            var mappedRetailers = new List<DsrRetailorResource>();
-
-            foreach (var distributor in distributorDetails)
+            if (id.StartsWith("NEXE"))
             {
-                var distributorId = distributor.Id;
+                var distributorDetails = await _dsrservice.AssignedDistributorDetailsByExecutiveId(id);
 
-                var assignedRetailer = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(distributorId);
-                if (assignedRetailer != null)
+                var mappedRetailers = new List<DsrRetailorResource>();
+
+                foreach (var distributor in distributorDetails)
                 {
-                    var mappedResource = (List<DsrRetailorResource>)_mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
-                    mappedRetailers.AddRange(mappedResource);
+                    var distributorId = distributor.Id;
+
+                    var assignedRetailer = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(distributorId);
+                    if (assignedRetailer != null)
+                    {
+                        var mappedResource = (List<DsrRetailorResource>)_mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
+                        mappedRetailers.AddRange(mappedResource);
+                    }
+
                 }
-                
+
+                return Ok(mappedRetailers);
             }
-
-
-
-            return Ok(mappedRetailers);
+            else if (id.StartsWith("NDIS"))
+            {
+                var assignedRetailer = await _dsrservice.GetAssignedRetailorDetailsByDistributorId(id);
+                var mappedResource = _mapper.Map<IEnumerable<DsrRetailor>, IEnumerable<DsrRetailorResource>>(assignedRetailer);
+                return Ok(mappedResource);
+            }
+            else
+            {
+                return BadRequest("Invalid ID prefix.");
+            }
 
 
         }

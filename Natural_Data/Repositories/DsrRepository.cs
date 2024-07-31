@@ -40,10 +40,10 @@ namespace Natural_Data.Repositories
                dsr = dsr.Select(c => new Dsr
                    {
                        Id = c.Id,
-                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                       OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "", "", c.ExecutiveNavigation.LastName ?? ""),
+                       Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "", "", c.DistributorNavigation.LastName ?? ""),
+                       Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "", "", c.RetailorNavigation.LastName ?? ""),
+                       OrderBy = string.Concat(c.OrderByNavigation.FirstName ?? "", "", c.OrderByNavigation.LastName ?? ""),
                        CreatedDate = c.CreatedDate,
                        ModifiedDate = c.ModifiedDate,
                        TotalAmount = c.TotalAmount,
@@ -98,7 +98,7 @@ namespace Natural_Data.Repositories
             {
                 Id = c.Distributor.Id,
 
-                DistributorName = string.Concat(c.Distributor.FirstName, "", c.Distributor.LastName)
+                DistributorName = string.Concat(c.Distributor.FirstName ?? "", "", c.Distributor.LastName ?? "")
             }).ToList();
 
             return result;
@@ -126,7 +126,7 @@ namespace Natural_Data.Repositories
                 Id = c.Retailor.Id,
                 //FirstName = c.Retailor.FirstName,
                 //LastName = c.Retailor.LastName,
-                RetailorName = string.Concat(c.Retailor.FirstName, "", c.Retailor.LastName),
+                RetailorName = string.Concat(c.Retailor.FirstName ?? "", "", c.Retailor.LastName ?? ""),
                 //Area = c.Area,
                 Distributor = c.Distributor.Id,
             }).ToList();
@@ -152,10 +152,10 @@ namespace Natural_Data.Repositories
                      .Select(c => new Dsr
                      {
                          Id = c.Id,
-                         Executive = string.Concat(c.ExecutiveNavigation.FirstName,"", c.ExecutiveNavigation.LastName),
-                         Distributor = string.Concat(c.DistributorNavigation.FirstName,"", c.DistributorNavigation.LastName),
-                         Retailor = string.Concat(c.RetailorNavigation.FirstName,"", c.RetailorNavigation.LastName),
-                         OrderBy = string.Concat(c.OrderByNavigation.FirstName,"", c.OrderByNavigation.LastName),
+                         Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "","", c.ExecutiveNavigation.LastName ?? ""),
+                         Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "","", c.DistributorNavigation.LastName ?? ""),
+                         Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "","", c.RetailorNavigation.LastName ?? ""),
+                         OrderBy = string.Concat(c.OrderByNavigation.FirstName ?? "","", c.OrderByNavigation.LastName ?? ""),
                          CreatedDate = c.CreatedDate,
                          ModifiedDate = c.ModifiedDate,
                          TotalAmount = c.TotalAmount
@@ -230,10 +230,10 @@ namespace Natural_Data.Repositories
                    .Select(c => new Dsr
                    {
                        Id = c.Id,
-                       Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                       Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                       Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                       OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                       Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "", "", c.ExecutiveNavigation.LastName ?? ""),
+                       Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "", "", c.DistributorNavigation.LastName ?? ""),
+                       Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "", "", c.RetailorNavigation.LastName ?? ""),
+                       OrderBy = string.Concat(c.OrderByNavigation.FirstName ?? "", "", c.OrderByNavigation.LastName ?? ""),
                        CreatedDate = c.CreatedDate,
                        ModifiedDate = c.ModifiedDate,
                        TotalAmount = c.TotalAmount
@@ -262,10 +262,10 @@ namespace Natural_Data.Repositories
                 .Select(c => new Dsr
                 {
                     Id = c.Id,
-                    Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                    Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                    Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
-                    OrderBy = string.Concat(c.OrderByNavigation.FirstName, "", c.OrderByNavigation.LastName),
+                    Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "", "", c.ExecutiveNavigation.LastName ?? ""),
+                    Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "", "", c.DistributorNavigation.LastName ?? ""),
+                    Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "", "", c.RetailorNavigation.LastName ?? ""),
+                    OrderBy = string.Concat(c.OrderByNavigation.FirstName ?? "", "", c.OrderByNavigation.LastName ?? ""),
                     CreatedDate = c.CreatedDate,
                     ModifiedDate = c.ModifiedDate,
                     TotalAmount = c.TotalAmount
@@ -285,9 +285,9 @@ namespace Natural_Data.Repositories
             {
                 Id = c.Id,
                 RetailorId = string.Concat(c.Retailor),
-                Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
-                Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
-                Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),
+                Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "", "", c.ExecutiveNavigation.LastName ?? ""),
+                Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "", "", c.DistributorNavigation.LastName ?? ""),
+                Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "", "", c.RetailorNavigation.LastName ?? ""),
                 Phonenumber = c.RetailorNavigation.MobileNumber,
                 Address = c.RetailorNavigation.Address,
                 City = c.RetailorNavigation.CityNavigation.CityName,

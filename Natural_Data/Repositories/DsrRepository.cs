@@ -21,6 +21,7 @@ namespace Natural_Data.Repositories
         public async Task<IEnumerable<Dsr>> GetAllDsrAsync(EdittDSR? search)
         {
             var dsr = await NaturalDbContext.Dsrs
+                .Include(c=>c.AreaNavigation)
                    .Include(c => c.ExecutiveNavigation)
                    .Include(c => c.DistributorNavigation)
                    .Include(c => c.RetailorNavigation)
@@ -40,6 +41,8 @@ namespace Natural_Data.Repositories
                dsr = dsr.Select(c => new Dsr
                    {
                        Id = c.Id,
+                         //Area = string.Concat(c.AreaNavigation.AreaName ?? "","",c.AreaName),
+                       Area = c.AreaNavigation.AreaName,
                        Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "", "", c.ExecutiveNavigation.LastName ?? ""),
                        Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "", "", c.DistributorNavigation.LastName ?? ""),
                        Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "", "", c.RetailorNavigation.LastName ?? ""),
@@ -57,6 +60,7 @@ namespace Natural_Data.Repositories
         private async Task<List<Dsr>> searchDsr(List<Dsr> dsr, EdittDSR search)
         {
             var searchDsrList = dsr.Where(c =>
+            (string.IsNullOrEmpty(search.Area) || c.Area == search.Area) &&
                     (string.IsNullOrEmpty(search.Executive) || c.Executive == search.Executive) &&
                     (string.IsNullOrEmpty(search.Distributor) || c.Distributor == search.Distributor) &&
                     (string.IsNullOrEmpty(search.Retailor) || c.Retailor == search.Retailor) &&
@@ -144,6 +148,7 @@ namespace Natural_Data.Repositories
         public async Task<Dsr> GetDsrbyId(string dsrid)
         {
             var dsr =await NaturalDbContext.Dsrs
+                .Include(c => c.AreaNavigation)
                      .Include(c => c.ExecutiveNavigation)
                      .Include(c => c.DistributorNavigation)
                      .Include(c => c.RetailorNavigation)
@@ -152,6 +157,7 @@ namespace Natural_Data.Repositories
                      .Select(c => new Dsr
                      {
                          Id = c.Id,
+                         Area = c.AreaNavigation.AreaName,
                          Executive = string.Concat(c.ExecutiveNavigation.FirstName ?? "","", c.ExecutiveNavigation.LastName ?? ""),
                          Distributor = string.Concat(c.DistributorNavigation.FirstName ?? "","", c.DistributorNavigation.LastName ?? ""),
                          Retailor = string.Concat(c.RetailorNavigation.FirstName ?? "","", c.RetailorNavigation.LastName ?? ""),
@@ -176,6 +182,7 @@ namespace Natural_Data.Repositories
                 .Select(c => new Dsr
                 {
                     Id = c.Id,
+                    
                     Executive = string.Concat(c.ExecutiveNavigation.FirstName, "", c.ExecutiveNavigation.LastName),
                     Distributor = string.Concat(c.DistributorNavigation.FirstName, "", c.DistributorNavigation.LastName),
                     Retailor = string.Concat(c.RetailorNavigation.FirstName, "", c.RetailorNavigation.LastName),

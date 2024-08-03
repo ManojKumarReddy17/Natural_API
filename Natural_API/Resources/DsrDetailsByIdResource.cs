@@ -3,6 +3,7 @@ namespace Natural_API.Resources
 {
     public class DsrDetailsByIdResource
     {
+        public string Area { get; set; }
         public string Executive { get; set; }
         public string Distributor { get; set; }
         public string Retailor { get; set; }

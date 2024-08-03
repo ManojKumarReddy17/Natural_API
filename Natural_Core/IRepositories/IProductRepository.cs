@@ -11,7 +11,7 @@ namespace Natural_Core.IRepositories
 	{
 
         Task<IEnumerable<string>> GetAllBucketAsync();
-        Task<List<Product>> GetProducttAsync();
+        Task<List<GetProduct>> GetProducttAsync();
         
         Task<GetProduct> GetProductByIdAsync(string ProductId);
         Task<IEnumerable<Natural_Core.S3Models.S3Config>> GetAllFilesAsync(string bucketName, string? prefix);

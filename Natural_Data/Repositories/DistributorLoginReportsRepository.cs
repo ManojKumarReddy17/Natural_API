@@ -23,7 +23,7 @@ namespace Natural_Data.Repositories
            
             var saleReport = await NaturalsDbContext.DistributorReports
        .FromSqlInterpolated($@"
-            CALL Naturals.DistributorLogin(
+            CALL Naturals.DistributorLogins(
                 {DSReport.Distributor}, 
                 {DSReport.Retailor ?? ""}, 
                 {DSReport.StartDate}, 

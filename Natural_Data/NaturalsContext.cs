@@ -54,6 +54,7 @@ namespace Natural_Core.Models
             SetTimestamps<Distributor>();
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
+            SetTimestamps<Area>();
             SetTimestamps<Product>();
             //SetTimestamps<Dsr>();
             SetTimestamps<Notification>();
@@ -292,6 +293,8 @@ namespace Natural_Core.Models
 
                 entity.HasIndex(e => e.OrderBy, "DSR_ibfk_4");
 
+                entity.HasIndex(e => e.Area, "DSR_ibfk_5");
+
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
@@ -315,6 +318,9 @@ namespace Natural_Core.Models
                 entity.Property(e => e.Retailor)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(e => e.Area)
+                   .IsRequired()
+                   .HasMaxLength(50);
 
                 entity.Property(e => e.TotalAmount).HasPrecision(20, 3);
 
@@ -341,6 +347,12 @@ namespace Natural_Core.Models
                     .HasForeignKey(d => d.Retailor)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("DSR_ibfk_3");
+
+                entity.HasOne(d => d.AreaNavigation)
+                    .WithMany(p => p.Dsrs)
+                    .HasForeignKey(d => d.Area)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("DSR_ibfk_5");
             });
 
             modelBuilder.Entity<Dsrdetail>(entity =>

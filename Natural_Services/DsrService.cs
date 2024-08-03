@@ -210,6 +210,7 @@ namespace Natural_Services
 
                     updatedsr.TotalAmount = dsr.TotalAmount;
                     updatedsr.OrderBy = dsr.OrderBy;
+                    updatedsr.Area = dsr.Area;
                     updatedsr.Executive = dsr.Executive;
                     updatedsr.Distributor=dsr.Distributor;
                     updatedsr.Retailor = dsr.Retailor;

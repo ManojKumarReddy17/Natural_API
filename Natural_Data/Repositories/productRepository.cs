@@ -24,7 +24,7 @@ namespace Natural_Data.Repositories
         }
 
         //get products with category name 
-        public async Task<List<Product>> GetProducttAsync()
+        public async Task<List<GetProduct>> GetProducttAsync()
         {
 
             var Products = await NaturalDbContext.Products
@@ -33,7 +33,7 @@ namespace Natural_Data.Repositories
            .Where(c => c.IsDeleted != true)
            .ToListAsync();
          
-            var result = Products.Select(p => new Product
+            var result = Products.Select(p => new GetProduct
             {
                 Id = p.Id,
                 ProductName = p.ProductName,
@@ -42,6 +42,7 @@ namespace Natural_Data.Repositories
                 Image = p.Image,
                 Weight = p.Weight,
                 ProductType = p.ProductTypeNavigation?.ProductTypeName,
+                ProductTypeCode = p.ProductTypeNavigation?.ProductTypeCode,
                 CreatedDate = p.CreatedDate,
                 ModifiedDate = p.ModifiedDate,
                 Category = p.CategoryNavigation?.CategoryName

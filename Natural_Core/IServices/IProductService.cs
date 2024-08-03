@@ -10,7 +10,7 @@ namespace Natural_Core.IServices
 {
     public interface IProductService
     {
-        Task<IEnumerable<Product>> GetAllProduct();
+        Task<IEnumerable<GetProduct>> GetAllProduct();
         Task<ProductResponse> CreateProduct(Product product);
         Task<GetProduct> GetProductDetailsByIdAsync(string ProductId);
         Task<Product> GetProductByIdAsync(string ProductId);

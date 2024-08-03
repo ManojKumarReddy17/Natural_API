@@ -22,6 +22,7 @@ namespace Natural_Services
 
             foreach (var report in salesReports)
             {
+                report.Area = report.Area.ToString();
                 report.Retailor = await _unitOfWork.DistributorSalesRepositoryRepo.GetRetailorNameById(report.Retailor);
                 report.Executive = await _unitOfWork.DistributorSalesRepositoryRepo.GetExecutiveNameById(report.Executive);
                 report.Distributor = await _unitOfWork.DistributorSalesRepositoryRepo.GetDistributorNameById(report.Distributor);

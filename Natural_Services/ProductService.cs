@@ -91,7 +91,7 @@ namespace Natural_Services
 
 
         //get products with category name
-        public async Task<IEnumerable<Product>> GetAllProduct()
+        public async Task<IEnumerable<GetProduct>> GetAllProduct()
         {
             var result = await _unitOfWork.ProductRepository.GetProducttAsync();
             var PresentinCategory = result.Where(d => d.IsDeleted != true).ToList();
@@ -135,6 +135,7 @@ namespace Natural_Services
                                     Weight = Produc.Weight,
                                     Image = sub?.PresignedUrl,
                                     ProductType = Produc.ProductType,
+                                    ProductTypeCode = Produc.ProductTypeCode,
                                 };
             if (search != null)
             {

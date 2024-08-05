@@ -30,9 +30,13 @@ namespace Natural_Data.Repositories
                    .ToListAsync();
             if(search != null)
             {
+
+                string defaultDateStr = "1/1/0001 12:00:00";
                 var startDate = search.StartDate.Date.ToString();
+                startDate = defaultDateStr;
                 var endDate = search.EndDate.Date.ToString();
-                if(!startDate.Contains( "1/1/0001 12:00:00") && !endDate.Contains("1/1/0001 12:00:00"))
+                endDate = defaultDateStr;
+                if (!startDate.Contains( "1/1/0001 12:00:00") && !endDate.Contains("1/1/0001 12:00:00"))
                 {
                     dsr = await searchDsr(dsr, search);
                 }

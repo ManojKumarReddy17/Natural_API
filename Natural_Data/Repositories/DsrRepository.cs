@@ -31,16 +31,19 @@ namespace Natural_Data.Repositories
             if(search != null)
             {
 
-                string defaultDateStr = "1/1/0001 12:00:00";
+                //string defaultDateStr = "1/1/0001 12:00:00";
                 var startDate = search.StartDate.Date.ToString();
-                startDate = defaultDateStr;
+                //startDate = defaultDateStr;
                 var endDate = search.EndDate.Date.ToString();
-                endDate = defaultDateStr;
-                if (!startDate.Contains( "1/1/0001 12:00:00") && !endDate.Contains("1/1/0001 12:00:00"))
+                //endDate = defaultDateStr;
+                bool isValidStartDate = !startDate.Contains("1/1/0001") && !startDate.Contains("01/01/0001");
+                bool isValidEndDate = !endDate.Contains("1/1/0001") && !endDate.Contains("01/01/0001");
+
+                if (isValidStartDate && isValidEndDate)
                 {
                     dsr = await searchDsr(dsr, search);
                 }
-                
+
             }
                dsr = dsr.Select(c => new Dsr
                    {

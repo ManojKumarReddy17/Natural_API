@@ -54,7 +54,7 @@ namespace Natural_Core.Models
             SetTimestamps<Distributor>();
             SetTimestamps<Executive>();
             SetTimestamps<Retailor>();
-            SetTimestamps<Area>();
+            //SetTimestamps<Area>();
             SetTimestamps<Product>();
             //SetTimestamps<Dsr>();
             SetTimestamps<Notification>();

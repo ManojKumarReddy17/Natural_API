@@ -310,11 +310,12 @@ namespace Natural_Data.Repositories
                 TotalAmount = c.TotalAmount,
                 CreatedDate = c.CreatedDate,
                 ModifiedDate = c.ModifiedDate,
+                 AId = c.Area ?? "",
                 //Area = c.RetailorNavigation.AreaNavigation.AreaName,
                 Image = c.RetailorNavigation.Image,
                 rId = c.Retailor
             }).ToList();
-                return dsr;
+            return dsr;
 
         }
         public async Task<IEnumerable<DSRretailorDetails>> GetRetailorDetailsbyDistributorId(string distributorId)

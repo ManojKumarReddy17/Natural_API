@@ -71,7 +71,9 @@ namespace Natural_Services
                                         State = retailor.State,
                                         Image = sub?.PresignedUrl,
                                         Latitude = retailor.Latitude,
-                                        Longitude = retailor.Longitude
+                                        Longitude = retailor.Longitude,
+                                        Distributor = retailor.Distributor
+                                        
                                     };
             if (page > 0)
             {

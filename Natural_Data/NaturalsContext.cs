@@ -177,6 +177,7 @@ namespace Natural_Core.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Image).HasMaxLength(50);
+                entity.Property(e => e.Executive).HasMaxLength(50);
 
                 entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 
@@ -702,6 +703,7 @@ namespace Natural_Core.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Image).HasMaxLength(50);
+                entity.Property(e => e.Distributor).HasMaxLength(50);
 
                 entity.Property(e => e.IsDeleted).HasDefaultValueSql("'0'");
 

@@ -91,8 +91,8 @@ namespace Natural_Services
                                     State = distributor.State,
                                     Image = sub?.PresignedUrl,
                                     Latitude = distributor.Latitude,
-                                    Longitude = distributor.Longitude
-                                    
+                                    Longitude = distributor.Longitude,
+                                    Executive = distributor.Executive
                                 };
 
             // Apply pagination

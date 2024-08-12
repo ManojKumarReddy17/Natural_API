@@ -35,6 +35,7 @@ namespace Natural_Core.Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Image { get; set; }
+        public string Executive { get; set; }
         public bool? IsDeleted { get; set; }
 
         //public virtual Area AreaNavigation { get; set; }

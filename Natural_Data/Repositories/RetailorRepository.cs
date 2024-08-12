@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Natural_Core;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
@@ -22,53 +23,181 @@ namespace Natural_Data.Repositories
         }
 
 
+        //public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, bool? NonAssign)
+        //{
+        //    var retailors = await NaturalDbContext.Retailors
+        //    //.Include(c => c.AreaNavigation)
+        //     .Include(a => a.CityNavigation)
+        //    .ThenInclude(ct => ct.State)
+        //    .Where(d => d.IsDeleted != true)
+        //     .ToListAsync();
+
+
+        //    if (search.City != null || search.State != null || search.FullName != null ||
+        //        search.FirstName != null || search.LastName != null)
+        //    {
+        //        retailors = await SearchRetailors(retailors, search);
+
+        //        if (NonAssign == true)
+        //        {
+        //            retailors = await SearchNonAssignedRetailors(retailors);
+        //        }
+        //    }
+        //    if (NonAssign == true && (search.City == null || search.State == null || search.FullName == null ||
+        //        search.FirstName == null || search.LastName == null))
+        //    {
+        //        retailors = await SearchNonAssignedRetailors(retailors);
+        //    }
+        //    var result = retailors.
+        //        Select(c => new Retailor
+        //        {
+
+        //            Id = c.Id,
+        //            FirstName = c.FirstName,
+        //            LastName = c.LastName,
+
+        //            MobileNumber = c.MobileNumber,
+        //            Address = c.Address,
+        //            Email = c.Email,
+        //            //Area = c.AreaNavigation.AreaName,
+        //            //City = c.AreaNavigation.City.CityName,
+        //            //State = c.AreaNavigation.City.State.StateName,
+        //            City = c.CityNavigation?.CityName,
+        //            State = c.StateNavigation?.StateName,
+        //            Latitude = c.Latitude,
+        //            Longitude = c.Longitude,
+        //            Image = c.Image
+        //        });
+
+        //    return result;
+        //}
         public async Task<IEnumerable<Retailor>> GetAllRetailorsAsync(SearchModel? search, bool? NonAssign)
         {
-            var retailors = await NaturalDbContext.Retailors
-            //.Include(c => c.AreaNavigation)
+            if (NonAssign == true)
+            {
+                var retailor = await NaturalDbContext.Retailors
+             //.Include(c => c.AreaNavigation)
              .Include(a => a.CityNavigation)
             .ThenInclude(ct => ct.State)
             .Where(d => d.IsDeleted != true)
              .ToListAsync();
-            
-
-            if ( search.City != null || search.State != null || search.FullName != null ||
-                search.FirstName != null || search.LastName != null)
-            {
-                retailors = await SearchRetailors(retailors, search);
-
-                if(NonAssign == true)
+                if (search.City != null || search.State != null || search.FullName != null ||
+                     search.FirstName != null || search.LastName != null)
                 {
-                    retailors = await SearchNonAssignedRetailors(retailors);
+                    retailor = await SearchRetailors(retailor, search);
+
+                    if (NonAssign == true)
+                    {
+                        retailor = await SearchNonAssignedRetailors(retailor);
+                    }
                 }
-            }
-            if (NonAssign == true && (search.City == null || search.State == null || search.FullName == null ||
-                search.FirstName == null || search.LastName == null))
-            {
-                retailors = await SearchNonAssignedRetailors(retailors);
-            }
-            var result = retailors.
-                Select(c => new Retailor
+                else if (NonAssign == true && (search.City == null || search.State == null || search.FullName == null ||
+                    search.FirstName == null || search.LastName == null))
                 {
+                    retailor = await SearchNonAssignedRetailors(retailor);
+                }
+                var result = retailor.
+               Select(c => new Retailor
+               {
 
-                    Id = c.Id,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                   
-                    MobileNumber = c.MobileNumber,
-                    Address = c.Address,
-                    Email = c.Email,
-                    //Area = c.AreaNavigation.AreaName,
-                    //City = c.AreaNavigation.City.CityName,
-                    //State = c.AreaNavigation.City.State.StateName,
-                    City =c.CityNavigation?.CityName,
-                    State= c.StateNavigation?.StateName,
-                    Latitude = c.Latitude,
-                    Longitude = c.Longitude,
-                    Image = c.Image
-                });
+                   Id = c.Id,
+                   FirstName = c.FirstName,
+                   LastName = c.LastName,
 
-            return result;
+                   MobileNumber = c.MobileNumber,
+                   Address = c.Address,
+                   Email = c.Email,
+                   //Area = c.AreaNavigation.AreaName,
+                   //City = c.AreaNavigation.City.CityName,
+                   //State = c.AreaNavigation.City.State.StateName,
+                   City = c.CityNavigation?.CityName,
+                   State = c.StateNavigation?.StateName,
+                   Latitude = c.Latitude,
+                   Longitude = c.Longitude,
+                   Image = c.Image
+               });
+
+                return result;
+            }
+            else 
+            {
+                var query = from r in NaturalDbContext.Retailors
+                            join rtd in NaturalDbContext.RetailorToDistributors
+                            on r.Id equals rtd.RetailorId into rtdGroup
+                            from rtd in rtdGroup.DefaultIfEmpty() // Left join to include retailors without distributors
+                            join q in NaturalDbContext.Distributors
+                            on rtd.DistributorId equals q.Id into dGroup
+                            from q in dGroup.DefaultIfEmpty() // Left join to include distributors without retailors
+                            where r.IsDeleted != true
+
+
+                            select new
+                            {
+                                Id = r.Id,
+                                Retailor = r,
+                                //City = r.CityNavigation.CityName,
+                                //State = r.StateNavigation.StateName,
+                                Distributor = q == null ? null : $"{q.FirstName} {q.LastName}"
+
+
+                            };
+
+                // Apply search filters
+                if (search != null)
+                {
+                    if (!string.IsNullOrEmpty(search.State))
+                    {
+                        query = query.Where(q => q.Retailor.StateNavigation.Id == search.State);
+                    }
+
+                    if (!string.IsNullOrEmpty(search.City))
+                    {
+                        query = query.Where(q => q.Retailor.CityNavigation.Id == search.City);
+                    }
+
+                    //if (!string.IsNullOrEmpty(search.FullName))
+                    //{
+                    //    query = query.Where(q =>
+                    //        q.Retailor.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                    //        (q.Retailor.LastName != null && q.Retailor.LastName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase)) ||
+                    //        (q.Retailor.FirstName + q.Retailor.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+                    //        (q.Retailor.FirstName + " " + q.Retailor.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase)
+                    //    );
+                    //}
+                }
+
+
+
+                // Execute the query and transform the results
+                var retailors = await query
+                    .Select(q => new Retailor
+                    {
+                        Id = q.Id,
+                        FirstName = q.Retailor.FirstName,
+                        LastName = q.Retailor.LastName,
+                        MobileNumber = q.Retailor.MobileNumber,
+                        Address = q.Retailor.Address,
+                        Email = q.Retailor.Email,
+                        City = q.Retailor.CityNavigation.CityName,
+                        State = q.Retailor.StateNavigation.StateName,
+                        Latitude = q.Retailor.Latitude,
+                        Longitude = q.Retailor.Longitude,
+                        Image = q.Retailor.Image,
+                        // Optionally, include distributor information if needed
+                        Distributor = q.Distributor
+                    })
+                    .ToListAsync();
+                if ( search.FullName != null )
+                {
+                    retailors = await searchDistributorRecords(retailors, search);
+
+                    
+                }
+                return retailors;
+                
+            }
+         
+
         }
         public async Task<IEnumerable<RetailorDetailsByArea>> GetRetailorDetailsByAreaId(string areaId)
         {
@@ -106,18 +235,28 @@ namespace Natural_Data.Repositories
         {
             var searchedRetailors = retailors.Where(c =>
        (c.IsDeleted != true) &&
-(string.IsNullOrEmpty(search.State) || c.State == search.State) &&
-(string.IsNullOrEmpty(search.City) || c.City == search.City) &&
-//(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && 
-(string.IsNullOrEmpty(search.FullName) ||
+       (string.IsNullOrEmpty(search.State) || c.State == search.State) &&
+         (string.IsNullOrEmpty(search.City) || c.City == search.City) &&
+        //(string.IsNullOrEmpty(search.Area) || c.Area == search.Area) && 
+          (string.IsNullOrEmpty(search.FullName) ||
         c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
         (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
         (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
-        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
-).ToList();
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))).ToList();
             return searchedRetailors;
         }
+        private async Task<List<Retailor>> searchDistributorRecords(List<Retailor> retailors, SearchModel search)
+        {
+            var searchedRetailors = retailors.Where(c =>
+       (c.IsDeleted != true) &&
 
+         (string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))).ToList();
+            return searchedRetailors;
+        }
         public async Task<GetRetailor> GetRetailorDetailsByIdAsync(string id)
         {
             var retailorDetails = await (from retailor in NaturalDbContext.Retailors

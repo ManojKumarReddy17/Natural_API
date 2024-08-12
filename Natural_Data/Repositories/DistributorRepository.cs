@@ -89,52 +89,52 @@ namespace Natural_Data.Repositories
             { return new UploadResult { Success = false, Message = $"Error uploading file to S3:{ex.Message}" }; }
 
         }
-        public async Task<List<Distributor>> GetAllDistributorstAsync(SearchModel? search, bool? nonAssign)
-        {
+        //        public async Task<List<Distributor>> GetAllDistributorstAsync(SearchModel? search, bool? nonAssign)
+        //        {
 
-            var distributors = await NaturalDbContext.Distributors
-            //.Include(c => c.AreaNavigation)
-             .Include(a => a.CityNavigation)
-            .ThenInclude(ct => ct.State)
-            .Where(d => d.IsDeleted != true)
-             .ToListAsync();
+        //            var distributors = await NaturalDbContext.Distributors
+        //            //.Include(c => c.AreaNavigation)
+        //             .Include(a => a.CityNavigation)
+        //            .ThenInclude(ct => ct.State)
+        //            .Where(d => d.IsDeleted != true)
+        //             .ToListAsync();
 
-            if (search.City != null || search.State != null || search.FullName != null ||
-                search.FirstName != null || search.LastName != null)
-            {
-                distributors = await searchDistributors(distributors, search);
-                if (nonAssign == true)
-                {
-                    distributors = await searchNonAssignedDistributors(distributors);
-                }
-            }
-            if (nonAssign == true)
-            {
-                distributors = await searchNonAssignedDistributors(distributors);
-            }
+        //            if (search.City != null || search.State != null || search.FullName != null ||
+        //                search.FirstName != null || search.LastName != null)
+        //            {
+        //                distributors = await searchDistributors(distributors, search);
+        //                if (nonAssign == true)
+        //                {
+        //                    distributors = await searchNonAssignedDistributors(distributors);
+        //                }
+        //            }
+        //            if (nonAssign == true)
+        //            {
+        //                distributors = await searchNonAssignedDistributors(distributors);
+        //            }
 
-            var result = distributors.Select(c => new Distributor
-            {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                MobileNumber = c.MobileNumber,
-                Address = c.Address,
-                Email = c.Email,
-                UserName = c.UserName,
-                Password = c.Password,
-                //Area = c.AreaNavigation.AreaName,
-                City = c.CityNavigation?.CityName,
-                State = c.StateNavigation?.StateName,
-                Latitude = c.Latitude,
-                Longitude = c.Longitude,
-                Image = c.Image
-            }).ToList();
+        //            var result = distributors.Select(c => new Distributor
+        //            {
+        //                Id = c.Id,
+        //                FirstName = c.FirstName,
+        //                LastName = c.LastName,
+        //                MobileNumber = c.MobileNumber,
+        //                Address = c.Address,
+        //                Email = c.Email,
+        //                UserName = c.UserName,
+        //                Password = c.Password,
+        //                //Area = c.AreaNavigation.AreaName,
+        //                City = c.CityNavigation?.CityName,
+        //                State = c.StateNavigation?.StateName,
+        //                Latitude = c.Latitude,
+        //                Longitude = c.Longitude,
+        //                Image = c.Image
+        //            }).ToList();
 
-            
 
-            return result;
-        }
+
+        //            return result;
+        //        }
 
         private async Task<List<Distributor>> searchNonAssignedDistributors(List<Distributor> distributorList)
         {
@@ -162,6 +162,151 @@ namespace Natural_Data.Repositories
         (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
 ).ToList();
             return exec;
+        }
+        private async Task<List<Distributor>> searchDistributorRecords(List<Distributor> distributorsList, SearchModel search)
+        {
+            var exec = distributorsList.Where(c =>
+       (c.IsDeleted != true) &&
+
+(string.IsNullOrEmpty(search.FullName) ||
+        c.FirstName.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+       (c.LastName?.StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ?? false) ||
+        (c.FirstName + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase) ||
+        (c.FirstName + " " + c.LastName).StartsWith(search.FullName, StringComparison.OrdinalIgnoreCase))
+).ToList();
+            return exec;
+        }
+        public async Task<List<Distributor>> GetAllDistributorstAsync(SearchModel? search, bool? nonAssign)
+        {
+
+            if (nonAssign == true)
+            {
+                var distributor = await NaturalDbContext.Distributors
+                 //.Include(c => c.AreaNavigation)
+                 .Include(a => a.CityNavigation)
+                .ThenInclude(ct => ct.State)
+                .Where(d => d.IsDeleted != true)
+                 .ToListAsync();
+
+                if (search.City != null || search.State != null || search.FullName != null ||
+                    search.FirstName != null || search.LastName != null)
+                {
+                    distributor = await searchDistributors(distributor, search);
+                    if (nonAssign == true)
+                    {
+                        distributor = await searchNonAssignedDistributors(distributor);
+                    }
+                }
+                if (nonAssign == true)
+                {
+                    distributor = await searchNonAssignedDistributors(distributor);
+                }
+                var result = distributor.Select(c => new Distributor
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    MobileNumber = c.MobileNumber,
+                    Address = c.Address,
+                    Email = c.Email,
+                    UserName = c.UserName,
+                    Password = c.Password,
+                    //Area = c.AreaNavigation.AreaName,
+                    City = c.CityNavigation?.CityName,
+                    State = c.StateNavigation?.StateName,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude,
+                    Image = c.Image
+                }).ToList();
+
+
+
+                return result;
+            }
+            else
+            {
+                // Build the base query with eager loading and joins
+                var query = from d in NaturalDbContext.Distributors
+                            join de in NaturalDbContext.DistributorToExecutives
+                            on d.Id equals de.DistributorId into deGroup
+                            from de in deGroup.DefaultIfEmpty() // Left join to include distributors without executives
+                            join e in NaturalDbContext.Executives
+                            on de.ExecutiveId equals e.Id into eGroup
+                            from e in eGroup.DefaultIfEmpty() // Left join to include executives without distributors
+                            where d.IsDeleted != true
+                            select new
+                            {
+                                Id = d.Id,
+                                Distributor = d,
+                                d.FirstName,
+                                d.LastName,
+                                //d.MobileNumber,
+                                //d.Address,
+                                //d.Email,
+                                //d.UserName,
+                                //d.Password,
+                                ////City = d.CityNavigation.CityName,
+                                ////State = d.StateNavigation.StateName,
+                                ////d.City,
+                                ////d.State,
+                                //d.Latitude,
+                                //d.Longitude,
+                                //d.Image,
+                                Executive = e == null ? null : $"{e.FirstName} {e.LastName}"
+                                //Executive = e == null
+                                //    ? "No Executive Assigned"
+                                //    : $"{e.FirstName} {e.LastName}", // Format Executive field
+                                //IsAssigned = e != null
+                            };
+
+                // Apply search filters
+                if (search != null)
+                {
+                    if (!string.IsNullOrEmpty(search.State))
+                    {
+                        query = query.Where(q => q.Distributor.StateNavigation.Id == search.State);
+                    }
+
+                    if (!string.IsNullOrEmpty(search.City))
+                    {
+                        query = query.Where(q => q.Distributor.CityNavigation.Id == search.City);
+                    }
+
+                    
+                  
+                }
+
+             
+
+                // Execute the query and transform the results
+                var distributors = await query
+                    .Select(d => new Distributor
+                    {
+                        Id = d.Id,
+                        FirstName = d.FirstName,
+                        LastName = d.LastName,
+                        MobileNumber = d.Distributor.MobileNumber,
+                        Address = d.Distributor.Address,
+                        Email = d.Distributor.Email,
+                        UserName = d.Distributor.UserName,
+                        Password = d.Distributor.Password,
+                        City = d.Distributor.CityNavigation.CityName,
+
+                        State = d.Distributor.StateNavigation.StateName,
+                        Latitude = d.Distributor.Latitude,
+                        Longitude = d.Distributor.Longitude,
+                        Image = d.Distributor.Image,
+                        Executive = d.Executive // Include Executive information
+                    })
+                    .ToListAsync();
+
+                if (search.FullName != null )
+                {
+                    distributors = await searchDistributorRecords(distributors, search);
+                   
+                }
+                return distributors;
+            }
         }
 
         public async Task<GetDistributor> GetDistributorDetailsByIdAsync(string distributorid)

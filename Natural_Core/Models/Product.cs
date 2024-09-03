@@ -23,6 +23,7 @@ namespace Natural_Core.Models
         public DateTime? CreatedDate { get; set; }
         public bool? IsDeleted { get; set; }
         public string ProductType { get; set; }
+        public decimal DisplayPrice { get; set; }
 
         public virtual Category CategoryNavigation { get; set; }
         public virtual ProductType ProductTypeNavigation { get; set; }

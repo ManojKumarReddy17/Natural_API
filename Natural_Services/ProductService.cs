@@ -131,6 +131,7 @@ namespace Natural_Services
                                     Category = Produc.Category,
                                     ProductName = Produc.ProductName,
                                     Price = Produc.Price,
+                                    DisplayPrice= Produc.DisplayPrice,
                                     Quantity = Produc.Quantity,
                                     Weight = Produc.Weight,
                                     Image = sub?.PresignedUrl,

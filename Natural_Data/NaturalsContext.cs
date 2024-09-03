@@ -644,6 +644,7 @@ namespace Natural_Core.Models
                     .HasMaxLength(50)
                     .HasColumnName("Product_Name");
                 entity.Property(e => e.ProductType).HasMaxLength(30);
+                entity.Property(e => e.DisplayPrice).HasPrecision(20, 3);
 
 
                 entity.Property(e => e.Weight).HasPrecision(20, 3);

@@ -47,6 +47,7 @@ namespace Natural_Core.Models
 
         // **this is StoreProcedure Model we have to include Mannually **
         public virtual DbSet<DistributorSalesReport> DistributorSalesReports { get; set; }
+        public virtual DbSet<DistributorShopwiseResult>DistributorShopwiseResults { get; set; }
         public virtual DbSet<DistributorReport> DistributorReports { get;set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -219,7 +220,7 @@ namespace Natural_Core.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Distributor_ibfk_3");
             });
-
+            
             modelBuilder.Entity<DistributorToExecutive>(entity =>
             {
                 entity.ToTable("DistributorToExecutive");
@@ -797,10 +798,10 @@ namespace Natural_Core.Models
                 entity.HasNoKey();
             });
 
-            //modelBuilder.Entity<DistributorReport>(entity =>
-            //{
-            //    entity.HasNoKey();
-            //});
+            modelBuilder.Entity<DistributorShopwiseResult>(entity =>
+            {
+                entity.HasNoKey();
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

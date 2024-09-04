@@ -9,6 +9,7 @@ namespace Natural_Core.IRepositories
     public interface IDistributorSalesRepository : IRepository<DistributorSalesReport>
     {
         Task<IEnumerable<DistributorSalesReport>> GetById(DistributorSalesReportInput DSReport);
+        Task<IEnumerable<DistributorShopwiseResult>> GetShopWiseDetails(DistributorShopwiseReport DSReport);
         Task<string> GetRetailorNameById(string retailorId);
         Task<string> GetExecutiveNameById(string executiveId);
         Task<string> GetDistributorNameById(string distributorId);

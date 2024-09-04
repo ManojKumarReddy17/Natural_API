@@ -24,6 +24,8 @@ namespace Natural_Core.Models
         public int Quantity { get; set; }
         public string productType { get;set; }
         public decimal SaleAmount { get; set; }
+
+        
     }
 
     public class DistributorSalesReportResult

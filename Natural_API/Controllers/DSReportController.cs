@@ -35,17 +35,30 @@ namespace Natural_API.Controllers
         public async Task<ActionResult<DistributorSalesReport>> Search([FromBody] DistributorSalesReportInput search)
         {
 
+
             var salesReport = await _DistributorSalesService.GetById(search);
+
             if (salesReport == null)
             {
                 return NotFound();
             }
+
             return Ok(salesReport);
+
         }
+        [HttpPost("ShopWise")]
+        public async Task<ActionResult<DistributorShopwiseResult>> SearchShopWise([FromBody] DistributorShopwiseReport search)
+        {
+            var salesReport = await _DistributorSalesService.GetDistributorShopwiseDetails(search);
 
+            if (salesReport == null)
+            {
+                return NotFound();
+            }
 
+            return Ok(salesReport);
 
-
+        }
     }
 }
 

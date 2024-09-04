@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Natural_Core.IRepositories;
 using Natural_Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +23,14 @@ namespace Natural_Data.Repositories
 
             return saleReport;
         }
-
-        public async Task<string> GetRetailorNameById(string retailorId)
+        public async Task<IEnumerable<DistributorShopwiseResult>> GetShopWiseDetails(DistributorShopwiseReport DSReport)
+        {
+            var saleReport = await NaturalDbContext.DistributorShopwiseResults
+                  .FromSqlInterpolated($"CALL Naturals.GetReports({DSReport.StartDate}, {DSReport.EndDate}, {DSReport.Executive}, {DSReport.Distributor}, {DSReport.Area})")
+                  .ToListAsync();
+            return saleReport;
+        }
+            public async Task<string> GetRetailorNameById(string retailorId)
         {
             return await NaturalDbContext.Retailors
                 .Where(r => r.Id == retailorId)

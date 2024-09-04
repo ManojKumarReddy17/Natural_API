@@ -9,6 +9,7 @@ namespace Natural_Core.IServices
     public interface IDistributorSalesService
     {
         Task<IEnumerable<DistributorSalesReport>> GetById(DistributorSalesReportInput DSReport);
+        Task<IEnumerable<DistributorShopwiseResult>> GetDistributorShopwiseDetails(DistributorShopwiseReport DSReport);
 
     }
 }

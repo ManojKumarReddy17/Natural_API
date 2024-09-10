@@ -53,6 +53,7 @@ namespace Natural_Services
         {
             var result = await _unitOfWork.CategoryRepo.GetAllAsync();
             var presentCategory = result.Where(d => d.IsDeleted != true);
+            presentCategory = presentCategory.OrderBy(d => d.CategoryName);
             return presentCategory;
         }
        

@@ -94,7 +94,7 @@ namespace Natural_Services
                                     Longitude = distributor.Longitude,
                                     Executive = distributor.Executive
                                 };
-
+            leftJoinQuery = leftJoinQuery.OrderBy(x => x.FirstName);
             // Apply pagination
             if (page > 0)
             {

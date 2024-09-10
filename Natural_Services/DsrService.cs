@@ -214,7 +214,9 @@ namespace Natural_Services
                     updatedsr.Executive = dsr.Executive;
                     updatedsr.Distributor=dsr.Distributor;
                     updatedsr.Retailor = dsr.Retailor;
+                    updatedsr.CreatedDate = dsr.CreatedDate;
                     updatedsr.ModifiedDate = dsr.CreatedDate;
+                    
 
                     _unitOfWork.dSRRepo.Update(updatedsr);
 

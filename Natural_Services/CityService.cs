@@ -29,7 +29,8 @@ namespace Natural_Services
             {
                 presentcity = presentcity.Where(c =>c.StateId == StateId).ToList();
             }
-            return presentcity;
+            var oredercities  = presentcity.OrderBy(c => c.CityName).ToList();
+            return oredercities;
 
         }
 

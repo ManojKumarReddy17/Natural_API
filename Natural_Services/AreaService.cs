@@ -34,6 +34,7 @@ namespace Natural_Services
                 result = result.Where(c => c.CityId == CityId).ToList();
             }
             result = result.Where(c => c.IsDeleted == false).ToList();
+            result = result.OrderBy(c => c.AreaName).ToList();
             if (page > 0)
             {
                 var PageSize = _paginationSettings.PageSize;

@@ -59,6 +59,19 @@ namespace Natural_API.Controllers
             return Ok(salesReport);
 
         }
+        [HttpGet("ShopWise")]
+        public async Task<ActionResult<DistributorShopwiseResult>> SearchShopWiseAngular([FromQuery] DistributorShopwiseReport search)
+        {
+            var salesReport = await _DistributorSalesService.GetDistributorShopwiseDetails(search);
+
+            if (salesReport == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(salesReport);
+
+        }
 
     }
 }

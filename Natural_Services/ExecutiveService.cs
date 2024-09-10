@@ -82,7 +82,7 @@ namespace Natural_Services
                                     Longitude = executive.Longitude,
                                     Image = sub?.PresignedUrl
                                 };
-
+            executivesList = executivesList.OrderBy(c=>c.FirstName).ToList();
             return executivesList;
         }
 

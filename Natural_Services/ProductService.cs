@@ -138,6 +138,7 @@ namespace Natural_Services
                                     ProductType = Produc.ProductType,
                                     ProductTypeCode = Produc.ProductTypeCode,
                                 };
+            productList = productList.OrderBy(x => x.Category);
             if (search != null)
             {
                 productList = await SearchProduct(productList, search);
